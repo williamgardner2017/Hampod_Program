@@ -1,0 +1,136 @@
+@startuml
+package presentation {
+    class Main {
+        +{method} main(args: String[])
+        +{method} handleModeChange()
+    }
+
+    class NormalMode {
+        +{method} handleAnnounceFrequencyVFOAKey()
+        +{method} handleMainReceiverKey()
+        +{method} handleAnnounceFrequencyVFOBKey()
+        +{method} handleSelectSubReceiverKey()
+        +{method} handleVOXStatusKey()
+        +{method} handleGainLevelKey()
+        +{method} handleAntiGainLevelKey()
+        +{method} handleSetVOXStatusKey()
+        +{method} handleSetGainLevelKey()
+        +{method} handleSetAntiGainLevelKey()
+        +{method} handleBreakInStatusKey()
+
+    }
+    note left: Will add other button handlers later.
+
+    class FrequencyEntryMode {
+        +{method} handlePoundKey()
+        +{method} handleFrequencyEnter()
+    }
+
+    class SetMode {
+        +{method} handleSetKey()
+    }
+}
+
+package domain {
+
+    class HamPodSystem {
+        -{field} settingsLoader: SettingsLoader
+        -{field} settingsSaver: SettingsSaver
+    }
+
+    class Settings {
+        -{field} preAmp
+        -{field} attenuation
+        -{field} compression
+        -{field} filterBandwidth
+        -{field} filterNumber
+        -{field} filterShape
+        -{field} agcSpeed
+        -{field} agcLevel
+        -{field} keyerSpeed
+        -{field} micGain
+        -{field} monitorLevel
+        -{field} noiseLanker
+        -{field} noiseReduction
+        -{field} operatingMode
+        -{field} powerOutputLevel
+        -{field} currentTime
+        -{field} tones
+        -{field} voxGain
+        -{field} antiGain
+        -{field} delay
+        -{field} tuningStepSize
+        -{field} controlFunction: ControlFunction
+        -{field} duplexOffsetFrequency
+        -{field} dialVFO
+    }
+
+    enum Tones {
+        TonesRepeater,
+        CTCSS,
+        DTS,
+        DV;
+    }
+
+    enum ControlFunction {
+        RF,
+        Squelch;
+    }
+
+    abstract Radio {
+
+    }
+
+    abstract ICOM {
+
+    }
+
+    abstract Kenwood {
+
+    }
+
+    abstract Yaesu {
+
+    }
+
+    class PythonToCAdapter {
+
+    }
+}
+
+package datasource {
+    class InputRadioLoader {
+
+    }
+
+    class SettingsSaver {
+
+    }
+
+    class SettingsLoader {
+
+    }
+    note right: Depending on the Radio plugged in, settings will be saved for it.
+}
+
+Main --> NormalMode
+Main --> FrequencyEntryMode
+Main --> SetMode
+
+Main --> HamPodSystem
+HamPodSystem -->"*" Settings
+HamPodSystem -->"*" PythonToCAdapter
+Settings --> Tones
+Settings --> ControlFunction
+
+Radio <|.. ICOM
+Radio <|.. Yaesu
+Radio <|.. Kenwood
+
+HamPodSystem -->"*" Radio
+HamPodSystem --> SettingsLoader
+HamPodSystem --> SettingsSaver
+HamPodSystem --> InputRadioLoader
+
+
+@enduml

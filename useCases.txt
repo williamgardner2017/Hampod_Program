@@ -1,0 +1,74 @@
+Normal Mode Use Cases
+Use Case 1:
+Use presses [1].
+
+[1] - Select VFO A and announce Frequency
+
+Quickly switch to VFO A and hear the current frequency.
+[Set] , [1] - Select Main receiver (IC-7800/7851/9100/9700)
+
+Switch to the main receiver on compatible radio models.
+[1] Hold - Select VFO B and announce Frequency
+
+Quickly switch to VFO B and hear the current frequency.
+[Set] , [1] Hold - Select Sub receiver (IC-7800/7851/9100/9700)
+
+Switch to the sub receiver on compatible radio models.
+[SHIFT] , [1] - VOX status, Gain and Anti Gain levels if enabled
+
+Hear the current VOX (voice operated transmit) status, gain, and anti-gain levels if enabled.
+[Set] , [SHIFT] , [1] - Set VOX status, Gain and Anti Gain levels
+
+Adjust the VOX status, gain, and anti-gain levels.
+[SHIFT] , [1] Hold - Break in status and Delay level if enabled
+
+Hear the current break-in (QSK) status and delay level if enabled.
+[2] - Announce current working VFO frequency
+
+Hear the current frequency on the working VFO.
+[2] Hold - Toggle Memory Scan On/Disabled
+
+Toggle memory scanning on or off.
+[SHIFT] , [2] - Tuning Step
+
+Hear the current tuning step.
+[Set] , [Shift] , [2] - Set Tuning Step
+
+Adjust the tuning step.
+[SHIFT] , [2] Hold - Read RF/Squelch Control setting
+
+Hear the current RF/squelch control setting.
+[Set] , [SHIFT] , [2] , Hold - Set RF/Squelch Control (0=Auto, 1=Squelch, 2=RF+Squelch)
+
+Adjust the RF/squelch control setting.
+[3] - Toggle Split Mode On/Disable
+
+Toggle split mode on or off.
+[3] Hold - Exchange VFO A and VFO b
+
+Exchange the frequencies of VFO A and VFO B.
+[SHIFT] , [3] - Choose Duplex direction (minus, plus, disabled), and announce offset frequency, Alternatively, disable Dual Watch for IC-775, IC-7610 and IC-7851
+
+Choose the duplex direction (minus, plus, or disabled) and hear the offset frequency. Alternatively, disable dual watch on compatible radio models.
+[Set] , [SHIFT] , [3] - Set Duplex Offset frequency
+
+Adjust the duplex offset frequency.
+[SHIFT] , [3] Hold - Turn on Dual Watch for IC-775, IC-7610 and IC-7851
+
+Turn on dual watch on compatible radio models.
+[A] - Shift on/off: This toggles the "Shift" keypad function on and off
+
+Toggle the "shift" keypad function on or off.
+[A] , Hold - Volume Up: Shortcut key to increase volume of the HamPod
+
+Increase the volume of the HamPod.
+[SHIFT] , [A] – Turns Shift off if currently on
+
+Turn off the "shift" keypad function if currently on.
+[4] - PreAmp status
+
+Hear the current preamp status.
+[Set] , [4] - Set PreAmp 1 and PreAmp 2 Status
+
+Adjust the preamp 1 and preamp 2 status.
+[4] , Hold - AGC status (slow, mid, fast) and level (0 to 13) depending on radio model
