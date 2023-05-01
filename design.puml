@@ -1,11 +1,7 @@
 @startuml
 package presentation {
-    class Main {
-        +{method} main(args: String[])
-        +{method} handleModeChange()
-    }
-
     class NormalMode {
+        -{field} hamPodSystem: HamPodSystem
         +{method} handleAnnounceFrequencyVFOAKey()
         +{method} handleMainReceiverKey()
         +{method} handleAnnounceFrequencyVFOBKey()
@@ -18,119 +14,274 @@ package presentation {
         +{method} handleSetAntiGainLevelKey()
         +{method} handleBreakInStatusKey()
 
+        +{method} handleCurrentWorkingVFOFrequency()
+        +{method} handleToggleMemoryScan()
+        +{method} handleTuningStep()
+        +{method} handleSetTuningStep()
+        +{method} handleReadRFControlSetting()
+        +{method} handleSetRFControlSetting()
+
+        +{method} handleToggleSplitMode()
+        +{method} handleExchangeVFO()
+        +{method} handleChooseDuplexDirection()
+        +{method} handleReadOffsetFrequency()
+        +{method} handleSetDuplexOffsetFrequency()
+        +{method} handleTurnOnDialWatch()
     }
-    note left: Will add other button handlers later.
 
     class FrequencyEntryMode {
+        -{field} hamPodSystem: HamPodSystem
         +{method} handlePoundKey()
         +{method} handleFrequencyEnter()
     }
 
     class SetMode {
+        -{field} hamPodSystem: HamPodSystem
         +{method} handleSetKey()
+    }
+
+    class MemoryMode {
+        -{field} hamPodSystem: HamPodSystem
+        +{method} handleIncrementChannelNumber()
+        +{method} handleDecrementChannelNumber()
+        +{method} handleAnnounceChannelData()
+        +{method} handleEnterChannelLocation()
+        +{method} handleSaveChannelNumber()
+        +{method} handleSaveVFONumber()
+        +{method} handleClearSelectedChannelLocation()
+        +{method} handleExitMemoryMode()
+        +{method} handleToggleBetweenVFO()
+    }
+
+    class DStarMode {
+        -{field} hamPodSystem: HamPodSystem
+        +{method} handleReadContentsOfBuffer()
+        +{method} handleEditBuffer()
+        +{method} handleExitDStarMode()
+    }
+
+    class DTMFMode {
+        -{field} hamPodSystem: HamPodSystem
+        +{method} handleGenerateRelatedTouchTones()
+        +{method} hanleExitDTMFMode()
+    }
+
+    class ConfigurationMode {
+        -{field} hamPodSystem: HamPodSystem
+        +{method} handleStepForwardOptions()
+        +{method} handleStepBackwardOptions()
+        +{method} handleIncrementParamValues()
+        +{method} handleDecrementParamValues()
+
     }
 }
 
 package domain {
 
     class HamPodSystem {
-        -{field} settingsLoader: SettingsLoader
-        -{field} settingsSaver: SettingsSaver
-    }
+        -{field} portA: Port
+        -{field} portB: Port
+        -{field} activePort: PortLetter
+        -{field} settingsFileHandler: SettingsFileHandler
+        -{field dstarFileHandler: DStarFileHandler
+        -{field} configurationFileHandler: ConfigurationFileHandler
 
-    class Settings {
-        -{field} preAmp
-        -{field} attenuation
-        -{field} compression
-        -{field} filterBandwidth
-        -{field} filterNumber
-        -{field} filterShape
-        -{field} agcSpeed
-        -{field} agcLevel
-        -{field} keyerSpeed
-        -{field} micGain
-        -{field} monitorLevel
-        -{field} noiseLanker
-        -{field} noiseReduction
-        -{field} operatingMode
-        -{field} powerOutputLevel
-        -{field} currentTime
-        -{field} tones
-        -{field} voxGain
-        -{field} antiGain
-        -{field} delay
-        -{field} tuningStepSize
-        -{field} controlFunction: ControlFunction
-        -{field} duplexOffsetFrequency
-        -{field} dialVFO
-    }
+        +{method} detectPortA()
+        +{method} detectPortB()
+        -{method} enterPortData(letter: PortLetter)
+        +{method} createString()
 
-    enum Tones {
-        TonesRepeater,
-        CTCSS,
-        DTS,
-        DV;
-    }
-
-    enum ControlFunction {
-        RF,
-        Squelch;
-    }
-
-    abstract Radio {
 
     }
 
-    abstract ICOM {
+    package dstarbuffer {
 
+        enum StringFieldType {
+            MYCALLSIGN
+            TXCALLSIGN
+            TXMESSAGE
+
+            +{method} toString(): String
+        }
+
+        class DStarBufferController {
+            -{field} dstarBuffer: List<StringField>
+        }
+        abstract StringField {
+            -{field} stringField: String
+            +{method} {abstract} checkIfValid()
+        }
+
+        class MyCallsign {
+            +{method} checkIfValid()
+        }
+
+        class TXCallsign {
+            +{method} checkIfValid()
+        }
+
+        class TXMessage {
+            +{method} checkIfValid()
+        }
     }
 
-    abstract Kenwood {
+    package memorybank {
+        class MemoryBankController {
+            -{field} memoryBank: List<ChannelData>
+        }
 
+        class ChannelData {
+            -{field} channelNumber: int
+            +{method} saveData()
+        }
     }
 
-    abstract Yaesu {
+    package portinformation {
+        enum PortLetter {
+            A
+            B
+        }
 
+        class Port {
+            -{field} input: Input
+            -{field} hamlibAPI: hamlibPuller
+            -{field} memoryBank: MemoryBankController
+            -{field} settings: Settings
+            -{field} settingsFileHandler: SettingsFileHandler
+        }
+
+        class Settings {
+            -{field} preAmp
+            -{field} attenuation
+            -{field} compression
+            -{field} filterBandwidth
+            -{field} filterNumber
+            -{field} filterShape
+            -{field} agcSpeed
+            -{field} agcLevel
+            -{field} keyerSpeed
+            -{field} micGain
+            -{field} monitorLevel
+            -{field} noiseLanker
+            -{field} noiseReduction
+            -{field} operatingMode
+            -{field} powerOutputLevel
+            -{field} currentTime
+            -{field} tones
+            -{field} voxGain
+            -{field} antiGain
+            -{field} delay
+            -{field} tuningStepSize
+            -{field} controlFunction: ControlFunction
+            -{field} duplexOffsetFrequency
+            -{field} dialVFO
+        }
+
+        enum Tones {
+            TonesRepeater
+            CTCSS
+            DTS
+            DV
+
+            +{method} toString(): String
+        }
+
+        enum ControlFunction {
+            RF
+            Squelch
+
+            +{method} toString(): String
+        }
     }
 
-    class PythonToCAdapter {
+    package equipmentinfoandmethods {
+        abstract Equipment {
+            -{field} make: String
+            -{field} model: String
+            -{field} serial: String
+        }
+
+        class Radio {
+
+        }
+
+        class Rotator {
+
+        }
+
+        class Amplifier {
+
+        }
+    }
+
+    class hamlibPuller {
 
     }
 }
+
 
 package datasource {
-    class InputRadioLoader {
-
+    class InputRadioHandler {
+        +{method} pullData()
     }
 
-    class SettingsSaver {
-
+    class SettingsFileHandler {
+        +{method} saveSettings(port: PortLetter, make: String, model: String, serial: String)
+        +{method} loadSettings(port: PortLetter, make: String, model: String, serial: String)
     }
 
-    class SettingsLoader {
-
+    class DStarFileHandler {
+        +{method} saveDStarFile()
+        +{method} loadDStarFile()
     }
-    note right: Depending on the Radio plugged in, settings will be saved for it.
+
+    class ConfigurationFileHandler {
+        +{method} loadSettings()
+        +{method} saveSettings()
+    }
 }
 
-Main --> NormalMode
-Main --> FrequencyEntryMode
-Main --> SetMode
+MemoryMode --> HamPodSystem
+NormalMode --> HamPodSystem
+SetMode --> HamPodSystem
+FrequencyEntryMode --> HamPodSystem
+DStarMode --> HamPodSystem
+DTMFMode --> HamPodSystem
+ConfigurationMode --> HamPodSystem
 
-Main --> HamPodSystem
-HamPodSystem -->"*" Settings
-HamPodSystem -->"*" PythonToCAdapter
+
+Port --> hamlibPuller
+
+' Port Package Dependencies
+HamPodSystem --> PortLetter
+HamPodSystem -->"*" Port
+Port --> Settings
 Settings --> Tones
 Settings --> ControlFunction
 
-Radio <|.. ICOM
-Radio <|.. Yaesu
-Radio <|.. Kenwood
+' Equipment Info Package Dependencies
+Port --> Equipment
+Equipment <|-- Radio
+Equipment <|-- Rotator
+Equipment <|-- Amplifier
 
-HamPodSystem -->"*" Radio
-HamPodSystem --> SettingsLoader
-HamPodSystem --> SettingsSaver
-HamPodSystem --> InputRadioLoader
+' Memory Bank Package Dependencies
+Port --> MemoryBankController
+MemoryBankController -->"*" ChannelData
+
+' DStar Buffer Package Dependencies
+HamPodSystem ..> StringFieldType
+HamPodSystem --> DStarBufferController
+DStarBufferController -->"*" StringField
+DStarBufferController ..> StringFieldType
+StringField --|> MyCallsign
+StringField --|> TXCallsign
+StringField --|> TXMessage
+
+Settings -down-> SettingsFileHandler
+DStarBufferController -down-> DStarFileHandler
+HamPodSystem -down-> InputRadioHandler
+HamPodSystem -down-> ConfigurationFileHandler
 
 
 @enduml
