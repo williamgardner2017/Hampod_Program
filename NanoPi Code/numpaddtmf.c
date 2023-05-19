@@ -17,7 +17,7 @@
 #define C4 15 //Pin GPIOG6
 
 char numpad_symbols[] = {'1', '2', '3', 'a', '4', '5', '6', 'b', '7', '8', '9', 'c', '*', '0', '#', 'd'};//Symbols on the numpad
-char *dtmf_tones[] = {"DTMF1.wav", "DTMF2.wav", "DTMF3.wav", ""};
+char *dtmf_tones[] = {"DTMF1.wav", "DTMF2.wav", "DTMF3.wav", "DTMFA.wav", "DTMF4.wav", "DTMF5.wav", "DTMF6.wav", "DTMFB.wav", "DTMF7.wav", "DTMF8.wav", "DTMF9.wav", "DTMFC.wav", "DTMFASTERISK.wav", "DTMF0.wav", "DTMFPOUND.wav", "DTMFD.wav"};
 void play_dtmf(int num){
 
 }
