@@ -18,8 +18,15 @@
 
 char numpad_symbols[] = {'1', '2', '3', 'a', '4', '5', '6', 'b', '7', '8', '9', 'c', '*', '0', '#', 'd'};//Symbols on the numpad
 char *dtmf_tones[] = {"DTMF1.wav", "DTMF2.wav", "DTMF3.wav", "DTMFA.wav", "DTMF4.wav", "DTMF5.wav", "DTMF6.wav", "DTMFB.wav", "DTMF7.wav", "DTMF8.wav", "DTMF9.wav", "DTMFC.wav", "DTMFASTERISK.wav", "DTMF0.wav", "DTMFPOUND.wav", "DTMFD.wav"};
-void play_dtmf(int num){
+void speak(char *text_to_speak);
 
+void play_dtmf(int num){
+	if(num > 15){
+		speak("Out of bounds keypad input");
+	}
+	char message[200];
+	sprintf(message, "aplay dtmf/%s&", dtmf_tones[num]);
+	system(message);
 }
 void speak(char *text_to_speak){
 	char begin[200];//Used to hold the command for sending Festival a command
@@ -65,6 +72,7 @@ int readNumPad(){
 }
 int main(void){
 	int oldval = -1;//Used to avoid having repeated input when the button is held
+	int dtmf_mode = 0;
 	wiringPiSetup();
 	pinMode(7, OUTPUT);//LED for Testing, on Pin GPIOG11
 	pinMode(R1, OUTPUT);
@@ -86,9 +94,21 @@ int main(void){
 		//digitalWrite(7,LOW);
 		//delay(500);
 		int readNum = readNumPad();
+		if(readNum == 15){
+			dtmf_mode = dtmf_mode ^ 1;
+			if(dtmf_mode == 1){
+				//speak("dtmf on");
+			}else{
+				//speak("dtmf off");
+			}
+		}
 		//printf("%d\r\n",readNum);
-		if(oldval != readNum && readNum != -1){	
-			speak_numpad(readNum);
+		if(oldval != readNum && readNum != -1){
+			if(dtmf_mode == 0){
+				speak_numpad(readNum);
+			}else{
+				play_dtmf(readNum);
+			}
 		}
 		oldval = readNum;//Keep track of old button to avoid multiple inputs for the same press
 		if(readNum >= 0){
