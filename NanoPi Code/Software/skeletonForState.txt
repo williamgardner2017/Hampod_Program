@@ -1,0 +1,48 @@
+Var modeState; //[BootUp, Normal, ModeSelect, SubMode]
+Var BootUpPhase; //[chooseCompany, chooseSave, selectLink, linkMore]
+Var modeSelectPage; //the page number that we are on
+
+public modeFlow(keyInput){
+    switch(ModeSelect){
+        case BootUp:
+            bootUpFlow(keyInput);
+            break;
+        case Normal:
+            normalModeStuff(keyInput);
+            break;
+        case ModeSelect:
+        case SubMode:
+        default: SCREAM AND DIE.
+    }
+}
+
+public bootUpFlow(keyInput){
+    switch(BootUpPhase){
+        case chooseCompany:
+        case selectLink:
+        case linkMore:
+        case chooseSave:
+            try{
+                loadUpsave(keyInput);
+            }catch(){
+                BootUpPhase = chooseSave;
+            }
+    }
+}
+
+public modeSelectFlow(keyInput){
+    switch(keyInput){
+        case C:
+            modeSelectPage ++;
+            break;
+        case D: 
+            modeSelectPage --;
+            break;
+        case *:
+            readOutCurrentModes(modeSelectPage);
+            break;
+        default:
+            switchToMode(selectModeFromPage(keyInput, modeSelectPage));
+            break;
+    }
+}
