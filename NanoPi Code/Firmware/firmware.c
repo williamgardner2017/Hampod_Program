@@ -5,6 +5,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#include "hampod_queue.h"
+
 #define INPUT_PIPE "Firmware_i"
 #define OUTPUT_PIPE "Firmware_o"
 #define KEYPAD_OUT "Keypad_o"
@@ -48,7 +50,14 @@ int main(){
         exit(1);
     }
     
+#ifdef DEBUG
+    printf("Firmware_i created, now creating the I\\O buffer thread\n");
+    printf("Creating instruction queue\n");
+#endif
+    
+    Packet_queue* instruction_queue = create_packet_queue();
 
+    destroy_queue(instruction_queue);
     close(output_pipe_fd);
     close(input_pipe_fd);
     return 0;
