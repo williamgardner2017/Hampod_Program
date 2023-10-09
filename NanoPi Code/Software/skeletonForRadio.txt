@@ -1,9 +1,6 @@
 /** Design choice questions
-* 1 should the hamlib objects be remaid each time they are to be used
 * 2 should the radio hold what modes it can use or should a higher area keep track and control that
 * 3 when loading up from a save, should the radio be in charge of pulling the data from the txt/data file or should the main class be in charge of that.
-* 4 For mode commands that update radio information, should it be that the mode need up update the paramiters and do the trick where that will back propagate to the radio class or should we figure out another way
-*
 */
 
 
@@ -29,6 +26,8 @@ var object1
 var object2
 ...
 
+
+Create the hamlib objects on load up of the radio.
 
 //loads up radio details, either by passing in the save file to look at or by passing in the data already retreaved from the save.
 public loadUpRadioFromSave(radio details from save)
@@ -76,10 +75,6 @@ public runCommand(keyInput){
         //just passes in the radio data
         results = currentMode.commandRelay(keyInput,object1,object2,...);
     }
-    
-    //Update any radio information that would need to be updated... somehow
-
-
     return resutls
 }
 

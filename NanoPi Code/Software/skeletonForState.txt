@@ -4,7 +4,7 @@ Var modeSelectPage; //the page number that we are on
 
 var radio; //the radio that is being operated on.
 public modeFlow(keyInput){
-    switch(ModeSelect){
+    switch(modeState){
         case BootUp:
             bootUpFlow(keyInput);
             break;
