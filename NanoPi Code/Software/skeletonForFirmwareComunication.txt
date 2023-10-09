@@ -2,6 +2,7 @@ public keyWatcher(){
     var oldKey = null;
     var holdKeySent; //flag
     var shiftState = 0;
+    var holdWaitCount = 0; //TODO implement this where if a press is shorter then this it is normal else it is a hold 
     every(x)miliseconds Do {
         var pressedKey = firmwareCommandQueue(see pressed key);
         switch(pressedKey){
@@ -22,6 +23,7 @@ public keyWatcher(){
                 break;
             case oldKey:
                 //TODO add a way to increase how long you need to hold for a hold command
+
                 if(pressedKey == null){
                     break;
                 }
