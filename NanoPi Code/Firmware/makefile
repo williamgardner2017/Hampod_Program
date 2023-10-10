@@ -1,5 +1,5 @@
 firmware.elf: firmware.o
-	cc firmware.o -o firmware.elf
+	cc firmware.o -o firmware.elf -lpthread
 firmware.o: firmware.c
 	cc $(CFLAGS) -c firmware.c -o firmware.o -lpthread
 firmware.c:
