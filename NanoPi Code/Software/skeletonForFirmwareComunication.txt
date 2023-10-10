@@ -2,13 +2,16 @@
 public keyWatcher(){
     every(x)miliseconds Do {
         var pressedKey = firmwareCommandQueue(see pressed key);
-        modeFlow(interperateKeyPresses(pressedKey));
+        var SignalToInterperage = interperateKeyPresses(pressedKey);
+        //interperatation is keyinput * 10 + shiftState + (if hold: maxShifts, else 0)
+        modeFlow(combineSignalIntoOneNumber(SignalToInterperage));
     }//end loop
 }
 
 var oldKey = null;
 var holdKeySent; //flag
 var shiftState = 0;
+var maxShifts = 3;
 var holdWaitCount = 0; //TODO implement this where if a press is shorter then this it is normal else it is a hold 
 var holdWaitTime = 2; //how long it needs to wait till it can send a hold signal
 
@@ -19,7 +22,7 @@ private interperateKeyPresses(pressedKey){
             if(oldKey != null && !holdKeySent && holdWaitCount < holdWaitTime){ // the oldKey is not null and no hold commands where sent out
                 if(oldKey == "A"){ //need to take care of shift here due to here being where non-holds are accounted for
                     shiftState = shiftState+1;
-                    if(shiftState >= 3){
+                    if(shiftState >= maxShifts){
                         shiftState = 0;
                     }
                 }else{

@@ -1,4 +1,5 @@
 /** Design choice questions
+* the main should hold the modes so that it can interperate the mode select and stuff to page correctly
 * 2 should the radio hold what modes it can use or should a higher area keep track and control that
 * 3 when loading up from a save, should the radio be in charge of pulling the data from the txt/data file or should the main class be in charge of that.
 */
