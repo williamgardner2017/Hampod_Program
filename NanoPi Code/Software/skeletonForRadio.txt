@@ -1,0 +1,86 @@
+/** Design choice questions
+* 2 should the radio hold what modes it can use or should a higher area keep track and control that
+* 3 when loading up from a save, should the radio be in charge of pulling the data from the txt/data file or should the main class be in charge of that.
+*/
+
+
+//this will be expanded upon, but is just a place holder for the moment
+var radioInformation
+var connectedPort
+var radioMake
+var radioModel
+var radioFrequency 
+
+//this will need to be stored so that sertain details can be remembered. 
+var currentModeDetials
+
+//the current mode should be stored internaly for easy accsess for later functions.
+var currentMode 
+
+//Modes could either be stored internaly and IDed into or be handed to the radio class when trying to load then up
+var radioModes = [mode pointers/objects]
+
+//used later for other functions
+// each of theses represents a hamlib object that would be needed to run their commands
+var object1
+var object2
+...
+
+
+Create the hamlib objects on load up of the radio.
+
+//loads up radio details, either by passing in the save file to look at or by passing in the data already retreaved from the save.
+public loadUpRadioFromSave(radio details from save)
+
+//loads up radio in default setup, for first time loading up
+public loadUpRadioDefault(connectedPort, radioMake, radioModel, Any other non-defaultable radio data)
+
+//Assuming the modes are stored internaly
+public getAvalibleModes(){
+    return radioModes;
+}
+
+//assuming the radio holds what the current mode is
+public getCurrentMode(){
+    return currentMode;
+}
+
+public getModeDetails(){
+    return currentModeDetials;
+}
+
+//assuming that either an ID will be passed in or the pointer/object will be passed in 
+public setMode(modeID/pointer){
+    currentMode = modeID/pointer;
+    //divergence
+    //uses ID
+    currentModeDetials = radioModes[currentMode].commandRelay(0,null...);
+    //uses pointer
+    currentModeDetials = currentMode.commandRelay(0,null...);
+    //end divergence
+
+    if(currentModeDetials.UsesHamlibObjects){
+        object1 = createObject1()
+        object2 = createObject2()
+    }
+}
+
+//assuming that currentMode is a pointer/object for the mode for easier creation;
+public runCommand(keyInput){
+    var resutls;
+    if(currentModeDetials.UsesHamlibObjects){
+        //uses the hamlib objects
+        results = currentMode.commandRelay(keyInput,object1,object2,...);
+    }else{
+        //just passes in the radio data
+        results = currentMode.commandRelay(keyInput,object1,object2,...);
+    }
+    return resutls
+}
+
+public getRadioDetailsInSavebleFormat(){
+    var radioDetails;
+    //process and compile together radioDetails;
+
+    return radioDetails;
+}

@@ -1,0 +1,116 @@
+Var modeState; //[BootUp, Normal, ModeSelect, SubMode, ConfigMode]
+Var BootUpPhase; //[chooseCompany, chooseSave, selectLink, linkMore]
+Var modeSelectPage; //the page number that we are on
+
+var radio; //the radio that is being operated on.
+public modeFlow(keyInput){
+    switch(modeState){
+        case BootUp:
+            bootUpFlow(keyInput);
+            break;
+        case Normal:
+            normalModeStuff(keyInput);
+            break;
+        case ModeSelect:
+            modeSelectFlow(keyInput);
+            break;
+        case SubMode:
+            subModeFlow(keyInput);
+            break;
+        case ConfigMode:
+            //since config does edit how the hampod operates rather then affecting a spesific radio, it will be easyer for it to have its own flow path
+            configFlow(keyInput);
+            break;
+        case special keys:
+            //TODO set this up
+            break;
+        default: SCREAM AND DIE.
+    }
+}
+
+var company;
+var model;
+public bootUpFlow(keyInput){
+    switch(BootUpPhase){
+        case chooseCompany:
+            company = getCompanyByInput(keyInput);
+            model = testForModel(company);
+            BootUpPhase = selectLink;
+        case selectLink:
+            if(keyInput == "Back"){
+                BootUpPhase = chooseCompany;
+            }else{
+                radio = radio.loadUpRadioDefault(getPortInformation(keyInput), company,model);
+                BootUpPhase = linkMore;
+            }
+        case linkMore:
+            if(keyInput == "yes"){
+                BootUpPhase = chooseCompany;
+            }else{
+                ModeSelect = Normal;
+            }
+        case chooseSave:
+            if(keyInput == "Back"){
+                BootUpPhase = chooseCompany;
+            }else{
+                try{
+                    loadUpsave(keyInput);
+                    ModeSelect = Normal;
+                }catch(){
+                    BootUpPhase = chooseSave;
+                }
+            }
+    }
+}
+
+public modeSelectFlow(keyInput){
+    switch(keyInput){
+        case C:
+            modeSelectPage ++;
+            break;
+        case D: 
+            modeSelectPage --;
+            break;
+        case *:
+            readOutCurrentModes(modeSelectPage);
+            break;
+        case [1-9]:
+            switchToMode(selectModeFromPage(keyInput, modeSelectPage));
+            break;
+        default:
+            throw unknown key error
+            break;
+    }
+}
+
+//
+public subModeFlow(keyInput){
+    var outputData;
+    switch(keyInput){
+        case *: 
+            outputData = radio.getModeDetails();
+            break;
+        case [0 - 9]:
+            outputData = radio.runCommand(keyInput);
+            break;
+        default:
+            error for unknown keyInput;
+            break;
+    }
+
+    sendSpeakerOutput(outputData);//on firmware page
+}
+
+// this will get called each time a mode is loaded in to pre setup the radio
+private switchToRadioMode(mode){
+    //check what mode we are going into, then have the radio load up that mode if it is ment to
+    if(mode == configMode){
+        modeState = configFlow;
+    }else if(mode == NormalMode){
+        modeState = Normal;
+        radio.setMode(mode);
+    }else{
+        modeState = SubMode;
+        radio.setMode(mode);
+    }
+}

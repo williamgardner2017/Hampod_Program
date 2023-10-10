@@ -1,0 +1,28 @@
+
+public commandRelay(command ID, radio data formated in a way that hamlib can understand.. // all the other data should be nullable){
+    switch(command ID){
+        case 0: 
+            return extendedCommandData;
+            break;
+        case 1-n:
+            run command;
+            return results;
+            break;
+        default:
+            Invalid command ID;
+            break;
+    }
+}
+
+
+private modeCommand1(stuff){
+    hamlibCommand(stuff)
+}
+
+/*
+* ID number: to be able to call said command
+* name/discription: what should be outputed by the speaker. The true number keys should have the discriptor. 
+* command metadata: information that would be needed for stuff like, if the return data would need to be saved, what data should be passed in.
+*/
+extendedCommandData = [If mode uses hamlibParamiters or uses raw radio data paramiters, 
+                        for each command in mode, [ID number, name/discription, command metadata ]]
