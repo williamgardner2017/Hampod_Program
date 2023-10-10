@@ -1,3 +1,4 @@
+#include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -11,6 +12,13 @@
 #define OUTPUT_PIPE "Firmware_o"
 #define KEYPAD_OUT "Keypad_o"
 #define KEYPAD_IN "Keypad_i"
+
+typedef struct Buff_input {
+    int pipe_fd;
+    Packet_queue* queue;
+} Buff_input;
+
+void *io_buffer_thread(void* arg);
 
 int main(){
 #ifdef DEBUG
@@ -51,14 +59,44 @@ int main(){
     }
     
 #ifdef DEBUG
-    printf("Firmware_i created, now creating the I\\O buffer thread\n");
+    printf("Firmware_i created\n");
     printf("Creating instruction queue\n");
 #endif
     
     Packet_queue* instruction_queue = create_packet_queue();
 
+#ifdef DEBUG
+    printf("Instruction queue created\n");
+    printf("Creating I\\O buffer thread\n");
+#endif
+    pthread_t io_buffer;
+    Buff_input thread_input;
+    thread_input.pipe_fd = input_pipe_fd;
+    thread_input.queue = instruction_queue;
+
+    if(pthread_create(&io_buffer, NULL, io_buffer_thread, (void*)&thread_input) != 0) {
+        perror("Buffer thread failed");
+        exit(1);
+    }
+
+    pthread_join(io_buffer, NULL);
     destroy_queue(instruction_queue);
     close(output_pipe_fd);
     close(input_pipe_fd);
     return 0;
+}
+
+void *io_buffer_thread(void* arg) {
+
+#ifdef DEBUG
+    printf("I\\O thread created\n");
+#endif
+    Buff_input* function_input = (Buff_input*)arg;
+    int i_pipe = function_input->pipe_fd;
+    Packet_queue* queue = function_input->queue;
+
+#ifdef DEBUG
+    printf("Input pipe = %d, queue_ptr = %p\n", i_pipe, queue);
+#endif
+
 }
