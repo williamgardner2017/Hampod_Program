@@ -5,6 +5,7 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <signal.h>
 
 #include "hampod_queue.h"
 
@@ -20,15 +21,26 @@ typedef struct Buff_input {
 
 void *io_buffer_thread(void* arg);
 
+void sigsegv_handler(int signum);
+
 int main(){
 #ifdef DEBUG
-    printf("\033[0;32mHampod Firmware Version 0.1\n");
+    printf("\033[0;32mHampod Firmware Version 0.31\n");
     printf("\033[0;31mDEBUG BUILD \033[1;33m\n");
     printf("Clearing Pipes\n");
     system("./pipe_remover.sh");
 #else
     system("./pipe_remover.sh > /dev/null 2>&1");
 #endif
+
+#ifdef DEGUG
+    printf("Creating Sigsegv handler");
+#endif
+
+    if(signal(SIGSEGV, sigsegv_handler) == SIG_ERR) {
+        perror("signal");
+        exit(1);
+    }
 
 #ifdef DEBUG
     printf("Now creating Firmware_o pipe\n");
@@ -73,7 +85,7 @@ int main(){
     Buff_input thread_input;
     thread_input.pipe_fd = input_pipe_fd;
     thread_input.queue = instruction_queue;
-
+    
     if(pthread_create(&io_buffer, NULL, io_buffer_thread, (void*)&thread_input) != 0) {
         perror("Buffer thread failed");
         exit(1);
@@ -99,4 +111,10 @@ void *io_buffer_thread(void* arg) {
     printf("Input pipe = %d, queue_ptr = %p\n", i_pipe, queue);
 #endif
 
+}
+
+void sigsegv_handler(int signum) {
+    printf("\033[0;31mSEGMENTAION FAULT - (Signal %d)\n", signum);
+    printf("Terminating Firmware\n");
+    exit(1);
 }
