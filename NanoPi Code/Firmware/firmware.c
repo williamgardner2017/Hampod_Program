@@ -19,13 +19,17 @@ typedef struct Buff_input {
     Packet_queue* queue;
 } Buff_input;
 
+pthread_mutex_t queue_lock;
+char running = 1;
 void *io_buffer_thread(void* arg);
 
 void sigsegv_handler(int signum);
 
+void sigint_handler(int signum);
+
 int main(){
 #ifdef DEBUG
-    printf("\033[0;32mHampod Firmware Version 0.31\n");
+    printf("\033[0;32mHampod Firmware Version 0.4\n");
     printf("\033[0;31mDEBUG BUILD \033[1;33m\n");
     printf("Clearing Pipes\n");
     system("./pipe_remover.sh");
@@ -34,10 +38,19 @@ int main(){
 #endif
 
 #ifdef DEGUG
-    printf("Creating Sigsegv handler");
+    printf("Creating Sigsegv handler\n");
 #endif
 
     if(signal(SIGSEGV, sigsegv_handler) == SIG_ERR) {
+        perror("signal");
+        exit(1);
+    }
+
+#ifdef DEBUG
+    printf("Creating Sigint handler\n");
+#endif
+
+    if(signal(SIGINT, sigint_handler) == SIG_ERR) {
         perror("signal");
         exit(1);
     }
@@ -79,6 +92,7 @@ int main(){
 
 #ifdef DEBUG
     printf("Instruction queue created\n");
+    printf("Creating queue mutex lock\n");
     printf("Creating I\\O buffer thread\n");
 #endif
     pthread_t io_buffer;
@@ -86,11 +100,52 @@ int main(){
     thread_input.pipe_fd = input_pipe_fd;
     thread_input.queue = instruction_queue;
     
+    if(pthread_mutex_init(&queue_lock, NULL) != 0) {
+        perror("pthread_mutex_init");
+        exit(1);
+    }
+    
+#ifdef DEBUG
+    printf("Queue lock initialized\n");
+#endif
+
     if(pthread_create(&io_buffer, NULL, io_buffer_thread, (void*)&thread_input) != 0) {
         perror("Buffer thread failed");
         exit(1);
     }
+    
+#ifdef DEBUG
+    printf("\033[0;33m1 second delay so thread can lock the queue\n");
+#endif
 
+    usleep(1000000);
+
+#ifdef DEBUG
+    printf("\033[0;33m1 second delay over\n");
+#endif
+
+    while(running) {
+        pthread_mutex_lock(&queue_lock);
+#ifdef DEBUG
+        printf("\033[0;33mQueue is open\n");
+#endif
+        Inst_packet* received_packet = dequeue(instruction_queue);
+        pthread_mutex_unlock(&queue_lock);
+#ifdef DEBUG
+        printf("\033[0;33mPacket is %p\n", received_packet);
+        printf("\033[0;33mProcessing received packet\n");
+#endif
+
+        if(received_packet == NULL) {
+            continue;
+        }
+
+        Packet_type type = received_packet->type;
+        unsigned short data_size = received_packet->data_len;
+
+
+        destroy_inst_packet(&received_packet);
+    }
     pthread_join(io_buffer, NULL);
     destroy_queue(instruction_queue);
     close(output_pipe_fd);
@@ -98,19 +153,60 @@ int main(){
     return 0;
 }
 
+// FIRMWARE CONTROLLER THREAD BELOW //
+// Debug print statements from this thread are purple
 void *io_buffer_thread(void* arg) {
 
 #ifdef DEBUG
-    printf("I\\O thread created\n");
+    printf("\033[0;35mI\\O thread created\n");
 #endif
     Buff_input* function_input = (Buff_input*)arg;
     int i_pipe = function_input->pipe_fd;
     Packet_queue* queue = function_input->queue;
-
+    unsigned char buffer[256];
 #ifdef DEBUG
-    printf("Input pipe = %d, queue_ptr = %p\n", i_pipe, queue);
+    printf("\033[0;35mInput pipe = %d, queue_ptr = %p\n", i_pipe, queue);
 #endif
 
+    while(running) {
+
+#ifdef DEBUG
+        printf("\033[0;35mLocking the queue\n");
+#endif
+        pthread_mutex_lock(&queue_lock);
+#ifdef DEBUG
+        printf("\033[0;35mWaiting for input...\n");
+#endif
+        unsigned char packet_type;
+        unsigned short size;
+        read(i_pipe, &packet_type, 4);
+        read(i_pipe, &size, 2);
+        read(i_pipe, buffer, size);
+
+#ifdef DEBUG
+        printf("\033[0;35mFound packet with type %d, size %d\n", packet_type, size);
+        printf("Buffer holds:%s: with size %d\n", buffer, sizeof(buffer));
+#endif
+        Inst_packet* new_packet = create_inst_packet(packet_type, size, buffer);
+
+#ifdef DEBUG
+        printf("\033[0;35mQueueing the new packet\n");
+#endif
+        enqueue(queue, new_packet);
+#ifdef DEBUG
+        printf("\033[0;35mReleasing queue\n");
+#endif
+        pthread_mutex_unlock(&queue_lock);
+        //usleep(100);
+    }
+}
+
+// SEGMENTATION FAULT HANDLER //
+
+void sigint_handler(int signum) {
+    printf("\033[0;31mTERMINATING FIRMWARE\n");
+    running = 0;
+    exit(0);
 }
 
 void sigsegv_handler(int signum) {
