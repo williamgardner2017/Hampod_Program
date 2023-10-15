@@ -38,6 +38,7 @@ Inst_packet* dequeue(Packet_queue* queue) {
 
     Node* removed_node = queue->head;
     Inst_packet* packet = removed_node->packet;
+    queue->head = removed_node->next;
 
     if(queue->head == NULL) {
         queue->tail = NULL;
