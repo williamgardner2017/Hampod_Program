@@ -48,7 +48,7 @@ int interperateKeyPresses(int keyPress){
 
 
 void keyWatcher(){
-    int pressedKey = firmwareCommandQueue(1);//TODO make this get the key
+    int pressedKey = (int) firmwareCommandQueue(1);//TODO make this get the key
     int signalToInterperate = interperateKeyPresses(pressedKey);
     modeFlow(signalToInterperate);
 }
@@ -64,15 +64,16 @@ int sendSpeakerOutput(char* text){
 
 
 
-pthread_mutex_t QueueLock; 
+//pthread_mutex_t QueueLock; 
 /**
  * This is what handles calling the firmware, functions that dont need to return should call this asycronusly while functions that will need a return should not
 */
 void* firmwareCommandQueue(int command){
-    pthread_mutex_lock(&QueueLock);
+    // pthread_mutex_lock(&QueueLock);
     //FirmWare.send(command)
-    void* reply = formware.reply();
-    pthread_mutex_unlock(&QueueLock); 
-    return reply;
+    //void* reply = firmware.reply();
+    // pthread_mutex_unlock(&QueueLock); 
+    //return reply;
 }  
+
 
