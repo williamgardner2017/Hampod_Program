@@ -116,14 +116,13 @@ int BootupFlow(int keyInput){
 }
 
 int modeSelectPage = 0; //the page number that we are on for mode select
-bool isReadingOut = false;
+int isReadingOut = 0;
 int ModeSelectFlow(int keyInput){
     if(isReadingOut){
         readOutModeName(modeSelectPage*9 + keyInput);
-        isReadingOut = false;
+        isReadingOut = 0;
     }else{
-        switch (keyInput)
-        {
+        switch (keyInput){
             case 'C':
                 modeSelectPage = modeSelectPage + 1;
                 break;
@@ -131,7 +130,7 @@ int ModeSelectFlow(int keyInput){
                 modeSelectPage = modeSelectPage - 1;
                 break;
             case '*':
-                isReadingOut = true;
+                isReadingOut = 1;
                 break;
             case 'H': //this is * hold
             //TODO add a min function to this to now over flow the amount of modes there are

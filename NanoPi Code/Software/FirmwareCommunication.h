@@ -1,10 +1,13 @@
 #ifndef HAMPOD_SOFT_FIRMCOMMUN
 #define HAMPOD_SOFT_FIRMCOMMUN
 #include "StateMachine.h"
+#include "GeneralFunctions.h"
 
-int keyWatcher();
+void keyWatcher();
 int interperateKeyPresses(int keyPress);
 int sendSpeakerOutput(char* string);
-int firmwareCommandQueue(int command);
+void* firmwareCommandQueue(int command);
+int formatToSpeakerOutput(char* string);
 #include "FirmwareCommunication.c"
 #endif
+

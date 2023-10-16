@@ -1,6 +1,7 @@
 #ifndef HAMPOD_SOFT_STATE
 #define HAMPOD_SOFT_STATE
 #include "FirmwareCommunication.h"
+#include "GeneralFunctions.h"
 typedef enum {
     bootUp,
     standard,
