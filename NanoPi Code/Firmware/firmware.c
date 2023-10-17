@@ -29,7 +29,7 @@ void sigint_handler(int signum);
 
 int main(){
 #ifdef DEBUG
-    printf("\033[0;32mHampod Firmware Version 0.4\n");
+    printf("\033[0;32mHampod Firmware Version 0.5\n");
     printf("\033[0;31mDEBUG BUILD \033[1;33m\n");
     printf("Clearing Pipes\n");
     system("./pipe_remover.sh");
@@ -85,6 +85,36 @@ int main(){
     
 #ifdef DEBUG
     printf("Firmware_i created\n");
+    printf("Creating Keypad_i pipe\n");
+#endif
+
+    if (mkfifo(KEYPAD_IN, 0666) == -1) {
+        perror("mkfifo");
+        exit(1);
+    }
+    int keypad_in_pipe_fd = open(KEYPAD_IN, O_WRONLY);
+    if(output_pipe_fd == -1){
+        perror("open");
+        exit(1);
+    }
+
+#ifdef DEBUG
+    printf("Keypad_i created\n");
+    printf("Creating Keypad_o pipe\n");
+#endif
+
+    if (mkfifo(KEYPAD_OUT, 0666) == -1) {
+        perror("mkfifo");
+        exit(1);
+    }
+    int input_pipe_fd = open(KEYPAD_OUT, O_RDONLY);
+    if(input_pipe_fd == -1){
+        perror("open");
+        exit(1);
+    }
+
+#ifdef DEBUG
+    printf("Keypad_o created\n");
     printf("Creating instruction queue\n");
 #endif
     
