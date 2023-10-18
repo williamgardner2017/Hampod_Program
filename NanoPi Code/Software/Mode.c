@@ -18,8 +18,8 @@ static void* commandRelay(int keyInput, int radioDetails){
 }
 
 
-
-static void freeMode(Mode* modeToFree){
+//TODO make this auto zero out
+static void freeMode(Mode** modeToFree){
     free(modeToFree->modeDetails->modeName);
     free(modeToFree->modeDetails);
     free(modeToFree);
