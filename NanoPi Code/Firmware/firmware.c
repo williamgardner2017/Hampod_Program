@@ -29,7 +29,7 @@ void sigint_handler(int signum);
 
 int main(){
 #ifdef DEBUG
-    printf("\033[0;32mHampod Firmware Version 0.5\n");
+    printf("\033[0;32mHampod Firmware Version 0.51\n");
     printf("\033[0;31mDEBUG BUILD \033[1;33m\n");
     printf("Clearing Pipes\n");
     system("./pipe_remover.sh");
@@ -93,7 +93,7 @@ int main(){
         exit(1);
     }
     int keypad_in_pipe_fd = open(KEYPAD_IN, O_WRONLY);
-    if(output_pipe_fd == -1){
+    if(keypad_in_pipe_fd == -1){
         perror("open");
         exit(1);
     }
@@ -107,8 +107,8 @@ int main(){
         perror("mkfifo");
         exit(1);
     }
-    int input_pipe_fd = open(KEYPAD_OUT, O_RDONLY);
-    if(input_pipe_fd == -1){
+    int keypad_out_pipe_fd = open(KEYPAD_OUT, O_RDONLY);
+    if(keypad_out_pipe_fd == -1){
         perror("open");
         exit(1);
     }
@@ -227,7 +227,7 @@ void *io_buffer_thread(void* arg) {
         printf("\033[0;35mReleasing queue\n");
 #endif
         pthread_mutex_unlock(&queue_lock);
-        //usleep(100);
+        usleep(100);
     }
 }
 
