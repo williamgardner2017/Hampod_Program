@@ -30,7 +30,7 @@ int ModeSelectFlow(int keyInput);
 int switchToRadioMode(int mode);
 int StandardModeFlow(int keyInput);
 int ConfigFlow(int keyInput);
-
 int readOutModeName(int mode);
+
 #include "StateMachine.c"
 #endif

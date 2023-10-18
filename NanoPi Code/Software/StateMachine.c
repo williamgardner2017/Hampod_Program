@@ -94,7 +94,7 @@ int BootupFlow(int keyInput){
                 currentRadio--;
                 //set radio to normal mode
                 //TODO make the number the one coresponding to normal mode
-                setMode(radios[currentRadio],getModeById(1));
+                setRadioMode(radios[currentRadio],getModeById(1));
                 //loadUpNormalMode
                 break; 
             }
@@ -169,16 +169,102 @@ int ModeSelectFlow(int keyInput){
     }
 }
 
+//dependint on firmware
 int DTMFFlow(int keyInput){
-
+    switch (keyInput)
+    {
+    case 73:
+        switchToRadioMode(0);
+        //TODO make this also turn back on other items 
+        break;
+    
+    default:
+        //TODO make the beep boops 
+        break;
+    }
 }
+
 
 int StandardModeFlow(int keyInput){
+    int keyPress = keyInput/10;
+    int keyType = keyInput%10;
 
+    switch (keyPress)
+    {
+    case 3: // A
+        switch (keyType)
+        {
+        case 0:
+            /* code */
+            break;
+        case 1:
+            
+            break;
+        case 2:
+            /* code */
+            break;
+        case 3:
+            //Volume up
+            break;
+        case 4:
+            //Volume up
+            break;
+        case 5:
+            /* code */
+            break;
+        
+        default:
+            break;
+        }
+        break;
+    case 7: //B
+        switch (keyType)
+        {
+        case 0:
+             switchToRadioMode(-3);//mode select
+            break;
+        case 1:
+            switchToRadioMode(0);//Normal mode
+            break;
+        case 2:
+            /* code */
+            break;
+        case 3:
+            //Volume up
+            break;
+        case 4:
+            
+            break;
+        case 5:
+            /* code */
+            break;
+        
+        default:
+            break;
+        }
+        break;
+    case 11: // C
+        //getModesOfProgramableKeys
+        //setRadioToMode
+        break;
+    case 15: // D
+        //getModesOfProgramableKeys
+        //setRadioToMode
+        break;
+    default:
+        runRadioCommand(radios[currentRadio],keyInput);
+        break;
+    }
 }
 
+/**
+ * TODO figure out how to do this
+ * Create a new file to handle this
+ * See if makeing this be treated like a normal mode would work
+ * See if there are any reasons a standard mode could not affect the hampod data
+*/
 int ConfigFlow(int KeyInput){
-
+    //This may be easyer to just treat as a standard mode but make special. 
 }
 
 /**
@@ -209,7 +295,7 @@ int switchToRadioMode(int modeID){
         default:
             modeState = standard;
             //radio.setMode(mode);
-            setMode(radios[currentRadio], getModeById(modeID));
+            setRadioMode(radios[currentRadio], getModeById(modeID));
             break;
     }
 }

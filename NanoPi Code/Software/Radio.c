@@ -22,11 +22,11 @@ ModeData* getModeDetails(Radio* thisRadio){
     return thisRadio->currentMode->modeDetails;
     }
 
-void setMode(Radio* thisRadio, Mode* modeToSetTo){
+void setRadioMode(Radio* thisRadio, Mode* modeToSetTo){
     thisRadio->currentMode = modeToSetTo;
 }
 
-void* runCommand(Radio* thisRadio, int keyInput){
+void* runRadioCommand(Radio* thisRadio, int keyInput){
     void* results;
     results = thisRadio->currentMode->modeInput(keyInput,23);
     return results;
