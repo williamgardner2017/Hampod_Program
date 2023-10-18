@@ -1,11 +1,13 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 ModeStates modeState = bootUp;
-BootUpStates bootUpState = selectNewOrSave;
-int modes[10];
+
 int programableKeysOn = 0;
-int radio = 0;//do not know how to represent this yet
+Radio* radios[2];
+int currentRadio = 0;
+
 int modeFlow(int keyInput){
     //the inital switch is for the programable keys, thisis so hat things can be avoided and passed over
     //TODO make a better system
@@ -50,8 +52,9 @@ int modeFlow(int keyInput){
 }
 
 //no idea how to store these yet
-int company = 0;
-int model = 0;
+char* company;
+int model;
+BootUpStates bootUpState = selectNewOrSave;
 int BootupFlow(int keyInput){
     switch (bootUpState)
     {
@@ -68,7 +71,7 @@ int BootupFlow(int keyInput){
                 bootUpState = selectNewOrSave;
                 break;
             }
-            company = 1;//TODO getCompanyByInput(keyInput);
+            company = strdup("ExampleCompany");;//TODO getCompanyByInput(keyInput);
             model = 1;//TODO testForModel(company);
             bootUpState = selectLink;
             break;
@@ -77,7 +80,8 @@ int BootupFlow(int keyInput){
                     bootUpState = chooseCompany;
                     break;
                 }else{
-                    radio = 1;//radio.loadUpRadioDefault(getPortInformation(keyInput), company,model);
+                    radios[currentRadio] = loadUpRadioUsingData(company,model,keyInput);
+                    currentRadio++;
                     bootUpState = linkMore;
                     break;
                 }
@@ -87,7 +91,10 @@ int BootupFlow(int keyInput){
                 break;
             }else if(keyInput == 0)/*No*/{
                 modeState = standard;
+                currentRadio--;
                 //set radio to normal mode
+                //TODO make the number the one coresponding to normal mode
+                setMode(radios[currentRadio],getModeById(1));
                 //loadUpNormalMode
                 break; 
             }
@@ -117,9 +124,13 @@ int BootupFlow(int keyInput){
 
 int modeSelectPage = 0; //the page number that we are on for mode select
 int isReadingOut = 0;
+/**
+ * this handles the select mode state
+ * TODO, make the readOutModeName better setup to be able to use the correct mode number
+*/
 int ModeSelectFlow(int keyInput){
     if(isReadingOut){
-        readOutModeName(modeSelectPage*9 + keyInput);
+        readOutModeName(modeSelectPage*9 + (keyInput/10));
         isReadingOut = 0;
     }else{
         switch (keyInput){
@@ -135,7 +146,7 @@ int ModeSelectFlow(int keyInput){
             case 'H': //this is * hold
             //TODO add a min function to this to now over flow the amount of modes there are
                 for(int i = modeSelectPage*9; i< (modeSelectPage+1)*9;i++){
-                    readOutModeName(modes[i]);
+                    readOutModeName(i);
                 }
                 break;
                 //TODO make this also just normal numbers
@@ -148,7 +159,7 @@ int ModeSelectFlow(int keyInput){
             case 7:
             case 8:
             case 9:
-                switchToRadioMode(modes[ (modeSelectPage*9) + keyInput]);
+                switchToRadioMode((modeSelectPage*9) + keyInput);
                 break;
         
             default:
@@ -170,27 +181,35 @@ int ConfigFlow(int KeyInput){
 
 }
 
-int readOutModeName(int mode){
-    
+/**
+ * Reads out the name of the asked for mode
+ * TODO make this use the firm ware
+*/
+int readOutModeName(int modeID){
+    printf("%s", getModeById(modeID)->modeDetails->modeName);
 }
 
-int switchToRadioMode(int mode){
-    //have radio interperate mode
-    int interpretedMode = 0; //radio.interperateMode(mode);
-    switch (mode)
+/**
+ * This is passed the modeID
+ * if the modeID is negitive that represents that it is a non-standard mode
+ * TODO make this correctly use the non-standard modes
+*/
+int switchToRadioMode(int modeID){
+    switch (modeID)
     {
-        case 0: //DTMF
+        case -1: //DTMF
             modeState = dtmf;
             break;
-        case 1: //config mode
+        case -2: //config mode
             modeState = configMode;
             break;
-        case 2: //mode select
+        case -3: //mode select
             modeState = modeSelect;
             break;
         default:
             modeState = standard;
             //radio.setMode(mode);
+            setMode(radios[currentRadio], getModeById(modeID));
             break;
     }
 }

@@ -1,17 +1,17 @@
 #include <stdlib.h>
 #include <string.h>
 
-
-Radio* loadUpRadioUsingData(char* make, int model, int port){
-Radio* newRadio = (Radio*)malloc(sizeof(Radio));
+Radio* loadUpRadioUsingData(char* make, int model, int port, Mode* defaultMode){
+    Radio *newRadio = (Radio*)malloc(sizeof(Radio));
     newRadio->make = make;
     newRadio->model = model;
     newRadio->port = port;
+    newRadio->currentMode = defaultMode;
     return newRadio;
 }
 
 void freeRadio(Radio* thisRadio){
-    
+    free(thisRadio);
 }
 
 Mode* getCurrentMode(Radio* thisRadio){
@@ -28,7 +28,7 @@ void setMode(Radio* thisRadio, Mode* modeToSetTo){
 
 void* runCommand(Radio* thisRadio, int keyInput){
     void* results;
-    results = thisRadio->currentMode->commandRelay(keyInput, 1);
+    results = thisRadio->currentMode->modeInput(keyInput,23);
     return results;
 }
 

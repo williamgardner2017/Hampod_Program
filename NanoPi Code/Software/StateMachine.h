@@ -2,6 +2,9 @@
 #define HAMPOD_SOFT_STATE
 #include "FirmwareCommunication.h"
 #include "GeneralFunctions.h"
+#include "Radio.h"
+#include "Mode.h"
+#include "ModeRouting.h"
 typedef enum {
     bootUp,
     standard,

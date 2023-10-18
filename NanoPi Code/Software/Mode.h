@@ -3,17 +3,18 @@
 
 
 typedef struct ModeData {
-    char* radioMake;
+    char* modeName;
     int radioModel;
 } ModeData;
 
 
 typedef struct Mode {
-    void* commandRelay(int, int);
+    void* (*modeInput)(int,int);
+    void (*free)(Mode);
     ModeData* modeDetails;
 } Mode;
-void* commandRelay(int keyInput, int radioDetails);
+
 Mode* createMode();
-void freeMode();
+
 #include "Mode.c"
 #endif
