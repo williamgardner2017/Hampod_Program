@@ -2,6 +2,8 @@
 #define HAMPOD_SOFT_FIRMCOMMUN
 #include "StateMachine.h"
 #include "GeneralFunctions.h"
+#include "hampod_firm_packet.h"
+#include "hampod_queue.h"
 
 void keyWatcher();
 int interperateKeyPresses(int keyPress);

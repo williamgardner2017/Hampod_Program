@@ -63,7 +63,7 @@ int sendSpeakerOutput(char* text){
 }
 
 
-
+Packet_queue* softwareQueue;
 //pthread_mutex_t QueueLock; 
 /**
  * This is what handles calling the firmware, functions that dont need to return should call this asycronusly while functions that will need a return should not
@@ -93,4 +93,8 @@ void firmwareOPipeWatcher(){
         //add the data to the queue
         //unlock the queue
     }
+}
+
+void startUpConnection(){
+    softwareQueue = create_packet_queue();
 }
