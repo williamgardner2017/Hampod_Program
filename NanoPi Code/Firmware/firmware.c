@@ -8,6 +8,7 @@
 #include <signal.h>
 
 #include "hampod_queue.h"
+#include "keypad_firmware.c"
 
 #define INPUT_PIPE "Firmware_i"
 #define OUTPUT_PIPE "Firmware_o"
@@ -20,7 +21,11 @@ typedef struct Buff_input {
 } Buff_input;
 
 pthread_mutex_t queue_lock;
+
 char running = 1;
+
+pid_t controller_pid;
+
 void *io_buffer_thread(void* arg);
 
 void sigsegv_handler(int signum);
@@ -29,13 +34,15 @@ void sigint_handler(int signum);
 
 int main(){
 #ifdef DEBUG
-    printf("\033[0;32mHampod Firmware Version 0.52\n");
+    printf("\033[0;32mHampod Firmware Version 0.6\n");
     printf("\033[0;31mDEBUG BUILD \033[1;33m\n");
     printf("Clearing Pipes\n");
     system("./pipe_remover.sh");
 #else
     system("./pipe_remover.sh > /dev/null 2>&1");
 #endif
+
+    controller_pid = getpid();
 
 #ifdef DEGUG
     printf("Creating Sigsegv handler\n");
@@ -92,11 +99,6 @@ int main(){
         perror("mkfifo");
         exit(1);
     }
-    int keypad_in_pipe_fd = open(KEYPAD_IN, O_WRONLY);
-    if(keypad_in_pipe_fd == -1){
-        perror("open");
-        exit(1);
-    }
 
 #ifdef DEBUG
     printf("Keypad_i created\n");
@@ -107,6 +109,19 @@ int main(){
         perror("mkfifo");
         exit(1);
     }
+
+    pid_t keypad_pid = fork();
+    
+    if(keypad_pid == 0) {
+        keypad_process();
+    }
+
+    int keypad_in_pipe_fd = open(KEYPAD_IN, O_WRONLY);
+    if(keypad_in_pipe_fd == -1){
+        perror("open");
+        exit(1);
+    }
+
     int keypad_out_pipe_fd = open(KEYPAD_OUT, O_RDONLY);
     if(keypad_out_pipe_fd == -1){
         perror("open");
@@ -125,6 +140,7 @@ int main(){
     printf("Creating queue mutex lock\n");
     printf("Creating I\\O buffer thread\n");
 #endif
+
     pthread_t io_buffer;
     Buff_input thread_input;
     thread_input.pipe_fd = input_pipe_fd;
@@ -143,6 +159,7 @@ int main(){
         perror("Buffer thread failed");
         exit(1);
     }
+
     
 #ifdef DEBUG
     printf("\033[0;33m1 second delay so thread can lock the queue\n");
@@ -156,11 +173,13 @@ int main(){
 
     while(running) {
         pthread_mutex_lock(&queue_lock);
+
 #ifdef DEBUG
         printf("\033[0;33mQueue is open\n");
 #endif
         Inst_packet* received_packet = dequeue(instruction_queue);
         pthread_mutex_unlock(&queue_lock);
+
 #ifdef DEBUG
         printf("\033[0;33mPacket is %p\n", received_packet);
         printf("\033[0;33mProcessing received packet\n");
@@ -190,10 +209,12 @@ void *io_buffer_thread(void* arg) {
 #ifdef DEBUG
     printf("\033[0;35mI\\O thread created\n");
 #endif
+
     Buff_input* function_input = (Buff_input*)arg;
     int i_pipe = function_input->pipe_fd;
     Packet_queue* queue = function_input->queue;
     unsigned char buffer[256];
+
 #ifdef DEBUG
     printf("\033[0;35mInput pipe = %d, queue_ptr = %p\n", i_pipe, queue);
 #endif
@@ -223,9 +244,11 @@ void *io_buffer_thread(void* arg) {
         printf("\033[0;35mQueueing the new packet\n");
 #endif
         enqueue(queue, new_packet);
+
 #ifdef DEBUG
         printf("\033[0;35mReleasing queue\n");
 #endif
+
         pthread_mutex_unlock(&queue_lock);
         usleep(100);
     }
