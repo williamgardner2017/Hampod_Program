@@ -9,6 +9,7 @@ int sendSpeakerOutput(char* string);
 void* firmwareCommandQueue(int command);
 int formatToSpeakerOutput(char* string);
 void keyQueue();
+void firmwareOPipeWatcher();
 #include "FirmwareCommunication.c"
 #endif
 

@@ -69,11 +69,28 @@ int sendSpeakerOutput(char* text){
  * This is what handles calling the firmware, functions that dont need to return should call this asycronusly while functions that will need a return should not
 */
 void* firmwareCommandQueue(int command){
-    // pthread_mutex_lock(&QueueLock);
-    //FirmWare.send(command)
-    //void* reply = firmware.reply();
-    // pthread_mutex_unlock(&QueueLock); 
-    //return reply;
+    /*
+     * lock the Input pipe
+     * put the packet onto the input pipe
+     * Give this call an ID
+     * unlock the input pipe
+     * Lock up the queue
+     * Set up the lock-priority code
+     * Grab the data from the queue
+     * unlock the queue
+     * return the data
+    */
+   return NULL;
 }  
 
-
+void firmwareOPipeWatcher(){
+    while(1 == 1){
+        //Read packet ID from the pipe
+        //read packet Length from the pipe
+        //read packet Data from pipe as a char string
+        //create the data to put into the queue
+        //lock the queue
+        //add the data to the queue
+        //unlock the queue
+    }
+}
