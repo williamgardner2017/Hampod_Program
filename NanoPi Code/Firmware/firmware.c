@@ -93,6 +93,10 @@ int main(){
         exit(1);
     }
     int keypad_in_pipe_fd = open(KEYPAD_IN, O_WRONLY);
+    if(keypad_in_pipe_fd == -1){
+        perror("open");
+        exit(1);
+    }
 
 #ifdef DEBUG
     printf("Keypad_i created\n");
@@ -104,12 +108,6 @@ int main(){
         exit(1);
     }
     int keypad_out_pipe_fd = open(KEYPAD_OUT, O_RDONLY);
-    
-    if(keypad_in_pipe_fd == -1){
-        perror("open");
-        exit(1);
-    }
-    
     if(keypad_out_pipe_fd == -1){
         perror("open");
         exit(1);
