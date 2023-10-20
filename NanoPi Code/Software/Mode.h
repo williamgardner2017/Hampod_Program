@@ -10,7 +10,7 @@ typedef struct ModeData {
 
 typedef struct Mode {
     void* (*modeInput)(KeyPress*,int);
-    void (*free)(Mode*);
+    void (*free)(Mode**);
     ModeData* modeDetails;
 } Mode;
 

@@ -46,10 +46,10 @@ char* firmwareCommandQueue(Inst_packet *command){
     ServecingID ++;
     pthread_cond_signal(&queue_cond);
     pthread_mutex_unlock(&queue_lock);
-    //TODO interperate the packet into a char* 
-    char* interpertedData = (char*) data->data;
+    char* interpertedData;
+    memccpy(interpertedData,data->data, lengthOf(data->data)+1);
     destroy_inst_packet(&data);
-    return data;
+    return interpertedData;
 }  
 
 
@@ -153,13 +153,18 @@ void keyWatcher(){
     //TODO properly setup the packet to be sent
     Inst_packet* keyPressedRequest = create_inst_packet(KEYPAD,1,NULL);
 
-    //TODO go from char* to char
-    char pressedKey = *firmwareCommandQueue(keyPressedRequest);
+    //This should go from char* to char, but only the first part of the array
+    char* temp = *firmwareCommandQueue(keyPressedRequest);
+    char pressedKey;
+    memccpy(&pressedKey, temp, 2);
+    free(temp);
+
     KeyPress *interpretedKey = interperateKeyPresses(pressedKey);
     //only run the modeFlow iff a key was actualy pressed
     if(interpretedKey->keyPressed != '-'){
         modeFlow(interpretedKey);
     }
+    destroy_inst_packet(&keyPressedRequest);
     free(interpretedKey);
 }
 

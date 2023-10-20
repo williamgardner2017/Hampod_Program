@@ -44,7 +44,7 @@ void modeRoutingStart(){
 void freeModes(){
     for(int i = 0; i<= modeCount;i++){
         if(modes[i] != NULL){
-            modes[i]->free(modes[i]);
+            modes[i]->free(&(modes[i]));
         }
     }
     free(modes);

@@ -18,11 +18,12 @@ static void* commandRelay(KeyPress* keyInput, int radioDetails){
 }
 
 
-//TODO make this auto zero out
-static void freeMode(Mode* modeToFree){
-    free(modeToFree->modeDetails->modeName);
-    free(modeToFree->modeDetails);
-    free(modeToFree);
+static void freeMode(Mode** modeToFree){
+    Mode* temp = *modeToFree;
+    free(temp->modeDetails->modeName);
+    free(temp->modeDetails);
+    free(*modeToFree);
+    *modeToFree = 0;
 }
 
 Mode* createMode(){

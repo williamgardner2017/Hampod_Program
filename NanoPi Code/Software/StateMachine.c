@@ -9,45 +9,30 @@ Radio** radios;
 int currentRadio = 0;
 int modeFlow(KeyPress* keyInput){
     //the inital switch is for the programable keys, thisis so hat things can be avoided and passed over
-    //TODO make a better system
-    switch (keyInput->keyPressed)
+    //specialty keys will be handled in each of the individual flows 
+    switch (modeState)
     {
-        case 'C':
-        if(programableKeysOn){
-            //do code here
+        case bootUp:
+            return BootupFlow(keyInput);
             break;
-        }
-        case 'D':
-        if(programableKeysOn){
-            //do code here
+        case standard:
+            return StandardModeFlow(keyInput);
             break;
-        }
-        
+        case modeSelect:
+            return ModeSelectFlow(keyInput);
+            break;
+        case configMode:
+            return ConfigFlow(keyInput);
+            break;
+        case dtmf:
+            return DTMFFlow(keyInput);
+            break;
         default:
-            switch (modeState)
-            {
-                case bootUp:
-                    return BootupFlow(keyInput);
-                    break;
-                case standard:
-                    return StandardModeFlow(keyInput);
-                    break;
-                case modeSelect:
-                    return ModeSelectFlow(keyInput);
-                    break;
-                case configMode:
-                    return ConfigFlow(keyInput);
-                    break;
-                case dtmf:
-                    return DTMFFlow(keyInput);
-                    break;
-                default:
-                    //make a screem of unknown
-                    //it should never get here
-                    break;
-            }
+            //make a screem of unknown
+            //it should never get here
             break;
     }
+    break;
 }
 
 //no idea how to store these yet
@@ -79,8 +64,7 @@ int BootupFlow(KeyPress* keyInput){
                     bootUpState = chooseCompany;
                     break;
                 }else{
-                    //TODO handle this mess
-                    radios[currentRadio] = loadUpRadioUsingData(company,model,(int) keyInput->keyPressed);
+                    radios[currentRadio] = loadUpRadioUsingData(company,model, convertCharToKeyValue(keyInput));
                     currentRadio++;
                     bootUpState = linkMore;
                     break;
@@ -126,12 +110,10 @@ int modeSelectPage = 0; //the page number that we are on for mode select
 int isReadingOut = 0;
 /**
  * this handles the select mode state
- * TODO, make the readOutModeName better setup to be able to use the correct mode number
 */
 int ModeSelectFlow(KeyPress* keyInput){
     if(isReadingOut){
-        //TODO get this to now use the char* version
-        //readOutModeName(modeSelectPage*9 + (keyInput/10));
+        readOutModeName(modeSelectPage*9 + (convertCharToKeyValue(keyInput)/10));
         isReadingOut = 0;
     }else{
         switch (keyInput->keyPressed){
@@ -159,8 +141,7 @@ int ModeSelectFlow(KeyPress* keyInput){
             case '7':
             case '8':
             case '9':
-            //TODO make this use correct value
-                switchToRadioMode((modeSelectPage*9) + keyInput->keyPressed);
+                switchToRadioMode((modeSelectPage*9) + convertCharToKeyValue(keyInput));
                 break;
         
             default:
@@ -179,7 +160,6 @@ int DTMFFlow(KeyPress* keyInput){
     }
 }
 
-//TODO redu parts of this function since it now is not compleat
 int StandardModeFlow(KeyPress* keyInput){
     switch (keyInput->keyPressed)
     {
@@ -265,7 +245,6 @@ int ConfigFlow(char* KeyInput){
 
 /**
  * Reads out the name of the asked for mode
- * TODO make this use the firm ware
 */
 int readOutModeName(int modeID){
     //DEBUG
@@ -277,7 +256,8 @@ int readOutModeName(int modeID){
 /**
  * This is passed the modeID
  * if the modeID is negitive that represents that it is a non-standard mode
- * TODO make this correctly use the non-standard modes
+ * TODO see if this can just be replaced with the new modeRouting file
+ * Idea, have this be what takes in the modeID and then using it would also switch the modeState as needed
 */
 int switchToRadioMode(int modeID){
     switch (modeID)
