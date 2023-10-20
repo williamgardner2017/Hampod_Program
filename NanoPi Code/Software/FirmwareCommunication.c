@@ -99,8 +99,8 @@ Functions related to the key presses
 
 //These are variables to control the keyPress interperater
 int shiftEnabled = 1;
-int oldKey = 0;
-int holdKeySent = 0;
+char oldKey = -1;
+bool holdKeySent = 0;
 int shiftState = 0;
 int maxShifts = 3;
 int holdWaitCount = 0;
@@ -110,15 +110,15 @@ int holdWaitTime = 2;
  * Processes the output of the key presses to properly interperate when 
  * a press is shifted or when a press is held down
  * Inputs: key pressed
- * outputs: (value of key pressed) * 10 + (shift count) + (maxShifts if held down)
+ * output: a KeyPress struct that holds the data for what key was pressed, this will need to be freed
 */
 KeyPress* interperateKeyPresses(char keyPress){
     KeyPress *returnValue = malloc(sizeof(KeyPress));
     returnValue->isHold = false;
-    returnValue->keyPressed = '-';
+    returnValue->keyPressed = -1;
     returnValue->shiftAmount = 0;
-    if(keyPress == '-1'){
-        if(oldKey != '-1' && !holdKeySent && holdWaitCount < holdWaitTime){
+    if(keyPress == -1){
+        if(oldKey != -1 && !holdKeySent && holdWaitCount < holdWaitTime){
             if(oldKey == 'A' && shiftEnabled){
                 shiftState ++;
                 if(shiftState >= maxShifts){
@@ -130,14 +130,14 @@ KeyPress* interperateKeyPresses(char keyPress){
                 shiftState = 0;
             }//end inner null
         }//end outer if
-        holdKeySent = 0;
-        oldKey = '-1';
+        holdKeySent = false;
+        oldKey = -1;
         holdWaitCount = 0;
-    }else if(keyPress == oldKey && keyPress != '-1'){
+    }else if(keyPress == oldKey && keyPress != -1){
         if(holdWaitCount < holdWaitTime){
             holdWaitCount++;
         }else if(!holdKeySent){
-            holdKeySent = 1;
+            holdKeySent = true;
             returnValue->keyPressed = keyPress;
             returnValue->shiftAmount = shiftState;
             returnValue->isHold = true;
@@ -148,6 +148,25 @@ KeyPress* interperateKeyPresses(char keyPress){
     }
     return returnValue;
 }
+
+void resetKeyInputVars(){
+    shiftEnabled = 1;
+    oldKey = -1;
+    holdKeySent = false;
+    shiftState = 0;
+    maxShifts = 3;
+    holdWaitCount = 0;
+    holdWaitTime = 2;
+}
+
+bool confirmKeyInputVars(char oK, bool hKS,int sS, int hWC){
+    if(oK == oldKey && hKS == holdKeySent && sS == shiftState && hWC == holdWaitCount){
+        return true;
+    }else{
+        return false;
+    }
+}
+
 
 void keyWatcher(){
     //TODO properly setup the packet to be sent

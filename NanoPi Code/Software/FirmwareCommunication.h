@@ -5,15 +5,18 @@
 #include "../Firmware/hampod_firm_packet.h"
 #include "../Firmware/hampod_queue.h"
 
-void keyWatcher();
-KeyPress* interperateKeyPresses(char keyPress);
-char* sendSpeakerOutput(char* string);
+void setupPipes();
 char* firmwareCommandQueue(Inst_packet command);
-int formatToSpeakerOutput(char* string);
-void keyQueue();
 void firmwareOPipeWatcher();
+char* sendSpeakerOutput(char* string);
+KeyPress* interperateKeyPresses(char keyPress);
+void resetKeyInputVars();
+bool confirmKeyInputVars(char oK, bool hKS,int sS, int hWC);
 
+void keyWatcher();
+void startKeyWatcher();
 void firmwareCommunicationStartup();
+
 
 #include "FirmwareCommunication.c"
 #endif
