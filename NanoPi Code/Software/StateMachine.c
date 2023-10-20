@@ -5,7 +5,7 @@
 ModeStates modeState = bootUp;
 
 int programableKeysOn = 0;
-Radio* radios[2];
+Radio** radios;
 int currentRadio = 0;
 int modeFlow(KeyPress* keyInput){
     //the inital switch is for the programable keys, thisis so hat things can be avoided and passed over
@@ -297,4 +297,10 @@ int switchToRadioMode(int modeID){
             setRadioMode(radios[currentRadio], getModeById(modeID));
             break;
     }
+}
+
+
+
+void stateMachineStart(){
+    radios = malloc(sizeof(Radio) * 2);
 }

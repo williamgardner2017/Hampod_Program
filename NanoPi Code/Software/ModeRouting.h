@@ -4,7 +4,7 @@
 #include "NormalMode.h"
 
 Mode* getModeById(int modeID);
-void initiateModeList();
+void modeRoutingStart();
 void freeModes();
 
 #include "ModeRouting.c"

@@ -6,7 +6,7 @@
 */
 
 const int modeCount = 2;
-Mode* modes[modeCount];
+Mode** modes;
 
 /**
 *This is where all of the modes will converge so that this is one of the few files that will need to be eddited inorder to add in a new modeCount
@@ -34,9 +34,8 @@ Mode* getModeById(int modeID){
 /*
 * Creates the array to hold all of the modes
 */
-void initiateModeList(){
-    //TODO make this actualy work properly if need be 
-    //modes = malloc(sizeOf(Mode)*modeCount);
+void modeRoutingStart(){
+    modes = malloc(sizeof(Mode) * modeCount);
 }
 
 /*

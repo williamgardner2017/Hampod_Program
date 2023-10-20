@@ -17,23 +17,12 @@ void setupPipes(){
 Actual communication section
 */
 //creating the queue
-Packet_queue* softwareQueue = create_packet_queue();
+Packet_queue* softwareQueue;
 // creating the locks
 pthread_mutex_t queue_lock;
 pthread_mutex_t pipe_lock;
 pthread_cond_t queue_cond;
-if(pthread_mutex_init(&queue_lock, NULL) != 0) {
-    perror("pthread_mutex_init for queue");
-    exit(1);
-}
-if(pthread_mutex_init(&pipe_lock, NULL) != 0) {
-    perror("pthread_mutex_init for pipe");
-    exit(1);
-}
-if(pthread_cond_init($queue_cond, NULL) != 0){
-    perror("pthread_cont_init for queue");
-    exit(1);
-}
+
 int CurrentID = 0;
 int ServecingID = 0;
 /**
@@ -197,5 +186,24 @@ void startKeyWatcher(){
     if (timer_settime(timerid, 0, &its, NULL) == -1) {
         perror("timer_settime");
         return 1;
+    }
+}
+
+
+
+
+//this starts up the communication of the firmware
+void firmwareCommunicationStartup(){
+    if(pthread_mutex_init(&queue_lock, NULL) != 0) {
+        perror("pthread_mutex_init for queue");
+        exit(1);
+    }
+    if(pthread_mutex_init(&pipe_lock, NULL) != 0) {
+        perror("pthread_mutex_init for pipe");
+        exit(1);
+    }
+    if(pthread_cond_init($queue_cond, NULL) != 0){
+        perror("pthread_cont_init for queue");
+        exit(1);
     }
 }

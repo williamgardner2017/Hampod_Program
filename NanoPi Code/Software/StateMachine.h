@@ -31,6 +31,7 @@ int switchToRadioMode(int mode);
 int StandardModeFlow(KeyPress* keyInput);
 int ConfigFlow(KeyPress* keyInput);
 int readOutModeName(int mode);
+void stateMachineStart();
 
 #include "StateMachine.c"
 #endif
