@@ -7,25 +7,30 @@ ModeStates modeState = bootUp;
 int programableKeysOn = 0;
 Radio** radios;
 int currentRadio = 0;
-int modeFlow(KeyPress* keyInput){
+ModeStates modeFlow(KeyPress* keyInput){
     //the inital switch is for the programable keys, thisis so hat things can be avoided and passed over
     //specialty keys will be handled in each of the individual flows 
     switch (modeState)
     {
         case bootUp:
-            return BootupFlow(keyInput);
+            BootupFlow(keyInput);
+            return bootUp;
             break;
         case standard:
-            return StandardModeFlow(keyInput);
+            StandardModeFlow(keyInput);
+            return standard;
             break;
         case modeSelect:
-            return ModeSelectFlow(keyInput);
+            ModeSelectFlow(keyInput);
+            return modeSelect;
             break;
         case configMode:
-            return ConfigFlow(keyInput);
+            ConfigFlow(keyInput);
+            return configMode;
             break;
         case dtmf:
-            return DTMFFlow(keyInput);
+            DTMFFlow(keyInput);
+            return dtmf;
             break;
         default:
             //make a screem of unknown
@@ -36,10 +41,11 @@ int modeFlow(KeyPress* keyInput){
 }
 
 //no idea how to store these yet
+//TODO have there be another file dedicated to figureing this out since it will probably be a large function
 char* company;
 int model;
 BootUpStates bootUpState = selectNewOrSave;
-int BootupFlow(KeyPress* keyInput){
+BootUpStates BootupFlow(KeyPress* keyInput){
     switch (bootUpState)
     {
         case selectNewOrSave:
@@ -104,6 +110,7 @@ int BootupFlow(KeyPress* keyInput){
         //should not get here
         break;
     }
+    return bootUpState;
 }
 
 int modeSelectPage = 0; //the page number that we are on for mode select
