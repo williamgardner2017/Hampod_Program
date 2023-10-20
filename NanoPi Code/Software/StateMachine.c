@@ -7,18 +7,17 @@ ModeStates modeState = bootUp;
 int programableKeysOn = 0;
 Radio* radios[2];
 int currentRadio = 0;
-
-int modeFlow(int keyInput){
+int modeFlow(KeyPress* keyInput){
     //the inital switch is for the programable keys, thisis so hat things can be avoided and passed over
     //TODO make a better system
-    switch (keyInput)
+    switch (keyInput->keyPressed)
     {
-        case 1:
+        case 'C':
         if(programableKeysOn){
             //do code here
             break;
         }
-        case 2:
+        case 'D':
         if(programableKeysOn){
             //do code here
             break;
@@ -55,19 +54,19 @@ int modeFlow(int keyInput){
 char* company;
 int model;
 BootUpStates bootUpState = selectNewOrSave;
-int BootupFlow(int keyInput){
+int BootupFlow(KeyPress* keyInput){
     switch (bootUpState)
     {
         case selectNewOrSave:
-            if(keyInput == 0)/*Save*/{
+            if(keyInput->keyPressed == '0')/*Save*/{
                 bootUpState = selectSave;
                 break;
-            }else if(keyInput == 1)/*Load new*/{
+            }else if(keyInput->keyPressed == '1')/*Load new*/{
                 bootUpState = chooseCompany;
                 break;
             }
         case chooseCompany:
-            if(keyInput == 0) /*Back*/{
+            if(keyInput->keyPressed == '0') /*Back*/{
                 bootUpState = selectNewOrSave;
                 break;
             }
@@ -76,20 +75,21 @@ int BootupFlow(int keyInput){
             bootUpState = selectLink;
             break;
         case selectLink:
-            if(keyInput == 0)/*Back*/{
+            if(keyInput->keyPressed == '0')/*Back*/{
                     bootUpState = chooseCompany;
                     break;
                 }else{
-                    radios[currentRadio] = loadUpRadioUsingData(company,model,keyInput);
+                    //TODO handle this mess
+                    radios[currentRadio] = loadUpRadioUsingData(company,model,(int) keyInput->keyPressed);
                     currentRadio++;
                     bootUpState = linkMore;
                     break;
                 }
         case linkMore:
-            if(keyInput == 1)/*Yes*/{
+            if(keyInput->keyPressed == '1')/*Yes*/{
                 bootUpState = chooseCompany;
                 break;
-            }else if(keyInput == 0)/*No*/{
+            }else if(keyInput->keyPressed == '0')/*No*/{
                 modeState = standard;
                 currentRadio--;
                 //set radio to normal mode
@@ -99,7 +99,7 @@ int BootupFlow(int keyInput){
                 break; 
             }
         case selectSave:
-            if(keyInput == 0)/*Back*/{
+            if(keyInput->keyPressed == '0')/*Back*/{
                     bootUpState = selectNewOrSave;
                     break;
                 }else{
@@ -128,12 +128,13 @@ int isReadingOut = 0;
  * this handles the select mode state
  * TODO, make the readOutModeName better setup to be able to use the correct mode number
 */
-int ModeSelectFlow(int keyInput){
+int ModeSelectFlow(KeyPress* keyInput){
     if(isReadingOut){
-        readOutModeName(modeSelectPage*9 + (keyInput/10));
+        //TODO get this to now use the char* version
+        //readOutModeName(modeSelectPage*9 + (keyInput/10));
         isReadingOut = 0;
     }else{
-        switch (keyInput){
+        switch (keyInput->keyPressed){
             case 'C':
                 modeSelectPage = modeSelectPage + 1;
                 break;
@@ -141,25 +142,25 @@ int ModeSelectFlow(int keyInput){
                 modeSelectPage = modeSelectPage - 1;
                 break;
             case '*':
-                isReadingOut = 1;
-                break;
-            case 'H': //this is * hold
-            //TODO add a min function to this to now over flow the amount of modes there are
-                for(int i = modeSelectPage*9; i< (modeSelectPage+1)*9;i++){
-                    readOutModeName(i);
+                if(keyInput->isHold){
+                    for(int i = modeSelectPage*9; i< (modeSelectPage+1)*9;i++){
+                        readOutModeName(i);
+                    }
+                }else{
+                    isReadingOut = 1;
                 }
                 break;
-                //TODO make this also just normal numbers
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-            case 9:
-                switchToRadioMode((modeSelectPage*9) + keyInput);
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+            //TODO make this use correct value
+                switchToRadioMode((modeSelectPage*9) + keyInput->keyPressed);
                 break;
         
             default:
@@ -170,84 +171,79 @@ int ModeSelectFlow(int keyInput){
 }
 
 //dependint on firmware
-int DTMFFlow(int keyInput){
-    switch (keyInput)
-    {
-    case 73:
-        switchToRadioMode(0);
-        //TODO make this also turn back on other items 
-        break;
-    
-    default:
-        //TODO make the beep boops 
-        break;
+int DTMFFlow(KeyPress* keyInput){
+    if(keyInput->keyPressed == 'B' && keyInput->isHold){
+         switchToRadioMode(0);
+    }else{
+        //do the beep boop
     }
 }
 
-
-int StandardModeFlow(int keyInput){
-    int keyPress = keyInput/10;
-    int keyType = keyInput%10;
-
-    switch (keyPress)
+//TODO redu parts of this function since it now is not compleat
+int StandardModeFlow(KeyPress* keyInput){
+    switch (keyInput->keyPressed)
     {
-    case 3: // A
-        switch (keyType)
+    case 'A': // A
+        switch (keyInput->shiftAmount)
         {
         case 0:
-            /* code */
+            if(keyInput->isHold){
+                //Volume up
+            }else{
+                
+            }
             break;
         case 1:
-            
+            if(keyInput->isHold){
+                //Volume up
+            }else{
+                
+            }
             break;
         case 2:
-            /* code */
+            if(keyInput->isHold){
+                //Volume up
+            }else{
+                
+            }
             break;
-        case 3:
-            //Volume up
-            break;
-        case 4:
-            //Volume up
-            break;
-        case 5:
-            /* code */
-            break;
-        
         default:
             break;
         }
         break;
-    case 7: //B
-        switch (keyType)
+    case 'B': //B
+     switch (keyInput->shiftAmount)
         {
         case 0:
-             switchToRadioMode(-3);//mode select
+            if(keyInput->isHold){
+                //Volume down
+            }else{
+                switchToRadioMode(-3);//mode select
+            }
             break;
         case 1:
-            switchToRadioMode(0);//Normal mode
+            if(keyInput->isHold){
+
+            }else{
+                switchToRadioMode(0);//Normal mode
+            }
             break;
         case 2:
-            /* code */
+             if(keyInput->isHold){
+
+            }else{
+               
+            }
             break;
-        case 3:
-            //Volume up
-            break;
-        case 4:
-            
-            break;
-        case 5:
-            /* code */
-            break;
-        
         default:
             break;
         }
         break;
-    case 11: // C
+    case 'C': // C
         //getModesOfProgramableKeys
         //setRadioToMode
         break;
-    case 15: // D
+    case 'D': // D
         //getModesOfProgramableKeys
         //setRadioToMode
         break;
@@ -263,7 +259,7 @@ int StandardModeFlow(int keyInput){
  * See if makeing this be treated like a normal mode would work
  * See if there are any reasons a standard mode could not affect the hampod data
 */
-int ConfigFlow(int KeyInput){
+int ConfigFlow(char* KeyInput){
     //This may be easyer to just treat as a standard mode but make special. 
 }
 
@@ -272,7 +268,10 @@ int ConfigFlow(int KeyInput){
  * TODO make this use the firm ware
 */
 int readOutModeName(int modeID){
+    //DEBUG
     printf("%s", getModeById(modeID)->modeDetails->modeName);
+    //actual
+    sendSpeakerOutput(getModeById(modeID)->modeDetails->modeName);
 }
 
 /**

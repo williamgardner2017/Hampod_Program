@@ -26,7 +26,7 @@ void setRadioMode(Radio* thisRadio, Mode* modeToSetTo){
     thisRadio->currentMode = modeToSetTo;
 }
 
-void* runRadioCommand(Radio* thisRadio, int keyInput){
+void* runRadioCommand(Radio* thisRadio, KeyPress* keyInput){
     void* results;
     results = thisRadio->currentMode->modeInput(keyInput,23);
     return results;

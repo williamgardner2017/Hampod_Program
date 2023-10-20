@@ -23,13 +23,13 @@ typedef enum {
 
 
 
-int ModeFlow(int keyInput);
-int BootupFlow(int keyInput);
-int DTMFFlow(int keyInput);
-int ModeSelectFlow(int keyInput);
+int ModeFlow(KeyPress* keyInput);
+int BootupFlow(KeyPress* keyInput);
+int DTMFFlow(KeyPress* keyInput);
+int ModeSelectFlow(KeyPress* keyInput);
 int switchToRadioMode(int mode);
-int StandardModeFlow(int keyInput);
-int ConfigFlow(int keyInput);
+int StandardModeFlow(KeyPress* keyInput);
+int ConfigFlow(KeyPress* keyInput);
 int readOutModeName(int mode);
 
 #include "StateMachine.c"

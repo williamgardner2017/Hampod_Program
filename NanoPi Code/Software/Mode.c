@@ -2,13 +2,13 @@
 #include <string.h>
 
 
-static void* commandRelay(int keyInput, int radioDetails){
-    switch (keyInput)
+static void* commandRelay(KeyPress* keyInput, int radioDetails){
+    switch (keyInput->keyPressed)
     {
-    case 0:
+    case '0':
         break;
     
-    case 2:
+    case '1':
         break;
  
     default:
@@ -19,7 +19,7 @@ static void* commandRelay(int keyInput, int radioDetails){
 
 
 //TODO make this auto zero out
-static void freeMode(Mode** modeToFree){
+static void freeMode(Mode* modeToFree){
     free(modeToFree->modeDetails->modeName);
     free(modeToFree->modeDetails);
     free(modeToFree);
