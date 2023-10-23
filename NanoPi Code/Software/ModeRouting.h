@@ -4,8 +4,12 @@
 #include "NormalMode.h"
 
 Mode* getModeById(int modeID);
-void modeRoutingStart();
+Mode** modeRoutingStart();
 void freeModes();
+//TODO make this a reality
+Mode* loadDTMFDummy();
+
+int getModeCount();
 
 #include "ModeRouting.c"
 #endif

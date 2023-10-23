@@ -1,11 +1,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+
+
 /*
 *The idea of this that users only need to edit this one place inorder to add in their new modes.
 */
 
-const int modeCount = 2;
+const int modeCount = 3;
 Mode** modes;
 
 /**
@@ -15,7 +17,7 @@ Mode** modes;
 Mode* getModeById(int modeID){
 
     switch(modeID){
-        case 0:
+        case 0: //NORMAL Mode
             if(modes[0] == NULL){
                 modes[0] = NormalLoad();
                 if(modes[0] == NULL){
@@ -23,6 +25,24 @@ Mode* getModeById(int modeID){
                 }
             }
             return modes[0];
+            break;
+        case 1: //DTMF mode so that things run smoothly
+            if(modes[1] == NULL){
+                modes[1] = loadDTMFDummy();
+                if(modes[1] == NULL){
+                    return NULL;
+                }
+            }
+            return modes[1];
+            break;
+        case 2: //ConfigMode since this is already done
+            if(modes[2] == NULL){
+                modes[2] = NormalLoad();
+                if(modes[2] == NULL){
+                    return NULL;
+                }
+            }
+            return modes[2];
             break;
         default:
             return NULL;
@@ -34,8 +54,9 @@ Mode* getModeById(int modeID){
 /*
 * Creates the array to hold all of the modes
 */
-void modeRoutingStart(){
+Mode** modeRoutingStart(){
     modes = malloc(sizeof(Mode) * modeCount);
+    return modes;
 }
 
 /*
@@ -48,4 +69,8 @@ void freeModes(){
         }
     }
     free(modes);
+}
+
+int getModeCount(){
+    return modeCount;
 }
