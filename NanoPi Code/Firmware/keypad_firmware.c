@@ -37,9 +37,7 @@ int readNumPad(){
 // Debug print statements from this process are Cyan (\033[0;36m)
 void keypad_process(){
 
-#ifdef DEBUG
-    printf("\033[0;35mKeypad reader process launched\n");
-#endif
+    KEYPAD_PRINTF("\033[0;35mKeypad reader process launched\n");
 
     unsigned char running = 1;
     int oldval = -1;//Used to avoid having repeated input when the button is held
@@ -58,9 +56,8 @@ void keypad_process(){
 	pullUpDnControl(C3, PUD_UP);
 	pullUpDnControl(C4, PUD_UP);
 
-#ifdef DEBUG
-    printf("\033[0;97mConnecting to input/output pipes\n");
-#endif
+    KEYPAD_PRINTF("\033[0;97mConnecting to input/output pipes\n");
+
 
     int input_pipe_fd = open(KEYPAD_I, O_RDONLY);
     if(input_pipe_fd == -1) {
@@ -75,9 +72,9 @@ void keypad_process(){
         kill(controller_pid, SIGINT);
         exit(0);
     }
-#ifdef DEBUG
-    printf("\033[0;97mPipes successfully connected\n");
-#endif
+    
+	KEYPAD_PRINTF("\033[0;97mPipes successfully connected\n");
+
 	while(running){
 		
 		int readNum = readNumPad();

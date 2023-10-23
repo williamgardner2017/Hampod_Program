@@ -15,6 +15,24 @@
 #define KEYPAD_OUT "Keypad_o"
 #define KEYPAD_IN "Keypad_i"
 
+//Time for some preprocessor magic
+#define FIRMWARE_THREAD_COLOR "\033[0;33mFirmware - Main: "
+#define FIRMWARE_IO_THREAD_COLOR "\033[0;35mFirmware - IO Thread"
+
+#define FIRMWARE_PRINTF(text, ...) \
+    do { \
+        if(DEBUG) { \
+            printf("%s", FIRMWARE_THREAD_COLOR, text, __VA_ARGS); \
+        } \
+    } while(0)
+
+#define FIRMWARE_IO_PRINTF(text, ...) \
+    do { \
+        if(DEBUG) { \
+            printf("%s", FIRMWARE_IO_THREAD_COLOR, text, __VA_ARGS); \
+        } \
+    } while(0)
+
 typedef struct Buff_input {
     int pipe_fd;
     Packet_queue* queue;
@@ -33,10 +51,11 @@ void sigsegv_handler(int signum);
 void sigint_handler(int signum);
 
 int main(){
+
 #ifdef DEBUG
     printf("\033[0;32mHampod Firmware Version 0.6\n");
     printf("\033[0;31mDEBUG BUILD \033[1;33m\n");
-    printf("Clearing Pipes\n");
+    FIRMWARE_PRINTF("Clearing Pipes\n");
     system("./pipe_remover.sh");
 #else
     system("./pipe_remover.sh > /dev/null 2>&1");
@@ -44,27 +63,21 @@ int main(){
 
     controller_pid = getpid();
 
-#ifdef DEGUG
-    printf("Creating Sigsegv handler\n");
-#endif
+    FIRMWARE_PRINTF("Creating Sigsegv handler\n");
 
     if(signal(SIGSEGV, sigsegv_handler) == SIG_ERR) {
         perror("signal");
         exit(1);
     }
 
-#ifdef DEBUG
-    printf("Creating Sigint handler\n");
-#endif
+    FIRMWARE_PRINTF("Creating Sigint handler\n");
 
     if(signal(SIGINT, sigint_handler) == SIG_ERR) {
         perror("signal");
         exit(1);
     }
 
-#ifdef DEBUG
-    printf("Now creating Firmware_o pipe\n");
-#endif
+    FIRMWARE_PRINTF("Now creating Firmware_o pipe\n");
 
     if (mkfifo(OUTPUT_PIPE, 0666) == -1) {
         perror("mkfifo");
@@ -76,9 +89,7 @@ int main(){
         exit(1);
     }
 
-#ifdef DEBUG
-    printf("Firmware_o created, now creating Firmware_i\n");
-#endif
+    FIRMWARE_PRINTF("Firmware_o created, now creating Firmware_i\n");
     
     if (mkfifo(INPUT_PIPE, 0666) == -1) {
         perror("mkfifo");
@@ -90,20 +101,16 @@ int main(){
         exit(1);
     }
     
-#ifdef DEBUG
-    printf("Firmware_i created\n");
-    printf("Creating Keypad_i pipe\n");
-#endif
+    FIRMWARE_PRINTF("Firmware_i created\n");
+    FIRMWARE_PRINTF("Creating Keypad_i pipe\n");
 
     if (mkfifo(KEYPAD_IN, 0666) == -1) {
         perror("mkfifo");
         exit(1);
     }
 
-#ifdef DEBUG
-    printf("Keypad_i created\n");
-    printf("Creating Keypad_o pipe\n");
-#endif
+    FIRMWARE_PRINTF("Keypad_i created\n");
+    FIRMWARE_PRINTF("Creating Keypad_o pipe\n");
 
     if (mkfifo(KEYPAD_OUT, 0666) == -1) {
         perror("mkfifo");
@@ -128,18 +135,14 @@ int main(){
         exit(1);
     }
 
-#ifdef DEBUG
-    printf("Keypad_o created\n");
-    printf("Creating instruction queue\n");
-#endif
+    FIRMWARE_PRINTF("Keypad_o created\n");
+    FIRMWARE_PRINTF("Creating instruction queue\n");
     
     Packet_queue* instruction_queue = create_packet_queue();
 
-#ifdef DEBUG
-    printf("\033[0;33mInstruction queue created\n");
-    printf("\033[0;33mCreating queue mutex lock\n");
-    printf("\033[0;33mCreating I\\O buffer thread\n");
-#endif
+    FIRMWARE_PRINTF("Instruction queue created\n");
+    FIRMWARE_PRINTF("Creating queue mutex lock\n");
+    FIRMWARE_PRINTF("Creating I\\O buffer thread\n");
 
     pthread_t io_buffer;
     Buff_input thread_input;
@@ -151,39 +154,29 @@ int main(){
         exit(1);
     }
     
-#ifdef DEBUG
-    printf("\033[0;33mQueue lock initialized\n");
-#endif
+    FIRMWARE_PRINTF("Queue lock initialized\n");
 
     if(pthread_create(&io_buffer, NULL, io_buffer_thread, (void*)&thread_input) != 0) {
         perror("Buffer thread failed");
         exit(1);
     }
 
-    
-#ifdef DEBUG
-    printf("\033[0;33m1 second delay so thread can lock the queue\n");
-#endif
+    FIRMWARE_PRINTF("1 second delay so thread can lock the queue\n");
 
     usleep(1000000);
 
-#ifdef DEBUG
-    printf("\033[0;33m1 second delay over\n");
-#endif
+    FIRMWARE_PRINTF("1 second delay over\n");
 
     while(running) {
         pthread_mutex_lock(&queue_lock);
 
-#ifdef DEBUG
-        printf("\033[0;33mQueue is open\n");
-#endif
+        FIRMWARE_PRINTF("Queue is open\n");
+
         Inst_packet* received_packet = dequeue(instruction_queue);
         pthread_mutex_unlock(&queue_lock);
 
-#ifdef DEBUG
-        printf("\033[0;33mPacket is %p\n", received_packet);
-        printf("\033[0;33mProcessing received packet\n");
-#endif
+        FIRMWARE_PRINTF("Packet is %p\n", received_packet);
+        FIRMWARE_PRINTF("Processing received packet\n");
 
         if(received_packet == NULL) {
             continue;
@@ -206,48 +199,40 @@ int main(){
 // Debug print statements from this thread are purple
 void *io_buffer_thread(void* arg) {
 
-#ifdef DEBUG
-    printf("\033[0;35mI\\O thread created\n");
-#endif
+    FIRMWARE_IO_PRINTF("I\\O thread created\n");
 
     Buff_input* function_input = (Buff_input*)arg;
     int i_pipe = function_input->pipe_fd;
     Packet_queue* queue = function_input->queue;
     unsigned char buffer[256];
 
-#ifdef DEBUG
-    printf("\033[0;35mInput pipe = %d, queue_ptr = %p\n", i_pipe, queue);
-#endif
+    FIRMWARE_IO_PRINTF("Input pipe = %d, queue_ptr = %p\n", i_pipe, queue);
+
 
     while(running) {
 
-#ifdef DEBUG
-        printf("\033[0;35mLocking the queue\n");
-#endif
+        FIRMWARE_IO_PRINTF("Locking the queue\n");
+
         pthread_mutex_lock(&queue_lock);
-#ifdef DEBUG
-        printf("\033[0;35mWaiting for input...\n");
-#endif
+
+        FIRMWARE_IO_PRINTF("Waiting for input...\n");
+
         unsigned char packet_type;
         unsigned short size;
         read(i_pipe, &packet_type, 4);
         read(i_pipe, &size, 2);
         read(i_pipe, buffer, size);
 
-#ifdef DEBUG
-        printf("\033[0;35mFound packet with type %d, size %d\n", packet_type, size);
-        printf("Buffer holds:%s: with size %d\n", buffer, sizeof(buffer));
-#endif
+        FIRMWARE_IO_PRINTF("Found packet with type %d, size %d\n", packet_type, size);
+        FIRMWARE_IO_PRINTF("Buffer holds:%s: with size %d\n", buffer, sizeof(buffer));
+
         Inst_packet* new_packet = create_inst_packet(packet_type, size, buffer);
 
-#ifdef DEBUG
-        printf("\033[0;35mQueueing the new packet\n");
-#endif
+        FIRMWARE_IO_PRINTF("Queueing the new packet\n");
+
         enqueue(queue, new_packet);
 
-#ifdef DEBUG
-        printf("\033[0;35mReleasing queue\n");
-#endif
+        FIRMWARE_IO_PRINTF("Releasing queue\n");
 
         pthread_mutex_unlock(&queue_lock);
         usleep(100);

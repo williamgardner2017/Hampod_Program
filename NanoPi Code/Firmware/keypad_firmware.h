@@ -29,6 +29,15 @@
 #define C3 16 //Pin GPIOG7
 #define C4 15 //Pin GPIOG6
 
+#define KEYPAD_THREAD_COLOR "\033[0;97mKeypad - Main: "
+
+#define KEYPAD_PRINTF(text, ...) \
+    do { \
+        if(DEBUG) { \
+            printf("%s", KEYPAD_THREAD_COLOR, text, __VA_ARGS); \
+        } \
+    } while(0)
+
 #include "keypad_firmware.c"
 
 #endif
