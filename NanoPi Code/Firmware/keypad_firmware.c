@@ -1,31 +1,7 @@
 /* This code is for the keypad firmware for the Hampod Program
 * Written by Brendan Perez
-* Last modified on 10/16/2023
+* Last modified on 10/18/2023
 */
-
-#include <wiringPi.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <pthread.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <signal.h>
-
-#include "hampod_queue.h"
-
-#define KEYPAD_O "Keypad_o"
-#define KEYPAD_I "Keypad_i"
-#define R1 0 //Pin GPIOA0
-#define R2 10 //Pin GPIOC3
-#define R3 5 //Pin GPIOG9
-#define R4 6 //Pin GPIOA1
-#define C1 4 //Pin GPIOG8
-#define C2 1 //Pin GPIOA6
-#define C3 16 //Pin GPIOG7
-#define C4 15 //Pin GPIOG6
 
 extern pid_t controller_pid;
 
@@ -65,7 +41,7 @@ void keypad_process(){
     printf("\033[0;35mKeypad reader process launched\n");
 #endif
 
-    uint8_t running = 1;
+    unsigned char running = 1;
     int oldval = -1;//Used to avoid having repeated input when the button is held
 	wiringPiSetup();
 	pinMode(7, OUTPUT);//LED for Testing, on Pin GPIOG11
@@ -83,7 +59,7 @@ void keypad_process(){
 	pullUpDnControl(C4, PUD_UP);
 
 #ifdef DEBUG
-    printf("\033[0;35mConnecting to input/output pipes\n");
+    printf("\033[0;97mConnecting to input/output pipes\n");
 #endif
 
     int input_pipe_fd = open(KEYPAD_I, O_RDONLY);
@@ -99,13 +75,12 @@ void keypad_process(){
         kill(controller_pid, SIGINT);
         exit(0);
     }
-
+#ifdef DEBUG
+    printf("\033[0;97mPipes successfully connected\n");
+#endif
 	while(running){
 		
 		int readNum = readNumPad();
-		if(oldval != readNum && readNum != -1){	
-			speak_numpad(readNum);
-		}
 		oldval = readNum;//Keep track of old button to avoid multiple inputs for the same press
 		if(readNum >= 0){
 		digitalWrite(7, HIGH);//blink led when a button is pressed

@@ -1,14 +1,14 @@
 firmware.elf: firmware.o
-	cc firmware.o -o firmware.elf -lpthread
+	cc -Wall firmware.o -o firmware.elf -wiringPi -lpthread
 firmware.o: firmware.c
-	cc $(CFLAGS) -c firmware.c -o firmware.o -lpthread
+	cc $(CFLAGS) -Wall -c firmware.c -o firmware.o -lwiringPi -lpthread
 firmware.c:
 	@echo "Missing firmware.c file. Repull the git repo"
 
 debug:
 	@echo "Building Debug version"
-	cc -DDEBUG -g -c firmware.c -o firmware.o -lpthread
-	cc firmware.o -o firmware.elf -lpthread
+	cc -DDEBUG -Wall -g -c firmware.c -o firmware.o -lwiringPi -lpthread
+	cc -Wall firmware.o -o firmware.elf -lwiringPi -lpthread
 
 clean:
 	@rm *.o

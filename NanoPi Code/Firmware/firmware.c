@@ -8,7 +8,7 @@
 #include <signal.h>
 
 #include "hampod_queue.h"
-#include "keypad_firmware.c"
+#include "keypad_firmware.h"
 
 #define INPUT_PIPE "Firmware_i"
 #define OUTPUT_PIPE "Firmware_o"
@@ -136,9 +136,9 @@ int main(){
     Packet_queue* instruction_queue = create_packet_queue();
 
 #ifdef DEBUG
-    printf("Instruction queue created\n");
-    printf("Creating queue mutex lock\n");
-    printf("Creating I\\O buffer thread\n");
+    printf("\033[0;33mInstruction queue created\n");
+    printf("\033[0;33mCreating queue mutex lock\n");
+    printf("\033[0;33mCreating I\\O buffer thread\n");
 #endif
 
     pthread_t io_buffer;
@@ -152,7 +152,7 @@ int main(){
     }
     
 #ifdef DEBUG
-    printf("Queue lock initialized\n");
+    printf("\033[0;33mQueue lock initialized\n");
 #endif
 
     if(pthread_create(&io_buffer, NULL, io_buffer_thread, (void*)&thread_input) != 0) {
