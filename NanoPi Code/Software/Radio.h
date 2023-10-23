@@ -1,6 +1,6 @@
 #ifndef HAMPOD_SOFT_RADIO
 #define HAMPOD_SOFT_RADIO
-#include "Mode.h"
+#include "Modes/Mode.h"
 #include "GeneralFunctions.h"
 //toy with the idea of the radio struct holding function pointers so they are more like objects
 typedef struct Radio{

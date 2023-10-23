@@ -28,7 +28,7 @@ Mode* getModeById(int modeID){
             break;
         case 1: //DTMF mode so that things run smoothly
             if(modes[1] == NULL){
-                modes[1] = loadDTMFDummy();
+                modes[1] = DTMFDummyLoad();
                 if(modes[1] == NULL){
                     return NULL;
                 }

@@ -3,8 +3,8 @@
 #include "FirmwareCommunication.h"
 #include "GeneralFunctions.h"
 #include "Radio.h"
-#include "Mode.h"
-#include "ModeRouting.h"
+#include "Modes/Mode.h"
+#include "Modes/ModeRouting.h"
 typedef enum {
     bootUp,
     standard,
