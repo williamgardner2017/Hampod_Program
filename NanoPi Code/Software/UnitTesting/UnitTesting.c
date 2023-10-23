@@ -17,7 +17,7 @@ bool ModeRoutingTest(){
     char* testGroup = "ModeRouting";
     char* testName;
     bool flag = true;
-    testName = "Creation"
+    testName = "Creation";
     if(testCreateModeRoutingFunction()){
         succsess = "succeeded";
     }else{
@@ -26,7 +26,7 @@ bool ModeRoutingTest(){
     }
     printf("%s in test: %s:%s", succsess, testGroup,testName);
 
-    testName = "freeing"
+    testName = "freeing";
     if(testFreeModes()){
         succsess = "succeeded";
     }else{
@@ -35,7 +35,7 @@ bool ModeRoutingTest(){
     }
     printf("%s in test: %s:%s", succsess, testGroup,testName);
 
-    testName = "one mode"
+    testName = "one mode";
     if(testGettingOneMode()){
         succsess = "succeeded";
     }else{
@@ -44,7 +44,7 @@ bool ModeRoutingTest(){
     }
     printf("%s in test: %s:%s", succsess, testGroup,testName);
 
-    testName = "Many modes"
+    testName = "Many modes";
     if(testGettingManyModes()){
         succsess = "succeeded";
     }else{
@@ -53,7 +53,7 @@ bool ModeRoutingTest(){
     }
     printf("%s in test: %s:%s", succsess, testGroup,testName);
 
-    testName = "Duplicate mode"
+    testName = "Duplicate mode";
     if(testGettingSameMode()){
         succsess = "succeeded";
     }else{

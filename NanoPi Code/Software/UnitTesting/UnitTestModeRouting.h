@@ -1,7 +1,7 @@
 #ifndef HAMPOD_TESTING_MODEROUTING
 #define HAMPOD_TESTING_MODEROUTING
-#include "../ModeRouting.h"
-#include "../Mode.h"
+#include "../Modes/ModeRouting.h"
+#include "../Modes/Mode.h"
 //TODO make the connected c file
 
 bool testCreateModeRoutingFunction();

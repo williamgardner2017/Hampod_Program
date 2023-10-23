@@ -2,6 +2,8 @@
 #define HAMPOD_SOFT_NORMAL
 #include "Mode.h"
 #include "../GeneralFunctions.h"
+#include "../FirmwareCommunication.h"
 
 Mode* NormalLoad();
+#include "NormalMode.c"
 #endif
