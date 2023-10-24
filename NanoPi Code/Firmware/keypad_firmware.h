@@ -1,9 +1,9 @@
 /* This code is for the keypad firmware for the Hampod Program
 * Written by Brendan Perez
-* Last modified on 10/18/2023
+* Last modified on 10/23/2023
 */
-#ifndef KEYPAD
-#define KEYPAD
+#ifndef KEYPAD_CODE
+#define KEYPAD_CODE
 
 #include <wiringPi.h>
 #include <stdio.h>
@@ -17,6 +17,7 @@
 #include <signal.h>
 
 #include "hampod_queue.h"
+#include "hampod_firm_packet.h"
 
 #define KEYPAD_O "Keypad_o"
 #define KEYPAD_I "Keypad_i"
@@ -30,13 +31,28 @@
 #define C4 15 //Pin GPIOG6
 
 #define KEYPAD_THREAD_COLOR "\033[0;97mKeypad - Main: "
+#define KEYPAD_IO_THREAD_COLOR "\033[0;96mKeypad - IO: "
 
-#define KEYPAD_PRINTF(text, ...) \
+#define KEYPAD_PRINTF(...) \
     do { \
         if(DEBUG) { \
-            printf("%s", KEYPAD_THREAD_COLOR, text, __VA_ARGS); \
+            printf(KEYPAD_THREAD_COLOR); \
+            printf(__VA_ARGS__); \
         } \
     } while(0)
+
+#define KEYPAD_IO_PRINTF(...) \
+    do { \
+        if(DEBUG) { \
+            printf(KEYPAD_IO_THREAD_COLOR); \
+            printf(__VA_ARGS__); \
+        } \
+    } while(0)
+
+typedef struct keypad_io_packet {
+    int pipe_fd;
+    Packet_queue* queue;
+} keypad_io_packet;
 
 #include "keypad_firmware.c"
 

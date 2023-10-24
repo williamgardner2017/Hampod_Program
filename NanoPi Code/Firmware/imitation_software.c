@@ -47,9 +47,9 @@ int main(){
     printf("\nSuccessful connection to Firmware_i\n");
     while(1) {
         printf("Packet attempt\n");
-        char new_data = 1;
+        char new_data = KEYPAD;
         char len = 1;
-        char msg = 'b';
+        char msg = 'r';
         Inst_packet* temp = create_inst_packet(new_data, len, &msg);
         send_packet(temp);
         usleep(1000000);

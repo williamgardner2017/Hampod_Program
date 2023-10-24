@@ -17,19 +17,21 @@
 
 //Time for some preprocessor magic
 #define FIRMWARE_THREAD_COLOR "\033[0;33mFirmware - Main: "
-#define FIRMWARE_IO_THREAD_COLOR "\033[0;35mFirmware - IO Thread"
+#define FIRMWARE_IO_THREAD_COLOR "\033[0;35mFirmware - IO Thread: "
 
-#define FIRMWARE_PRINTF(text, ...) \
+#define FIRMWARE_PRINTF(...) \
     do { \
         if(DEBUG) { \
-            printf("%s", FIRMWARE_THREAD_COLOR, text, __VA_ARGS); \
+            printf(FIRMWARE_THREAD_COLOR); \
+            printf(__VA_ARGS__); \
         } \
     } while(0)
 
-#define FIRMWARE_IO_PRINTF(text, ...) \
+#define FIRMWARE_IO_PRINTF(...) \
     do { \
         if(DEBUG) { \
-            printf("%s", FIRMWARE_IO_THREAD_COLOR, text, __VA_ARGS); \
+            printf(FIRMWARE_IO_THREAD_COLOR); \
+            printf(__VA_ARGS__); \
         } \
     } while(0)
 
@@ -53,7 +55,7 @@ void sigint_handler(int signum);
 int main(){
 
 #ifdef DEBUG
-    printf("\033[0;32mHampod Firmware Version 0.6\n");
+    printf("\033[0;32mHampod Firmware Version 0.8\n");
     printf("\033[0;31mDEBUG BUILD \033[1;33m\n");
     FIRMWARE_PRINTF("Clearing Pipes\n");
     system("./pipe_remover.sh");
@@ -166,7 +168,7 @@ int main(){
     usleep(1000000);
 
     FIRMWARE_PRINTF("1 second delay over\n");
-
+    
     while(running) {
         pthread_mutex_lock(&queue_lock);
 
@@ -184,7 +186,19 @@ int main(){
 
         Packet_type type = received_packet->type;
         unsigned short data_size = received_packet->data_len;
-
+        if(type == KEYPAD && received_packet->data[0] == 'r') {
+            FIRMWARE_PRINTF("Got a READ keypad packet\n");
+            write(keypad_in_pipe_fd, received_packet, 6);
+            write(keypad_in_pipe_fd, received_packet->data, 1);
+            FIRMWARE_PRINTF("Packet sent, now waiting for a response\n");
+            Packet_type keypad_back;
+            unsigned short keypad_back_size;
+            char read_key;
+            read(keypad_out_pipe_fd, &keypad_back, sizeof(Packet_type));
+            read(keypad_out_pipe_fd, &keypad_back_size, sizeof(unsigned short));
+            read(keypad_out_pipe_fd, &read_key, sizeof(char));
+            FIRMWARE_PRINTF("Keypad sent back %x\n", read_key);
+        }
 
         destroy_inst_packet(&received_packet);
     }
@@ -237,6 +251,7 @@ void *io_buffer_thread(void* arg) {
         pthread_mutex_unlock(&queue_lock);
         usleep(100);
     }
+    return NULL;
 }
 
 // SEGMENTATION FAULT HANDLER //
