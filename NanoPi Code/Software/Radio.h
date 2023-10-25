@@ -10,7 +10,7 @@ typedef struct Radio{
     Mode* currentMode;
 } Radio;
 
-Radio* loadUpRadioUsingData(char* make, int model, int port);
+Radio* loadUpRadioUsingData(char* make, int model, int port, Mode* defaultMode);
 void freeRadio(Radio* thisRadio);
 Mode* getCurrentMode(Radio* thisRadio);
 ModeData* getModeDetails(Radio* thisRadio);

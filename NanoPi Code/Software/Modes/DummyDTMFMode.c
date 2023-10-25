@@ -1,13 +1,13 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
-
-static void* commandRelay(KeyPress* keyInput, int radioDetails){
+void* DTMFCommandRelay(KeyPress* keyInput, int radioDetails){
     return NULL;
 }
 
 
-static void freeMode(Mode** modeToFree){
+void freeDummyDTMFMode(Mode** modeToFree){
     Mode* temp = *modeToFree;
     free(temp->modeDetails->modeName);
     free(temp->modeDetails);
@@ -21,8 +21,8 @@ Mode* DTMFDummyLoad(){
     if(newMode == NULL){
         return NULL;
     }
-    newMode->modeInput = commandRelay;
-    newMode->free = freeMode;
+    newMode->modeInput = DTMFCommandRelay;
+    newMode->freeMode = freeDummyDTMFMode;
 
     ModeData* newData = (ModeData*)malloc(sizeof(ModeData));
 

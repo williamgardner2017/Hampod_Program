@@ -3,12 +3,15 @@
 #include "Mode.h"
 #include "NormalMode.h"
 #include "DummyDTMFMode.h"
-
+#include "../GeneralFunctions.h"
 Mode* getModeById(int modeID);
 Mode** modeRoutingStart();
 void freeModes();
 
 int getModeCount();
+
+void setProgramibleKeys(KeyPress key, int modeID);
+Mode* getModeViaProgramableKey(KeyPress key);
 
 #include "ModeRouting.c"
 #endif

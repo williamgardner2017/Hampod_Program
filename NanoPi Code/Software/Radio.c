@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 Radio* loadUpRadioUsingData(char* make, int model, int port, Mode* defaultMode){
     Radio *newRadio = (Radio*)malloc(sizeof(Radio));

@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 int currentPage = 0;
 int maxPages = 4;
@@ -10,7 +11,7 @@ CurrentSettingName[1] = "sound";
 CurrentSettingName[2] = "frequency";
 CurrentSettingName[3] = "donold";
 int maxValues[] = {4,1,3,2}; 
-static void* commandRelay(KeyPress* keyInput, int radioDetails){
+void* configCommandRelay(KeyPress* keyInput, int radioDetails){
     switch (keyInput->keyPressed)
     {
     case '4':
@@ -64,7 +65,7 @@ static void* commandRelay(KeyPress* keyInput, int radioDetails){
 }
 
 
-static void freeMode(Mode** modeToFree){
+void freeConfigMode(Mode** modeToFree){
     Mode* temp = *modeToFree;
     free(temp->modeDetails->modeName);
     free(temp->modeDetails);
@@ -78,8 +79,8 @@ Mode* ConfigLoad(){
     if(newMode == NULL){
         return NULL;
     }
-    newMode->modeInput = commandRelay;
-    newMode->free = freeMode;
+    newMode->modeInput = configCommandRelay;
+    newMode->freeMode = freeConfigMode;
 
     ModeData* newData = (ModeData*)malloc(sizeof(ModeData));
 

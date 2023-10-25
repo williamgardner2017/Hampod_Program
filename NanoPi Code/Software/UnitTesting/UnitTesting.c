@@ -1,10 +1,24 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-//printf(string, extras)
+#include <stdbool.h>
+
+#include "UnitTestKeyPresses.h"
+#include "UnitTestModeRouting.h"
+#include "UnitTestRadio.h"
+#include "UnitTestStateMachine.h"
+bool KeyPressTesting();
+bool ModeRoutingTest();
+
 int main(){
     char* testGroup = "ModeRouting";
     if(ModeRoutingTest()){
+        printf("Full pass in %s",testGroup);
+    }else{
+        printf("At least one test failed in %s",testGroup);
+    }
+    testGroup = "KeyPresses";
+    if(KeyPressTesting()){
         printf("Full pass in %s",testGroup);
     }else{
         printf("At least one test failed in %s",testGroup);
@@ -62,5 +76,21 @@ bool ModeRoutingTest(){
     }
     printf("%s in test: %s:%s", succsess, testGroup,testName);
 
+    return flag;
+}
+
+bool KeyPressTesting(){
+    char* succsess;
+    char* testGroup = "KeyPresses";
+    char* testName;
+    bool flag = true;
+    testName = "FullTest";
+    if(fullTest()){
+        succsess = "succeeded";
+    }else{
+        succsess = "failed";
+        flag = false;
+    }
+    printf("%s in test: %s:%s", succsess, testGroup,testName);
     return flag;
 }

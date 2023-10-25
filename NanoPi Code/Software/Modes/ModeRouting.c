@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
-
+#include <stdbool.h>
 
 
 /*
@@ -51,11 +51,18 @@ Mode* getModeById(int modeID){
     
 }
 
+
+//Used later on;
+Mode** keyBinds;
+
+
 /*
 * Creates the array to hold all of the modes
+//TODO make sure that this way of initilizin a 2d array
 */
 Mode** modeRoutingStart(){
     modes = malloc(sizeof(Mode) * modeCount);
+    keyBinds = malloc(sizeof(Mode)*12);
     return modes;
 }
 
@@ -65,12 +72,74 @@ Mode** modeRoutingStart(){
 void freeModes(){
     for(int i = 0; i<= modeCount;i++){
         if(modes[i] != NULL){
-            modes[i]->free(&(modes[i]));
+            modes[i]->freeMode(&(modes[i]));
         }
     }
     free(modes);
+
+    for(int i = 0; i<12;i++){
+        if(keyBinds[i] != NULL){
+            keyBinds[i]->freeMode(&keyBinds[i]);
+        }
+    }
+    free(keyBinds);
 }
 
 int getModeCount(){
     return modeCount;
 }
+
+
+
+/**
+ * Since this file handles the routing of functions, it will also handle the routing on the programable keys
+*/
+static int keyPressToBindValue(KeyPress key){
+    int value = key.shiftAmount;
+    if(key.isHold){
+        value = value + 3;
+    }
+    switch (key.keyPressed)
+    {
+    case 'C':
+        break;
+    case 'D':
+        value = value+6;
+        break;
+    default:
+        //it should not get here
+        return -1;
+        break;
+    }
+    return value;
+}
+
+/**
+ * binds the programable keys
+*/
+void setProgramibleKeys(KeyPress key, int modeID){
+    
+    int value = keyPressToBindValue(key);
+    if(value == -1){
+        //should not get here
+        return;
+    }
+    //value has not been translated
+
+    keyBinds[value] = getModeById(modeID);
+}
+
+/**
+ * gets the mode via the programable keys
+*/
+Mode* getModeViaProgramableKey(KeyPress key){
+    int value = keyPressToBindValue(key);
+    if(value == -1){
+        //should not get here
+        return NULL;
+    }
+    //value has not been translated
+
+    return keyBinds[value];
+}
+

@@ -8,7 +8,6 @@
 void setupPipes();
 char* firmwareCommandQueue(Inst_packet command);
 void firmwareOPipeWatcher();
-char* sendSpeakerOutput(char* string);
 KeyPress* interperateKeyPresses(char keyPress);
 void resetKeyInputVars();
 bool confirmKeyInputVars(char oK, bool hKS,int sS, int hWC);
@@ -16,6 +15,7 @@ bool confirmKeyInputVars(char oK, bool hKS,int sS, int hWC);
 void keyWatcher();
 void startKeyWatcher();
 void firmwareCommunicationStartup();
+char* sendSpeakerOutput(char* text);
 
 
 #include "FirmwareCommunication.c"

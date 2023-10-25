@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 /**
  * This is testing short key presses, one where you hold it down for one tick and another where you hold it down for 2 ticks

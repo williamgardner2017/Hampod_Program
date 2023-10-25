@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 ModeStates modeState = bootUp;
 
@@ -37,7 +38,6 @@ ModeStates modeFlow(KeyPress* keyInput){
             //it should never get here
             break;
     }
-    break;
 }
 
 //no idea how to store these yet
@@ -70,7 +70,7 @@ BootUpStates BootupFlow(KeyPress* keyInput){
                     bootUpState = chooseCompany;
                     break;
                 }else{
-                    radios[currentRadio] = loadUpRadioUsingData(company,model, convertCharToKeyValue(keyInput));
+                    radios[currentRadio] = loadUpRadioUsingData(company,model, convertCharToKeyValue(keyInput), getModeById(0));
                     currentRadio++;
                     bootUpState = linkMore;
                     break;
@@ -94,16 +94,13 @@ BootUpStates BootupFlow(KeyPress* keyInput){
                     break;
                 }else{
                     //TODO make sure that try catch works as intended
-                    try
-                    {
-                       //loadUpsave(keyInput);
-                       //loadUpNormalMode
+                    /*
+                    if(loadUpSave(keyInput)){
                         modeState = standard;
-                    }   
-                    catch(...)
-                    {
-                       bootUpState = selectSave;
+                    }else{
+                        bootUpState = selectSave;
                     }
+                    */
                 }
                 break;
         default:
@@ -246,7 +243,7 @@ int StandardModeFlow(KeyPress* keyInput){
  * See if makeing this be treated like a normal mode would work
  * See if there are any reasons a standard mode could not affect the hampod data
 */
-int ConfigFlow(char* KeyInput){
+int ConfigFlow(KeyPress* KeyInput){
     //This may be easyer to just treat as a standard mode but make special. 
 }
 
@@ -257,7 +254,11 @@ int readOutModeName(int modeID){
     //DEBUG
     printf("%s", getModeById(modeID)->modeDetails->modeName);
     //actual
-    sendSpeakerOutput(getModeById(modeID)->modeDetails->modeName);
+
+    //problem? 
+    char* holdName = strdup(getModeById(modeID)->modeDetails->modeName);
+    sendSpeakerOutput(holdName);
+    return 1;
 }
 
 /**
