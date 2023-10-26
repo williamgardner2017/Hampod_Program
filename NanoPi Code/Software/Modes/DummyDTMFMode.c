@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-
+#include "DummyDTMFMode.h"
 #include "Mode.h"
 #include "../GeneralFunctions.h"
 void* DTMFCommandRelay(KeyPress* keyInput, int radioDetails){

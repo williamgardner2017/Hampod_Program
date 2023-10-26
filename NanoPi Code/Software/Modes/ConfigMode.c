@@ -1,19 +1,19 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdio.h>
+#include "ConfigMode.h"
+#include "../FirmwareCommunication.h"
 #include "Mode.h"
 #include "../GeneralFunctions.h"
 
 int currentPage = 0;
 int maxPages = 4;
 int CurrentSettings[] = {0,0,0,0};
-char** CurrentSettingName = malloc(sizeof(char*)*4);
-CurrentSettingName[0] = "V";
-CurrentSettingName[1] = "sound";
-CurrentSettingName[2] = "frequency";
-CurrentSettingName[3] = "donold";
+char* CurrentSettingName[] = {"V", "sound", "frequency", "donold"};
 int maxValues[] = {4,1,3,2}; 
 void* configCommandRelay(KeyPress* keyInput, int radioDetails){
+    char output[50];
     switch (keyInput->keyPressed)
     {
     case '4':
@@ -21,10 +21,8 @@ void* configCommandRelay(KeyPress* keyInput, int radioDetails){
         if(currentPage == -1){
             currentPage = maxPages-1;
         }
-        char* output[40];
         sprintf(output,"Switched to settings %s", CurrentSettingName[currentPage]);
         sendSpeakerOutput(output);
-        free(output);
         break;
     
     case '6':
@@ -32,20 +30,16 @@ void* configCommandRelay(KeyPress* keyInput, int radioDetails){
         if(currentPage == maxPages){
             currentPage = 0;
         }
-        char* output[40];
         sprintf(output,"Switched to settings %s", CurrentSettingName[currentPage]);
         sendSpeakerOutput(output);
-        free(output);
         break;
     case '8':
         CurrentSettings[currentPage]++;
         if(CurrentSettings[currentPage] > maxValues[currentPage]){
             CurrentSettings[currentPage] = 0;
         }
-        char* output[40];
         sprintf(output,"setting value %s to %d", CurrentSettingName[currentPage], CurrentSettings[currentPage]);
         sendSpeakerOutput(output);
-        free(output);
         break;
     
     case '2':
@@ -54,10 +48,8 @@ void* configCommandRelay(KeyPress* keyInput, int radioDetails){
             CurrentSettings[currentPage] = maxValues[currentPage];
         }
 
-        char* output[40];
         sprintf(output,"setting value %s to %d", CurrentSettingName[currentPage], CurrentSettings[currentPage]);
         sendSpeakerOutput(output);
-        free(output);
         break;
  
     default:

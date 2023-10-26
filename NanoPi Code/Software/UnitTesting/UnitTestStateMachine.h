@@ -10,5 +10,5 @@ bool testSwitchToRadioMode(); //not realy any ideas
 bool testStandardModeFlow(); //no idea
 bool testReadOutModeName(); //no idea
 
-#include "UnitTestStateMachine.c"
+
 #endif

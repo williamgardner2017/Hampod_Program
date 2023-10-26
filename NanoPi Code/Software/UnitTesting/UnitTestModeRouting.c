@@ -1,9 +1,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdio.h>
+#include "UnitTestModeRouting.h"
 #include "../Modes/Mode.h"
 #include "../Modes/ModeRouting.h"
-
 bool testCreateModeRoutingFunction(){
     Mode** testObject = modeRoutingStart();
     int modeCount = getModeCount();
@@ -11,9 +12,8 @@ bool testCreateModeRoutingFunction(){
         freeModes();
         return false;
     }
-
     for(int i = 0; i<modeCount; i++){
-        if(testObject[i] != NULL){
+        if(testObject[i]->initialized){
             freeModes();
             return false;
         }
@@ -24,7 +24,7 @@ bool testCreateModeRoutingFunction(){
 bool testGettingOneMode(){
     modeRoutingStart();
     Mode* testMode = getModeById(0);
-    if(testMode == NULL){
+    if(!(testMode->initialized)){
         freeModes();
         return false;
     }
@@ -34,13 +34,12 @@ bool testGettingOneMode(){
 bool testGettingManyModes(){
     modeRoutingStart();
     Mode* testMode = getModeById(0);
-    if(testMode == NULL){
+    if(!(testMode->initialized)){
         freeModes();
         return false;
     }
-    freeModes();
     testMode = getModeById(2);
-    if(testMode == NULL){
+    if(!(testMode->initialized)){
         freeModes();
         return false;
     }
@@ -58,4 +57,8 @@ bool testGettingSameMode(){
     }
     freeModes();
     return false;
+}
+
+bool testFreeModes(){
+    return true;
 }

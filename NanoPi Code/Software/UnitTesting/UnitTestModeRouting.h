@@ -10,5 +10,5 @@ bool testGettingManyModes();
 bool testGettingSameMode();
 bool testFreeModes();
 
-#include "UnitTestModeRouting.c"
+
 #endif

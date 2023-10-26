@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include "StateMachine.h"
 #include "Modes/ModeRouting.h"
 #include "FirmwareCommunication.h"
 #include "GeneralFunctions.h"

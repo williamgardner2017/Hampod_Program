@@ -45,5 +45,5 @@ void setRadios(Radio** radios, int currentRadio);
 void setBootUpState(BootUpStates state);
 void setCompanyAndModel(char* comp, int mod);
 
-#include "StateMachine.c"
+
 #endif

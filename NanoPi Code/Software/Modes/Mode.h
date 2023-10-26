@@ -1,5 +1,6 @@
 #ifndef HAMPOD_SOFT_MODE
 #define HAMPOD_SOFT_MODE
+#include <stdbool.h>
 #include "../GeneralFunctions.h"
 
 typedef struct ModeData {
@@ -12,9 +13,10 @@ typedef struct Mode {
     void* (*modeInput)(KeyPress*,int);
     void (*freeMode)(struct Mode **self);
     ModeData* modeDetails;
+    bool initialized;
 } Mode;
 
 Mode* createMode();
 
-#include "Mode.c"
+
 #endif

@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-
+#include "Radio.h"
 #include "Modes/Mode.h"
 #include "GeneralFunctions.h"
 Radio* loadUpRadioUsingData(char* make, int model, int port, Mode* defaultMode){

@@ -11,7 +11,7 @@ typedef struct KeyPress{
 int convertCharToKeyValue(KeyPress* keyPressed);
 
 
-#include "GeneralFunctions.c"
+
 #endif
 
 //

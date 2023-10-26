@@ -1,7 +1,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-
+#include <stdio.h>
+#include "ModeRouting.h"
 #include "ConfigMode.h"
 #include "Mode.h"
 #include "NormalMode.h"
@@ -23,29 +24,23 @@ Mode* getModeById(int modeID){
 
     switch(modeID){
         case 0: //NORMAL Mode
-            if(modes[0] == NULL){
+            if(!modes[0]->initialized){
                 modes[0] = NormalLoad();
-                if(modes[0] == NULL){
-                    return NULL;
-                }
+                modes[0]->initialized = true;
             }
             return modes[0];
             break;
         case 1: //DTMF mode so that things run smoothly
-            if(modes[1] == NULL){
+            if(!modes[1]->initialized){
                 modes[1] = DTMFDummyLoad();
-                if(modes[1] == NULL){
-                    return NULL;
-                }
+                modes[1]->initialized = true;
             }
             return modes[1];
             break;
         case 2: //ConfigMode since this is already done
-            if(modes[2] == NULL){
+            if(!modes[2]->initialized){
                 modes[2] = ConfigLoad();
-                if(modes[2] == NULL){
-                    return NULL;
-                }
+                modes[2]->initialized = true;
             }
             return modes[2];
             break;
@@ -67,7 +62,15 @@ Mode** keyBinds;
 */
 Mode** modeRoutingStart(){
     modes = malloc(sizeof(Mode) * modeCount);
+    for(int i = 0;i<modeCount;i++){
+        modes[i] = malloc(sizeof(Mode));
+        modes[i]->initialized = false;
+    }
     keyBinds = malloc(sizeof(Mode)*12);
+        for(int i = 0;i<12;i++){
+        keyBinds[i] = malloc(sizeof(Mode));
+        keyBinds[i]->initialized = false;
+    }
     return modes;
 }
 
@@ -75,16 +78,22 @@ Mode** modeRoutingStart(){
 * Frees all of the mode structts and the array
 */
 void freeModes(){
-    for(int i = 0; i<= modeCount;i++){
-        if(modes[i] != NULL){
+    for(int i = 0; i< modeCount;i++){
+        if(modes[i]->initialized){
             modes[i]->freeMode(&(modes[i]));
+        }else{
+            free(modes[i]);
         }
+        modes[i] = 0;
     }
     free(modes);
-
     for(int i = 0; i<12;i++){
-        if(keyBinds[i] != NULL){
-            keyBinds[i]->freeMode(&keyBinds[i]);
+        if(keyBinds[i] != 0){
+            if(keyBinds[i]->initialized){
+                keyBinds[i]->freeMode(&keyBinds[i]);
+            }else{
+                free(keyBinds[i]);
+            }
         }
     }
     free(keyBinds);

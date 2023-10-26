@@ -5,5 +5,5 @@
 #include "../FirmwareCommunication.h"
 
 Mode* NormalLoad();
-#include "NormalMode.c"
+
 #endif

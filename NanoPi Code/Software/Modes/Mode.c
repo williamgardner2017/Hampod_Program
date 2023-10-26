@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-
+#include "Mode.h"
 #include "../GeneralFunctions.h"
 void* demoCommandRelay(KeyPress* keyInput, int radioDetails){
     switch (keyInput->keyPressed)

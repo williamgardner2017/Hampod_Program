@@ -9,10 +9,11 @@
 #include <time.h>
 #include <stdbool.h>
 
+#include "FirmwareCommunication.h"
 #include "StateMachine.h"
 #include "GeneralFunctions.h"
-#include "../Firmware/hampod_firm_packet.h"
-#include "../Firmware/hampod_queue.h"
+// #include "../Firmware/hampod_firm_packet.h"
+// #include "../Firmware/hampod_queue.h"
 
 //this is here the pipes will be set up
 void setupPipes(){
@@ -23,7 +24,7 @@ void setupPipes(){
 Actual communication section
 */
 //creating the queue
-Packet_queue* softwareQueue;
+//Packet_queue* softwareQueue;
 // creating the locks
 // pthread_mutex_t queue_lock;
 // pthread_mutex_t pipe_lock;
@@ -34,7 +35,7 @@ int ServecingID = 0;
 /**
  * This is what handles calling the firmware, functions that dont need to return should call this asycronusly while functions that will need a return should not
 */
-char* firmwareCommandQueue(Inst_packet* command){
+char* firmwareCommandQueue(char* command){
     int myId = 0;
     //pthread_mutex_lock(&pipe_lock);
     //put stuff onto the pipe
@@ -48,13 +49,16 @@ char* firmwareCommandQueue(Inst_packet* command){
        // pthread_cond_wait(&queue_cond, &queue_lock);
     }
     //grab the data from the queue
-    Inst_packet *data = dequeue(softwareQueue);
+    //Inst_packet *data = dequeue(softwareQueue);
     ServecingID ++;
    // pthread_cond_signal(&queue_cond);
    // pthread_mutex_unlock(&queue_lock);
     char* interpertedData;
-    memccpy(interpertedData,data->data, '\0',sizeof(data->data));
-    destroy_inst_packet(&data);
+
+    //temp for now
+    interpertedData = "testing";
+    //memccpy(interpertedData,data->data, '\0',sizeof(data->data));
+    //destroy_inst_packet(&data);
     return interpertedData;
 }  
 
@@ -91,8 +95,10 @@ Functions that the software will be calling
  * Creates the speeker output and puts it onto the qeueu asycronusly 
 */
 char* sendSpeakerOutput(char* text){
-    Inst_packet* speakerPacket = create_inst_packet(AUDIO,sizeof((unsigned char*) text),(unsigned char*) text);
-    return firmwareCommandQueue(speakerPacket);
+    //Inst_packet* speakerPacket = create_inst_packet(AUDIO,sizeof((unsigned char*) text),(unsigned char*) text);
+   //return firmwareCommandQueue(speakerPacket);
+
+   return firmwareCommandQueue(text);
 }
 
 
@@ -104,7 +110,7 @@ Functions related to the key presses
 
 
 //These are variables to control the keyPress interperater
-int shiftEnabled = 1;
+bool shiftEnabled = true;
 char oldKey = -1;
 bool holdKeySent = 0;
 int shiftState = 0;
@@ -131,7 +137,7 @@ KeyPress* interperateKeyPresses(char keyPress){
                     shiftState = 0;
                 }
             }else{
-                returnValue->keyPressed = keyPress;
+                returnValue->keyPressed = oldKey;
                 returnValue->shiftAmount = shiftState;
                 shiftState = 0;
             }//end inner null
@@ -144,7 +150,7 @@ KeyPress* interperateKeyPresses(char keyPress){
             holdWaitCount++;
         }else if(!holdKeySent){
             holdKeySent = true;
-            returnValue->keyPressed = keyPress;
+            returnValue->keyPressed = oldKey;
             returnValue->shiftAmount = shiftState;
             returnValue->isHold = true;
             shiftState = 0;
@@ -173,13 +179,19 @@ bool confirmKeyInputVars(char oK, bool hKS,int sS, int hWC){
     }
 }
 
+void printOutErrors(char oK, bool hKS,int sS, int hWC){
+     printf("OldKey Expeccted:%c Actual:%c\nHoldKeySent Ecpected:%i Actual%i\n",oK, oldKey, hKS, holdKeySent);
+    printf("ShiftState Expected:%i Actual:%i\nHoldCount Expected:%i Actual:%i\n", sS, shiftState, hWC, holdWaitCount);
+}
+
 
 void keyWatcher(){
     //TODO properly setup the packet to be sent
-    Inst_packet* keyPressedRequest = create_inst_packet(KEYPAD,1,NULL);
+    //Inst_packet* keyPressedRequest = create_inst_packet(KEYPAD,1,NULL);
 
+    char* temp2 = "testing";
     //This should go from char* to char, but only the first part of the array
-    char* temp = firmwareCommandQueue(keyPressedRequest);
+    char* temp = firmwareCommandQueue(temp2);
     char pressedKey = temp[0];
 
     KeyPress *interpretedKey = interperateKeyPresses(pressedKey);
@@ -187,7 +199,7 @@ void keyWatcher(){
     if(interpretedKey->keyPressed != '-'){
         modeFlow(interpretedKey);
     }
-    destroy_inst_packet(&keyPressedRequest);
+    //destroy_inst_packet(&keyPressedRequest);
 
     free(temp);
     free(interpretedKey);
