@@ -2,6 +2,11 @@
 #include <string.h>
 #include <stdbool.h>
 
+#include "ConfigMode.h"
+#include "Mode.h"
+#include "NormalMode.h"
+#include "DummyDTMFMode.h"
+#include "../GeneralFunctions.h"
 
 /*
 *The idea of this that users only need to edit this one place inorder to add in their new modes.
@@ -37,7 +42,7 @@ Mode* getModeById(int modeID){
             break;
         case 2: //ConfigMode since this is already done
             if(modes[2] == NULL){
-                modes[2] = NormalLoad();
+                modes[2] = ConfigLoad();
                 if(modes[2] == NULL){
                     return NULL;
                 }

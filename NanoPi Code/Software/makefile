@@ -4,7 +4,7 @@ CFLAGS = -Wall -O2
 TARGET = MainSystem
 TARGETT = TestingSystem
 # Define the source files and object files
-SRCS = FirmwareCommunication.c GeneralFunctions.c Radio.c Startup.c StateMachine.c Modes/ModeRouting.c Modes/ConfigMode.c Modes/DummyDTMFMode.c Modes/NormalMode.c
+SRCS = Modes/ModeRouting.c FirmwareCommunication.c GeneralFunctions.c Radio.c Startup.c StateMachine.c  Modes/ConfigMode.c Modes/DummyDTMFMode.c Modes/NormalMode.c
 TESTS = UnitTesting/UnitTesting.c UnitTesting/UnitTestKeyPresses.c UnitTesting/UnitTestModeRouting.c UnitTesting/UnitTestStateMachine.c
 OBJS = $(SRCS:.c=.o)
 OBJST = $(TESTS:.c=.o)

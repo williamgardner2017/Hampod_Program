@@ -2,8 +2,10 @@
 #include <string.h>
 #include <stdbool.h>
 
+#include "Modes/Mode.h"
+#include "GeneralFunctions.h"
 Radio* loadUpRadioUsingData(char* make, int model, int port, Mode* defaultMode){
-    Radio *newRadio = (Radio*)malloc(sizeof(Radio));
+    Radio* newRadio = malloc(sizeof(Radio));
     newRadio->make = make;
     newRadio->model = model;
     newRadio->port = port;
@@ -34,5 +36,5 @@ void* runRadioCommand(Radio* thisRadio, KeyPress* keyInput){
 }
 
 void* getRadioDetailsInSavableFormat(Radio* thisRadio){
-
+    return NULL;
 }

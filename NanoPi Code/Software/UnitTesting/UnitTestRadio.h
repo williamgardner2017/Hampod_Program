@@ -7,5 +7,4 @@ bool testgetCurrentMode();
 bool testgetModeDetails();
 bool testsetRadioMode();
 bool testgetRadioDetailsInSavableFormat();
-#include "UnitTesting.c"
 #endif

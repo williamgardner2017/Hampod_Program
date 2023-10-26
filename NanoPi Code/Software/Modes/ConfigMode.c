@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include "Mode.h"
+#include "../GeneralFunctions.h"
 
 int currentPage = 0;
 int maxPages = 4;

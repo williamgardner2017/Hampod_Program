@@ -9,6 +9,11 @@
 #include <time.h>
 #include <stdbool.h>
 
+#include "StateMachine.h"
+#include "GeneralFunctions.h"
+#include "../Firmware/hampod_firm_packet.h"
+#include "../Firmware/hampod_queue.h"
+
 //this is here the pipes will be set up
 void setupPipes(){
     //TODO ask brendain for help with this part
@@ -29,7 +34,7 @@ int ServecingID = 0;
 /**
  * This is what handles calling the firmware, functions that dont need to return should call this asycronusly while functions that will need a return should not
 */
-char* firmwareCommandQueue(Inst_packet *command){
+char* firmwareCommandQueue(Inst_packet* command){
     int myId = 0;
     //pthread_mutex_lock(&pipe_lock);
     //put stuff onto the pipe
@@ -48,32 +53,32 @@ char* firmwareCommandQueue(Inst_packet *command){
    // pthread_cond_signal(&queue_cond);
    // pthread_mutex_unlock(&queue_lock);
     char* interpertedData;
-    //memccpy(interpertedData,data->data, lengthOf(data->data)+1);
+    memccpy(interpertedData,data->data, '\0',sizeof(data->data));
     destroy_inst_packet(&data);
     return interpertedData;
 }  
 
 
 void firmwareOPipeWatcher(){
-    while(1 == 1){
-        unsigned char packet_type;
-        unsigned short size;
-        //Read packet ID from the pipe
-     //   read(i_pipe, &packet_type, 4);
-        //read packet Length from the pipe
-     //   read(i_pipe, &size, 2);
-        //read packet Data from pipe as a char string
-      //  read(i_pipe, buffer, size);
-        //create the data to put into the queue
-     //   Inst_packet* new_packet = create_inst_packet(packet_type, size, buffer);
-        //lock the queue
-      //  pthread_mutex_lock(&queue_lock);
-        //add the data to the queue
-    //    enqueue(softwareQueue, new_packet);
-        //unlock the queue
-     //   pthread_mutex_unlock(&queue_lock);
-        usleep(100);
-    }
+    // while(1 == 1){
+    //     unsigned char packet_type;
+    //     unsigned short size;
+    //     //Read packet ID from the pipe
+    //  //   read(i_pipe, &packet_type, 4);
+    //     //read packet Length from the pipe
+    //  //   read(i_pipe, &size, 2);
+    //     //read packet Data from pipe as a char string
+    //   //  read(i_pipe, buffer, size);
+    //     //create the data to put into the queue
+    //  //   Inst_packet* new_packet = create_inst_packet(packet_type, size, buffer);
+    //     //lock the queue
+    //   //  pthread_mutex_lock(&queue_lock);
+    //     //add the data to the queue
+    // //    enqueue(softwareQueue, new_packet);
+    //     //unlock the queue
+    //  //   pthread_mutex_unlock(&queue_lock);
+    //     //usleep(100);
+    // }
 }
 
 
@@ -86,7 +91,7 @@ Functions that the software will be calling
  * Creates the speeker output and puts it onto the qeueu asycronusly 
 */
 char* sendSpeakerOutput(char* text){
-    Inst_packet *speakerPacket = create_inst_packet(AUDIO,sizeof((unsigned char*) text),(unsigned char*) text);
+    Inst_packet* speakerPacket = create_inst_packet(AUDIO,sizeof((unsigned char*) text),(unsigned char*) text);
     return firmwareCommandQueue(speakerPacket);
 }
 
@@ -174,10 +179,8 @@ void keyWatcher(){
     Inst_packet* keyPressedRequest = create_inst_packet(KEYPAD,1,NULL);
 
     //This should go from char* to char, but only the first part of the array
-    char* temp = *firmwareCommandQueue(keyPressedRequest);
-    char pressedKey;
-    //memccpy(&pressedKey, temp, 2);
-    free(temp);
+    char* temp = firmwareCommandQueue(keyPressedRequest);
+    char pressedKey = temp[0];
 
     KeyPress *interpretedKey = interperateKeyPresses(pressedKey);
     //only run the modeFlow iff a key was actualy pressed
@@ -185,6 +188,8 @@ void keyWatcher(){
         modeFlow(interpretedKey);
     }
     destroy_inst_packet(&keyPressedRequest);
+
+    free(temp);
     free(interpretedKey);
 }
 

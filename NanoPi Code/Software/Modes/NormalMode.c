@@ -2,6 +2,10 @@
 #include <string.h>
 #include <stdbool.h>
 
+#include "Mode.h"
+#include "../GeneralFunctions.h"
+#include "../FirmwareCommunication.h"
+
 void* normalCommandRelay(KeyPress* keyInput, int radioDetails){
     switch (keyInput->keyPressed)
     {
@@ -27,7 +31,7 @@ void freeNormalMode(Mode** modeToFree){
 }
 
 Mode* NormalLoad(){
-    Mode* newMode = (Mode*) malloc(sizeof(Mode));
+    Mode* newMode = malloc(sizeof(Mode));
 
     if(newMode == NULL){
         return NULL;

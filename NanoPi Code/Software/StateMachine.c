@@ -2,7 +2,11 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdbool.h>
-
+#include "Modes/ModeRouting.h"
+#include "FirmwareCommunication.h"
+#include "GeneralFunctions.h"
+#include "Radio.h"
+#include "Modes/Mode.h"
 ModeStates modeState = bootUp;
 
 int programableKeysOn = 0;
@@ -38,6 +42,7 @@ ModeStates modeFlow(KeyPress* keyInput){
             //it should never get here
             break;
     }
+        return -1;
 }
 
 //no idea how to store these yet
@@ -153,6 +158,7 @@ int ModeSelectFlow(KeyPress* keyInput){
                 break;
         }
     }
+        return -1;
 }
 
 //dependint on firmware
@@ -162,6 +168,7 @@ int DTMFFlow(KeyPress* keyInput){
     }else{
         //do the beep boop
     }
+    return -1;
 }
 
 int StandardModeFlow(KeyPress* keyInput){
@@ -235,6 +242,7 @@ int StandardModeFlow(KeyPress* keyInput){
         runRadioCommand(radios[currentRadio],keyInput);
         break;
     }
+        return -1;
 }
 
 /**
@@ -245,6 +253,7 @@ int StandardModeFlow(KeyPress* keyInput){
 */
 int ConfigFlow(KeyPress* KeyInput){
     //This may be easyer to just treat as a standard mode but make special. 
+    return -1;
 }
 
 /**
@@ -285,6 +294,7 @@ int switchToRadioMode(int modeID){
             setRadioMode(radios[currentRadio], getModeById(modeID));
             break;
     }
+        return -1;
 }
 
 

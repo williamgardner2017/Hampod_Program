@@ -6,7 +6,7 @@
 #include "../Firmware/hampod_queue.h"
 
 void setupPipes();
-char* firmwareCommandQueue(Inst_packet command);
+char* firmwareCommandQueue(Inst_packet* command);
 void firmwareOPipeWatcher();
 KeyPress* interperateKeyPresses(char keyPress);
 void resetKeyInputVars();

@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include "../Modes/Mode.h"
+#include "../Modes/ModeRouting.h"
 
 bool testCreateModeRoutingFunction(){
     Mode** testObject = modeRoutingStart();

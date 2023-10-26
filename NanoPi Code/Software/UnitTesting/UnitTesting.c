@@ -7,24 +7,6 @@
 #include "UnitTestModeRouting.h"
 #include "UnitTestRadio.h"
 #include "UnitTestStateMachine.h"
-bool KeyPressTesting();
-bool ModeRoutingTest();
-
-int main(){
-    char* testGroup = "ModeRouting";
-    if(ModeRoutingTest()){
-        printf("Full pass in %s",testGroup);
-    }else{
-        printf("At least one test failed in %s",testGroup);
-    }
-    testGroup = "KeyPresses";
-    if(KeyPressTesting()){
-        printf("Full pass in %s",testGroup);
-    }else{
-        printf("At least one test failed in %s",testGroup);
-    }
-}
-
 
 bool ModeRoutingTest(){
     char* succsess;
@@ -93,4 +75,21 @@ bool KeyPressTesting(){
     }
     printf("%s in test: %s:%s", succsess, testGroup,testName);
     return flag;
+}
+
+int main(){
+    char* testGroup = "ModeRouting";
+    if(ModeRoutingTest()){
+        printf("Full pass in %s",testGroup);
+    }else{
+        printf("At least one test failed in %s",testGroup);
+    }
+    testGroup = "KeyPresses";
+    if(KeyPressTesting()){
+        printf("Full pass in %s",testGroup);
+    }else{
+        printf("At least one test failed in %s",testGroup);
+    }
+
+    return -1;
 }
