@@ -9,12 +9,14 @@
 
 #include "hampod_queue.h"
 #include "keypad_firmware.h"
+#include "audio_firmware.h"
 
 #define INPUT_PIPE "Firmware_i"
 #define OUTPUT_PIPE "Firmware_o"
 #define KEYPAD_OUT "Keypad_o"
 #define KEYPAD_IN "Keypad_i"
-
+#define AUDIO_OUT "Speaker_o"
+#define AUDIO_IN "Speaker_i"
 //Time for some preprocessor magic
 #define FIRMWARE_THREAD_COLOR "\033[0;33mFirmware - Main: "
 #define FIRMWARE_IO_THREAD_COLOR "\033[0;35mFirmware - IO Thread: "
@@ -138,6 +140,40 @@ int main(){
     }
 
     FIRMWARE_PRINTF("Keypad_o created\n");
+    FIRMWARE_PRINTF("Creating Audio_i pipe\n");
+
+    if (mkfifo(AUDIO_IN, 0666) == -1) {
+        perror("mkfifo");
+        exit(1);
+    }
+
+    FIRMWARE_PRINTF("Audio_i created\n");
+    FIRMWARE_PRINTF("Creating Audio_o pipe\n");
+
+    if (mkfifo(AUDIO_OUT, 0666) == -1) {
+        perror("mkfifo");
+        exit(1);
+    }
+
+    pid_t audio_pid = fork();
+    
+    if(audio_pid == 0) {
+        audio_process();
+    }
+
+    int audio_in_pipe_fd = open(AUDIO_IN, O_WRONLY);
+    if(audio_in_pipe_fd == -1){
+        perror("open");
+        exit(1);
+    }
+
+    int audio_out_pipe_fd = open(AUDIO_OUT, O_RDONLY);
+    if(audio_out_pipe_fd == -1){
+        perror("open");
+        exit(1);
+    }
+
+    FIRMWARE_PRINTF("Audio_o created\n");
     FIRMWARE_PRINTF("Creating instruction queue\n");
     
     Packet_queue* instruction_queue = create_packet_queue();
@@ -199,7 +235,19 @@ int main(){
             read(keypad_out_pipe_fd, &read_key, sizeof(char));
             FIRMWARE_PRINTF("Keypad sent back %x\n", read_key);
         }
-
+        if(type == AUDIO) {
+            FIRMWARE_PRINTF("Got a audio packey\n");
+            write(audio_in_pipe_fd, received_packet, 6);
+            write(audio_in_pipe_fd, received_packet->data, 1);
+            FIRMWARE_PRINTF("Packet sent, now waiting for a response\n");
+            Packet_type audio_back;
+            unsigned short audio_back_size;
+            int return_code;
+            read(audio_out_pipe_fd, &keypad_back, sizeof(Packet_type));
+            read(audio_out_pipe_fd, &keypad_back_size, sizeof(unsigned short));
+            read(audio_out_pipe_fd, &return_code, sizeof(int));
+            FIRMWARE_PRINTF("audio sent back %x\n", return_code);
+        }
         destroy_inst_packet(&received_packet);
     }
     pthread_join(io_buffer, NULL);
