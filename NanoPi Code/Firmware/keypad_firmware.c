@@ -45,7 +45,6 @@ void keypad_process(){
 
     KEYPAD_PRINTF("Keypad reader process launched\n");
 
-    int oldval = -1;//Used to avoid having repeated input when the button is held
 	wiringPiSetup();
 	pinMode(7, OUTPUT);//LED for Testing, on Pin GPIOG11
 	pinMode(R1, OUTPUT);
@@ -129,7 +128,7 @@ void keypad_process(){
             read_value = readNumPad();
         }
 
-        Inst_packet* packet_to_send = create_inst_packet(KEYPAD, 1, &read_value);
+        Inst_packet* packet_to_send = create_inst_packet(KEYPAD, 1, (unsigned char*)&read_value);
         KEYPAD_PRINTF("Sending back value of %x\n", read_value);
         write(output_pipe_fd, packet_to_send, 6);
         write(output_pipe_fd, packet_to_send->data, 1);

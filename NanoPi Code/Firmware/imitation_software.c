@@ -4,6 +4,7 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <string.h>
 
 #include "hampod_firm_packet.h"
 
@@ -17,8 +18,9 @@ void send_packet(Inst_packet* packet){
     printf("Message = %s\n", packet->data);
     write(output_pipe, packet, 6);
     unsigned char buffer[256];
-    memcpy(buffer, packet->data, 1);
-    write(output_pipe, buffer, 1);
+    memcpy(buffer, packet->data, packet->data_len);
+    printf("Message = %s\n", (char*)buffer);
+    write(output_pipe, buffer, packet->data_len);
 }
 
 int main(){
@@ -47,10 +49,16 @@ int main(){
     printf("\nSuccessful connection to Firmware_i\n");
     while(1) {
         printf("Packet attempt\n");
-        char new_data = KEYPAD;
+        char new_data = AUDIO;
         char len = 1;
-        char msg = 'r';
+        char msg = '*';
+        char dtmf_msg[] = "DTMFA";
+        unsigned short dtmf_len = strlen(dtmf_msg) + 1;
         Inst_packet* temp = create_inst_packet(new_data, len, &msg);
+        send_packet(temp);
+        usleep(1000000);
+        destroy_inst_packet(&temp);
+        temp = create_inst_packet(new_data, dtmf_len, dtmf_msg);
         send_packet(temp);
         usleep(1000000);
         destroy_inst_packet(&temp);

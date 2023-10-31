@@ -236,15 +236,15 @@ int main(){
             FIRMWARE_PRINTF("Keypad sent back %x\n", read_key);
         }
         if(type == AUDIO) {
-            FIRMWARE_PRINTF("Got a audio packey\n");
+            FIRMWARE_PRINTF("Got a audio packet\n");
             write(audio_in_pipe_fd, received_packet, 6);
-            write(audio_in_pipe_fd, received_packet->data, 1);
+            write(audio_in_pipe_fd, received_packet->data, received_packet->data_len);
             FIRMWARE_PRINTF("Packet sent, now waiting for a response\n");
             Packet_type audio_back;
             unsigned short audio_back_size;
             int return_code;
-            read(audio_out_pipe_fd, &keypad_back, sizeof(Packet_type));
-            read(audio_out_pipe_fd, &keypad_back_size, sizeof(unsigned short));
+            read(audio_out_pipe_fd, &audio_back, sizeof(Packet_type));
+            read(audio_out_pipe_fd, &audio_back_size, sizeof(unsigned short));
             read(audio_out_pipe_fd, &return_code, sizeof(int));
             FIRMWARE_PRINTF("audio sent back %x\n", return_code);
         }

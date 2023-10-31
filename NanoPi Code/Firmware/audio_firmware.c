@@ -5,10 +5,10 @@ pthread_mutex_t audio_queue_lock;
 pthread_mutex_t audio_queue_available;
 
 const char* pregenerated_audio[] = {
-    "1.wav", "2.wav", "3.wav", "4.wav",
-    "5.wav", "6.wav", "7.wav", "8.wav",
-    "9.wav", "0.wav", "#.wav", "*.wav",
-    "a.wav", "b.wav", "c.wav", "d.wav"
+    "DTMF1", "DTMF2", "DTMF3", "DTMF4",
+    "DTMF5", "DTMF6", "DTMF7", "DTMF8",
+    "DTMF9", "DTMF0", "DTMFA", "DTMFB",
+    "DTMFC", "DTMFD", "DTMFASTERISK", "DTMFPOUND"
 };
 
 void *audio_io_thread(void* arg);
@@ -21,7 +21,7 @@ unsigned int hash(char* text) {
             break;
         }
         hashed_value += (text[i] - 'a') * multiplier;
-        multiplier * PRIME2;
+        multiplier *= PRIME2;
     }
     return hashed_value % TABLE_SIZE;
 }
@@ -80,7 +80,7 @@ void audio_process() {
     thread_input.pipe_fd = input_pipe_fd;
     thread_input.queue = input_queue;
 
-    AUDIO_IO_PRINTF("Launching IO thread\n");
+    AUDIO_PRINTF("Launching IO thread\n");
     if(pthread_create(&audio_io_buffer, NULL, audio_io_thread, (void*)&thread_input) != 0){
         perror("Keypad IO thread failed");
         kill(controller_pid, SIGINT);
@@ -101,19 +101,21 @@ void audio_process() {
         pthread_mutex_unlock(&audio_queue_lock);
         pthread_mutex_unlock(&audio_queue_available);
         char* requested_string = calloc(1, received_packet->data_len + 0x10);
-        strcpy(requested_string, received_packet->data);
+        strcpy(requested_string, (char*)received_packet->data);
         unsigned int string_hash = hash(requested_string);
         int system_result;
         if(hash_check[string_hash] == 0) {
+            AUDIO_PRINTF("Hash miss, generating %s from Festival\n", requested_string);
             sprintf(buffer, "echo '%s' | festival --tts", requested_string);
             system_result = system(buffer);
         } else {
-            strcpy(buffer, "aplay ");
+            strcpy(buffer, "aplay pregen_audio/");
             strcat(requested_string, ".wav");
             strcat(buffer, requested_string);
+            AUDIO_PRINTF("Hash hit, playing %s as a wav file\n", requested_string);
             system_result = system(buffer);
         }
-        Inst_packet* packet_to_send = create_inst_packet(AUDIO, sizeof(int), &system_result);
+        Inst_packet* packet_to_send = create_inst_packet(AUDIO, sizeof(int), (unsigned char*)&system_result);
         AUDIO_PRINTF("Sending back value of %x\n", system_result);
         write(output_pipe_fd, packet_to_send, 6);
         write(output_pipe_fd, packet_to_send->data, sizeof(int));
@@ -164,7 +166,7 @@ void *audio_io_thread(void* arg) {
         Inst_packet* new_packet = create_inst_packet(type, size, buffer);
 
         AUDIO_IO_PRINTF("Locking queue\n");
-        AUDIO_mutex_lock(&audio_queue_lock);
+        pthread_mutex_lock(&audio_queue_lock);
 
         AUDIO_IO_PRINTF("Queueing packet\n");
         enqueue(queue, new_packet);
