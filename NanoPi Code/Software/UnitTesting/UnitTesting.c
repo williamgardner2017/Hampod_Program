@@ -15,13 +15,6 @@
 
 void sigsegv_handler(int signum);
 
-void sigint_handler(int signum);
-
-void sigint_handler(int signum) {
-    printf("\033[0;31mTERMINATING FIRMWARE\n");
-    exit(0);
-}
-
 void sigsegv_handler(int signum) {
     printf("\033[0;31mSEGMENTAION FAULT - (Signal %d)\n", signum);
     printf("Terminating Firmware\n");
@@ -105,10 +98,6 @@ bool KeyPressTesting(){
 
 
 int main(){
-    if(signal(SIGINT, sigint_handler) == SIG_ERR) {
-        perror("signal adfewaf awe");
-        exit(1);
-    }
 
     if(signal(SIGSEGV, sigsegv_handler) == SIG_ERR) {
         perror("signal with stuff");

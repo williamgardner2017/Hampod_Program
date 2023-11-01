@@ -12,6 +12,7 @@ ModeStates modeState = bootUp;
 
 int programableKeysOn = 0;
 Radio** radios;
+int maxRadios = 2;
 int currentRadio = 0;
 ModeStates modeFlow(KeyPress* keyInput){
     //the inital switch is for the programable keys, thisis so hat things can be avoided and passed over
@@ -315,4 +316,13 @@ void setRadios(Radio** r, int cR){
 }
 void setBootUpState(BootUpStates state){
     bootUpState = state;
+}
+
+
+void freeStateMachine(){
+    for(int i = 0; i<maxRadios;i++){
+        freeRadio(radios[i]);
+    }
+    free(radios);
+    freeModes();
 }

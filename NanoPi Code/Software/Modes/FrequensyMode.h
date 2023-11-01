@@ -1,5 +1,5 @@
-#ifndef HAMPOD_SOFT_CONFIG
-#define HAMPOD_SOFT_CONFIG
+#ifndef HAMPOD_SOFT_FEQUENCYMODE
+#define HAMPOD_SOFT_FEQUENCYMODE
 #include "Mode.h"
 #include "../GeneralFunctions.h"
 #include "../FirmwareCommunication.h"

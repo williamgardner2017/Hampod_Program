@@ -36,7 +36,7 @@ int ConfigFlow(KeyPress* keyInput);
 int readOutModeName(int mode);
 void stateMachineStart();
 
-
+void freeStateMachine();
 /**
  * These functions are for testing purposes only
 */

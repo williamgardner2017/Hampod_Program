@@ -1,7 +1,7 @@
-// #include <pthread.h>
+#include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
-// #include <unistd.h>
+#include <unistd.h>
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -10,10 +10,10 @@
 #include <stdbool.h>
 #include <string.h>
 
-#include "StateMachine.h"
-#include "../Firmware/hampod_firm_packet.h"
-#include "../Firmware/hampod_queue.h"
 #include "GeneralFunctions.h"
+#include "StateMachine.h"
+#include "../Firmware/hampod_queue.h"
+#include "../Firmware/hampod_firm_packet.h"
 #include "FirmwareCommunication.h"
 
 int input_pipe;
@@ -43,18 +43,18 @@ void setupPipes(){
 }
 //this starts up the communication of the firmware
 void firmwareCommunicationStartup(){
-    // if(pthread_mutex_init(&queue_lock, NULL) != 0) {
-    //     perror("pthread_mutex_init for queue");
-    //     exit(1);
-    // }
-    // if(pthread_mutex_init(&pipe_lock, NULL) != 0) {
-    //     perror("pthread_mutex_init for pipe");
-    //     exit(1);
-    // }
-    // if(pthread_cond_init(&queue_cond, NULL) != 0){
-    //     perror("pthread_cont_init for queue");
-    //     exit(1);
-    // }
+    if(pthread_mutex_init(&queue_lock, NULL) != 0) {
+        perror("pthread_mutex_init for queue");
+        exit(1);
+    }
+    if(pthread_mutex_init(&pipe_lock, NULL) != 0) {
+        perror("pthread_mutex_init for pipe");
+        exit(1);
+    }
+    if(pthread_cond_init(&queue_cond, NULL) != 0){
+        perror("pthread_cont_init for queue");
+        exit(1);
+    }
 }
 
 void send_packet(Inst_packet* packet){
@@ -64,6 +64,7 @@ void send_packet(Inst_packet* packet){
     memcpy(buffer, packet->data, packet->data_len);
     printf("Message = %s\n", (char*)buffer);
     write(output_pipe, buffer, packet->data_len);
+    destroy_inst_packet(&packet);
 }
 
 /*
@@ -72,9 +73,9 @@ Actual communication section
 //creating the queue
 Packet_queue* softwareQueue;
 // creating the locks
-// pthread_mutex_t queue_lock;
-// pthread_mutex_t pipe_lock;
-// pthread_cond_t queue_cond;
+pthread_mutex_t queue_lock;
+pthread_mutex_t pipe_lock;
+pthread_cond_t queue_cond;
 
 int CurrentID = 0;
 int ServecingID = 0;
@@ -84,22 +85,21 @@ int ServecingID = 0;
 */
 char* firmwareCommandQueue(Inst_packet* command){
     int myId = 0;
-    // pthread_mutex_lock(&pipe_lock);
+    pthread_mutex_lock(&pipe_lock);
     send_packet(command);
     myId = CurrentID;
     CurrentID++;
-    // pthread_mutex_unlock(&pipe_lock);
-    destroy_inst_packet(&command);
+    pthread_mutex_unlock(&pipe_lock);
     //do the priority locking
-    // pthread_mutex_lock(&queue_lock);
+    pthread_mutex_lock(&queue_lock);
     while(ServecingID != myId){
-    //    pthread_cond_wait(&queue_cond, &queue_lock);
+       pthread_cond_wait(&queue_cond, &queue_lock);
     }
     //grab the data from the queue
     Inst_packet *data = dequeue(softwareQueue);
     ServecingID ++;
-    // pthread_cond_signal(&queue_cond);
-    // pthread_mutex_unlock(&queue_lock);
+    pthread_cond_signal(&queue_cond);
+    pthread_mutex_unlock(&queue_lock);
     char* interpertedData;
 
     //temp for now
@@ -125,11 +125,11 @@ void firmwareOPipeWatcher(){
         //create the data to put into the queue
         Inst_packet* new_packet = create_inst_packet(packet_type, size, buffer);
         //lock the queue
-        // pthread_mutex_lock(&queue_lock);
+        pthread_mutex_lock(&queue_lock);
         //add the data to the queue
         enqueue(softwareQueue, new_packet);
         //unlock the queue
-        // pthread_mutex_unlock(&queue_lock);
+        pthread_mutex_unlock(&queue_lock);
         usleep(100);
     }
 }
@@ -253,31 +253,37 @@ void keyWatcher(){
 }
 
 
-// timer_t timerid;
+timer_t timerid;
 
 void startKeyWatcher(){
-//     struct sigevent sev;
-//     struct itimerspec its;
+    struct sigevent sev;
+    struct itimerspec its;
 
-//    sev.sigev_notify = SIGEV_THREAD;
-//     sev.sigev_notify_function = keyWatcher;
+   sev.sigev_notify = SIGEV_THREAD;
+    sev.sigev_notify_function = keyWatcher;
 
-//     if (timer_create(CLOCK_REALTIME, &sev, &timerid) == -1) {
-//         perror("timer_create");
-//         return 1;
-//     }
+    if (timer_create(CLOCK_REALTIME, &sev, &timerid) == -1) {
+        perror("timer_create");
+        return 1;
+    }
 
-//     its.it_value.tv_sec = 1;
-//     its.it_value.tv_nsec = 0;
-//     its.it_interval.tv_sec = 1;
-//     its.it_interval.tv_nsec = 0;
+    its.it_value.tv_sec = 1;
+    its.it_value.tv_nsec = 0;
+    its.it_interval.tv_sec = 1;
+    its.it_interval.tv_nsec = 0;
 
-//     if (timer_settime(timerid, 0, &its, NULL) == -1) {
-//         perror("timer_settime");
-//         return 1;
-//     }
+    if (timer_settime(timerid, 0, &its, NULL) == -1) {
+        perror("timer_settime");
+        return 1;
+    }
 }
 
-
-
-
+void freeFirmwareComunication(){
+    close(input_pipe);
+    close(output_pipe);
+    pthread_mutex_destroy(queue_lock);
+    pthread_mutex_destroy(pipe_lock);
+    pthread_mutex_destroy(queue_cond);
+    destroy_queue(softwareQueue);
+    timer_delete(timerid);
+}

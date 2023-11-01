@@ -21,5 +21,6 @@ void startKeyWatcher();
 void firmwareCommunicationStartup();
 void printOutErrors(char oK, bool hKS,int sS, int hWC);
 
+void freeFirmwareComunication();
 #endif
 

@@ -4,6 +4,7 @@
 #include "NormalMode.h"
 #include "DummyDTMFMode.h"
 #include "ConfigMode.h"
+#include "FrequensyMode.h"
 #include "../GeneralFunctions.h"
 Mode* getModeById(int modeID);
 Mode** modeRoutingStart();
