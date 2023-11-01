@@ -2,14 +2,55 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdbool.h>
+#include <math.h>
+
 #include "../FirmwareCommunication.h"
 #include "Mode.h"
 #include "../GeneralFunctions.h"
 #include "FrequensyMode.h"
 
 double currentFrequency = 0;
-
+int decimalPlace = 0;
+bool hasDecimal = false;
+// * does not go back to normal mode 
 void* frequencyCommandRelay(KeyPress* keyInput, int radioDetails){
+    switch(keyInput->keyPressed){
+        case '0':
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+            if(hasDecimal){
+                decimalPlace ++;
+            }
+            currentFrequency = currentFrequency*10 + convertCharToKeyValue(keyInput);
+            //read out the number
+            sendSpeakerOutput(&(keyInput->keyPressed));
+            break;
+        case '#':
+            currentFrequency = currentFrequency / pow(10,decimalPlace);
+            //TODO add the hamlib code to change the frequency here 
+            //enter frequency into the radio
+            break;
+        case '*':
+            if(hasDecimal){
+                currentFrequency = 0;
+                decimalPlace = 0;
+                hasDecimal = false;
+            }else{
+                decimalPlace = 0;
+                hasDecimal = true;
+            }
+            break;
+        default:
+        break;
+    }
     return NULL;
 }
 
@@ -37,8 +78,8 @@ Mode* frequencyLoad(){
         free(newMode);
         return NULL;
     }
-    newData->modeName = strdup("ExampleMake");
-    newData->radioModel = 42;
+    newData->modeName = strdup("frequency mode");
+    newData->radioModel = 42; //not sure for why this is here and if I need it 
 
     newMode->modeDetails = newData;
 
