@@ -2,11 +2,13 @@
 #define HAMPOD_SOFT_FIRMCOMMUN
 #include "StateMachine.h"
 #include "GeneralFunctions.h"
-// #include "../Firmware/hampod_firm_packet.h"
-// #include "../Firmware/hampod_queue.h"
-
+#include "../Firmware/hampod_firm_packet.h"
+#include "../Firmware/hampod_queue.h"
+#define INPUT_PIPE "Firmware_i"
+#define OUTPUT_PIPE "Firmware_o"
 void setupPipes();
-char* firmwareCommandQueue(char* command);
+void send_packet(Inst_packet* packet);
+char* firmwareCommandQueue(Inst_packet* command);
 void firmwareOPipeWatcher();
 KeyPress* interperateKeyPresses(char keyPress);
 void resetKeyInputVars();

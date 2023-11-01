@@ -280,11 +280,13 @@ int readOutModeName(int modeID){
 int switchToRadioMode(int modeID){
     switch (modeID)
     {
-        case -1: //DTMF
+        case 1: //DTMF
             modeState = dtmf;
+            setRadioMode(radios[currentRadio], getModeById(modeID));
             break;
-        case -2: //config mode
+        case 2: //config mode
             modeState = configMode;
+            setRadioMode(radios[currentRadio], getModeById(modeID));
             break;
         case -3: //mode select
             modeState = modeSelect;
@@ -302,4 +304,15 @@ int switchToRadioMode(int modeID){
 
 void stateMachineStart(){
     radios = malloc(sizeof(Radio) * 2);
+}
+
+void setModeState(ModeStates state){
+    modeState = state;
+}
+void setRadios(Radio** r, int cR){
+    radios = r;
+    currentRadio = cR;
+}
+void setBootUpState(BootUpStates state){
+    bootUpState = state;
 }

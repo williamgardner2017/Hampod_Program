@@ -13,7 +13,7 @@ bool testCreateModeRoutingFunction(){
         return false;
     }
     for(int i = 0; i<modeCount; i++){
-        if(testObject[i]->initialized){
+        if(testObject[i] != 0){
             freeModes();
             return false;
         }
@@ -24,7 +24,7 @@ bool testCreateModeRoutingFunction(){
 bool testGettingOneMode(){
     modeRoutingStart();
     Mode* testMode = getModeById(0);
-    if(!(testMode->initialized)){
+    if(testMode==0){
         freeModes();
         return false;
     }
@@ -34,12 +34,12 @@ bool testGettingOneMode(){
 bool testGettingManyModes(){
     modeRoutingStart();
     Mode* testMode = getModeById(0);
-    if(!(testMode->initialized)){
+    if(testMode == 0){
         freeModes();
         return false;
     }
     testMode = getModeById(2);
-    if(!(testMode->initialized)){
+    if(testMode == 0){
         freeModes();
         return false;
     }

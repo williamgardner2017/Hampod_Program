@@ -41,7 +41,7 @@ void stateMachineStart();
  * These functions are for testing purposes only
 */
 void setModeState(ModeStates state);
-void setRadios(Radio** radios, int currentRadio);
+void setRadios(Radio** r, int cR);
 void setBootUpState(BootUpStates state);
 void setCompanyAndModel(char* comp, int mod);
 

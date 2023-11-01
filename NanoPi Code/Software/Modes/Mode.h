@@ -13,7 +13,6 @@ typedef struct Mode {
     void* (*modeInput)(KeyPress*,int);
     void (*freeMode)(struct Mode **self);
     ModeData* modeDetails;
-    bool initialized;
 } Mode;
 
 Mode* createMode();
