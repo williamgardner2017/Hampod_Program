@@ -12,10 +12,12 @@
 
 #include "GeneralFunctions.h"
 #include "StateMachine.h"
+#include "IDQueue.h"
+#include "ThreadQueue.h"
 #include "../Firmware/hampod_queue.h"
 #include "../Firmware/hampod_firm_packet.h"
 #include "FirmwareCommunication.h"
-
+bool running = true;
 int input_pipe;
 int output_pipe;
 //this is here the pipes will be set up
@@ -41,6 +43,21 @@ void setupPipes(){
         exit(1);
     }
 }
+
+/*
+Actual communication section
+*/
+//creating the queue
+Packet_queue* softwareQueue;
+ID_queue* IDQueue;
+Thread_queue* threadQueue;
+// creating the locks
+pthread_mutex_t queue_lock;
+pthread_mutex_t pipe_lock;
+pthread_cond_t queue_cond;
+
+pthread_mutex_t thread_lock;
+pthread_cond_t thread_cond;
 //this starts up the communication of the firmware
 void firmwareCommunicationStartup(){
     if(pthread_mutex_init(&queue_lock, NULL) != 0) {
@@ -55,6 +72,19 @@ void firmwareCommunicationStartup(){
         perror("pthread_cont_init for queue");
         exit(1);
     }
+    if(pthread_mutex_init(&thread_lock, NULL) != 0) {
+        perror("thread_lock");
+        exit(1);
+    }
+    if(pthread_cond_init(&thread_cond, NULL) != 0){
+        perror("thread_cond");
+        exit(1);
+    }
+    softwareQueue = create_packet_queue();
+    IDQueue = create_IDqueue();
+    threadQueue = createThreadQueue();
+    firmwareStartOPipeWatcher();
+    startOutputThreadManager();
 }
 
 void send_packet(Inst_packet* packet){
@@ -67,37 +97,34 @@ void send_packet(Inst_packet* packet){
     destroy_inst_packet(&packet);
 }
 
-/*
-Actual communication section
-*/
-//creating the queue
-Packet_queue* softwareQueue;
-// creating the locks
-pthread_mutex_t queue_lock;
-pthread_mutex_t pipe_lock;
-pthread_cond_t queue_cond;
+
 
 int CurrentID = 0;
-int ServecingID = 0;
 /**
  * This is what handles calling the firmware, functions that dont need to return should call this asycronusly while functions that will need a return should not
  * This also takes care of freeing the command packet
+ * 
+ * //TODO make this handle as if the packets had an id to them
 */
 char* firmwareCommandQueue(Inst_packet* command){
     int myId = 0;
     pthread_mutex_lock(&pipe_lock);
-    send_packet(command);
     myId = CurrentID;
+    // command->id myID;
+    send_packet(command);
     CurrentID++;
+    if(CurrentID > 1000){
+        CurrentID = 0;
+    }
     pthread_mutex_unlock(&pipe_lock);
     //do the priority locking
     pthread_mutex_lock(&queue_lock);
-    while(ServecingID != myId){
+    while(IDpeek(IDQueue) != myId){
        pthread_cond_wait(&queue_cond, &queue_lock);
     }
     //grab the data from the queue
     Inst_packet *data = dequeue(softwareQueue);
-    ServecingID ++;
+    IDdequeue(IDQueue);
     pthread_cond_signal(&queue_cond);
     pthread_mutex_unlock(&queue_lock);
     char* interpertedData;
@@ -109,15 +136,28 @@ char* firmwareCommandQueue(Inst_packet* command){
     return interpertedData;
 }  
 
+pthread_t pipeWatcherThread;
+void firmwareStartOPipeWatcher(){
+    int result;
+    result = pthread_create(&pipeWatcherThread, NULL, firmwareOPipeWatcher, NULL);
+    if (result) {
+        fprintf(stderr, "Error creating thread: %d\n", result);
+        exit(0);
+    }
+}
 
 //TODO make sure this is set up properly
 void firmwareOPipeWatcher(){
-    while(1 == 1){
+    while(running){
         unsigned char packet_type;
+        unsigned int id;
         unsigned short size;
         unsigned char* buffer;
+        //TODO add the id pipe size thing to this
         //Read packet ID from the pipe
         read(input_pipe, &packet_type, 4);
+        //read the ID from the pipe
+        read(input_pipe, &id, 2);
         //read packet Length from the pipe
         read(input_pipe, &size, 2);
         //read packet Data from pipe as a char string
@@ -128,28 +168,62 @@ void firmwareOPipeWatcher(){
         pthread_mutex_lock(&queue_lock);
         //add the data to the queue
         enqueue(softwareQueue, new_packet);
+        IDenqueue(IDQueue,id);
         //unlock the queue
+        pthread_cond_signal(&queue_cond);
         pthread_mutex_unlock(&queue_lock);
         usleep(100);
     }
 }
 
+pthread_t callManagerThread;
+void startOutputThreadManager(){
+    int result;
+    result = pthread_create(&callManagerThread, NULL, OutputThreadManager, NULL);
+    if (result) {
+        fprintf(stderr, "Error creating thread: %d\n", result);
+        exit(0);
+    }
+}
+
 
 /*
-Functions that the software will be calling
+    This will let multiple threads for outputs happen without locking up the system
 */
+void OutputThreadManager(){
+    while(running || !ThreadQueueIsEmpty(threadQueue)){
+        pthread_mutex_lock(&thread_lock);
+        while(ThreadQueueIsEmpty(threadQueue)){
+            pthread_cond_wait(&thread_cond, &thread_lock);
+        }
+        pthread_t current = ThreadDequeue(threadQueue);
+        pthread_mutex_unlock(&thread_lock);
+        pthread_join(current);
+    }
+}
 
-
+pthread_t speakerThread;
 /**
  * Creates the speeker output and puts it onto the qeueu asycronusly 
  * Return a string
+ * //TODO make it use threads 
+ * //TODO make a thread to clean up those threads 
 */
 char* sendSpeakerOutput(char* text){
-   Inst_packet* speakerPacket = create_inst_packet(AUDIO,sizeof((unsigned char*) text),(unsigned char*) text);
+    Inst_packet* speakerPacket = create_inst_packet(AUDIO,sizeof((unsigned char*) text),(unsigned char*) text);
+    int result;
+    pthread_mutex_lock(&thread_lock);
+    result = pthread_create(&speakerThread, NULL, firmwareCommandQueue, speakerPacket);
+    Threadenqueue(threadQueue, speakerThread);
+    pthread_cond_signal(&thread_cond);
+    pthread_mutex_unlock(&thread_lock);
+    if (result) {
+        fprintf(stderr, "Error creating thread: %d\n", result);
+        exit(0);
+    }
+    // return firmwareCommandQueue(speakerPacket);
 
-   return firmwareCommandQueue(speakerPacket);
-
-//    return firmwareCommandQueue(text);
+   return text;
 }
 
 
@@ -279,11 +353,19 @@ void startKeyWatcher(){
 }
 
 void freeFirmwareComunication(){
+    running = false;
     close(input_pipe);
     close(output_pipe);
     pthread_mutex_destroy(queue_lock);
     pthread_mutex_destroy(pipe_lock);
     pthread_mutex_destroy(queue_cond);
     destroy_queue(softwareQueue);
+    destroy_IDqueue(IDQueue);
     timer_delete(timerid);
+    pthread_join(pipeWatcherThread);
+    pthread_join(callManagerThread);
+    destroyThreadQueue(threadQueue);
+    pthread_mutex_destroy(thread_lock);
+    pthread_mutex_destroy(thread_cond);
+
 }

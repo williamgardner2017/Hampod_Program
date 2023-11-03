@@ -34,7 +34,6 @@ void fullStart(){
 
     //create my stuff
     firmwareCommunicationStartup();
-    firmwareOPipeWatcher();
     stateMachineStart();
 
     //SETTING UP THE SIMULATION DEMO
