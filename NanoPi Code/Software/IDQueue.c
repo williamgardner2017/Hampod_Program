@@ -40,7 +40,7 @@ int IDpeek(ID_queue* queue){
 }
 int IDdequeue(ID_queue* queue){
     if(queue->head == NULL) {
-        return NULL;
+        return -1;
     }
 
     IDNode* removed_node = queue->head;

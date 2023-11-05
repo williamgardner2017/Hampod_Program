@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -g 
+CFLAGS = -Wall -pthread -g
 TARGETTEST = RunUnitTests
 TARGETNORMAL = Hampod
 
@@ -15,13 +15,17 @@ OBJSTESTS := $(SRCTESTS:.c=.o)
 .PHONY: clean
 
 tests: $(OBJSTESTS)
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) -o $@ $^ 
 
 hampod: $(OBJSNORMAL)
 	$(CC) $(CFLAGS) -o $@ $^
 
 
 
-clean:
+cleanWindows:
 	del /s *.o
 	del *.exe
+
+clean:
+ 	rm -f /s *.o   # Remove object files
+    rm -f *.exe  # Remove the executable (replace 'my_program' with the actual name)
