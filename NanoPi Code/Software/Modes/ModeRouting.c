@@ -74,7 +74,8 @@ Mode** modeRoutingStart(){
 * Frees all of the mode structts and the array
 */
 void freeModes(){
-    for(int i = 0; i< modeCount;i++){
+    int i;
+    for(i = 0; i< modeCount;i++){
         if(modes[i] != 0){
             modes[i]->freeMode(&(modes[i]));
         }else{
@@ -83,7 +84,7 @@ void freeModes(){
         modes[i] = 0;
     }
     free(modes);
-    for(int i = 0; i<12;i++){
+    for(i = 0; i<12;i++){
         if(keyBinds[i] != 0){
             keyBinds[i]->freeMode(&keyBinds[i]);
         }else{

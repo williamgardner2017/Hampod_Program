@@ -136,7 +136,8 @@ int ModeSelectFlow(KeyPress* keyInput){
                 break;
             case '*':
                 if(keyInput->isHold){
-                    for(int i = modeSelectPage*9; i< (modeSelectPage+1)*9;i++){
+                    int i;
+                    for(i = modeSelectPage*9; i< (modeSelectPage+1)*9;i++){
                         readOutModeName(i);
                     }
                 }else{
@@ -320,7 +321,8 @@ void setBootUpState(BootUpStates state){
 
 
 void freeStateMachine(){
-    for(int i = 0; i<maxRadios;i++){
+    int i;
+    for(i = 0; i<maxRadios;i++){
         freeRadio(radios[i]);
     }
     free(radios);

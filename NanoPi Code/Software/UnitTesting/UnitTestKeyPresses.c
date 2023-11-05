@@ -60,7 +60,8 @@ bool fullTest(){
     int expectedShiftState[] =  {0  ,0  ,0  ,0  ,0  ,1  ,1  ,0  ,0  ,1  ,1  ,2  ,2  ,2  ,2  ,2  ,0  ,0  ,0  ,1  ,1  ,1  ,1  ,0  ,0};
     int expectedHoldCount[] =   {0  ,0  ,0  ,0  ,0  ,0  ,0  ,0  ,0  ,0  ,0  ,0  ,0  ,0  ,1  ,2  ,2  ,0  ,0  ,0  ,0  ,1  ,2  ,2  ,0};
     int trialLength = 25;
-    for(int i = 0; i<trialLength; i++){
+    int i;
+    for(i = 0; i<trialLength; i++){
         //printf("Current input %c, input number %i out of %i\n", input[i],i,trialLength);
         actual = interperateKeyPresses(input[i]);
         exepected->keyPressed = expectedKeyPressed[i];

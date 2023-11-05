@@ -12,7 +12,8 @@ bool testCreateModeRoutingFunction(){
         freeModes();
         return false;
     }
-    for(int i = 0; i<modeCount; i++){
+    int i;
+    for(i = 0; i<modeCount; i++){
         if(testObject[i] != 0){
             freeModes();
             return false;
