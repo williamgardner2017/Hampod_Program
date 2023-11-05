@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -pthread -g
+CFLAGS = -Wall -g
 TARGETTEST = RunUnitTests
 TARGETNORMAL = Hampod
 
@@ -10,15 +10,15 @@ SRCTESTS := $(filter-out Startup.c, $(wildcard *.c)) $(wildcard Modes/*.c) $(wil
 OBJSTESTS := $(SRCTESTS:.c=.o)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@ -lpthread
 
 .PHONY: clean
 
 tests: $(OBJSTESTS)
-	$(CC) $(CFLAGS) -o $@ $^ 
+	$(CC) $(CFLAGS) -o $@ $^ -lpthread
 
 hampod: $(OBJSNORMAL)
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) -o $@ $^ -lpthread
 
 
 
