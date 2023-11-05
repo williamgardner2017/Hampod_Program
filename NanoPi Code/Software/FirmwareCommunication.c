@@ -30,7 +30,8 @@ void setupPipes(){
     }
     printf("Attempting to connect to Firmware_i\n");
     output_pipe;
-    for(int i = 0; i < 1000; i++){
+    int i = 0l
+    for(i ; i < 1000; i++){
         output_pipe = open(INPUT_PIPE, O_WRONLY);
         printf("Attempt %d/1000\r", i);
         if(output_pipe != -1){
@@ -147,7 +148,7 @@ void firmwareStartOPipeWatcher(){
 }
 
 //TODO make sure this is set up properly
-void firmwareOPipeWatcher(void* arg){
+void* firmwareOPipeWatcher(void* arg){
     while(running){
         unsigned char packet_type;
         unsigned int id;
@@ -190,7 +191,7 @@ void startOutputThreadManager(){
 /*
     This will let multiple threads for outputs happen without locking up the system
 */
-void OutputThreadManager(void* arg){
+void* OutputThreadManager(void* arg){
     while(running || !ThreadQueueIsEmpty(threadQueue)){
         pthread_mutex_lock(&thread_lock);
         while(ThreadQueueIsEmpty(threadQueue)){
