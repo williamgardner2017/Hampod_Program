@@ -30,7 +30,7 @@ void setupPipes(){
     }
     printf("Attempting to connect to Firmware_i\n");
     output_pipe;
-    int i = 0l
+    int i = 0;
     for(i ; i < 1000; i++){
         output_pipe = open(INPUT_PIPE, O_WRONLY);
         printf("Attempt %d/1000\r", i);
@@ -175,6 +175,8 @@ void* firmwareOPipeWatcher(void* arg){
         pthread_mutex_unlock(&queue_lock);
         usleep(100);
     }
+
+    return NULL;
 }
 
 pthread_t callManagerThread;
@@ -201,6 +203,7 @@ void* OutputThreadManager(void* arg){
         pthread_mutex_unlock(&thread_lock);
         pthread_join(current, NULL);
     }
+    return NULL;
 }
 
 pthread_t speakerThread;
