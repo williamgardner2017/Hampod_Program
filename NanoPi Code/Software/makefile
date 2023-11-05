@@ -27,5 +27,5 @@ cleanWindows:
 	del *.exe
 
 clean:
- 	@rm -f /s *.o   # Remove object files
-    @rm -f *.exe  # Remove the executable (replace 'my_program' with the actual name)
+	@rm -f /s *.o   # Remove object files
+	@rm -f *.exe  # Remove the executable (replace 'my_program' with the actual name)
