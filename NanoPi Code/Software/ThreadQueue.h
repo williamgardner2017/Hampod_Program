@@ -5,12 +5,12 @@
 typedef struct ThreadNode {
     pthread_t thread; 
     struct ThreadNode* next;
-} IDNode;
+} ThreadNode;
 
 typedef struct Thread_queue {
     ThreadNode* head;
     ThreadNode* tail;
-} ID_queue;
+} Thread_queue;
 
 void Threadenqueue(Thread_queue* queue, pthread_t thread);
 Thread_queue* createThreadQueue();
