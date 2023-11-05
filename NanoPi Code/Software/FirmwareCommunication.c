@@ -198,7 +198,7 @@ void OutputThreadManager(){
         }
         pthread_t current = ThreadDequeue(threadQueue);
         pthread_mutex_unlock(&thread_lock);
-        pthread_join(current);
+        pthread_join(current, NULL);
     }
 }
 
@@ -356,16 +356,16 @@ void freeFirmwareComunication(){
     running = false;
     close(input_pipe);
     close(output_pipe);
-    pthread_mutex_destroy(queue_lock);
-    pthread_mutex_destroy(pipe_lock);
-    pthread_mutex_destroy(queue_cond);
+    pthread_mutex_destroy(&queue_lock);
+    pthread_mutex_destroy(&pipe_lock);
+    pthread_mutex_destroy(&queue_cond);
     destroy_queue(softwareQueue);
     destroy_IDqueue(IDQueue);
     timer_delete(timerid);
-    pthread_join(pipeWatcherThread);
-    pthread_join(callManagerThread);
+    pthread_join(pipeWatcherThread,NULL);
+    pthread_join(callManagerThread,NULL);
     destroyThreadQueue(threadQueue);
-    pthread_mutex_destroy(thread_lock);
-    pthread_mutex_destroy(thread_cond);
+    pthread_mutex_destroy(&thread_lock);
+    pthread_mutex_destroy(&thread_cond);
 
 }

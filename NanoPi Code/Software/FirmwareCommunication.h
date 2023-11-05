@@ -25,5 +25,8 @@ void firmwareCommunicationStartup();
 void printOutErrors(char oK, bool hKS,int sS, int hWC);
 
 void freeFirmwareComunication();
+
+void startOutputThreadManager();
+void OutputThreadManager();
 #endif
 

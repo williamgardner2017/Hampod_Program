@@ -1,6 +1,8 @@
 #include <pthread.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
+#include <stdio.h>
 #include "ThreadQueue.h"
 
 Thread_queue* createThreadQueue(){
@@ -20,7 +22,7 @@ void Threadenqueue(Thread_queue* queue, pthread_t thread){
         exit(1);
     }
     //this is to copy the value so it does not get lost
-    memcpy(new_node->thread, thread, sizeof(pthread_t));
+    memcpy((void*) new_node->thread, (void*) thread, sizeof(pthread_t));
     //new_node->thread = thread;
     new_node->next = NULL;
 
