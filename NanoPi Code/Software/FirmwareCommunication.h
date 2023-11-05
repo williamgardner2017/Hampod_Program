@@ -11,7 +11,7 @@
 void setupPipes();
 void send_packet(Inst_packet* packet);
 char* firmwareCommandQueue(Inst_packet* command);
-void firmwareOPipeWatcher();
+void firmwareOPipeWatcher(void* arg);
 void firmwareStartOPipeWatcher();
 KeyPress* interperateKeyPresses(char keyPress);
 void resetKeyInputVars();
@@ -27,6 +27,6 @@ void printOutErrors(char oK, bool hKS,int sS, int hWC);
 void freeFirmwareComunication();
 
 void startOutputThreadManager();
-void OutputThreadManager();
+void OutputThreadManager(void* arg);
 #endif
 

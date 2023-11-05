@@ -147,7 +147,7 @@ void firmwareStartOPipeWatcher(){
 }
 
 //TODO make sure this is set up properly
-void firmwareOPipeWatcher(){
+void firmwareOPipeWatcher(void* arg){
     while(running){
         unsigned char packet_type;
         unsigned int id;
@@ -190,7 +190,7 @@ void startOutputThreadManager(){
 /*
     This will let multiple threads for outputs happen without locking up the system
 */
-void OutputThreadManager(){
+void OutputThreadManager(void* arg){
     while(running || !ThreadQueueIsEmpty(threadQueue)){
         pthread_mutex_lock(&thread_lock);
         while(ThreadQueueIsEmpty(threadQueue)){
@@ -358,7 +358,7 @@ void freeFirmwareComunication(){
     close(output_pipe);
     pthread_mutex_destroy(&queue_lock);
     pthread_mutex_destroy(&pipe_lock);
-    pthread_mutex_destroy(&queue_cond);
+    pthread_cond_destroy(&queue_cond);
     destroy_queue(softwareQueue);
     destroy_IDqueue(IDQueue);
     timer_delete(timerid);
@@ -366,6 +366,6 @@ void freeFirmwareComunication(){
     pthread_join(callManagerThread,NULL);
     destroyThreadQueue(threadQueue);
     pthread_mutex_destroy(&thread_lock);
-    pthread_mutex_destroy(&thread_cond);
+    pthread_cond_destroy(&thread_cond);
 
 }
