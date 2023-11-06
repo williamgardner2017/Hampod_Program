@@ -4,7 +4,6 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdbool.h>
-#include "FirmwareCommunication.h"
 #include "Modes/ModeRouting.h"
 #include "GeneralFunctions.h"
 #include "Radio.h"
@@ -50,5 +49,6 @@ void setBootUpState(BootUpStates state);
 void setCompanyAndModel(char* comp, int mod);
 
 
+#include "FirmwareCommunication.h"
 #include "StateMachine.c"
 #endif
