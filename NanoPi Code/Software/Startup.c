@@ -62,7 +62,6 @@ int main(){
         perror("signal");
         exit(1);
     }
-    #include <signal.h>
     fullStart();
     return -1;
 }

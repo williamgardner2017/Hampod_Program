@@ -24,7 +24,7 @@ CFLAGS = -Wall -g
 # 	cc firmware.o -o firmware.elf -lpthread
 
 Software: Startup.o
-	cc $(CFLAGS) -o Software Startup.o 
+	cc $(CFLAGS) -o Software Startup.o -lpthread
 Startup.o: Startup.c
 	cc $(CFLAGS) -c Startup.c -o Startup.o -lpthread
 Startup.c:
