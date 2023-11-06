@@ -28,9 +28,8 @@ void setupPipes(){
         exit(-1);
     }
     printf("Attempting to connect to Firmware_i\n");
-    output_pipe;
-    int i = 0;
-    for(i ; i < 1000; i++){
+    int i;
+    for(i = 0; i < 1000; i++){
         output_pipe = open(INPUT_PIPE, O_WRONLY);
         printf("Attempt %d/1000\r", i);
         if(output_pipe != -1){
@@ -323,7 +322,7 @@ void keyWatcher(){
         KeyPress *interpretedKey = interperateKeyPresses(pressedKey);
         //only run the modeFlow iff a key was actualy pressed
         if(interpretedKey->keyPressed != '-'){
-            modeFlow(interpretedKey);
+            ModeFlow(interpretedKey);
         }
         
         free(temp);

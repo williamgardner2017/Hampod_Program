@@ -43,7 +43,7 @@ void fullStart(){
 
     //send that I am ready
     
-    Inst_packet* iAmReady = create_inst_packet(CONFIG, sizeof("ok"),"ok");
+    Inst_packet* iAmReady = create_inst_packet(CONFIG, sizeof("ok")+1,"ok");
     firmwareCommandQueue(iAmReady);
     //start key loop after getting the responce
     startKeyWatcher();
