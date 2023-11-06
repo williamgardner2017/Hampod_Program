@@ -1,5 +1,5 @@
 # CC = gcc
-# CFLAGS = -Wall -g
+CFLAGS = -Wall -g
 # TARGETTEST = RunUnitTests
 # TARGETNORMAL = Hampod
 
@@ -22,6 +22,9 @@
 
 # firmware.elf: firmware.o
 # 	cc firmware.o -o firmware.elf -lpthread
+
+Software: Startup.o
+	cc $(CFLAGS) -o Software Startup.o 
 Startup.o: Startup.c
 	cc $(CFLAGS) -c Startup.c -o Startup.o -lpthread
 Startup.c:
