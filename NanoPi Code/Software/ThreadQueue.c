@@ -31,7 +31,7 @@ void Threadenqueue(Thread_queue* queue, pthread_t thread){
 }
 pthread_t ThreadDequeue(Thread_queue* queue){
       if(queue->head == NULL) {
-        return NULL;
+        return (pthread_t) NULL;
     }
 
     ThreadNode* removed_node = queue->head;

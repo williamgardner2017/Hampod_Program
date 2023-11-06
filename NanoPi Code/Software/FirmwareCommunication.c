@@ -118,7 +118,7 @@ char* firmwareCommandQueue(Inst_packet* command){
     return interpertedData;
 }  
 
-pthread_t pipeWatcherThread;
+
 void firmwareStartOPipeWatcher(){
     int result;
     result = pthread_create(&pipeWatcherThread, NULL, firmwareOPipeWatcher, NULL);
@@ -160,7 +160,7 @@ void* firmwareOPipeWatcher(void* arg){
     return NULL;
 }
 
-pthread_t callManagerThread;
+
 void startOutputThreadManager(){
     int result;
     result = pthread_create(&callManagerThread, NULL, OutputThreadManager, NULL);
@@ -187,7 +187,7 @@ void* OutputThreadManager(void* arg){
     return NULL;
 }
 
-pthread_t speakerThread;
+
 /**
  * Creates the speeker output and puts it onto the qeueu asycronusly 
  * Return a string
@@ -198,7 +198,7 @@ char* sendSpeakerOutput(char* text){
     Inst_packet* speakerPacket = create_inst_packet(AUDIO,sizeof((unsigned char*) text)+1,(unsigned char*) text);
     int result;
     pthread_mutex_lock(&thread_lock);
-    result = pthread_create(&speakerThread, NULL, firmwareCommandQueue, speakerPacket);
+    result = pthread_create(&speakerThread, NULL, firmwareCommandQueue, (void*) speakerPacket);
     Threadenqueue(threadQueue, speakerThread);
     pthread_cond_signal(&thread_cond);
     pthread_mutex_unlock(&thread_lock);
@@ -295,10 +295,11 @@ void printOutErrors(char oK, bool hKS,int sS, int hWC){
 }
 
 int keyRequestFrequency = 200000;
-void keyWatcher(){
+void* keyWatcher(void* args){
     //TODO properly setup the packet to be sent
     while(running){
-        Inst_packet* keyPressedRequest = create_inst_packet(KEYPAD,1,'r');
+        unsigned char *rr = "r";
+        Inst_packet* keyPressedRequest = create_inst_packet(KEYPAD,1,rr);
 
         char* temp = firmwareCommandQueue(keyPressedRequest);
         char pressedKey = temp[0];
