@@ -6,7 +6,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <signal.h>
-#include <time.h>
 #include <stdbool.h>
 #include <string.h>
 
@@ -313,48 +312,37 @@ void printOutErrors(char oK, bool hKS,int sS, int hWC){
     printf("ShiftState Expected:%i Actual:%i\nHoldCount Expected:%i Actual:%i\n", sS, shiftState, hWC, holdWaitCount);
 }
 
-
+int keyRequestFrequency = 200000;
 void keyWatcher(){
     //TODO properly setup the packet to be sent
-    Inst_packet* keyPressedRequest = create_inst_packet(KEYPAD,1,'r');
+    while(running){
+        Inst_packet* keyPressedRequest = create_inst_packet(KEYPAD,1,'r');
 
-    char* temp = firmwareCommandQueue(keyPressedRequest);
-    char pressedKey = temp[0];
-    KeyPress *interpretedKey = interperateKeyPresses(pressedKey);
-    //only run the modeFlow iff a key was actualy pressed
-    if(interpretedKey->keyPressed != '-'){
-        modeFlow(interpretedKey);
+        char* temp = firmwareCommandQueue(keyPressedRequest);
+        char pressedKey = temp[0];
+        KeyPress *interpretedKey = interperateKeyPresses(pressedKey);
+        //only run the modeFlow iff a key was actualy pressed
+        if(interpretedKey->keyPressed != '-'){
+            modeFlow(interpretedKey);
+        }
+        
+        free(temp);
+        free(interpretedKey);
+        usleep(keyRequestFrequency);
     }
-    
-    free(temp);
-    free(interpretedKey);
 }
 
-
-timer_t timerid;
-
+//this will be a manual thing
+pthread_t timerId;
 void startKeyWatcher(){
-    struct sigevent sev;
-    struct itimerspec its;
-
-   sev.sigev_notify = SIGEV_THREAD;
-    sev.sigev_notify_function = keyWatcher;
-
-    if (timer_create(CLOCK_REALTIME, &sev, &timerid) == -1) {
-        perror("timer_create");
-        return 1;
-    }
-
-    its.it_value.tv_sec = 1;
-    its.it_value.tv_nsec = 0;
-    its.it_interval.tv_sec = 1;
-    its.it_interval.tv_nsec = 0;
-
-    if (timer_settime(timerid, 0, &its, NULL) == -1) {
-        perror("timer_settime");
-        return 1;
+    int result;
+    result = pthread_create(&timerId, NULL, keyWatcher, NULL);
+    if (result) {
+        fprintf(stderr, "Error creating thread: %d\n", result);
+        exit(0);
     }
 }
+
 
 void freeFirmwareComunication(){
     running = false;
@@ -365,7 +353,6 @@ void freeFirmwareComunication(){
     pthread_cond_destroy(&queue_cond);
     destroy_queue(softwareQueue);
     destroy_IDqueue(IDQueue);
-    timer_delete(timerid);
     pthread_join(pipeWatcherThread,NULL);
     pthread_join(callManagerThread,NULL);
     destroyThreadQueue(threadQueue);

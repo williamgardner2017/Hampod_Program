@@ -3,7 +3,6 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdbool.h>
-#include <math.h>
 
 #include "../FirmwareCommunication.h"
 #include "Mode.h"
