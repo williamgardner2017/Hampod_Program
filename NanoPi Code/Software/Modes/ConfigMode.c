@@ -2,10 +2,10 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include "ConfigMode.h"
 #include "../FirmwareCommunication.h"
 #include "Mode.h"
 #include "../GeneralFunctions.h"
+#include "ConfigMode.h"
 
 int currentPage = 0;
 int maxPages = 4;

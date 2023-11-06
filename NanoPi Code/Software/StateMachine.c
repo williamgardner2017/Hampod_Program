@@ -2,12 +2,12 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdbool.h>
-#include "StateMachine.h"
 #include "Modes/ModeRouting.h"
 #include "FirmwareCommunication.h"
 #include "GeneralFunctions.h"
 #include "Radio.h"
 #include "Modes/Mode.h"
+#include "StateMachine.h"
 ModeStates modeState = bootUp;
 
 int programableKeysOn = 0;

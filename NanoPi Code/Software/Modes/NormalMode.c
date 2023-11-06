@@ -1,10 +1,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include "NormalMode.h"
 #include "Mode.h"
 #include "../GeneralFunctions.h"
 #include "../FirmwareCommunication.h"
+#include "NormalMode.h"
 
 void* normalCommandRelay(KeyPress* keyInput, int radioDetails){
     switch (keyInput->keyPressed)
