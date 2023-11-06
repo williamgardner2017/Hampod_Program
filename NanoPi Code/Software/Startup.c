@@ -6,9 +6,9 @@
 #include <unistd.h>
 #include <signal.h>
 
+#include "FirmwareCommunication.h"
 #include "StateMachine.h"
 #include "Radio.h"
-#include "FirmwareCommunication.h"
 #include "../Firmware/hampod_firm_packet.h"
 
 void sigint_handler(int signum);
@@ -30,7 +30,7 @@ void fullStart(){
     setupPipes();
     //send pid over to the software
     //TODO make this so that it is a one way send may just add this to the pipe creation
-    send_packet(create_inst_packet(CONFIG,sizeof(p),p));
+    send_packet(create_inst_packet(CONFIG,sizeof(p),(unsigned char*) p));
 
     //create my stuff
     firmwareCommunicationStartup();

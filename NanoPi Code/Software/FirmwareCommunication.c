@@ -88,12 +88,12 @@ int CurrentID = 0;
  * 
  * //TODO make this handle as if the packets had an id to them
 */
-char* firmwareCommandQueue(Inst_packet* command){
+void* firmwareCommandQueue(void* command){
     int myId = 0;
     pthread_mutex_lock(&pipe_lock);
     myId = CurrentID;
     // command->id myID;
-    send_packet(command);
+    send_packet((Inst_packet*) command);
     CurrentID++;
     if(CurrentID > 1000){
         CurrentID = 0;

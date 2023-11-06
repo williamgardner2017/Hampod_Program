@@ -27,7 +27,7 @@ pthread_t pipeWatcherThread;
 #define OUTPUT_PIPE "Firmware_o"
 void setupPipes();
 void send_packet(Inst_packet* packet);
-char* firmwareCommandQueue(Inst_packet* command);
+void* firmwareCommandQueue(void* command);
 void* firmwareOPipeWatcher(void* arg);
 void firmwareStartOPipeWatcher();
 KeyPress* interperateKeyPresses(char keyPress);
