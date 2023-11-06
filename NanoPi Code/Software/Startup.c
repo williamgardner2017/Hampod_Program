@@ -6,8 +6,8 @@
 #include <unistd.h>
 #include <signal.h>
 
-#include "FirmwareCommunication.h"
 #include "StateMachine.h"
+#include "FirmwareCommunication.h"
 #include "Radio.h"
 #include "../Firmware/hampod_firm_packet.h"
 
