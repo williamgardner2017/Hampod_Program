@@ -9,7 +9,6 @@ typedef struct KeyPress{
 } KeyPress;
 
 int convertCharToKeyValue(KeyPress* keyPressed);
-int pow(int a, int b);
 
 
 #endif
