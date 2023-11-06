@@ -4,14 +4,21 @@ unsigned char audio_running = 1;
 pthread_mutex_t audio_queue_lock;
 pthread_mutex_t audio_queue_available;
 
+/*
+Hashing has been deprecated. This will be removed in the next commit.
+
 const char* pregenerated_audio[] = {
     "DTMF1", "DTMF2", "DTMF3", "DTMF4",
     "DTMF5", "DTMF6", "DTMF7", "DTMF8",
     "DTMF9", "DTMF0", "DTMFA", "DTMFB",
     "DTMFC", "DTMFD", "DTMFASTERISK", "DTMFPOUND"
 };
+*/
 
 void *audio_io_thread(void* arg);
+
+/*
+Hashing has been deprecated. This will be removed in the next commit.
 
 unsigned int hash(char* text) {
     unsigned int hashed_value = 0;
@@ -25,9 +32,13 @@ unsigned int hash(char* text) {
     }
     return hashed_value % TABLE_SIZE;
 }
+*/
 
 void audio_process() {
     char buffer[MAXSTRINGSIZE];
+    /*
+    Hashing has been deprecated. This will be removed in the next commit
+
     unsigned char hash_check[TABLE_SIZE];
     unsigned int hashed_value;
     
@@ -39,8 +50,8 @@ void audio_process() {
         AUDIO_PRINTF("%s Hashed index = %u :)\n", buffer, hashed_value);
         hash_check[hashed_value] += 1;
     }
-
-    AUDIO_PRINTF("Connecting to input/output pipes\n");
+    */
+    AUDIO_PRINTF("Audio process launched\nConnecting to input/output pipes\n");
 
     int input_pipe_fd = open(AUDIO_I, O_RDONLY);
     if(input_pipe_fd == -1) {
@@ -102,24 +113,32 @@ void audio_process() {
         pthread_mutex_unlock(&audio_queue_available);
         char* requested_string = calloc(1, received_packet->data_len + 0x10);
         strcpy(requested_string, (char*)received_packet->data);
-        unsigned int string_hash = hash(requested_string);
+        char audio_type_byte = requested_string[0];
+        char remaining_string = requested_string + 1; //Removes the first byte but we need to keep the original pointer to free it later
+        //unsigned int string_hash = hash(requested_string); Now deprecated. This will be removed in the next commit
         int system_result;
-        if(hash_check[string_hash] == 0) {
-            AUDIO_PRINTF("Hash miss, generating %s from Festival\n", requested_string);
-            sprintf(buffer, "echo '%s' | festival --tts", requested_string);
+        //if(hash_check[string_hash] == 0) { Now deprecated. This will be removed in the next commit
+        if(audio_type_byte == 's') {
+            //AUDIO_PRINTF("Hash miss, generating %s from Festival\n", requested_string); Now deprecated. This will be removed in the next commit
+            AUDIO_PRINTF("Festival tts %s\n", remaining_string);
+            sprintf(buffer, "echo '%s' | festival --tts", remaining_string);
+            system_result = system(buffer);
+        } else if(audio_type_byte == 'p') {
+            strcpy(buffer, "aplay ");
+            strcat(remaining_string, ".wav");
+            strcat(buffer, remaining_string);
+            //AUDIO_PRINTF("Hash hit, playing %s as a wav file\n", requested_string); Now deprecated. This will be removed in the next commit
+            AUDIO_PRINTF("Now playing %s with aplay\n", remaining_string);
             system_result = system(buffer);
         } else {
-            strcpy(buffer, "aplay pregen_audio/");
-            strcat(requested_string, ".wav");
-            strcat(buffer, requested_string);
-            AUDIO_PRINTF("Hash hit, playing %s as a wav file\n", requested_string);
-            system_result = system(buffer);
+            AUDIO_PRINTF("Audio error. Unrecognized packet data %s\n", requested_string);
+            system_result = -1;
         }
         Inst_packet* packet_to_send = create_inst_packet(AUDIO, sizeof(int), (unsigned char*)&system_result);
         AUDIO_PRINTF("Sending back value of %x\n", system_result);
         write(output_pipe_fd, packet_to_send, 6);
         write(output_pipe_fd, packet_to_send->data, sizeof(int));
-
+        free(requested_string);
         destroy_inst_packet(&packet_to_send);
     }
 

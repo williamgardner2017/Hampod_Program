@@ -41,7 +41,7 @@
         } \
     } while(0)
 
-unsigned int hash(char* text);
+//unsigned int hash(char* text); Now deprecated. This will be removed in the next commit
 
 typedef struct audio_io_packet {
     int pipe_fd;
