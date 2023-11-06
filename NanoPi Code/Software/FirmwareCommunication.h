@@ -12,7 +12,7 @@
 #include <stdbool.h>
 #include <string.h>
 
-#include "StateMachine.h"
+
 #include "GeneralFunctions.h"
 #include "IDQueue.h"
 #include "ThreadQueue.h"
@@ -36,8 +36,8 @@ bool confirmKeyInputVars(char oK, bool hKS,int sS, int hWC);
 
 char* sendSpeakerOutput(char* text);
 
-void* keyWatcher(void* args);
 void startKeyWatcher();
+void* keyWatcher(void* args);
 void firmwareCommunicationStartup();
 void printOutErrors(char oK, bool hKS,int sS, int hWC);
 
@@ -45,6 +45,10 @@ void freeFirmwareComunication();
 
 void startOutputThreadManager();
 void* OutputThreadManager(void* arg);
+
+//this is down here to prevent call order issues 
+#include "StateMachine.h"
+
 
 #include "FirmwareCommunication.c"
 #endif
