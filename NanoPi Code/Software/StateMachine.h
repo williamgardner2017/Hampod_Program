@@ -4,8 +4,8 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdbool.h>
-#include "Modes/ModeRouting.h"
 #include "FirmwareCommunication.h"
+#include "Modes/ModeRouting.h"
 #include "GeneralFunctions.h"
 #include "Radio.h"
 #include "Modes/Mode.h"

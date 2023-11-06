@@ -12,8 +12,8 @@
 #include <stdbool.h>
 #include <string.h>
 
-#include "GeneralFunctions.h"
 #include "StateMachine.h"
+#include "GeneralFunctions.h"
 #include "IDQueue.h"
 #include "ThreadQueue.h"
 #include "../Firmware/hampod_queue.h"
