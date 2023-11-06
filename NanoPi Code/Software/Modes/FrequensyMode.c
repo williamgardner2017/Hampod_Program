@@ -1,13 +1,6 @@
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdbool.h>
 
-#include "../FirmwareCommunication.h"
-#include "Mode.h"
-#include "../GeneralFunctions.h"
-#include "FrequensyMode.h"
+
+
 
 double currentFrequency = 0;
 int decimalPlace = 0;

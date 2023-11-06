@@ -1,7 +1,4 @@
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include "IDQueue.h"
+
 
 ID_queue* create_IDqueue(){
     ID_queue* new = malloc(sizeof(ID_queue));

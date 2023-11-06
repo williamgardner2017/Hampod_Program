@@ -1,9 +1,4 @@
-#include <pthread.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
-#include <stdio.h>
-#include "ThreadQueue.h"
+
 
 Thread_queue* createThreadQueue(){
         Thread_queue* new = malloc(sizeof(Thread_queue));

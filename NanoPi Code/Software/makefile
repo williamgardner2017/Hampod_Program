@@ -21,6 +21,12 @@ hampod: $(OBJSNORMAL)
 	$(CC) $(CFLAGS) -o $@ $^ -lpthread
 
 
+hampodtwo: software.o
+
+software.o: software.c
+	gcc -g -Wall -c Startup.c -o software.o -lwiringPi -lpthread
+software.c:
+	@echo "Missing firmware.c file. Repull the git repo"
 
 cleanWindows:
 	del /s *.o

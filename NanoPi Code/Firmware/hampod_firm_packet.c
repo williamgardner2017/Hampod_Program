@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "hampod_firm_packet.h"
 Inst_packet* create_inst_packet(Packet_type new_type, unsigned short new_len, unsigned char *new_data) {
     Inst_packet *new = malloc(sizeof(Inst_packet));
     new->type = new_type;

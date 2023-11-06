@@ -1,14 +1,4 @@
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include "Mode.h"
-#include "../GeneralFunctions.h"
-#include "ConfigMode.h"
-#include "NormalMode.h"
-#include "DummyDTMFMode.h"
-#include "FrequensyMode.h"
-#include "ModeRouting.h"
+
 
 /*
 *The idea of this that users only need to edit this one place inorder to add in their new modes.

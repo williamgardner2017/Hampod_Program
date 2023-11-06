@@ -1,5 +1,7 @@
 #ifndef HAMPOD_SOFT_MODE
 #define HAMPOD_SOFT_MODE
+#include <stdlib.h>
+#include <string.h>
 #include <stdbool.h>
 #include "../GeneralFunctions.h"
 
@@ -17,5 +19,6 @@ typedef struct Mode {
 
 Mode* createMode();
 
+#include "Mode.c"
 
 #endif

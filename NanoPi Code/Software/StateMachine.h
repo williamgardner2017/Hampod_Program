@@ -1,10 +1,14 @@
 #ifndef HAMPOD_SOFT_STATE
 #define HAMPOD_SOFT_STATE
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include "Modes/ModeRouting.h"
+#include "FirmwareCommunication.h"
 #include "GeneralFunctions.h"
 #include "Radio.h"
 #include "Modes/Mode.h"
-#include "Modes/ModeRouting.h"
-#include "FirmwareCommunication.h"
 typedef enum {
     bootUp,
     standard,
@@ -46,4 +50,5 @@ void setBootUpState(BootUpStates state);
 void setCompanyAndModel(char* comp, int mod);
 
 
+#include "StateMachine.c"
 #endif

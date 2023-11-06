@@ -1,21 +1,4 @@
-#include <pthread.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <signal.h>
-#include <stdbool.h>
-#include <string.h>
 
-#include "GeneralFunctions.h"
-#include "StateMachine.h"
-#include "IDQueue.h"
-#include "ThreadQueue.h"
-#include "../Firmware/hampod_queue.h"
-#include "../Firmware/hampod_firm_packet.h"
-#include "FirmwareCommunication.h"
 bool running = true;
 int input_pipe;
 int output_pipe;
