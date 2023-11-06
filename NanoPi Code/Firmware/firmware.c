@@ -43,6 +43,7 @@ typedef struct Buff_input {
 } Buff_input;
 
 pthread_mutex_t queue_lock;
+pthread_mutex_t queue_available;
 
 char running = 1;
 
@@ -192,6 +193,11 @@ int main(){
         exit(1);
     }
     
+    if(pthread_mutex_init(&queue_available, NULL) != 0) {
+        perror("pthread_mutex_init");
+        exit(1);
+    }
+    
     FIRMWARE_PRINTF("Queue lock initialized\n");
 
     if(pthread_create(&io_buffer, NULL, io_buffer_thread, (void*)&thread_input) != 0) {
@@ -206,12 +212,14 @@ int main(){
     FIRMWARE_PRINTF("1 second delay over\n");
     
     while(running) {
+        pthread_mutex_lock(&queue_available);
         pthread_mutex_lock(&queue_lock);
 
         FIRMWARE_PRINTF("Queue is open\n");
 
         Inst_packet* received_packet = dequeue(instruction_queue);
         pthread_mutex_unlock(&queue_lock);
+        pthread_mutex_unlock(&queue_available);
 
         FIRMWARE_PRINTF("Packet is %p\n", received_packet);
         FIRMWARE_PRINTF("Processing received packet\n");
@@ -234,6 +242,10 @@ int main(){
             read(keypad_out_pipe_fd, &keypad_back_size, sizeof(unsigned short));
             read(keypad_out_pipe_fd, &read_key, sizeof(char));
             FIRMWARE_PRINTF("Keypad sent back %x\n", read_key);
+            write(output_pipe_fd, &type, sizeof(Packet_type));
+            unsigned short return_size = 1;
+            write(output_pipe_fd, &return_size, sizeof(unsigned short));
+            write(output_pipe_fd, &read_key, sizeof(char));
         }
         if(type == AUDIO) {
             FIRMWARE_PRINTF("Got a audio packet\n");
@@ -247,6 +259,9 @@ int main(){
             read(audio_out_pipe_fd, &audio_back_size, sizeof(unsigned short));
             read(audio_out_pipe_fd, &return_code, sizeof(int));
             FIRMWARE_PRINTF("audio sent back %x\n", return_code);
+            write(output_pipe_fd, &audio_back, sizeof(Packet_type));
+            write(output_pipe_fd, &audio_back_size, sizeof(unsigned short));
+            write(output_pipe_fd, &return_code, sizeof(int));
         }
         destroy_inst_packet(&received_packet);
     }
@@ -276,6 +291,12 @@ void *io_buffer_thread(void* arg) {
         FIRMWARE_IO_PRINTF("Locking the queue\n");
 
         pthread_mutex_lock(&queue_lock);
+        int queue_empty = is_empty(queue);
+        pthread_mutex_unlock(&queue_lock);
+
+        if(queue_empty) {
+            pthread_mutex_lock(&queue_available);
+        }
 
         FIRMWARE_IO_PRINTF("Waiting for input...\n");
 
@@ -291,12 +312,16 @@ void *io_buffer_thread(void* arg) {
         Inst_packet* new_packet = create_inst_packet(packet_type, size, buffer);
 
         FIRMWARE_IO_PRINTF("Queueing the new packet\n");
-
+        pthread_mutex_lock(&queue_lock);
         enqueue(queue, new_packet);
 
         FIRMWARE_IO_PRINTF("Releasing queue\n");
 
         pthread_mutex_unlock(&queue_lock);
+        if(queue_empty) {
+            FIRMWARE_IO_PRINTF("Queue was not empty\n");
+            pthread_mutex_unlock(&queue_available);
+        }
         usleep(100);
     }
     return NULL;

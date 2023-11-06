@@ -114,7 +114,7 @@ void audio_process() {
         char* requested_string = calloc(1, received_packet->data_len + 0x10);
         strcpy(requested_string, (char*)received_packet->data);
         char audio_type_byte = requested_string[0];
-        char remaining_string = requested_string + 1; //Removes the first byte but we need to keep the original pointer to free it later
+        char* remaining_string = requested_string + 1; //Removes the first byte but we need to keep the original pointer to free it later
         //unsigned int string_hash = hash(requested_string); Now deprecated. This will be removed in the next commit
         int system_result;
         //if(hash_check[string_hash] == 0) { Now deprecated. This will be removed in the next commit
