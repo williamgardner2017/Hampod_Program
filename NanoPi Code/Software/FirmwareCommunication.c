@@ -214,7 +214,7 @@ pthread_t speakerThread;
  * //TODO make a thread to clean up those threads 
 */
 char* sendSpeakerOutput(char* text){
-    Inst_packet* speakerPacket = create_inst_packet(AUDIO,sizeof((unsigned char*) text),(unsigned char*) text);
+    Inst_packet* speakerPacket = create_inst_packet(AUDIO,sizeof((unsigned char*) text)+1,(unsigned char*) text);
     int result;
     pthread_mutex_lock(&thread_lock);
     result = pthread_create(&speakerThread, NULL, firmwareCommandQueue, speakerPacket);
@@ -316,7 +316,7 @@ void printOutErrors(char oK, bool hKS,int sS, int hWC){
 
 void keyWatcher(){
     //TODO properly setup the packet to be sent
-    Inst_packet* keyPressedRequest = create_inst_packet(KEYPAD,1,"r");
+    Inst_packet* keyPressedRequest = create_inst_packet(KEYPAD,1,'r');
 
     char* temp = firmwareCommandQueue(keyPressedRequest);
     char pressedKey = temp[0];
