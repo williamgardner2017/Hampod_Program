@@ -1,31 +1,30 @@
-CC = gcc
-CFLAGS = -Wall -g
-TARGETTEST = RunUnitTests
-TARGETNORMAL = Hampod
+# CC = gcc
+# CFLAGS = -Wall -g
+# TARGETTEST = RunUnitTests
+# TARGETNORMAL = Hampod
 
-SRCNORMAL := $(wildcard *.c) $(wildcard Modes/*.c) ../Firmware/hampod_firm_packet.c ../Firmware/hampod_queue.c
-OBJSNORMAL := $(SRCNORMAL:.c=.o)
+# SRCNORMAL := $(wildcard *.c) $(wildcard Modes/*.c) ../Firmware/hampod_firm_packet.c ../Firmware/hampod_queue.c
+# OBJSNORMAL := $(SRCNORMAL:.c=.o)
 
-SRCTESTS := $(filter-out Startup.c, $(wildcard *.c)) $(wildcard Modes/*.c) $(wildcard UnitTesting/*.c) ../Firmware/hampod_firm_packet.c ../Firmware/hampod_queue.c
-OBJSTESTS := $(SRCTESTS:.c=.o)
+# SRCTESTS := $(filter-out Startup.c, $(wildcard *.c)) $(wildcard Modes/*.c) $(wildcard UnitTesting/*.c) ../Firmware/hampod_firm_packet.c ../Firmware/hampod_queue.c
+# OBJSTESTS := $(SRCTESTS:.c=.o)
 
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@ -lpthread
+# %.o: %.c
+# 	$(CC) $(CFLAGS) -c $< -o $@ -lpthread
 
-.PHONY: clean
+# .PHONY: clean
 
-tests: $(OBJSTESTS)
-	$(CC) $(CFLAGS) -o $@ $^ -lpthread
+# tests: $(OBJSTESTS)
+# 	$(CC) $(CFLAGS) -o $@ $^ -lpthread
 
-hampod: $(OBJSNORMAL)
-	$(CC) $(CFLAGS) -o $@ $^ -lpthread
+# hampod: $(OBJSNORMAL)
+# 	$(CC) $(CFLAGS) -o $@ $^ -lpthread
 
-
-hampodtwo: software.o
-
-software.o: software.c
-	gcc -g -Wall -c Startup.c -o software.o -lwiringPi -lpthread
-software.c:
+# firmware.elf: firmware.o
+# 	cc firmware.o -o firmware.elf -lpthread
+Startup.o: Startup.c
+	cc $(CFLAGS) -c Startup.c -o Startup.o -lpthread
+Startup.c:
 	@echo "Missing firmware.c file. Repull the git repo"
 
 cleanWindows:
