@@ -6,9 +6,10 @@
 #include <unistd.h>
 #include <signal.h>
 
-#include "FirmwareCommunication.h"
 #include "StateMachine.h"
+#include "FirmwareCommunication.h"
 #include "Radio.h"
+#include "KeyWatching.h"
 #include "../Firmware/hampod_firm_packet.h"
 
 void sigint_handler(int signum);
@@ -53,6 +54,7 @@ void sigint_handler(int signum) {
     printf("\033[0;31mTERMINATING FIRMWARE\n");
     freeFirmwareComunication();
     freeStateMachine();
+    freeKeyWatcher();
     exit(0);
 }
 

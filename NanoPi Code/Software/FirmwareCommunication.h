@@ -20,9 +20,7 @@
 #include "../Firmware/hampod_firm_packet.h"
 
 
-pthread_t speakerThread;
-pthread_t callManagerThread;
-pthread_t pipeWatcherThread;
+
 #define INPUT_PIPE "Firmware_i"
 #define OUTPUT_PIPE "Firmware_o"
 void setupPipes();
@@ -36,8 +34,7 @@ bool confirmKeyInputVars(char oK, bool hKS,int sS, int hWC);
 
 char* sendSpeakerOutput(char* text);
 
-void startKeyWatcher();
-void* keyWatcher(void* args);
+
 void firmwareCommunicationStartup();
 void printOutErrors(char oK, bool hKS,int sS, int hWC);
 
@@ -45,10 +42,6 @@ void freeFirmwareComunication();
 
 void startOutputThreadManager();
 void* OutputThreadManager(void* arg);
-
-//this is down here to prevent call order issues 
-#include "StateMachine.h"
-
 
 #include "FirmwareCommunication.c"
 #endif
