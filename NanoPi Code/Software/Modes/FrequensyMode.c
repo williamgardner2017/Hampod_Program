@@ -23,7 +23,9 @@ void* frequencyCommandRelay(KeyPress* keyInput, int radioDetails){
             }
             currentFrequency = currentFrequency*10 + convertCharToKeyValue(keyInput);
             //read out the number
-            sendSpeakerOutput(&(keyInput->keyPressed));
+            char* putoutmessage[3] = "s";
+            strcat(putoutmessage, keyInput->keyPressed);            
+            sendSpeakerOutput(putoutmessage);
             break;
         case '#':
             currentFrequency = currentFrequency / pow(10,decimalPlace);
