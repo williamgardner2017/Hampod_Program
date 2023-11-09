@@ -33,6 +33,7 @@
 #define KEYPAD_THREAD_COLOR "\033[0;97mKeypad - Main: "
 #define KEYPAD_IO_THREAD_COLOR "\033[0;96mKeypad - IO: "
 
+#ifdef DEBUG
 #define KEYPAD_PRINTF(...) \
     do { \
         if(DEBUG) { \
@@ -48,6 +49,7 @@
             printf(__VA_ARGS__); \
         } \
     } while(0)
+#endif
 
 typedef struct keypad_io_packet {
     int pipe_fd;

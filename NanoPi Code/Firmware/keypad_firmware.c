@@ -128,9 +128,9 @@ void keypad_process(){
             read_value = readNumPad();
         }
 
-        Inst_packet* packet_to_send = create_inst_packet(KEYPAD, 1, (unsigned char*)&read_value);
+        Inst_packet* packet_to_send = create_inst_packet(KEYPAD, 1, (unsigned char*)&read_value, received_packet->tag);
         KEYPAD_PRINTF("Sending back value of %x\n", read_value);
-        write(output_pipe_fd, packet_to_send, 6);
+        write(output_pipe_fd, packet_to_send, 8);
         write(output_pipe_fd, packet_to_send->data, 1);
 
         destroy_inst_packet(&packet_to_send);
@@ -165,8 +165,10 @@ void *keypad_io_thread(void* arg) {
 
         Packet_type type;
         unsigned short size;
+        unsigned short tag;
         read(i_pipe, &type, sizeof(Packet_type));
         read(i_pipe, &size, sizeof(unsigned short));
+        read(i_pipe, &tag, sizeof(unsigned short));
         read(i_pipe, buffer, size);
 
         KEYPAD_IO_PRINTF("Found packet with type %d, size %d\n", type, size);

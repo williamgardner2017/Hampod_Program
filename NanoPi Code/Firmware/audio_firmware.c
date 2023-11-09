@@ -4,53 +4,11 @@ unsigned char audio_running = 1;
 pthread_mutex_t audio_queue_lock;
 pthread_mutex_t audio_queue_available;
 
-/*
-Hashing has been deprecated. This will be removed in the next commit.
-
-const char* pregenerated_audio[] = {
-    "DTMF1", "DTMF2", "DTMF3", "DTMF4",
-    "DTMF5", "DTMF6", "DTMF7", "DTMF8",
-    "DTMF9", "DTMF0", "DTMFA", "DTMFB",
-    "DTMFC", "DTMFD", "DTMFASTERISK", "DTMFPOUND"
-};
-*/
-
 void *audio_io_thread(void* arg);
-
-/*
-Hashing has been deprecated. This will be removed in the next commit.
-
-unsigned int hash(char* text) {
-    unsigned int hashed_value = 0;
-    unsigned int multiplier = PRIME2;
-    for(int i = 0; i < strlen(text); i++){
-        if(text[i] == '\0'){
-            break;
-        }
-        hashed_value += (text[i] - 'a') * multiplier;
-        multiplier *= PRIME2;
-    }
-    return hashed_value % TABLE_SIZE;
-}
-*/
 
 void audio_process() {
     char buffer[MAXSTRINGSIZE];
-    /*
-    Hashing has been deprecated. This will be removed in the next commit
 
-    unsigned char hash_check[TABLE_SIZE];
-    unsigned int hashed_value;
-    
-    AUDIO_PRINTF("Audio process launched\nGenerating hash table of pregenerated text\n");
-
-    for(int i = 0; i < STRING_COUNT; i++) {
-        strcpy(buffer, pregenerated_audio[i]);
-        hashed_value = hash(buffer);
-        AUDIO_PRINTF("%s Hashed index = %u :)\n", buffer, hashed_value);
-        hash_check[hashed_value] += 1;
-    }
-    */
     AUDIO_PRINTF("Audio process launched\nConnecting to input/output pipes\n");
 
     int input_pipe_fd = open(AUDIO_I, O_RDONLY);
@@ -114,12 +72,10 @@ void audio_process() {
         char* requested_string = calloc(1, received_packet->data_len + 0x10);
         strcpy(requested_string, (char*)received_packet->data);
         char audio_type_byte = requested_string[0];
-        char* remaining_string = requested_string + 1; //Removes the first byte but we need to keep the original pointer to free it later
-        //unsigned int string_hash = hash(requested_string); Now deprecated. This will be removed in the next commit
+        char* remaining_string = requested_string + 1;
         int system_result;
-        //if(hash_check[string_hash] == 0) { Now deprecated. This will be removed in the next commit
+        unsigned short packet_tag = received_packet->tag;
         if(audio_type_byte == 's') {
-            //AUDIO_PRINTF("Hash miss, generating %s from Festival\n", requested_string); Now deprecated. This will be removed in the next commit
             AUDIO_PRINTF("Festival tts %s\n", remaining_string);
             sprintf(buffer, "echo '%s' | festival --tts", remaining_string);
             system_result = system(buffer);
@@ -127,16 +83,15 @@ void audio_process() {
             strcpy(buffer, "aplay ");
             strcat(remaining_string, ".wav");
             strcat(buffer, remaining_string);
-            //AUDIO_PRINTF("Hash hit, playing %s as a wav file\n", requested_string); Now deprecated. This will be removed in the next commit
             AUDIO_PRINTF("Now playing %s with aplay\n", remaining_string);
             system_result = system(buffer);
         } else {
             AUDIO_PRINTF("Audio error. Unrecognized packet data %s\n", requested_string);
             system_result = -1;
         }
-        Inst_packet* packet_to_send = create_inst_packet(AUDIO, sizeof(int), (unsigned char*)&system_result);
+        Inst_packet* packet_to_send = create_inst_packet(AUDIO, sizeof(int), (unsigned char*)&system_result, packet_tag);
         AUDIO_PRINTF("Sending back value of %x\n", system_result);
-        write(output_pipe_fd, packet_to_send, 6);
+        write(output_pipe_fd, packet_to_send, 8);
         write(output_pipe_fd, packet_to_send->data, sizeof(int));
         free(requested_string);
         destroy_inst_packet(&packet_to_send);
@@ -170,8 +125,10 @@ void *audio_io_thread(void* arg) {
 
         Packet_type type;
         unsigned short size;
+        unsigned short tag;
         read(i_pipe, &type, sizeof(Packet_type));
         read(i_pipe, &size, sizeof(unsigned short));
+        read(i_pipe, &tag, sizeof(unsigned short));
         read(i_pipe, buffer, size);
 
         AUDIO_IO_PRINTF("Found packet with type %d, size %d\n", type, size);
@@ -182,7 +139,7 @@ void *audio_io_thread(void* arg) {
             continue;
         }
 
-        Inst_packet* new_packet = create_inst_packet(type, size, buffer);
+        Inst_packet* new_packet = create_inst_packet(type, size, buffer, tag);
 
         AUDIO_IO_PRINTF("Locking queue\n");
         pthread_mutex_lock(&audio_queue_lock);

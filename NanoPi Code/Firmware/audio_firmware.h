@@ -25,6 +25,7 @@
 #define AUDIO_THREAD_COLOR "\033[0;34mAudio - Main: "
 #define AUDIO_IO_THREAD_COLOR "\033[0;32mAudio - IO: "
 
+#ifdef DEBUG
 #define AUDIO_PRINTF(...) \
     do { \
         if(DEBUG) { \
@@ -40,8 +41,7 @@
             printf(__VA_ARGS__); \
         } \
     } while(0)
-
-//unsigned int hash(char* text); Now deprecated. This will be removed in the next commit
+#endif
 
 typedef struct audio_io_packet {
     int pipe_fd;
