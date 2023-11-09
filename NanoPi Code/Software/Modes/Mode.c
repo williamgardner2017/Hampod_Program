@@ -1,14 +1,11 @@
-#include <stdlib.h>
-#include <string.h>
 
-
-static void* commandRelay(int keyInput, int radioDetails){
-    switch (keyInput)
+void* demoCommandRelay(KeyPress* keyInput, int radioDetails){
+    switch (keyInput->keyPressed)
     {
-    case 0:
+    case '0':
         break;
     
-    case 2:
+    case '1':
         break;
  
     default:
@@ -18,11 +15,12 @@ static void* commandRelay(int keyInput, int radioDetails){
 }
 
 
-//TODO make this auto zero out
-static void freeMode(Mode** modeToFree){
-    free(modeToFree->modeDetails->modeName);
-    free(modeToFree->modeDetails);
-    free(modeToFree);
+void freeDemoMode(Mode** modeToFree){
+    Mode* temp = *modeToFree;
+    free(temp->modeDetails->modeName);
+    free(temp->modeDetails);
+    free(*modeToFree);
+    *modeToFree = 0;
 }
 
 Mode* createMode(){
@@ -31,8 +29,8 @@ Mode* createMode(){
     if(newMode == NULL){
         return NULL;
     }
-    newMode->modeInput = commandRelay;
-    newMode->free = freeMode;
+    newMode->modeInput = demoCommandRelay;
+    newMode->freeMode = freeDemoMode;
 
     ModeData* newData = (ModeData*)malloc(sizeof(ModeData));
 

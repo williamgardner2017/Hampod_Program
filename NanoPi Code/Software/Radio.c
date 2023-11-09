@@ -1,8 +1,6 @@
-#include <stdlib.h>
-#include <string.h>
 
 Radio* loadUpRadioUsingData(char* make, int model, int port, Mode* defaultMode){
-    Radio *newRadio = (Radio*)malloc(sizeof(Radio));
+    Radio* newRadio = malloc(sizeof(Radio));
     newRadio->make = make;
     newRadio->model = model;
     newRadio->port = port;
@@ -26,12 +24,12 @@ void setRadioMode(Radio* thisRadio, Mode* modeToSetTo){
     thisRadio->currentMode = modeToSetTo;
 }
 
-void* runRadioCommand(Radio* thisRadio, int keyInput){
+void* runRadioCommand(Radio* thisRadio, KeyPress* keyInput){
     void* results;
     results = thisRadio->currentMode->modeInput(keyInput,23);
     return results;
 }
 
 void* getRadioDetailsInSavableFormat(Radio* thisRadio){
-
+    return NULL;
 }

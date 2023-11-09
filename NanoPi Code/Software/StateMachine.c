@@ -1,73 +1,61 @@
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
 
 ModeStates modeState = bootUp;
 
 int programableKeysOn = 0;
-Radio* radios[2];
+Radio** radios;
+int maxRadios = 2;
 int currentRadio = 0;
-
-int modeFlow(int keyInput){
+ModeStates modeFlow(KeyPress* keyInput){
     //the inital switch is for the programable keys, thisis so hat things can be avoided and passed over
-    //TODO make a better system
-    switch (keyInput)
+    //specialty keys will be handled in each of the individual flows 
+    switch (modeState)
     {
-        case 1:
-        if(programableKeysOn){
-            //do code here
+        case bootUp:
+            BootupFlow(keyInput);
+            return bootUp;
             break;
-        }
-        case 2:
-        if(programableKeysOn){
-            //do code here
+        case standard:
+            StandardModeFlow(keyInput);
+            return standard;
             break;
-        }
-        
+        case modeSelect:
+            ModeSelectFlow(keyInput);
+            return modeSelect;
+            break;
+        case configMode:
+            ConfigFlow(keyInput);
+            return configMode;
+            break;
+        case dtmf:
+            DTMFFlow(keyInput);
+            return dtmf;
+            break;
         default:
-            switch (modeState)
-            {
-                case bootUp:
-                    return BootupFlow(keyInput);
-                    break;
-                case standard:
-                    return StandardModeFlow(keyInput);
-                    break;
-                case modeSelect:
-                    return ModeSelectFlow(keyInput);
-                    break;
-                case configMode:
-                    return ConfigFlow(keyInput);
-                    break;
-                case dtmf:
-                    return DTMFFlow(keyInput);
-                    break;
-                default:
-                    //make a screem of unknown
-                    //it should never get here
-                    break;
-            }
+            //make a screem of unknown
+            //it should never get here
             break;
     }
+        return -1;
 }
 
 //no idea how to store these yet
+//TODO have there be another file dedicated to figureing this out since it will probably be a large function
 char* company;
 int model;
 BootUpStates bootUpState = selectNewOrSave;
-int BootupFlow(int keyInput){
+BootUpStates BootupFlow(KeyPress* keyInput){
     switch (bootUpState)
     {
         case selectNewOrSave:
-            if(keyInput == 0)/*Save*/{
+            if(keyInput->keyPressed == '0')/*Save*/{
                 bootUpState = selectSave;
                 break;
-            }else if(keyInput == 1)/*Load new*/{
+            }else if(keyInput->keyPressed == '1')/*Load new*/{
                 bootUpState = chooseCompany;
                 break;
             }
         case chooseCompany:
-            if(keyInput == 0) /*Back*/{
+            if(keyInput->keyPressed == '0') /*Back*/{
                 bootUpState = selectNewOrSave;
                 break;
             }
@@ -76,20 +64,20 @@ int BootupFlow(int keyInput){
             bootUpState = selectLink;
             break;
         case selectLink:
-            if(keyInput == 0)/*Back*/{
+            if(keyInput->keyPressed == '0')/*Back*/{
                     bootUpState = chooseCompany;
                     break;
                 }else{
-                    radios[currentRadio] = loadUpRadioUsingData(company,model,keyInput);
+                    radios[currentRadio] = loadUpRadioUsingData(company,model, convertCharToKeyValue(keyInput), getModeById(0));
                     currentRadio++;
                     bootUpState = linkMore;
                     break;
                 }
         case linkMore:
-            if(keyInput == 1)/*Yes*/{
+            if(keyInput->keyPressed == '1')/*Yes*/{
                 bootUpState = chooseCompany;
                 break;
-            }else if(keyInput == 0)/*No*/{
+            }else if(keyInput->keyPressed == '0')/*No*/{
                 modeState = standard;
                 currentRadio--;
                 //set radio to normal mode
@@ -99,41 +87,38 @@ int BootupFlow(int keyInput){
                 break; 
             }
         case selectSave:
-            if(keyInput == 0)/*Back*/{
+            if(keyInput->keyPressed == '0')/*Back*/{
                     bootUpState = selectNewOrSave;
                     break;
                 }else{
                     //TODO make sure that try catch works as intended
-                    try
-                    {
-                       //loadUpsave(keyInput);
-                       //loadUpNormalMode
+                    /*
+                    if(loadUpSave(keyInput)){
                         modeState = standard;
-                    }   
-                    catch(...)
-                    {
-                       bootUpState = selectSave;
+                    }else{
+                        bootUpState = selectSave;
                     }
+                    */
                 }
                 break;
         default:
         //should not get here
         break;
     }
+    return bootUpState;
 }
 
 int modeSelectPage = 0; //the page number that we are on for mode select
 int isReadingOut = 0;
 /**
  * this handles the select mode state
- * TODO, make the readOutModeName better setup to be able to use the correct mode number
 */
-int ModeSelectFlow(int keyInput){
+int ModeSelectFlow(KeyPress* keyInput){
     if(isReadingOut){
-        readOutModeName(modeSelectPage*9 + (keyInput/10));
+        readOutModeName(modeSelectPage*9 + (convertCharToKeyValue(keyInput)/10));
         isReadingOut = 0;
     }else{
-        switch (keyInput){
+        switch (keyInput->keyPressed){
             case 'C':
                 modeSelectPage = modeSelectPage + 1;
                 break;
@@ -141,25 +126,25 @@ int ModeSelectFlow(int keyInput){
                 modeSelectPage = modeSelectPage - 1;
                 break;
             case '*':
-                isReadingOut = 1;
-                break;
-            case 'H': //this is * hold
-            //TODO add a min function to this to now over flow the amount of modes there are
-                for(int i = modeSelectPage*9; i< (modeSelectPage+1)*9;i++){
-                    readOutModeName(i);
+                if(keyInput->isHold){
+                    int i;
+                    for(i = modeSelectPage*9; i< (modeSelectPage+1)*9;i++){
+                        readOutModeName(i);
+                    }
+                }else{
+                    isReadingOut = 1;
                 }
                 break;
-                //TODO make this also just normal numbers
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-            case 9:
-                switchToRadioMode((modeSelectPage*9) + keyInput);
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+                switchToRadioMode((modeSelectPage*9) + convertCharToKeyValue(keyInput));
                 break;
         
             default:
@@ -167,87 +152,83 @@ int ModeSelectFlow(int keyInput){
                 break;
         }
     }
+        return -1;
 }
 
 //dependint on firmware
-int DTMFFlow(int keyInput){
-    switch (keyInput)
-    {
-    case 73:
-        switchToRadioMode(0);
-        //TODO make this also turn back on other items 
-        break;
-    
-    default:
-        //TODO make the beep boops 
-        break;
+int DTMFFlow(KeyPress* keyInput){
+    if(keyInput->keyPressed == 'B' && keyInput->isHold){
+         switchToRadioMode(0);
+    }else{
+        //do the beep boop
     }
+    return -1;
 }
 
-
-int StandardModeFlow(int keyInput){
-    int keyPress = keyInput/10;
-    int keyType = keyInput%10;
-
-    switch (keyPress)
+int StandardModeFlow(KeyPress* keyInput){
+    switch (keyInput->keyPressed)
     {
-    case 3: // A
-        switch (keyType)
+    case 'A': // A
+        switch (keyInput->shiftAmount)
         {
         case 0:
-            /* code */
+            if(keyInput->isHold){
+                //Volume up
+            }else{
+                
+            }
             break;
         case 1:
-            
+            if(keyInput->isHold){
+                //Volume up
+            }else{
+                
+            }
             break;
         case 2:
-            /* code */
+            if(keyInput->isHold){
+                //Volume up
+            }else{
+                
+            }
             break;
-        case 3:
-            //Volume up
-            break;
-        case 4:
-            //Volume up
-            break;
-        case 5:
-            /* code */
-            break;
-        
         default:
             break;
         }
         break;
-    case 7: //B
-        switch (keyType)
+    case 'B': //B
+     switch (keyInput->shiftAmount)
         {
         case 0:
-             switchToRadioMode(-3);//mode select
+            if(keyInput->isHold){
+                //Volume down
+            }else{
+                //switchToRadioMode(-3);//mode select
+            }
             break;
         case 1:
-            switchToRadioMode(0);//Normal mode
+            if(keyInput->isHold){
+
+            }else{
+                //switchToRadioMode(0);//Normal mode
+            }
             break;
         case 2:
-            /* code */
+             if(keyInput->isHold){
+
+            }else{
+               
+            }
             break;
-        case 3:
-            //Volume up
-            break;
-        case 4:
-            
-            break;
-        case 5:
-            /* code */
-            break;
-        
         default:
             break;
         }
         break;
-    case 11: // C
+    case 'C': // C
         //getModesOfProgramableKeys
         //setRadioToMode
         break;
-    case 15: // D
+    case 'D': // D
         //getModesOfProgramableKeys
         //setRadioToMode
         break;
@@ -255,6 +236,7 @@ int StandardModeFlow(int keyInput){
         runRadioCommand(radios[currentRadio],keyInput);
         break;
     }
+        return -1;
 }
 
 /**
@@ -263,31 +245,41 @@ int StandardModeFlow(int keyInput){
  * See if makeing this be treated like a normal mode would work
  * See if there are any reasons a standard mode could not affect the hampod data
 */
-int ConfigFlow(int KeyInput){
+int ConfigFlow(KeyPress* KeyInput){
     //This may be easyer to just treat as a standard mode but make special. 
+    return -1;
 }
 
 /**
  * Reads out the name of the asked for mode
- * TODO make this use the firm ware
 */
 int readOutModeName(int modeID){
+    //DEBUG
     printf("%s", getModeById(modeID)->modeDetails->modeName);
+    //actual
+
+    //problem? 
+    char* holdName = strdup(getModeById(modeID)->modeDetails->modeName);
+    sendSpeakerOutput(holdName);
+    return 1;
 }
 
 /**
  * This is passed the modeID
  * if the modeID is negitive that represents that it is a non-standard mode
- * TODO make this correctly use the non-standard modes
+ * TODO see if this can just be replaced with the new modeRouting file
+ * Idea, have this be what takes in the modeID and then using it would also switch the modeState as needed
 */
 int switchToRadioMode(int modeID){
     switch (modeID)
     {
-        case -1: //DTMF
+        case 1: //DTMF
             modeState = dtmf;
+            setRadioMode(radios[currentRadio], getModeById(modeID));
             break;
-        case -2: //config mode
+        case 2: //config mode
             modeState = configMode;
+            setRadioMode(radios[currentRadio], getModeById(modeID));
             break;
         case -3: //mode select
             modeState = modeSelect;
@@ -298,4 +290,32 @@ int switchToRadioMode(int modeID){
             setRadioMode(radios[currentRadio], getModeById(modeID));
             break;
     }
+        return -1;
+}
+
+
+
+void stateMachineStart(){
+    radios = malloc(sizeof(Radio) * 2);
+}
+
+void setModeState(ModeStates state){
+    modeState = state;
+}
+void setRadios(Radio** r, int cR){
+    radios = r;
+    currentRadio = cR;
+}
+void setBootUpState(BootUpStates state){
+    bootUpState = state;
+}
+
+
+void freeStateMachine(){
+    int i;
+    for(i = 0; i<maxRadios;i++){
+        freeRadio(radios[i]);
+    }
+    free(radios);
+    freeModes();
 }
