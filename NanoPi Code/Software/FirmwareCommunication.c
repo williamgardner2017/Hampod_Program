@@ -197,7 +197,7 @@ void* OutputThreadManager(void* arg){
  * //TODO make a thread to clean up those threads 
 */
 char* sendSpeakerOutput(char* text){
-    Inst_packet* speakerPacket = create_inst_packet(AUDIO,strlen((unsigned char*) text)+1,(unsigned char*) text);
+    Inst_packet* speakerPacket = create_inst_packet(AUDIO,strlen(text)+1,(unsigned char*) text);
     int result;
     pthread_mutex_lock(&thread_lock);
     result = pthread_create(&speakerThread, NULL, firmwareCommandQueue, (void*) speakerPacket);
@@ -226,13 +226,12 @@ bool shiftEnabled = true;
 char oldKey = -1;
 bool holdKeySent = 0;
 int shiftState = 0;
-int maxShifts = 3;
 int holdWaitCount = 0;
 
-const int keyRequestFrequency2 = 16000;
-const int holdSeconds = 1;
-
-int holdWaitTime = holdSeconds*1000000 / keyRequestFrequency2;
+int maxShifts = 3;
+#define keyRequestFrequency2 16000
+#define holdSeconds 1
+#define holdWaitTime (holdSeconds*1000000) / keyRequestFrequency2
 
 /**
  * Processes the output of the key presses to properly interperate when 
@@ -284,7 +283,6 @@ void resetKeyInputVars(){
     shiftState = 0;
     maxShifts = 3;
     holdWaitCount = 0;
-    holdWaitTime = 2;
 }
 
 bool confirmKeyInputVars(char oK, bool hKS,int sS, int hWC){
