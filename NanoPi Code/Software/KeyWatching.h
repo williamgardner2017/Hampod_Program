@@ -1,3 +1,5 @@
+#ifndef HAMPOD_SOFT_KeyWAtch
+#define HAMPOD_SOFT_KeyWAtch
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,3 +16,6 @@
 void startKeyWatcher();
 void* keyWatcher(void* args);
 void freeKeyWatcher();
+
+#include "KeyWatching.c"
+#endif
