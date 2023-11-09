@@ -53,7 +53,8 @@ void fullStart(){
     printf("software: Demo setup complete");
     //send that I am ready
     printf("software: Sending I am Ready packet to firmware");
-    Inst_packet* iAmReady = create_inst_packet(CONFIG, sizeof("ok")+1,"ok");
+    unsigned char* okMessage = "ok";
+    Inst_packet* iAmReady = create_inst_packet(CONFIG, strlen(okMessage)+1,okMessage);
     firmwareCommandQueue(iAmReady);
     printf("software: packet reciprecated");
     //start key loop after getting the responce

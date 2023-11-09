@@ -197,7 +197,7 @@ void* OutputThreadManager(void* arg){
  * //TODO make a thread to clean up those threads 
 */
 char* sendSpeakerOutput(char* text){
-    Inst_packet* speakerPacket = create_inst_packet(AUDIO,sizeof((unsigned char*) text)+1,(unsigned char*) text);
+    Inst_packet* speakerPacket = create_inst_packet(AUDIO,strlen((unsigned char*) text)+1,(unsigned char*) text);
     int result;
     pthread_mutex_lock(&thread_lock);
     result = pthread_create(&speakerThread, NULL, firmwareCommandQueue, (void*) speakerPacket);
@@ -229,10 +229,10 @@ int shiftState = 0;
 int maxShifts = 3;
 int holdWaitCount = 0;
 
-int keyRequestFrequency = 16000;
-double holdSeconds = 1.0;
+const int keyRequestFrequency2 = 16000;
+const double holdSeconds = 1.0;
 
-int holdWaitTime = (holdSeconds*1000000)/keyRequestFrequency;
+int holdWaitTime =(int) holdSeconds*1000000.0 /keyRequestFrequency2;
 
 /**
  * Processes the output of the key presses to properly interperate when 
