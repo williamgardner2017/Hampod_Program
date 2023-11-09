@@ -73,7 +73,7 @@ void firmwareCommunicationStartup(){
 
 void send_packet(Inst_packet* packet){
     printf("Message = %s\n", packet->data);
-    write(output_pipe, packet, 6);
+    write(output_pipe, packet, 8);
     unsigned char buffer[256];
     memcpy(buffer, packet->data, packet->data_len);
     printf("Message = %s\n", (char*)buffer);
@@ -141,10 +141,10 @@ void* firmwareOPipeWatcher(void* arg){
         //TODO add the id pipe size thing to this
         //Read packet ID from the pipe
         read(input_pipe, &packet_type, 4);
-        //read the ID from the pipe
-        read(input_pipe, &tag, 2);
         //read packet Length from the pipe
         read(input_pipe, &size, 2);
+        //read the ID from the pipe
+        read(input_pipe, &tag, 2);
         //read packet Data from pipe as a char string
         read(input_pipe, buffer, size);
         //create the data to put into the queue
