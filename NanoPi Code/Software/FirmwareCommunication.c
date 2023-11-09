@@ -230,9 +230,9 @@ int maxShifts = 3;
 int holdWaitCount = 0;
 
 const int keyRequestFrequency2 = 16000;
-const double holdSeconds = 1.0;
+const int holdSeconds = 1;
 
-int holdWaitTime = holdSeconds*1000000.0 /keyRequestFrequency2;
+int holdWaitTime = holdSeconds*1000000 / keyRequestFrequency2;
 
 /**
  * Processes the output of the key presses to properly interperate when 
