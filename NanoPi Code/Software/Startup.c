@@ -16,9 +16,12 @@ void sigint_handler(int signum);
 
 void fullStart(){
     //destroy name pipes
+    printf("software: removing pipes");
     system("../Firmware/pipe_remover.sh");
+    printf("software: removing pipes compleated");
     //TODO add the destroy pipes thing
     //fork
+    printf("software: Starting Firmware");
     pid_t p = fork();
     if(p<0){
         perror("fork fail");
@@ -26,28 +29,37 @@ void fullStart(){
     }else if(p == 0){
         //start firmware
         system("../Firmware/firmware.elf");
+        printf("software: FirmwareStarted");
     }else{
     //connect the pipes
+    printf("software: Connecting pipes");
     setupPipes();
+    printf("software: Connecting pipes compleated");
     //send pid over to the software
     //TODO make this so that it is a one way send may just add this to the pipe creation
-    send_packet(create_inst_packet(CONFIG,sizeof(p),(unsigned char*) p));
+    //send_packet(create_inst_packet(CONFIG,sizeof(p),(unsigned char*) p));
 
     //create my stuff
+    printf("software: Starting Firmware communication");
     firmwareCommunicationStartup();
+    printf("software: Starting Firmware Compunication compleat");
     stateMachineStart();
 
     //SETTING UP THE SIMULATION DEMO
+    printf("software: Setting up demo");
     setModeState(standard);
     Radio** radios = malloc(sizeof(Radio));
     setRadios(radios,4);
-
+    printf("software: Demo setup complete");
     //send that I am ready
-    
+    printf("software: Sending I am Ready packet to firmware");
     Inst_packet* iAmReady = create_inst_packet(CONFIG, sizeof("ok")+1,"ok");
     firmwareCommandQueue(iAmReady);
+    printf("software: packet reciprecated");
     //start key loop after getting the responce
+    printf("software: Starting keywatcher");
     startKeyWatcher();
+    printf("software: Startin Keywatcher complete");
     }
 }
 void sigint_handler(int signum) {
@@ -64,6 +76,7 @@ int main(){
         perror("signal");
         exit(1);
     }
+    printf("Software kill handler setup");
     fullStart();
     return -1;
 }

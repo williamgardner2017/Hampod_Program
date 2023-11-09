@@ -31,6 +31,11 @@ void* frequencyCommandRelay(KeyPress* keyInput, int radioDetails){
             currentFrequency = currentFrequency / pow(10,decimalPlace);
             //TODO add the hamlib code to change the frequency here 
             //enter frequency into the radio
+            // retcode = rig_set_freq(my_rig, RIG_VFO_CURR, currentFrequency);
+            // if (retcode != RIG_OK)
+            // {
+            //     printf("rig_set_freq: error = %s \n", rigerror(retcode));
+            // }
             break;
         case '*':
             if(hasDecimal){

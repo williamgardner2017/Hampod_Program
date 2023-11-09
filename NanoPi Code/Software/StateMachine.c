@@ -203,14 +203,14 @@ int StandardModeFlow(KeyPress* keyInput){
             if(keyInput->isHold){
                 //Volume down
             }else{
-                switchToRadioMode(-3);//mode select
+                //switchToRadioMode(-3);//mode select
             }
             break;
         case 1:
             if(keyInput->isHold){
 
             }else{
-                switchToRadioMode(0);//Normal mode
+                //switchToRadioMode(0);//Normal mode
             }
             break;
         case 2:
