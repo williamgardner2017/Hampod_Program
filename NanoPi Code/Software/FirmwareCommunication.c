@@ -228,7 +228,11 @@ bool holdKeySent = 0;
 int shiftState = 0;
 int maxShifts = 3;
 int holdWaitCount = 0;
-int holdWaitTime = 2;
+
+int keyRequestFrequency = 16000;
+double holdSeconds = 1.0;
+
+int holdWaitTime = (holdSeconds*1000000)/keyRequestFrequency;
 
 /**
  * Processes the output of the key presses to properly interperate when 

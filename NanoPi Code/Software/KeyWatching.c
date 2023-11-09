@@ -1,4 +1,4 @@
-int keyRequestFrequency = 200000;
+int keyRequestFrequency = 16000;
 void* keyWatcher(void* args){
     //TODO properly setup the packet to be sent
     while(running){
