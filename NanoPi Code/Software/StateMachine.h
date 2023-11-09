@@ -29,7 +29,7 @@ typedef enum {
  * Each of the returns is just for unit testing sake,
  * they return an identifyer depending on which path they took
 */
-ModeStates ModeFlow(KeyPress* keyInput);
+ModeStates modeFlow(KeyPress* keyInput);
 BootUpStates BootupFlow(KeyPress* keyInput);
 int DTMFFlow(KeyPress* keyInput);
 int ModeSelectFlow(KeyPress* keyInput);
