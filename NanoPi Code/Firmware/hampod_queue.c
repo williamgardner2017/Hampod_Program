@@ -54,3 +54,7 @@ void destroy_queue(Packet_queue* queue) {
     }
     free(queue);
 }
+
+int is_empty(Packet_queue* queue){
+    return queue->head == NULL;
+}
