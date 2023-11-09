@@ -92,10 +92,11 @@ int CurrentID = 0;
 */
 void* firmwareCommandQueue(void* command){
     int myId = 0;
+    Inst_packet* myCommand = (Inst_packet*) command;
     pthread_mutex_lock(&pipe_lock);
     myId = CurrentID;
-    // command->id myID;
-    send_packet((Inst_packet*) command);
+    myCommand->tag = myId;
+    send_packet(myCommand);
     CurrentID++;
     if(CurrentID > 1000){
         CurrentID = 0;
@@ -141,13 +142,13 @@ void* firmwareOPipeWatcher(void* arg){
         //Read packet ID from the pipe
         read(input_pipe, &packet_type, 4);
         //read the ID from the pipe
-        read(input_pipe, &id, 2);
+        read(input_pipe, &tag, 2);
         //read packet Length from the pipe
         read(input_pipe, &size, 2);
         //read packet Data from pipe as a char string
         read(input_pipe, buffer, size);
         //create the data to put into the queue
-        Inst_packet* new_packet = create_inst_packet(packet_type, size, buffer);
+        Inst_packet* new_packet = create_inst_packet(packet_type, size, buffer, tag);
         //lock the queue
         pthread_mutex_lock(&queue_lock);
         //add the data to the queue
@@ -197,7 +198,7 @@ void* OutputThreadManager(void* arg){
  * //TODO make a thread to clean up those threads 
 */
 char* sendSpeakerOutput(char* text){
-    Inst_packet* speakerPacket = create_inst_packet(AUDIO,strlen(text)+1,(unsigned char*) text);
+    Inst_packet* speakerPacket = create_inst_packet(AUDIO,strlen(text)+1,(unsigned char*) text, 0);
     int result;
     pthread_mutex_lock(&thread_lock);
     result = pthread_create(&speakerThread, NULL, firmwareCommandQueue, (void*) speakerPacket);

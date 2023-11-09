@@ -3,13 +3,13 @@ void* keyWatcher(void* args){
     //TODO properly setup the packet to be sent
     while(running){
         unsigned char *rr = "r";
-        Inst_packet* keyPressedRequest = create_inst_packet(KEYPAD,1,rr);
+        Inst_packet* keyPressedRequest = create_inst_packet(KEYPAD,1,rr, 0);
 
         char* temp = firmwareCommandQueue(keyPressedRequest);
         char pressedKey = temp[0];
         KeyPress *interpretedKey = interperateKeyPresses(pressedKey);
         //only run the modeFlow iff a key was actualy pressed
-        printf("Software: Key pressed %c, shift value %i, was held %i", interpretedKey->keyPressed, interpretedKey->shiftAmount,interpretedKey->isHold);
+        printf("Software: Key pressed %c, shift value %i, was held %i\n", interpretedKey->keyPressed, interpretedKey->shiftAmount,interpretedKey->isHold);
         if(interpretedKey->keyPressed != '-'){
             modeFlow(interpretedKey);
         }

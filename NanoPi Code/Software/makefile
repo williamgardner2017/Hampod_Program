@@ -23,7 +23,7 @@ CFLAGS = -Wall -g -lm
 # firmware.elf: firmware.o
 # 	cc firmware.o -o firmware.elf -lpthread
 
-Software: Startup.o
+Software.efl: Startup.o
 	cc $(CFLAGS) -o Software Startup.o -lpthread
 Startup.o: Startup.c
 	cc $(CFLAGS) -c Startup.c -o Startup.o -lpthread
@@ -38,3 +38,4 @@ clean:
 	@rm -f /s *.o   # Remove object files
 	@rm -f /s ../Firmware/*.o   # Remove object files
 	@rm -f *.exe  # Remove the executable (replace 'my_program' with the actual name)
+	@rm -f *.elf

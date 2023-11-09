@@ -16,12 +16,12 @@ void sigint_handler(int signum);
 
 void fullStart(){
     //destroy name pipes
-    printf("software: removing pipes");
+    printf("software: removing pipes\n");
     system("../Firmware/pipe_remover.sh");
-    printf("software: removing pipes compleated");
+    printf("software: removing pipes compleated\n");
     //TODO add the destroy pipes thing
     //fork
-    printf("software: Starting Firmware");
+    printf("software: Starting Firmware\n");
     pid_t p = fork();
     if(p<0){
         perror("fork fail");
@@ -29,38 +29,38 @@ void fullStart(){
     }else if(p == 0){
         //start firmware
         system("../Firmware/firmware.elf");
-        printf("software: FirmwareStarted");
+        printf("software: FirmwareStarted\n");
     }else{
     //connect the pipes
-    printf("software: Connecting pipes");
+    printf("software: Connecting pipes\n");
     setupPipes();
-    printf("software: Connecting pipes compleated");
+    printf("software: Connecting pipes compleated\n");
     //send pid over to the software
     //TODO make this so that it is a one way send may just add this to the pipe creation
     //send_packet(create_inst_packet(CONFIG,sizeof(p),(unsigned char*) p));
 
     //create my stuff
-    printf("software: Starting Firmware communication");
+    printf("software: Starting Firmware communication\n");
     firmwareCommunicationStartup();
-    printf("software: Starting Firmware Compunication compleat");
+    printf("software: Starting Firmware Compunication compleat\n");
     stateMachineStart();
 
     //SETTING UP THE SIMULATION DEMO
-    printf("software: Setting up demo");
+    printf("software: Setting up demo\n");
     setModeState(standard);
     Radio** radios = malloc(sizeof(Radio));
     setRadios(radios,4);
-    printf("software: Demo setup complete");
+    printf("software: Demo setup complete\n");
     //send that I am ready
-    printf("software: Sending I am Ready packet to firmware");
+    printf("software: Sending I am Ready packet to firmware\n");
     unsigned char* okMessage = "ok";
-    Inst_packet* iAmReady = create_inst_packet(CONFIG, strlen((char*) okMessage)+1,okMessage);
+    Inst_packet* iAmReady = create_inst_packet(CONFIG, strlen((char*) okMessage)+1,okMessage, 0);
     firmwareCommandQueue(iAmReady);
-    printf("software: packet reciprecated");
+    printf("software: packet reciprecated\n");
     //start key loop after getting the responce
-    printf("software: Starting keywatcher");
+    printf("software: Starting keywatcher\n");
     startKeyWatcher();
-    printf("software: Startin Keywatcher complete");
+    printf("software: Startin Keywatcher complete\n");
     }
 }
 void sigint_handler(int signum) {
@@ -77,7 +77,7 @@ int main(){
         perror("signal");
         exit(1);
     }
-    printf("Software kill handler setup");
+    printf("Software kill handler setup\n");
     fullStart();
     return -1;
 }
