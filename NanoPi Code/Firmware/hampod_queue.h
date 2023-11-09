@@ -16,6 +16,7 @@ Packet_queue* create_packet_queue();
 void enqueue(Packet_queue* queue, Inst_packet *packet);
 Inst_packet* dequeue(Packet_queue* queue);
 void destroy_queue(Packet_queue* queue);
+int is_empty(Packet_queue* queue);
 
 #include "hampod_queue.c"
 
