@@ -7,6 +7,7 @@ int output_pipe;
 //this is here the pipes will be set up
 void setupPipes(){
     printf("Connecting to Firmware_o\n");
+    usleep(1000);
     int i;
     for(i = 0; i < 1000; i++){
         input_pipe = open(OUTPUT_PIPE, O_RDONLY);

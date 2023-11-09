@@ -21,8 +21,8 @@
 
 
 
-#define INPUT_PIPE "Firmware_i"
-#define OUTPUT_PIPE "Firmware_o"
+#define INPUT_PIPE "../Firmware/Firmware_i"
+#define OUTPUT_PIPE "../Firmware/Firmware_o"
 void setupPipes();
 void send_packet(Inst_packet* packet);
 void* firmwareCommandQueue(void* command);

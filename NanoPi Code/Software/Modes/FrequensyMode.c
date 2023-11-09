@@ -32,7 +32,8 @@ void* frequencyCommandRelay(KeyPress* keyInput, int radioDetails){
             // for(i = 0; i<decimalPlace; i++){
             //     currentFrequency = currentFrequency / 10;
             // }
-            currentFrequency = currentFrequency / pow(10,decimalPlace);
+            //currentFrequency = currentFrequency / pow(10,decimalPlace);
+            currentFrequency = 0;
             //TODO add the hamlib code to change the frequency here 
             //enter frequency into the radio
             // retcode = rig_set_freq(my_rig, RIG_VFO_CURR, currentFrequency);
