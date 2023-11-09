@@ -7,13 +7,19 @@ int output_pipe;
 //this is here the pipes will be set up
 void setupPipes(){
     printf("Connecting to Firmware_o\n");
-    input_pipe = open(OUTPUT_PIPE, O_RDONLY);
+    int i;
+    for(i = 0; i < 1000; i++){
+        input_pipe = open(OUTPUT_PIPE, O_RDONLY);
+        printf("Attempt %d/1000\r", i);
+        if(output_pipe != -1){
+            break;
+        }
+    }
     if(input_pipe == -1){
         perror("open");
         exit(-1);
     }
     printf("Attempting to connect to Firmware_i\n");
-    int i;
     for(i = 0; i < 1000; i++){
         output_pipe = open(INPUT_PIPE, O_WRONLY);
         printf("Attempt %d/1000\r", i);
