@@ -137,6 +137,7 @@ void* firmwareOPipeWatcher(void* arg){
         unsigned char packet_type;
         unsigned int id;
         unsigned short size;
+        unsigned short tag;
         unsigned char* buffer;
         //TODO add the id pipe size thing to this
         //Read packet ID from the pipe
