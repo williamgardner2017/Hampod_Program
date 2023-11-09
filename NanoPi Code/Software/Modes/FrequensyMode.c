@@ -28,6 +28,10 @@ void* frequencyCommandRelay(KeyPress* keyInput, int radioDetails){
             sendSpeakerOutput(putoutmessage);
             break;
         case '#':
+            // int i
+            // for(i = 0; i<decimalPlace; i++){
+            //     currentFrequency = currentFrequency / 10;
+            // }
             currentFrequency = currentFrequency / pow(10,decimalPlace);
             //TODO add the hamlib code to change the frequency here 
             //enter frequency into the radio

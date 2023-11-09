@@ -1,5 +1,5 @@
 # CC = gcc
-CFLAGS = -Wall -g
+CFLAGS = -Wall -g -lm
 # TARGETTEST = RunUnitTests
 # TARGETNORMAL = Hampod
 
