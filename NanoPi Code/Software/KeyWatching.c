@@ -1,8 +1,8 @@
 int keyRequestFrequency = 16000;
-bool running = true;
+bool running2 = true;
 void* keyWatcher(void* args){
     //TODO properly setup the packet to be sent
-    while(running){
+    while(running2){
         unsigned char *rr = "r";
         Inst_packet* keyPressedRequest = create_inst_packet(KEYPAD,1,rr, 0);
 
@@ -33,6 +33,6 @@ void startKeyWatcher(){
 
 
 void freeKeyWatcher(){
-    running = false;
+    running2 = false;
     pthread_join(timerId,NULL);
 }
