@@ -1,10 +1,13 @@
 #ifndef HAMPOD_SOFT_STATE
 #define HAMPOD_SOFT_STATE
-#include "FirmwareCommunication.h"
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include "Modes/ModeRouting.h"
 #include "GeneralFunctions.h"
 #include "Radio.h"
-#include "Mode.h"
-#include "ModeRouting.h"
+#include "Modes/Mode.h"
 typedef enum {
     bootUp,
     standard,
@@ -22,15 +25,30 @@ typedef enum {
 } BootUpStates;
 
 
-
-int ModeFlow(int keyInput);
-int BootupFlow(int keyInput);
-int DTMFFlow(int keyInput);
-int ModeSelectFlow(int keyInput);
+/**
+ * Each of the returns is just for unit testing sake,
+ * they return an identifyer depending on which path they took
+*/
+ModeStates modeFlow(KeyPress* keyInput);
+BootUpStates BootupFlow(KeyPress* keyInput);
+int DTMFFlow(KeyPress* keyInput);
+int ModeSelectFlow(KeyPress* keyInput);
 int switchToRadioMode(int mode);
-int StandardModeFlow(int keyInput);
-int ConfigFlow(int keyInput);
+int StandardModeFlow(KeyPress* keyInput);
+int ConfigFlow(KeyPress* keyInput);
 int readOutModeName(int mode);
+void stateMachineStart();
 
+void freeStateMachine();
+/**
+ * These functions are for testing purposes only
+*/
+void setModeState(ModeStates state);
+void setRadios(Radio** r, int cR);
+void setBootUpState(BootUpStates state);
+void setCompanyAndModel(char* comp, int mod);
+
+
+#include "FirmwareCommunication.h"
 #include "StateMachine.c"
 #endif
