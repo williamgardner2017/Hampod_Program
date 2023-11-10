@@ -73,6 +73,8 @@ void sigint_handler(int signum) {
     freeKeyWatcher();
     printf("end the firmware\n");
     kill(p,SIGINT);
+    kill(p,SIGKILL);
+    kill(p,SIGTERM);
     exit(0);
 }
 
