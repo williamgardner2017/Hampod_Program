@@ -13,6 +13,9 @@
 #include "../Firmware/hampod_firm_packet.h"
 
 void sigint_handler(int signum);
+
+void sigsegv_handler(int signum);
+
 pid_t p;
 void fullStart(){
     //destroy name pipes
@@ -78,7 +81,20 @@ void sigint_handler(int signum) {
     exit(0);
 }
 
+void sigsegv_handler(int signum) {
+    printf("\033[0;31mSEGMENTAION FAULT - (Signal %d)\n", signum);
+    printf("Terminating Firmware\n");
+    kill(p,SIGINT);
+    kill(p,SIGKILL);
+    kill(p,SIGTERM);
+    exit(1);
+}
+
 int main(){
+    if(signal(SIGSEGV, sigsegv_handler) == SIG_ERR) {
+        perror("signal");
+        exit(1);
+    }
 
      if(signal(SIGINT, sigint_handler) == SIG_ERR) {
         perror("signal");
