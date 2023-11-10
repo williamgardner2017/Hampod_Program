@@ -13,7 +13,7 @@
 #include "../Firmware/hampod_firm_packet.h"
 
 void sigint_handler(int signum);
-
+pid_t p;
 void fullStart(){
     //destroy name pipes
     printf("software: removing pipes\n");
@@ -22,13 +22,13 @@ void fullStart(){
     //TODO add the destroy pipes thing
     //fork
     printf("software: Starting Firmware\n");
-    pid_t p = fork();
+    p = fork();
     if(p<0){
         perror("fork fail");
         exit(1);
     }else if(p == 0){
         //start firmware
-        system("../Firmware/firmware.elf");
+        system("../Firmware/firmware.elf&");
         printf("software: FirmwareStarted\n");
     }else{
     //connect the pipes
@@ -65,9 +65,14 @@ void fullStart(){
 }
 void sigint_handler(int signum) {
     printf("\033[0;31mTERMINATING FIRMWARE\n");
+    printf("ending firmware\n");
     freeFirmwareComunication();
+    printf("ending state machine\n");
     freeStateMachine();
+    printf("ending keywatcher\n");
     freeKeyWatcher();
+    printf("end the firmware\n");
+    kill(p,SIGKILL);
     exit(0);
 }
 

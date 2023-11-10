@@ -1,4 +1,5 @@
 int keyRequestFrequency = 16000;
+bool running = true;
 void* keyWatcher(void* args){
     //TODO properly setup the packet to be sent
     while(running){
@@ -32,5 +33,6 @@ void startKeyWatcher(){
 
 
 void freeKeyWatcher(){
-     pthread_join(timerId,NULL);
+    running = false;
+    pthread_join(timerId,NULL);
 }

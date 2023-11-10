@@ -11,8 +11,8 @@ void setupPipes(){
     int i;
     for(i = 0; i < 1000; i++){
         input_pipe = open(OUTPUT_PIPE, O_RDONLY);
-        printf("Attempt %d/1000\r", i);
-        if(output_pipe != -1){
+        printf("Attempt %d/1000\r", i); 
+        if(input_pipe != -1){
             break;
         }
     }
@@ -186,7 +186,7 @@ void startOutputThreadManager(){
     This will let multiple threads for outputs happen without locking up the system
 */
 void* OutputThreadManager(void* arg){
-    while(running || !ThreadQueueIsEmpty(threadQueue)){
+    while(running){
         pthread_mutex_lock(&thread_lock);
         while(ThreadQueueIsEmpty(threadQueue)){
             pthread_cond_wait(&thread_cond, &thread_lock);
@@ -312,6 +312,8 @@ void printOutErrors(char oK, bool hKS,int sS, int hWC){
 
 void freeFirmwareComunication(){
     running = false;
+    pthread_join(pipeWatcherThread,NULL);
+    pthread_join(callManagerThread,NULL);
     close(input_pipe);
     close(output_pipe);
     pthread_mutex_destroy(&queue_lock);
@@ -319,8 +321,6 @@ void freeFirmwareComunication(){
     pthread_cond_destroy(&queue_cond);
     destroy_queue(softwareQueue);
     destroy_IDqueue(IDQueue);
-    pthread_join(pipeWatcherThread,NULL);
-    pthread_join(callManagerThread,NULL);
     destroyThreadQueue(threadQueue);
     pthread_mutex_destroy(&thread_lock);
     pthread_cond_destroy(&thread_cond);
