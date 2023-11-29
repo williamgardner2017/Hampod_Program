@@ -69,16 +69,14 @@ void fullStart(){
 }
 void sigint_handler(int signum) {
     printf("\033[0;31mTERMINATING FIRMWARE\n");
-    printf("ending firmware\n");
+    printf("end the firmware with pid %i\n", (int) p);
+    kill(p,SIGINT);
+    printf("ending firmware communication\n");
     freeFirmwareComunication();
     printf("ending state machine\n");
     freeStateMachine();
     printf("ending keywatcher\n");
     freeKeyWatcher();
-    printf("end the firmware\n");
-    kill(p,SIGINT);
-    kill(p,SIGKILL);
-    kill(p,SIGTERM);
     exit(0);
 }
 
@@ -86,8 +84,6 @@ void sigsegv_handler(int signum) {
     printf("\033[0;31mSEGMENTAION FAULT - (Signal %d)\n", signum);
     printf("Terminating Firmware\n");
     kill(p,SIGINT);
-    kill(p,SIGKILL);
-    kill(p,SIGTERM);
     exit(1);
 }
 
