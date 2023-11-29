@@ -4,7 +4,7 @@ void* keyWatcher(void* args){
     //TODO properly setup the packet to be sent
     while(running2){
         unsigned char *rr = (unsigned char*) "r";
-        Inst_packet* keyPressedRequest = create_inst_packet(KEYPAD,strlen(rr)+1,rr, 0);
+        Inst_packet* keyPressedRequest = create_inst_packet(KEYPAD,strlen((signed char*) rr)+1,rr, 0);
 
         char* temp = firmwareCommandQueue(keyPressedRequest);
         char pressedKey = temp[0];

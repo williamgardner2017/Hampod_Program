@@ -142,7 +142,6 @@ void firmwareStartOPipeWatcher(){
 void* firmwareOPipeWatcher(void* arg){
     while(running){
         unsigned char packet_type;
-        unsigned int id;
         unsigned short size;
         unsigned short tag;
         unsigned char* buffer;
@@ -162,7 +161,7 @@ void* firmwareOPipeWatcher(void* arg){
         pthread_mutex_lock(&queue_lock);
         //add the data to the queue
         enqueue(softwareQueue, new_packet);
-        IDenqueue(IDQueue,id);
+        IDenqueue(IDQueue,tag);
         //unlock the queue
         pthread_cond_signal(&queue_cond);
         pthread_mutex_unlock(&queue_lock);
