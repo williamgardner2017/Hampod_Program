@@ -33,8 +33,25 @@ void fullStart(){
         //start firmware
         system("../Firmware/firmware.elf&");
         printf("software: FirmwareStarted\n");
+        exit(0);
     }else{
     //connect the pipes
+        int status;
+        pid_t terminated_child_pid = waitpid(p, &status, 0);
+
+        if (terminated_child_pid == -1) {
+            perror("Waitpid failed");
+            exit(1);
+        }
+
+        if (WIFEXITED(status)) {
+            printf("Child process %d exited with status %d\n", terminated_child_pid, WEXITSTATUS(status));
+        } else {
+            printf("Child process %d did not exit normally\n", terminated_child_pid);
+        }
+
+    }
+
     usleep(500000);
     printf("software: Connecting pipes\n");
     setupPipes();
@@ -65,7 +82,6 @@ void fullStart(){
     printf("software: Starting keywatcher\n");
     startKeyWatcher();
     printf("software: Startin Keywatcher complete\n");
-    }
 }
 void sigint_handler(int signum) {
     printf("\033[0;31mTERMINATING FIRMWARE\n");
