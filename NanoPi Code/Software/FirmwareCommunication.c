@@ -12,10 +12,11 @@ void setupPipes(){
     for(i = 0; i < 1000; i++){
         input_pipe = open(OUTPUT_PIPE, O_RDONLY);
         printf("Attempt %d/1000\r", i); 
-        if(input_pipe != -1){
+        if(input_pipe != -1){ 
             break;
         }
     }
+    printf("\n");
     if(input_pipe == -1){
         perror("open");
         exit(-1);
@@ -28,6 +29,7 @@ void setupPipes(){
             break;
         }
     }
+    printf("\n");
     if(output_pipe == -1){
         printf("\nUnsuccessful Connection\n");
         perror("open");
