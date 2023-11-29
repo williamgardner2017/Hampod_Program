@@ -35,6 +35,7 @@ void fullStart(){
         printf("software: FirmwareStarted\n");
     }else{
     //connect the pipes
+    usleep(500000);
     printf("software: Connecting pipes\n");
     setupPipes();
     printf("software: Connecting pipes compleated\n");
