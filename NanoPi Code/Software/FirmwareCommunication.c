@@ -87,7 +87,6 @@ void send_packet(Inst_packet* packet){
     memcpy(buffer, packet->data, packet->data_len);
     printf("Message = %s\n", (char*)buffer);
     write(output_pipe, buffer, packet->data_len);
-    free(packet->data);
     destroy_inst_packet(&packet);
 }
 
