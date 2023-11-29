@@ -115,6 +115,11 @@ void* firmwareCommandQueue(void* command){
     pthread_mutex_lock(&queue_lock);
     while(IDpeek(IDQueue) != myId){
        pthread_cond_wait(&queue_cond, &queue_lock);
+       if(!running){
+            //keep on signaling till it clears up
+            pthread_cond_signal(&queue_cond);
+            return NULL;
+        }
     }
     //grab the data from the queue
     Inst_packet *data = dequeue(softwareQueue);
@@ -192,6 +197,13 @@ void* OutputThreadManager(void* arg){
         pthread_mutex_lock(&thread_lock);
         while(ThreadQueueIsEmpty(threadQueue)){
             pthread_cond_wait(&thread_cond, &thread_lock);
+            if(!running){
+                pthread_cond_signal(&thread_cond);
+                return NULL;
+            }
+        }
+        if(!running){
+                return NULL;
         }
         pthread_t current = ThreadDequeue(threadQueue);
         pthread_mutex_unlock(&thread_lock);
@@ -317,6 +329,7 @@ void freeFirmwareComunication(){
     printf("Software:ending pipe watcher\n");
     pthread_join(pipeWatcherThread,NULL);
     printf("Software:ending call manager\n");
+    pthread_cond_signal(&thread_cond); //trying to fix this
     pthread_join(callManagerThread,NULL);
     printf("Software:closing input pipe\n");
     close(input_pipe);
@@ -325,6 +338,7 @@ void freeFirmwareComunication(){
     printf("Software:destroying packet queue mutexes\n");
     pthread_mutex_destroy(&queue_lock);
     pthread_mutex_destroy(&pipe_lock);
+    printf("Software:destroying packet condition\n");
     pthread_cond_destroy(&queue_cond);
     printf("Software:destroying packet queue\n");
     destroy_queue(softwareQueue);
