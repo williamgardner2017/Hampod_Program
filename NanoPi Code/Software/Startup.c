@@ -71,12 +71,12 @@ void sigint_handler(int signum) {
     printf("\033[0;31mTERMINATING FIRMWARE\n");
     printf("end the firmware with pid %i\n", (int) p);
     kill(p,SIGINT);
+    printf("ending keywatcher\n");
+    freeKeyWatcher();
     printf("ending firmware communication\n");
     freeFirmwareComunication();
     printf("ending state machine\n");
     freeStateMachine();
-    printf("ending keywatcher\n");
-    freeKeyWatcher();
     exit(0);
 }
 
