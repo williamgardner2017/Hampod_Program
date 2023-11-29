@@ -87,6 +87,7 @@ void send_packet(Inst_packet* packet){
     memcpy(buffer, packet->data, packet->data_len);
     printf("Message = %s\n", (char*)buffer);
     write(output_pipe, buffer, packet->data_len);
+    free(packet->data);
     destroy_inst_packet(&packet);
 }
 
@@ -314,17 +315,25 @@ void printOutErrors(char oK, bool hKS,int sS, int hWC){
 
 void freeFirmwareComunication(){
     running = false;
+    printf("Software:ending pipe watcher\n");
     pthread_join(pipeWatcherThread,NULL);
+    printf("Software:ending call manager\n");
     pthread_join(callManagerThread,NULL);
+    printf("Software:closing input pipe\n");
     close(input_pipe);
+    printf("Software:closing output pipe\n");
     close(output_pipe);
+    printf("Software:destroying packet queue mutexes\n");
     pthread_mutex_destroy(&queue_lock);
     pthread_mutex_destroy(&pipe_lock);
     pthread_cond_destroy(&queue_cond);
+    printf("Software:destroying packet queue\n");
     destroy_queue(softwareQueue);
+    printf("Software:destroying ID queue\n");
     destroy_IDqueue(IDQueue);
+    printf("Software:destroying thread queue\n");
     destroyThreadQueue(threadQueue);
+    printf("Software:destroying thread uqueue mutexes\n");
     pthread_mutex_destroy(&thread_lock);
     pthread_cond_destroy(&thread_cond);
-
 }
