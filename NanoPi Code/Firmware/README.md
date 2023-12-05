@@ -36,7 +36,17 @@ value the code returns.
 A properly formatted packet will conatin a lowercase `r` in the data field. More data could follow but the keypad code only cares about the first character in the data field. Subsequent data after the first charater are ignored.
 
 ### Audio ###
+This code is responsible for audio playback on the Hampod. This code takes string data from a packet and can either utilize text-to speech for the string or play the file specified with the path provided in the packet. <br>
+The data field of a audio packet can be broken down into two parts: a character for which type of audio it is and a null-terminated string that is either a valid filepath to a `.wav` file or a string of text. To specify using speech synthesis, the first character should be a lowercase `s` followed by the string
+There is no need to put space between the specifier character and the string. For example, the input `sHello World` will send `Hello World` to the speech synthesizer without the first `s`. <br>
+To playback an existing `.wav` file, a lowercase `p` should prefix the null-termineated filepath. For example, the data field for a playback packet would look like `ppath/to/file/HelloWorld` and the firmware will play `path/to/file/HelloWorld.wav`. The Firmware will also add the `.wav` to the end of the file, so it
+is not necessary to include it in the path. <br>
+*Note: The Firmware will attempt to play that file, whether it exists or not. It will return an error if it cannot find the file.*
+
+## Packets Returned ##
+During operation outside of startup, the Firmware will always send a response packet back. However, there is no guarantee in the order they are returned. Not every packet will take the same amount of time to be processed. For example, if a text-to speech packet is sent followed by a read keypad packet, then the read keypad packet will be returned first since reading the keypad is a near instant process. The text-to-speech synthesis is much slower, so its packet will be returned after the keypad packet. <br>
+This is what the `tag` field is used for. While the Firmware does not use the `tag` field, software can assign each packet it sends to the Frimware with an id and use the ids it sends to determine what response packet was sent back, since it may not be obvious from the `type` field alone.
 
 ## Building & Running ##
 To build the Firmware, run `make` in this directory to generate the `elf` file. Run `make debug` to get the debug version of the Firmware, which has debug print statements as well as including the debugging symbols for the code. <br>
-
+Each thread and process has a unique text output color for debug print statements. They also have a prefix to let the person debugging know which process/thead it came from (ex. `Audio - Main:` for the main process for the audio section of Frimware).
