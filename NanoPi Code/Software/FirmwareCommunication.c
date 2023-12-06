@@ -286,8 +286,8 @@ KeyPress* interperateKeyPresses(char keyPress){
     returnValue->isHold = false;
     returnValue->keyPressed = '-';
     returnValue->shiftAmount = 0;
-    if(keyPress == -1){
-        if(oldKey != -1 && !holdKeySent && holdWaitCount < holdWaitTime){
+    if(keyPress == '-'){
+        if(oldKey != '-' && !holdKeySent && holdWaitCount < holdWaitTime){
             if(oldKey == 'A' && shiftEnabled){
                 shiftState ++;
                 if(shiftState >= maxShifts){
@@ -300,9 +300,9 @@ KeyPress* interperateKeyPresses(char keyPress){
             }//end inner null
         }//end outer if
         holdKeySent = false;
-        oldKey = -1;
+        oldKey = '-';
         holdWaitCount = 0;
-    }else if(keyPress == oldKey && keyPress != -1){
+    }else if(keyPress == oldKey && keyPress != '-'){
         if(holdWaitCount < holdWaitTime){
             holdWaitCount++;
         }else if(!holdKeySent){
@@ -314,6 +314,10 @@ KeyPress* interperateKeyPresses(char keyPress){
         }
     }else{
         oldKey = keyPress;
+    }
+
+    if(returnValue->keyPressed == -1){
+        returnValue->keyPressed = '-';
     }
     return returnValue;
 }
