@@ -331,12 +331,18 @@ void freeFirmwareComunication(){
     printf("Software:ending pipe watcher\n");
     pthread_join(pipeWatcherThread,NULL);
 
+    printf("Software:destroying packet queue\n");
+    destroy_queue(softwareQueue);
+    printf("Software:destroying ID queue\n");
+    destroy_IDqueue(IDQueue);
+
     printf("Software:clearing conditions\n");
     pthread_cond_signal(&thread_cond);
     pthread_cond_signal(&queue_cond); //trying to fix this
     //TODO add a wait thing here
 
-    usleep(1000000);
+    usleep(2000000);
+
 
     printf("Software:ending call manager\n");
     pthread_join(callManagerThread,NULL);
@@ -352,10 +358,7 @@ void freeFirmwareComunication(){
     pthread_mutex_destroy(&queue_lock);
     pthread_mutex_destroy(&pipe_lock);
 
-    printf("Software:destroying packet queue\n");
-    destroy_queue(softwareQueue);
-    printf("Software:destroying ID queue\n");
-    destroy_IDqueue(IDQueue);
+
 
 
     printf("Software:closing input pipe\n");
