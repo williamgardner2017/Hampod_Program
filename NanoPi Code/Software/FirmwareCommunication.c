@@ -116,8 +116,9 @@ void* firmwareCommandQueue(void* command){
     while(IDpeek(IDQueue) != myId){
        pthread_cond_wait(&queue_cond, &queue_lock);
        if(!running){
-            //keep on signaling till it clears up
+            //keep on ignaling till it clears up
             pthread_cond_signal(&queue_cond);
+            pthread_mutex_unlock(&queue_lock);
             return NULL;
         }
     }
@@ -199,6 +200,7 @@ void* OutputThreadManager(void* arg){
             pthread_cond_wait(&thread_cond, &thread_lock);
             if(!running){
                 pthread_cond_signal(&thread_cond);
+                pthread_mutex_unlock(&thread_lock);
                 return NULL;
             }
         }
@@ -328,25 +330,36 @@ void freeFirmwareComunication(){
     running = false;
     printf("Software:ending pipe watcher\n");
     pthread_join(pipeWatcherThread,NULL);
+
+    printf("Software:clearing conditions\n");
+    pthread_cond_signal(&thread_cond);
+    pthread_cond_signal(&queue_cond); //trying to fix this
+    //TODO add a wait thing here
+
+    usleep(1000000);
+
     printf("Software:ending call manager\n");
-    pthread_cond_signal(&thread_cond); //trying to fix this
     pthread_join(callManagerThread,NULL);
-    printf("Software:closing input pipe\n");
-    close(input_pipe);
-    printf("Software:closing output pipe\n");
-    close(output_pipe);
+    printf("Software:destroying thread uqueue mutexes\n");
+    pthread_mutex_destroy(&thread_lock);
+    pthread_cond_destroy(&thread_cond);
+    printf("Software:destroying thread queue\n");
+    destroyThreadQueue(threadQueue);
+
+    printf("Software:destroying packet condition\n");
+    pthread_cond_destroy(&queue_cond);
     printf("Software:destroying packet queue mutexes\n");
     pthread_mutex_destroy(&queue_lock);
     pthread_mutex_destroy(&pipe_lock);
-    printf("Software:destroying packet condition\n");
-    pthread_cond_destroy(&queue_cond);
+
     printf("Software:destroying packet queue\n");
     destroy_queue(softwareQueue);
     printf("Software:destroying ID queue\n");
     destroy_IDqueue(IDQueue);
-    printf("Software:destroying thread queue\n");
-    destroyThreadQueue(threadQueue);
-    printf("Software:destroying thread uqueue mutexes\n");
-    pthread_mutex_destroy(&thread_lock);
-    pthread_cond_destroy(&thread_cond);
+
+
+    printf("Software:closing input pipe\n");
+    close(input_pipe);
+    printf("Software:closing output pipe\n");
+    close(output_pipe);
 }
