@@ -10,7 +10,7 @@ void* keyWatcher(void* args){
         char pressedKey = temp[0];
         KeyPress *interpretedKey = interperateKeyPresses(pressedKey);
         //only run the modeFlow iff a key was actualy pressed
-        printf("Software: ey prKessed %c, shift value %i, was held %i\n", interpretedKey->keyPressed, interpretedKey->shiftAmount,interpretedKey->isHold);
+        printf("Software: key prKessed %c, shift value %i, was held %i\n", interpretedKey->keyPressed, interpretedKey->shiftAmount,interpretedKey->isHold);
         if(interpretedKey->keyPressed != '-'){
             modeFlow(interpretedKey);
         }

@@ -284,7 +284,7 @@ int maxShifts = 3;
 KeyPress* interperateKeyPresses(char keyPress){
     KeyPress *returnValue = malloc(sizeof(KeyPress));
     returnValue->isHold = false;
-    returnValue->keyPressed = -1;
+    returnValue->keyPressed = '-';
     returnValue->shiftAmount = 0;
     if(keyPress == -1){
         if(oldKey != -1 && !holdKeySent && holdWaitCount < holdWaitTime){
