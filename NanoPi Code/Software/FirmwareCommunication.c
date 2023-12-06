@@ -4,6 +4,7 @@ pthread_t pipeWatcherThread;
 bool running = true;
 int input_pipe;
 int output_pipe;
+int countOfPackets = 0;
 //this is here the pipes will be set up
 void setupPipes(){
     printf("Connecting to Firmware_o\n");
@@ -113,15 +114,18 @@ void* firmwareCommandQueue(void* command){
     pthread_mutex_unlock(&pipe_lock);
     //do the priority locking
     pthread_mutex_lock(&queue_lock);
+    countOfPackets ++;
     while(IDpeek(IDQueue) != myId){
        pthread_cond_wait(&queue_cond, &queue_lock);
        if(!running){
             //keep on ignaling till it clears up
+            countOfPackets --;
             pthread_cond_signal(&queue_cond);
             pthread_mutex_unlock(&queue_lock);
             return NULL;
         }
     }
+    countOfPackets --;
     //grab the data from the queue
     Inst_packet *data = dequeue(softwareQueue);
     IDdequeue(IDQueue);
@@ -335,7 +339,7 @@ void freeFirmwareComunication(){
     destroy_queue(softwareQueue);
     printf("Software:destroying ID queue\n");
     destroy_IDqueue(IDQueue);
-
+    printf("Software: things in call mannager cond %d\n", countOfPackets);
     printf("Software:clearing conditions\n");
     pthread_cond_signal(&thread_cond);
     pthread_cond_signal(&queue_cond); //trying to fix this
@@ -343,7 +347,7 @@ void freeFirmwareComunication(){
 
     usleep(2000000);
 
-
+    printf("Software: things in call mannager cond %d\n", countOfPackets);
     printf("Software:ending call manager\n");
     pthread_join(callManagerThread,NULL);
     printf("Software:destroying thread uqueue mutexes\n");
