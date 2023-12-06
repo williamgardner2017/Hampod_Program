@@ -1,5 +1,5 @@
 firmware.elf: firmware.o
-	cc -Wall firmware.o -o firmware.elf -wiringPi -lpthread
+	cc -Wall firmware.o -o firmware.elf -lwiringPi -lpthread
 firmware.o: firmware.c
 	cc $(CFLAGS) -Wall -c firmware.c -o firmware.o -lwiringPi -lpthread
 firmware.c:
