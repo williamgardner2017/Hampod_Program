@@ -82,11 +82,11 @@ void firmwareCommunicationStartup(){
 }
 
 void send_packet(Inst_packet* packet){
-    printf("Message = %s\n", packet->data);
+    // printf("Message = %s\n", packet->data);
     write(output_pipe, packet, 8);
     unsigned char buffer[256];
     memcpy(buffer, packet->data, packet->data_len);
-    printf("Message = %s\n", (char*)buffer);
+    // printf("Message = %s\n", (char*)buffer);
     write(output_pipe, buffer, packet->data_len);
     destroy_inst_packet(&packet);
 }
@@ -115,6 +115,7 @@ void* firmwareCommandQueue(void* command){
     //do the priority locking
     pthread_mutex_lock(&queue_lock);
     countOfPackets ++;
+        printf("waiting for packet with tag %d to finish\n",myId);
     while(IDpeek(IDQueue) != myId && running){
        pthread_cond_wait(&queue_cond, &queue_lock);
        if(!running){
@@ -180,8 +181,9 @@ void* firmwareOPipeWatcher(void* arg){
         enqueue(softwareQueue, new_packet);
         IDenqueue(IDQueue,tag);
         //unlock the queue
-        pthread_cond_signal(&queue_cond);
+        printf("Software: Got a packet with the tag of %d\n", tag);
         pthread_mutex_unlock(&queue_lock);
+        pthread_cond_signal(&queue_cond);
         usleep(100);
     }
 
