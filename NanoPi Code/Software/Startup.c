@@ -80,7 +80,7 @@ void fullStart(){
     send_packet(iAmReady);
     //start key loop after getting the responce
     printf("software: Starting keywatcher\n");
-    startKeyWatcher();
+    keyWatcher(NULL);
     printf("software: Startin Keywatcher complete\n");
 }
 void sigint_handler(int signum) {
