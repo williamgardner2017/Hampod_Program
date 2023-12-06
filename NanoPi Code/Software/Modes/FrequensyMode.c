@@ -28,8 +28,7 @@ void* frequencyCommandRelay(KeyPress* keyInput, int radioDetails){
             sendSpeakerOutput(putoutmessage);
             break;
         case '#':
-            int i;
-            for(i = 0; i<decimalPlace; i++){
+            for(int i = 0; i<decimalPlace; i++){
                 currentFrequency = currentFrequency / 10;
             }
         printf("Software: would be setting the radio frequency %f",currentFrequency);
