@@ -179,7 +179,7 @@ void *keypad_io_thread(void* arg) {
             continue;
         }
 
-        Inst_packet* new_packet = create_inst_packet(type, size, buffer);
+        Inst_packet* new_packet = create_inst_packet(type, size, buffer, tag);
 
         KEYPAD_IO_PRINTF("Locking queue\n");
         pthread_mutex_lock(&keypad_queue_lock);

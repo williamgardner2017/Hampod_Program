@@ -49,6 +49,14 @@
             printf(__VA_ARGS__); \
         } \
     } while(0)
+#else
+
+#define KEYPAD_PRINTF(...) \
+    while(0)
+
+#define KEYPAD_IO_PRINTF(...) \
+    while(0)
+
 #endif
 
 typedef struct keypad_io_packet {
