@@ -140,11 +140,12 @@ void* firmwareCommandQueue(void* command){
     IDdequeue(IDQueue);
     pthread_cond_signal(&queue_cond);
     pthread_mutex_unlock(&queue_lock);
-    char* interpertedData;
+    char* interpertedData = malloc(sizeof(data->data)+1);
 
     //temp for now
-    interpertedData = "testing";
+    printf("SOftware:Saveing over the data\n");
     memccpy(interpertedData,data->data, '\0',sizeof(data->data));
+    printf("SOftware:data saved\n");
     destroy_inst_packet(&data);
     return interpertedData;
 }  
