@@ -115,17 +115,20 @@ void* firmwareCommandQueue(void* command){
     //do the priority locking
     pthread_mutex_lock(&queue_lock);
     countOfPackets ++;
-        printf("waiting for packet with tag %d to finish\n",myId);
+    printf("software: waiting for packet with tag %d to finish\n",myId);
     while(IDpeek(IDQueue) != myId && running){
-       pthread_cond_wait(&queue_cond, &queue_lock);
-       if(!running){
+        printf("Software: packet with tag %d is still waiting\n",myId);
+        pthread_cond_wait(&queue_cond, &queue_lock);
+        if(!running){
             //keep on ignaling till it clears up
+            printf("Software: Clearing packet backlog. Current packet tag %d\n",myId);
             countOfPackets --;
             pthread_mutex_unlock(&queue_lock);
             pthread_cond_signal(&queue_cond);
             return NULL;
         }
     }
+    printf("Software: packet with tag %d is being processed\n",myId);
     countOfPackets --;
     if(!running){
         pthread_cond_signal(&queue_cond);

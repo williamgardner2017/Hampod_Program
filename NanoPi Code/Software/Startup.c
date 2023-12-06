@@ -77,7 +77,7 @@ void fullStart(){
     printf("software: Sending I am Ready packet to firmware\n");
     unsigned char* okMessage = (unsigned char*) "ok";
     Inst_packet* iAmReady = create_inst_packet(CONFIG, strlen((char*) okMessage)+1,okMessage, 0);
-    send_packet(iAmReady);
+    firmwareCommandQueue(iAmReady);
     //start key loop after getting the responce
     printf("software: Starting keywatcher\n");
     keyWatcher(NULL);
