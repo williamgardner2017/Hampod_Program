@@ -165,7 +165,9 @@ void* firmwareOPipeWatcher(void* arg){
         unsigned char* buffer;
         //TODO add the id pipe size thing to this
         //Read packet ID from the pipe
+        printf("Software:Waiting for something to read\n");
         read(input_pipe, &packet_type, 4);
+        printf("Software:I have something to read\n");
         //read packet Length from the pipe
         read(input_pipe, &size, 2);
         //read the ID from the pipe
