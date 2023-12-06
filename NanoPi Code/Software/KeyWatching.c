@@ -3,7 +3,7 @@ bool running2 = true;
 void* keyWatcher(void* args){
     //TODO properly setup the packet to be sent
     while(running2){
-        unsigned char *rr = "r";
+        unsigned char *rr = (unsigned char*) "r";
         Inst_packet* keyPressedRequest = create_inst_packet(KEYPAD,strlen(rr)+1,rr, 0);
 
         char* temp = firmwareCommandQueue(keyPressedRequest);
@@ -18,6 +18,7 @@ void* keyWatcher(void* args){
         free(interpretedKey);
         usleep(keyRequestFrequency);
     }
+    return NULL;
 }
 
 //this will be a manual thing
