@@ -98,7 +98,7 @@ void sigint_handler(int signum) {
 
 void sigsegv_handler(int signum) {
     printf("\033[0;31mSEGMENTAION FAULT - (Signal %d)\n", signum);
-    printf("Terminating Firmware\n");
+    printf("Terminating Firmware by the software\n");
     kill(p,SIGINT);
     exit(1);
 }
