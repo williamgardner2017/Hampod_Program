@@ -115,17 +115,22 @@ void* firmwareCommandQueue(void* command){
     //do the priority locking
     pthread_mutex_lock(&queue_lock);
     countOfPackets ++;
-    while(IDpeek(IDQueue) != myId){
+    while(IDpeek(IDQueue) != myId && running){
        pthread_cond_wait(&queue_cond, &queue_lock);
        if(!running){
             //keep on ignaling till it clears up
             countOfPackets --;
-            pthread_cond_signal(&queue_cond);
             pthread_mutex_unlock(&queue_lock);
+            pthread_cond_signal(&queue_cond);
             return NULL;
         }
     }
     countOfPackets --;
+    if(!running){
+        pthread_cond_signal(&queue_cond);
+        pthread_mutex_unlock(&queue_lock);
+        return NULL;
+    }
     //grab the data from the queue
     Inst_packet *data = dequeue(softwareQueue);
     IDdequeue(IDQueue);
