@@ -341,8 +341,8 @@ void freeFirmwareComunication(){
     destroy_IDqueue(IDQueue);
     printf("Software: things in call mannager cond %d\n", countOfPackets);
     printf("Software:clearing conditions\n");
-    pthread_cond_signal(&thread_cond);
-    pthread_cond_signal(&queue_cond); //trying to fix this
+    pthread_cond_broadcast(&thread_cond);
+    pthread_cond_broadcast(&queue_cond); //trying to fix this
     //TODO add a wait thing here
 
     usleep(2000000);
