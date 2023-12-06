@@ -28,7 +28,7 @@ int readNumPad(){
 		for(int j = 0; j < 4; j++){
 			if(digitalRead(cols[j]) == LOW){//if a column is a logic low, then the button on that row, column was pressed
 				pressed++;
-				pressedNum = numpad_symbols[4*i + j];//Map the button to a number
+				pressedNum = 4*i + j;//Map the button to a number
 			}
 		}
 		digitalWrite(rows[i], HIGH);//Set the row back to high to not interfere with other rows
@@ -36,7 +36,7 @@ int readNumPad(){
 	if(pressed > 1){
 		return '-';//Return invalid if multiple buttons are pressed
 	}else{
-		return pressedNum;
+		return numpad_symbols[pressedNum];
 	}
 }
 
