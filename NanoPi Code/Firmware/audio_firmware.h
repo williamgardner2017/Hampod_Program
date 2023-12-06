@@ -41,6 +41,14 @@
             printf(__VA_ARGS__); \
         } \
     } while(0)
+#else
+
+#define AUDIO_PRINTF(...) \
+    while(0)
+
+#define AUDIO_IO_PRINTF(...) \
+    while(0)
+
 #endif
 
 typedef struct audio_io_packet {

@@ -37,6 +37,14 @@
             printf(__VA_ARGS__); \
         } \
     } while(0)
+#else
+
+#define FIRMWARE_PRINTF(...) \
+    while(0)
+
+#define FIRMWARE_IO_PRINTF(...) \
+    while(0)
+
 #endif
 
 typedef struct Buff_input {
@@ -216,7 +224,7 @@ int main(){
 
     FIRMWARE_PRINTF("1 second delay over\n");
     FIRMWARE_PRINTF("Sending ok packet to software\n");
-    char ok_signal = 'R';
+    unsigned char ok_signal = 'R';
     Inst_packet* ready_packet = create_inst_packet(CONFIG, 1, &ok_signal, 0x1234);
     write(output_pipe_fd, ready_packet, 8);
     write(output_pipe_fd, ready_packet->data, sizeof(char));
@@ -238,7 +246,7 @@ int main(){
         }
 
         Packet_type type = received_packet->type;
-        unsigned short data_size = received_packet->data_len;
+        //unsigned short data_size = received_packet->data_len;
         if(type == KEYPAD && received_packet->data[0] == 'r') {
             FIRMWARE_PRINTF("Got a READ keypad packet\n");
             write(keypad_in_pipe_fd, received_packet, 8);
