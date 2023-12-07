@@ -70,7 +70,7 @@ void fullStart(){
     //SETTING UP THE SIMULATION DEMO
     printf("software: Setting up demo\n");
     setModeState(standard);
-    Radio** radios = malloc(sizeof(Radio));
+    Radio* radios = malloc(sizeof(Radio));
     setRadios(radios,0);
     switchToRadioMode(3);
     printf("software: Demo setup complete\n");

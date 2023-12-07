@@ -302,8 +302,8 @@ void stateMachineStart(){
 void setModeState(ModeStates state){
     modeState = state;
 }
-void setRadios(Radio** r, int cR){
-    radios = r;
+void setRadio(Radio* r, int cR){
+    radios[cR] = r;
     currentRadio = cR;
 }
 void setBootUpState(BootUpStates state){
