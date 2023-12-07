@@ -1,4 +1,10 @@
-
+#ifndef SIMULATEOUTPUT
+#ifdef TESTING
+#define SIMULATEOUTPUT 1
+#else
+#define SIMULATEOUTPUT 0
+#endif
+#endif
 
 
 

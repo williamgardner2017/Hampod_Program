@@ -1,13 +1,6 @@
 #ifndef HAMPOD_SOFT_STATE
 #define HAMPOD_SOFT_STATE
 
-#ifndef SIMULATEOUTPUT
-#ifdef TESTING
-#define SIMULATEOUTPUT 1
-#else
-#define SIMULATEOUTPUT 0
-#endif
-#endif
 
 #include <stdlib.h>
 #include <string.h>
