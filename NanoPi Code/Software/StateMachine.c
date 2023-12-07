@@ -307,6 +307,7 @@ int switchToRadioMode(int modeID){
 
 void stateMachineStart(){
     radios = calloc(2,sizeof(Radio));
+    modeRoutingStart();
 }
 
 void setModeState(ModeStates state){
