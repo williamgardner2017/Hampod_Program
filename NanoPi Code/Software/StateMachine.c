@@ -6,6 +6,9 @@ Radio** radios;
 int maxRadios = 2;
 int currentRadio = 0;
 ModeStates modeFlow(KeyPress* keyInput){
+    if(SIMULATEOUTPUT == 1){
+        printf("Mode flow step 1");
+    }
     //the inital switch is for the programable keys, thisis so hat things can be avoided and passed over
     //specialty keys will be handled in each of the individual flows 
     switch (modeState)
@@ -166,6 +169,9 @@ int DTMFFlow(KeyPress* keyInput){
 }
 
 int StandardModeFlow(KeyPress* keyInput){
+    if(SIMULATEOUTPUT == 1){
+        printf("Standard flow for modes with key input of %c, shift of %i, and hold of %i\n",keyInput->keyPressed,keyInput->shiftAmount,keyInput->isHold);
+    }
     switch (keyInput->keyPressed)
     {
     case 'A': // A
@@ -233,6 +239,9 @@ int StandardModeFlow(KeyPress* keyInput){
         //setRadioToMode
         break;
     default:
+    if(SIMULATEOUTPUT == 1){
+        printf("No letter key was pressed so going to the mode\n");
+    }
         runRadioCommand(radios[currentRadio],keyInput);
         break;
     }

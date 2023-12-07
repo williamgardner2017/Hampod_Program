@@ -17,7 +17,7 @@ void sigsegv_handler(int signum);
 
 void sigsegv_handler(int signum) {
     printf("\033[0;31mSEGMENTAION FAULT - (Signal %d)\n", signum);
-    printf("Terminating Firmware\n");
+    printf("Terminating Testing\n");
     exit(1);
 }
 

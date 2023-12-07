@@ -1,5 +1,12 @@
 #ifndef HAMPOD_SOFT_RADIO
 #define HAMPOD_SOFT_RADIO
+#ifndef SIMULATEOUTPUT
+#ifdef TESTING
+#define SIMULATEOUTPUT 1
+#else
+#define SIMULATEOUTPUT 0
+#endif
+#endif
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>

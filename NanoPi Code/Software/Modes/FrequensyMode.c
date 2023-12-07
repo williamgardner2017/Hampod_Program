@@ -53,6 +53,9 @@ void* frequencyCommandRelay(KeyPress* keyInput, int radioDetails){
             }
             break;
         default:
+        if(SIMULATEOUTPUT == 1){
+            printf("got key of %c and nothing happens with that input\n",keyInput->keyPressed);
+        }
         break;
     }
     return NULL;
