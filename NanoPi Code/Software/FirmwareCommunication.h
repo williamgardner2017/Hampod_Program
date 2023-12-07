@@ -1,11 +1,6 @@
 #ifndef HAMPOD_SOFT_FIRMCOMMUN
 #define HAMPOD_SOFT_FIRMCOMMUN
 
-#ifdef TESTING
-    #define SIMULATEOUTPUT 1
-#else
-    #define SIMULATEOUTPUT 0
-#endif
 
 #include <pthread.h>
 #include <stdio.h>
@@ -29,6 +24,13 @@
 
 #define INPUT_PIPE "Firmware_i"
 #define OUTPUT_PIPE "Firmware_o"
+
+#ifdef TESTING
+    #define SIMULATEOUTPUT 1
+#else
+    #define SIMULATEOUTPUT 0
+#endif
+
 void setupPipes();
 void send_packet(Inst_packet* packet);
 void* firmwareCommandQueue(void* command);

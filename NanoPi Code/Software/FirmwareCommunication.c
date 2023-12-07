@@ -239,11 +239,11 @@ void* OutputThreadManager(void* arg){
  * //TODO make a thread to clean up those threads 
 */
 char* sendSpeakerOutput(char* text){
-    if(SIMULATEOUTPUT == 1){
+    if(SIMULATEOUTPUT){
         printf("TESTING SPEAKER OUTPUT: %s", text);
         return text;
     }else{
-        printf("Sending packet to the firmware\n");
+        printf("Sending packet to the firmware %i\n",SIMULATEOUTPUT);
     }
     Inst_packet* speakerPacket = create_inst_packet(AUDIO,strlen(text)+1,(unsigned char*) text, 0);
     int result;

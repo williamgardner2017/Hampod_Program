@@ -42,7 +42,7 @@ clean:
 
 testing: UnitTesting.elf
 UnitTesting.elf: UnitTesting.o
-	cc $(CFLAGS) -o UnitTesting.elf UnitTesting.o -lpthread
+	cc $(CFLAGS) -TESTING -o UnitTesting.elf UnitTesting.o -lpthread
 UnitTesting.o: UnitTesting.c
 	cc $(CFLAGS) -TESTING -c UnitTesting/UnitTesting.c -o UnitTesting.o -lpthread
 UnitTesting.c:
