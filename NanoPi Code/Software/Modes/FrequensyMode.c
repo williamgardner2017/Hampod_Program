@@ -27,7 +27,7 @@ void* frequencyCommandRelay(KeyPress* keyInput, int radioDetails){
             for(int i = 0; i<decimalPlace; i++){
                 currentFrequency = currentFrequency / 10;
             }
-        printf("Software: would be setting the radio frequency %f",currentFrequency);
+        PRINTFLEVEL1("Software: would be setting the radio frequency %f",currentFrequency);
             //currentFrequency = currentFrequency / pow(10,decimalPlace);
             currentFrequency = 0;
             //TODO add the hamlib code to change the frequency here 
@@ -50,7 +50,7 @@ void* frequencyCommandRelay(KeyPress* keyInput, int radioDetails){
             break;
         default:
         if(SIMULATEOUTPUT == 1){
-            printf("got key of %c and nothing happens with that input\n",keyInput->keyPressed);
+            PRINTFLEVEL1("got key of %c and nothing happens with that input\n",keyInput->keyPressed);
         }
         break;
     }

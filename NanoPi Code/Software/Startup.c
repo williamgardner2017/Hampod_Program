@@ -13,6 +13,34 @@
 #include "KeyWatching.h"
 #include "../Firmware/hampod_firm_packet.h"
 
+#ifdef OUTPUTLEVEL1
+#define PRINTFLEVEL1(...) \
+    do { \
+        if(DEBUG) { \
+            printf(__VA_ARGS__); \
+        } \
+    } while(0)
+#else
+
+#define PRINTFLEVEL1(...) \
+    while(0)
+
+#endif
+
+#ifdef OUTPUTLEVEL2
+#define PRINTFLEVEL2(...) \
+    do { \
+        if(DEBUG) { \
+            printf(__VA_ARGS__); \
+        } \
+    } while(0)
+#else
+
+#define PRINTFLEVEL2(...) \
+    while(0)
+
+#endif
+
 void sigint_handler(int signum);
 
 void sigsegv_handler(int signum);

@@ -24,9 +24,7 @@ void setRadioMode(Radio* thisRadio, Mode* modeToSetTo){
 }
 
 void* runRadioCommand(Radio* thisRadio, KeyPress* keyInput){
-    if(SIMULATEOUTPUT == 1){
-        printf("running mode of %s\n",thisRadio->currentMode->modeDetails->modeName);
-    }
+    PRINTFLEVEL1("running mode of %s\n",thisRadio->currentMode->modeDetails->modeName);
     void* results;
     results = thisRadio->currentMode->modeInput(keyInput,0);
     return results;

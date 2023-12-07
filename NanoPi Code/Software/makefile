@@ -44,6 +44,24 @@ testing: UnitTesting.elf
 UnitTesting.elf: UnitTesting.o
 	cc $(CFLAGS) -o UnitTesting.elf UnitTesting.o -lpthread
 UnitTesting.o: UnitTesting.c
-	cc $(CFLAGS) -DTESTING -c UnitTesting/UnitTesting.c -o UnitTesting.o -lpthread
+	cc $(CFLAGS) -DTESTING -DOUTPUT2 -DOUTPUT1 -c UnitTesting/UnitTesting.c -o UnitTesting.o -lpthread
 UnitTesting.c:
+	@echo "Missing firmware.c file. Repull the git repo"
+
+#with not much output text
+SoftwareOutput1: SoftwareOutput1.elf
+SoftwareOutput1.elf: SoftwareOutput1.o
+	cc $(CFLAGS) -o SoftwareOutput1.elf SoftwareOutput1.o -lpthread
+SoftwareOutput1.o: Startup.c
+	cc $(CFLAGS) -DOUTPUT1 -c Startup.c -o SoftwareOutput1.o -lpthread
+Startup.c:
+	@echo "Missing firmware.c file. Repull the git repo"
+
+#with a lot of output text
+SoftwareOutput2: SoftwareOutput2.elf
+SoftwareOutput2.elf: SoftwareOutput2.o
+	cc $(CFLAGS) -o SoftwareOutput2.elf SoftwareOutput2.o -lpthread
+SoftwareOutput2.o: Startup.c
+	cc $(CFLAGS) -DOUTPUT2 -DOUTPUT1 -c Startup.c -o SoftwareOutput2.o -lpthread
+Startup.c:
 	@echo "Missing firmware.c file. Repull the git repo"

@@ -108,7 +108,7 @@ bool StateMachineTesting(){
     printf("Testing bad path with all inputs being bad inputs\n");
     TestStateMachingBadInputSetFrequ();
 
-    printf("all paths did not crash");
+    printf("all paths did not crash\n");
     return true;
 }
 

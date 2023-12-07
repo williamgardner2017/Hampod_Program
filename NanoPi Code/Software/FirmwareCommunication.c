@@ -115,20 +115,20 @@ void* firmwareCommandQueue(void* command){
     //do the priority locking
     pthread_mutex_lock(&queue_lock);
     countOfPackets ++;
-    printf("software: waiting for packet with tag %d to finish\n",myId);
+    PRINTFLEVEL2("software: waiting for packet with tag %d to finish\n",myId);
     while(IDpeek(IDQueue) != myId && running){
-        printf("Software: packet with tag %d is still waiting\n",myId);
+        PRINTFLEVEL2("Software: packet with tag %d is still waiting\n",myId);
         pthread_cond_wait(&queue_cond, &queue_lock);
         if(!running){
             //keep on ignaling till it clears up
-            printf("Software: Clearing packet backlog. Current packet tag %d\n",myId);
+            PRINTFLEVEL2("Software: Clearing packet backlog. Current packet tag %d\n",myId);
             countOfPackets --;
             pthread_mutex_unlock(&queue_lock);
             pthread_cond_signal(&queue_cond);
             return NULL;
         }
     }
-    printf("Software: packet with tag %d is being processed\n",myId);
+    PRINTFLEVEL2("Software: packet with tag %d is being processed\n",myId);
     countOfPackets --;
     if(!running){
         pthread_cond_signal(&queue_cond);
@@ -143,9 +143,9 @@ void* firmwareCommandQueue(void* command){
     char* interpertedData = malloc(sizeof(data->data)+1);
 
     //temp for now
-    printf("SOftware:Saveing over the data\n");
+    PRINTFLEVEL2("Software:Saveing over the data\n");
     memccpy(interpertedData,data->data, '\0',sizeof(data->data));
-    printf("SOftware:data saved\n");
+    PRINTFLEVEL2("Software:data saved\n");
     destroy_inst_packet(&data);
     return interpertedData;
 }  
@@ -169,9 +169,9 @@ void* firmwareOPipeWatcher(void* arg){
         unsigned char* buffer;
         //TODO add the id pipe size thing to this
         //Read packet ID from the pipe
-        printf("Software:Waiting for something to read\n");
+        PRINTFLEVEL2("Software:Waiting for something to read\n");
         read(input_pipe, &packet_type, 4);
-        printf("Software:I have something to read\n");
+        PRINTFLEVEL2("Software:I have something to read\n");
         //read packet Length from the pipe
         read(input_pipe, &size, 2);
         //read the ID from the pipe
@@ -187,7 +187,7 @@ void* firmwareOPipeWatcher(void* arg){
         enqueue(softwareQueue, new_packet);
         IDenqueue(IDQueue,tag);
         //unlock the queue
-        printf("Software: Got a packet with the tag of %d\n", tag);
+        PRINTFLEVEL2("Software: Got a packet with the tag of %d\n", tag);
         pthread_mutex_unlock(&queue_lock);
         pthread_cond_signal(&queue_cond);
         usleep(100);
@@ -240,10 +240,8 @@ void* OutputThreadManager(void* arg){
 */
 char* sendSpeakerOutput(char* text){
     if(SIMULATEOUTPUT){
-        printf("TESTING SPEAKER OUTPUT: %s", text);
+        PRINTFLEVEL1("TESTING SPEAKER OUTPUT: %s", text);
         return text;
-    }else{
-        printf("Sending packet to the firmware %i\n",SIMULATEOUTPUT);
     }
     Inst_packet* speakerPacket = create_inst_packet(AUDIO,strlen(text)+1,(unsigned char*) text, 0);
     int result;
@@ -346,8 +344,8 @@ bool confirmKeyInputVars(char oK, bool hKS,int sS, int hWC){
 }
 
 void printOutErrors(char oK, bool hKS,int sS, int hWC){
-     printf("OldKey Expeccted:%c Actual:%c\nHoldKeySent Ecpected:%i Actual%i\n",oK, oldKey, hKS, holdKeySent);
-    printf("ShiftState Expected:%i Actual:%i\nHoldCount Expected:%i Actual:%i\n", sS, shiftState, hWC, holdWaitCount);
+    PRINTFLEVEL2("OldKey Expeccted:%c Actual:%c\nHoldKeySent Ecpected:%i Actual%i\n",oK, oldKey, hKS, holdKeySent);
+    PRINTFLEVEL2("ShiftState Expected:%i Actual:%i\nHoldCount Expected:%i Actual:%i\n", sS, shiftState, hWC, holdWaitCount);
 }
 
 
