@@ -242,6 +242,8 @@ char* sendSpeakerOutput(char* text){
     if(SIMULATEOUTPUT == 1){
         printf("TESTING SPEAKER OUTPUT: %s", text);
         return text;
+    }else{
+        printf("Sending packet to the firmware\n");
     }
     Inst_packet* speakerPacket = create_inst_packet(AUDIO,strlen(text)+1,(unsigned char*) text, 0);
     int result;
