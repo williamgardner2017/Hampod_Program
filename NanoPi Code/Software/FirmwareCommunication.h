@@ -34,7 +34,7 @@
 #ifdef OUTPUTLEVEL1
 #define PRINTFLEVEL1(...) \
     do { \
-        if(DEBUG) { \
+        if(OUTPUTLEVEL1) { \
             printf(__VA_ARGS__); \
         } \
     } while(0)
@@ -48,7 +48,7 @@
 #ifdef OUTPUTLEVEL2
 #define PRINTFLEVEL2(...) \
     do { \
-        if(DEBUG) { \
+        if(OUTPUTLEVEL1) { \
             printf(__VA_ARGS__); \
         } \
     } while(0)
