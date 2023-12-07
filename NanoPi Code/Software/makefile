@@ -23,10 +23,24 @@ CFLAGS = -Wall -g -lm
 # firmware.elf: firmware.o
 # 	cc firmware.o -o firmware.elf -lpthread
 
+Level0: Software.elf
+Level1: Software1.elf
+Level2: Software2.elf
+
 Software.elf: Startup.o
 	cc $(CFLAGS) -o Software.elf Startup.o -lpthread
+Software1.elf: Startup1.o
+	cc $(CFLAGS) -o Software1.elf Startup1.o -lpthread
+Software2.elf: Startup2.o
+	cc $(CFLAGS) -o Software2.elf Startup2.o -lpthread
+
+
 Startup.o: Startup.c
 	cc $(CFLAGS) -c Startup.c -o Startup.o -lpthread
+Startup1.o: Startup.c
+	cc $(CFLAGS) -c -DOUTPUT1 Startup.c -o Startup1.o -lpthread
+Startup2.o: Startup.c
+	cc $(CFLAGS) -c -DOUTPUT2 -DOUTPUT1 Startup.c -o Startup2.o -lpthread
 Startup.c:
 	@echo "Missing firmware.c file. Repull the git repo"
 
@@ -48,16 +62,3 @@ UnitTesting.o: UnitTesting.c
 UnitTesting.c:
 	@echo "Missing firmware.c file. Repull the git repo"
 
-#with not much output text
-SoftwareOutput1: SoftwareOutput1.elf
-SoftwareOutput1.elf: SoftwareOutput1.o
-	cc $(CFLAGS) -o SoftwareOutput1.elf SoftwareOutput1.o -lpthread
-SoftwareOutput1.o: Startup.c
-	cc $(CFLAGS) -DOUTPUT1 -c Startup.c -o SoftwareOutput1.o -lpthread
-
-#with a lot of output text
-SoftwareOutput2: SoftwareOutput2.elf
-SoftwareOutput2.elf: SoftwareOutput2.o
-	cc $(CFLAGS) -o SoftwareOutput2.elf SoftwareOutput2.o -lpthread
-SoftwareOutput2.o: Startup.c
-	cc $(CFLAGS) -DOUTPUT2 -DOUTPUT1 -c Startup.c -o SoftwareOutput2.o -lpthread
