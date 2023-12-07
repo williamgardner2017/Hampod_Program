@@ -39,3 +39,11 @@ clean:
 	@rm -f /s ../Firmware/*.o   # Remove object files
 	@rm -f *.exe  # Remove the executable (replace 'my_program' with the actual name)
 	@rm -f *.elf
+
+testing: UnitTesting.elf
+UnitTesting.elf: UnitTesting.o
+	cc $(CFLAGS) -o UnitTesting.elf UnitTesting.o -lpthread
+UnitTesting.o: UnitTesting.c
+	cc $(CFLAGS) -c UnitTesting/UnitTesting.c -o UnitTesting.o -lpthread
+UnitTesting.c:
+	@echo "Missing firmware.c file. Repull the git repo"

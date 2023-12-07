@@ -1,6 +1,70 @@
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include "UnitTestStateMachine.h"
-#include "../GeneralFunctions.h"
-#include "../StateMachine.h"
+bool TestStateMachingBadInputSetFrequ(){
+    printf("Setting up enviorment\n");
+    stateMachineStart();
+    setModeState(standard);
+    Radio** radios = malloc(sizeof(Radio));
+    setRadios(radios,0);
+    switchToRadioMode(3);
+    printf("Testing with key input P shift 0 hold 0\n");
+    KeyPress* testInput = malloc(sizeof(KeyPress));
+    testInput->keyPressed = 'P';
+    testInput->shiftAmount = 0;
+    testInput->isHold = false;
+    modeFlow(testInput);
+    printf("Testing with key input q shift 2 hold 0\n");
+    testInput->keyPressed = 'q';
+    testInput->shiftAmount = 2;
+    testInput->isHold = false;
+    modeFlow(testInput);
+    printf("Testing with key input z shift 1 hold 1\n");
+    testInput->keyPressed = 'z';
+    testInput->shiftAmount = 1;
+    testInput->isHold = true;
+    modeFlow(testInput);
+    printf("Freeing values\n");
+    freeStateMachine();
+    free(testInput);
+    printf("No crashes happend\n");
+    return true;
+}
+bool TestStateMachingGoodInputSetFrequ(){
+    printf("Setting up enviorment\n");
+    stateMachineStart();
+    setModeState(standard);
+    Radio** radios = malloc(sizeof(Radio));
+    setRadios(radios,0);
+    switchToRadioMode(3);
+    printf("Testing with key input 1 shift 0 hold 0\n");
+    KeyPress* testInput = malloc(sizeof(KeyPress));
+    testInput->keyPressed = '1';
+    testInput->shiftAmount = 0;
+    testInput->isHold = false;
+    modeFlow(testInput);
+    printf("Testing with key input 2 shift 0 hold 0\n");
+    testInput->keyPressed = '2';
+    testInput->shiftAmount = 0;
+    testInput->isHold = false;
+    modeFlow(testInput);
+    printf("Testing with key input * shift 0 hold 0\n");
+    testInput->keyPressed = '*';
+    testInput->shiftAmount = 0;
+    testInput->isHold = false;
+    modeFlow(testInput);
+    printf("Testing with key input 3 shift 0 hold 0\n");
+    testInput->keyPressed = '3';
+    testInput->shiftAmount = 0;
+    testInput->isHold = false;
+    modeFlow(testInput);
+    printf("Testing with key input # shift 0 hold 0\n");
+    testInput->keyPressed = '#';
+    testInput->shiftAmount = 0;
+    testInput->isHold = false;
+    modeFlow(testInput);
+    printf("should have printed out 12.3\n");
+    printf("Freeing values\n");
+    freeStateMachine();
+    free(testInput);
+    printf("No crashes happend\n");
+    return true;
+}
+

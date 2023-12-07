@@ -71,7 +71,8 @@ void fullStart(){
     printf("software: Setting up demo\n");
     setModeState(standard);
     Radio** radios = malloc(sizeof(Radio));
-    setRadios(radios,4);
+    setRadios(radios,0);
+    switchToRadioMode(3);
     printf("software: Demo setup complete\n");
     //send that I am ready
     printf("software: Sending I am Ready packet to firmware\n");

@@ -1,14 +1,18 @@
 #ifndef HAMPOD_TESTING_STATE
 #define HAMPOD_TESTING_STATE
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <signal.h>
 #include "../GeneralFunctions.h"
 #include "../StateMachine.h"
-bool testModeFlowPathing(); //Have an idea of how
-bool testBootupFlowPathing(); //have an idea of how
-bool testDTMFFlowPathing(); //not realy an idea of how
-bool testModeSelectFlowPathing(); //not realy an inde of how
-bool testSwitchToRadioMode(); //not realy any ideas
-bool testStandardModeFlow(); //no idea
-bool testReadOutModeName(); //no idea
+#include "../Radio.h"
+bool TestStateMachingBadInputSetFrequ();
+bool TestStateMachingGoodInputSetFrequ();
 
-
+#include "UnitTestStateMachine.c"
 #endif

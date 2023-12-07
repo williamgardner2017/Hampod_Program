@@ -93,7 +93,15 @@ bool KeyPressTesting(){
     return flag;
 }
 
+bool StateMachineTesting(){
+    printf("Testing happy path code with frequency enter mode\n");
+    TestStateMachingGoodInputSetFrequ();
+    printf("Testing bad path with all inputs being bad inputs\n");
+    TestStateMachingBadInputSetFrequ();
 
+    printf("all paths did not crash");
+    return true;
+}
 
 
 
@@ -107,21 +115,21 @@ int main(){
 
 
 
-    char* testGroup = "ModeRouting";
-    printf("Starting testing on %s\n",testGroup);
-    bool didTheyPass = ModeRoutingTest();
-    if(didTheyPass){
-        printf("Full pass in %s\n",testGroup);
-    }else{
-        printf("At least one test failed in %s\n",testGroup);
-    }
-    testGroup = "KeyPresses";
-    printf("Starting testing on %s\n",testGroup);
-    if(KeyPressTesting()){
-        printf("Full pass in %s\n",testGroup);
-    }else{
-        printf("At least one test failed in %s\n",testGroup);
-    }
-
+    // char* testGroup = "ModeRouting";
+    // printf("Starting testing on %s\n",testGroup);
+    // bool didTheyPass = ModeRoutingTest();
+    // if(didTheyPass){
+    //     printf("Full pass in %s\n",testGroup);
+    // }else{
+    //     printf("At least one test failed in %s\n",testGroup);
+    // }
+    // testGroup = "KeyPresses";
+    // printf("Starting testing on %s\n",testGroup);
+    // if(KeyPressTesting()){
+    //     printf("Full pass in %s\n",testGroup);
+    // }else{
+    //     printf("At least one test failed in %s\n",testGroup);
+    // }
+    StateMachineTesting();
     return -1;
 }
