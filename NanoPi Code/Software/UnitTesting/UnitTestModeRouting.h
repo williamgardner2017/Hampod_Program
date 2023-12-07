@@ -13,6 +13,7 @@ bool testGettingOneMode();
 bool testGettingManyModes();
 bool testGettingSameMode();
 bool testFreeModes();
+bool testGrabEachMode();
 
 #include "UnitTestModeRouting.h"
 #endif

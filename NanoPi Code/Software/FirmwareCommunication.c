@@ -1,3 +1,8 @@
+#ifdef TESTING
+#define SIMULATEOUTPUT 1
+#else
+#define SIMULATEOUTPUT 0
+#endif
 pthread_t speakerThread;
 pthread_t callManagerThread;
 pthread_t pipeWatcherThread;
@@ -239,6 +244,10 @@ void* OutputThreadManager(void* arg){
  * //TODO make a thread to clean up those threads 
 */
 char* sendSpeakerOutput(char* text){
+    if(SIMULATEOUTPUT == 1){
+        printf("TESTING SPEAKER OUTPUT: %s", text);
+        return text;
+    }
     Inst_packet* speakerPacket = create_inst_packet(AUDIO,strlen(text)+1,(unsigned char*) text, 0);
     int result;
     pthread_mutex_lock(&thread_lock);

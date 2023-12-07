@@ -56,3 +56,13 @@ bool testGettingSameMode(){
 bool testFreeModes(){
     return true;
 }
+
+bool testGrabEachMode(){
+    modeRoutingStart();
+     getModeById(0);
+     getModeById(1);
+     getModeById(2);
+     getModeById(3);
+     freeModes();
+     return true;
+}

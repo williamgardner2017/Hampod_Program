@@ -25,7 +25,7 @@ void* frequencyCommandRelay(KeyPress* keyInput, int radioDetails){
             //read out the number
             char putoutmessage[3] = "sq";
             putoutmessage[1] = keyInput->keyPressed;          
-            //sendSpeakerOutput(putoutmessage);
+            sendSpeakerOutput(putoutmessage);
             break;
         case '#':
             for(int i = 0; i<decimalPlace; i++){

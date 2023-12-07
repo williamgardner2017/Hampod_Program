@@ -44,6 +44,6 @@ testing: UnitTesting.elf
 UnitTesting.elf: UnitTesting.o
 	cc $(CFLAGS) -o UnitTesting.elf UnitTesting.o -lpthread
 UnitTesting.o: UnitTesting.c
-	cc $(CFLAGS) -c UnitTesting/UnitTesting.c -o UnitTesting.o -lpthread
+	cc $(CFLAGS) -TESTING -c UnitTesting/UnitTesting.c -o UnitTesting.o -lpthread
 UnitTesting.c:
 	@echo "Missing firmware.c file. Repull the git repo"
