@@ -47,6 +47,7 @@ bool TestStateMachingGoodInputSetFrequ(){
     testInput->keyPressed = '1';
     testInput->shiftAmount = 0;
     testInput->isHold = false;
+    printf("plugging in key input\n");
     modeFlow(testInput);
     printf("Testing with key input 2 shift 0 hold 0\n");
     testInput->keyPressed = '2';
