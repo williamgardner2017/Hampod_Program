@@ -1,13 +1,3 @@
-#ifndef SIMULATEOUTPUT
-#ifdef TESTING
-#define SIMULATEOUTPUT 1
-#else
-#define SIMULATEOUTPUT 0
-#endif
-#endif
-
-
-
 double currentFrequency = 0;
 int decimalPlace = 0;
 bool hasDecimal = false;

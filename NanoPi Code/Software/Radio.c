@@ -1,11 +1,3 @@
-#ifndef SIMULATEOUTPUT
-#ifdef TESTING
-#define SIMULATEOUTPUT 1
-#else
-#define SIMULATEOUTPUT 0
-#endif
-#endif
-
 Radio* loadUpRadioUsingData(char* make, int model, int port, Mode* defaultMode){
     Radio* newRadio = malloc(sizeof(Radio));
     newRadio->make = make;

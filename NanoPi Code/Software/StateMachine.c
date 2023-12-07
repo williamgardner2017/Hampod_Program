@@ -1,10 +1,4 @@
-#ifndef SIMULATEOUTPUT
-#ifdef TESTING
-#define SIMULATEOUTPUT 1
-#else
-#define SIMULATEOUTPUT 0
-#endif
-#endif
+
 
 ModeStates modeState = bootUp;
 
@@ -13,7 +7,7 @@ Radio** radios;
 int maxRadios = 2;
 int currentRadio = 0;
 ModeStates modeFlow(KeyPress* keyInput){
-    if(SIMULATEOUTPUT == 1){
+    if(TESTINGOUTPUT == 1){
         printf("Mode flow step 1\n");
     }
     //the inital switch is for the programable keys, thisis so hat things can be avoided and passed over
@@ -176,7 +170,7 @@ int DTMFFlow(KeyPress* keyInput){
 }
 
 int StandardModeFlow(KeyPress* keyInput){
-    if(SIMULATEOUTPUT == 1){
+    if(TESTINGOUTPUT == 1){
         printf("Standard flow for modes with key input of %c, shift of %i, and hold of %i\n",keyInput->keyPressed,keyInput->shiftAmount,keyInput->isHold);
     }
     switch (keyInput->keyPressed)
@@ -246,7 +240,7 @@ int StandardModeFlow(KeyPress* keyInput){
         //setRadioToMode
         break;
     default:
-    if(SIMULATEOUTPUT == 1){
+    if(TESTINGOUTPUT == 1){
         printf("No letter key was pressed so going to the mode\n");
     }
         runRadioCommand(radios[currentRadio],keyInput);
@@ -329,11 +323,21 @@ void setBootUpState(BootUpStates state){
 
 void freeStateMachine(){
     int i;
+
     for(i = 0; i<maxRadios;i++){
         if(radios[i] != 0){
             freeRadio(radios[i]);
         }
     }
+    if(TESTINGOUTPUT){
+        printf("finished freeing radios\n");
+    }
     free(radios);
+    if(TESTINGOUTPUT){
+        printf("Freed the radios object\n");
+    }
     freeModes();
+    if(TESTINGOUTPUT){
+        printf("freed the modes\n");
+    }
 }
