@@ -1,7 +1,11 @@
 #ifndef HAMPOD_SOFT_FIRMCOMMUN
 #define HAMPOD_SOFT_FIRMCOMMUN
 
-
+#ifdef TESTING
+    #define SIMULATEOUTPUT 1
+#else
+    #define SIMULATEOUTPUT 0
+#endif
 
 #include <pthread.h>
 #include <stdio.h>

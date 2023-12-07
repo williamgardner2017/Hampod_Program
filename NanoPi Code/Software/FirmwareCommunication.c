@@ -1,11 +1,3 @@
-#ifndef SIMULATEOUTPUT
-#ifdef TESTING
-#define SIMULATEOUTPUT 1
-#else
-#define SIMULATEOUTPUT 0
-#endif
-#endif
-
 pthread_t speakerThread;
 pthread_t callManagerThread;
 pthread_t pipeWatcherThread;
