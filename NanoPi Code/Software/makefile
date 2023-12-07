@@ -38,9 +38,9 @@ Software2.elf: Startup2.o
 Startup.o: Startup.c
 	cc $(CFLAGS) -c Startup.c -o Startup.o -lpthread
 Startup1.o: Startup.c
-	cc $(CFLAGS) -c -DOUTPUT1 Startup.c -o Startup1.o -lpthread
+	cc $(CFLAGS) -c -DOUTPUTLEVEL1 Startup.c -o Startup1.o -lpthread
 Startup2.o: Startup.c
-	cc $(CFLAGS) -c -DOUTPUT2 -DOUTPUT1 Startup.c -o Startup2.o -lpthread
+	cc $(CFLAGS) -c -DOUTPUTLEVEL2 -DOUTPUTLEVEL1 Startup.c -o Startup2.o -lpthread
 Startup.c:
 	@echo "Missing firmware.c file. Repull the git repo"
 
@@ -58,7 +58,7 @@ testing: UnitTesting.elf
 UnitTesting.elf: UnitTesting.o
 	cc $(CFLAGS) -o UnitTesting.elf UnitTesting.o -lpthread
 UnitTesting.o: UnitTesting.c
-	cc $(CFLAGS) -DTESTING -DOUTPUT2 -DOUTPUT1 -c UnitTesting/UnitTesting.c -o UnitTesting.o -lpthread
+	cc $(CFLAGS) -DTESTING -DOUTPUTLEVEL2 -DOUTPUTLEVEL1 -c UnitTesting/UnitTesting.c -o UnitTesting.o -lpthread
 UnitTesting.c:
 	@echo "Missing firmware.c file. Repull the git repo"
 
