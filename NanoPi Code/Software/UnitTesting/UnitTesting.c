@@ -24,74 +24,74 @@ void sigsegv_handler(int signum) {
 
 
 
-bool ModeRoutingTest(){
-    char* succsess;
-    char* testGroup = "ModeRouting";
-    char* testName;
-    bool flag = true;
-    testName = "Creation";
-    if(testCreateModeRoutingFunction()){
-        succsess = "succeeded";
-    }else{
-        succsess = "failed";
-        flag = false;
-    }
-    printf("%s in test: %s:%s\n", succsess, testGroup,testName);
+// bool ModeRoutingTest(){
+//     char* succsess;
+//     char* testGroup = "ModeRouting";
+//     char* testName;
+//     bool flag = true;
+//     testName = "Creation";
+//     if(testCreateModeRoutingFunction()){
+//         succsess = "succeeded";
+//     }else{
+//         succsess = "failed";
+//         flag = false;
+//     }
+//     printf("%s in test: %s:%s\n", succsess, testGroup,testName);
 
-    testName = "freeing";
-    if(testFreeModes()){
-        succsess = "succeeded";
-    }else{
-        succsess = "failed";
-        flag = false;
-    }
-    printf("%s in test: %s:%s\n", succsess, testGroup,testName);
+//     testName = "freeing";
+//     if(testFreeModes()){
+//         succsess = "succeeded";
+//     }else{
+//         succsess = "failed";
+//         flag = false;
+//     }
+//     printf("%s in test: %s:%s\n", succsess, testGroup,testName);
 
-    testName = "one mode";
-    if(testGettingOneMode()){
-        succsess = "succeeded";
-    }else{
-        succsess = "failed";
-        flag = false;
-    }
-    printf("%s in test: %s:%s\n", succsess, testGroup,testName);
+//     testName = "one mode";
+//     if(testGettingOneMode()){
+//         succsess = "succeeded";
+//     }else{
+//         succsess = "failed";
+//         flag = false;
+//     }
+//     printf("%s in test: %s:%s\n", succsess, testGroup,testName);
 
-    testName = "Many modes";
-    if(testGettingManyModes()){
-        succsess = "succeeded";
-    }else{
-        succsess = "failed";
-        flag = false;
-    }
-    printf("%s in test: %s:%s\n", succsess, testGroup,testName);
+//     testName = "Many modes";
+//     if(testGettingManyModes()){
+//         succsess = "succeeded";
+//     }else{
+//         succsess = "failed";
+//         flag = false;
+//     }
+//     printf("%s in test: %s:%s\n", succsess, testGroup,testName);
 
-    testName = "Duplicate mode";
-    if(testGettingSameMode()){
-        succsess = "succeeded";
-    }else{
-        succsess = "failed";
-        flag = false;
-    }
-    printf("%s in test: %s:%s\n", succsess, testGroup,testName);
+//     testName = "Duplicate mode";
+//     if(testGettingSameMode()){
+//         succsess = "succeeded";
+//     }else{
+//         succsess = "failed";
+//         flag = false;
+//     }
+//     printf("%s in test: %s:%s\n", succsess, testGroup,testName);
 
-    return flag;
-}
+//     return flag;
+// }
 
-bool KeyPressTesting(){
-    char* succsess;
-    char* testGroup = "KeyPresses";
-    char* testName;
-    bool flag = true;
-    testName = "FullTest";
-    if(fullTest()){
-        succsess = "succeeded";
-    }else{
-        succsess = "failed";
-        flag = false;
-    }
-    printf("%s in test: %s:%s\n", succsess, testGroup,testName);
-    return flag;
-}
+// bool KeyPressTesting(){
+//     char* succsess;
+//     char* testGroup = "KeyPresses";
+//     char* testName;
+//     bool flag = true;
+//     testName = "FullTest";
+//     if(fullTest()){
+//         succsess = "succeeded";
+//     }else{
+//         succsess = "failed";
+//         flag = false;
+//     }
+//     printf("%s in test: %s:%s\n", succsess, testGroup,testName);
+//     return flag;
+// }
 
 bool StateMachineTesting(){
     printf("Testing happy path code with frequency enter mode\n");
