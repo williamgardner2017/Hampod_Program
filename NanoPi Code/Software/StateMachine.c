@@ -14,7 +14,7 @@ int maxRadios = 2;
 int currentRadio = 0;
 ModeStates modeFlow(KeyPress* keyInput){
     if(SIMULATEOUTPUT == 1){
-        printf("Mode flow step 1");
+        printf("Mode flow step 1\n");
     }
     //the inital switch is for the programable keys, thisis so hat things can be avoided and passed over
     //specialty keys will be handled in each of the individual flows 
@@ -312,7 +312,7 @@ int switchToRadioMode(int modeID){
 
 
 void stateMachineStart(){
-    radios = malloc(sizeof(Radio) * 2);
+    radios = calloc(2,sizeof(Radio));
 }
 
 void setModeState(ModeStates state){
@@ -330,7 +330,9 @@ void setBootUpState(BootUpStates state){
 void freeStateMachine(){
     int i;
     for(i = 0; i<maxRadios;i++){
-        freeRadio(radios[i]);
+        if(radios[i] != 0){
+            freeRadio(radios[i]);
+        }
     }
     free(radios);
     freeModes();
