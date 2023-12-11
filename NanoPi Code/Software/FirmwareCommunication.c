@@ -166,7 +166,7 @@ void* firmwareOPipeWatcher(void* arg){
         unsigned char packet_type;
         unsigned short size;
         unsigned short tag;
-        unsigned char* buffer;
+        unsigned char buffer[256];
         //TODO add the id pipe size thing to this
         //Read packet ID from the pipe
         PRINTFLEVEL2("Software:Waiting for something to read\n");
@@ -176,7 +176,6 @@ void* firmwareOPipeWatcher(void* arg){
         read(input_pipe, &size, 2);
         //read the ID from the pipe
         read(input_pipe, &tag, 2);
-        buffer = malloc(size*sizeof(unsigned char));
         //read packet Data from pipe as a char string
         read(input_pipe, buffer, size);
         //create the data to put into the queue
