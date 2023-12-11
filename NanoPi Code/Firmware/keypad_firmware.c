@@ -5,7 +5,7 @@
 
 extern pid_t controller_pid;
 
-char numpad_symbols[] = {'1', '2', '3', 'a', '4', '5', '6', 'b', '7', '8', '9', 'c', '*', '0', '#', 'd'};//Symbols on the numpad
+char numpad_symbols[] = {'1', '2', '3', 'A', '4', '5', '6', 'B', '7', '8', '9', 'C', '*', '0', '#', 'D'};//Symbols on the numpad
 
 unsigned char keypad_running = 1;
 
