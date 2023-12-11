@@ -5,12 +5,41 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <signal.h>
+#include <sys/wait.h>
 
 #include "StateMachine.h"
 #include "FirmwareCommunication.h"
 #include "Radio.h"
 #include "KeyWatching.h"
 #include "../Firmware/hampod_firm_packet.h"
+
+#ifdef OUTPUTLEVEL1
+#define PRINTFLEVEL1(...) \
+    do { \
+        if(OUTPUTLEVEL1) { \
+            printf(__VA_ARGS__); \
+        } \
+    } while(0)
+#else
+
+#define PRINTFLEVEL1(...) \
+    while(0)
+
+#endif
+
+#ifdef OUTPUTLEVEL2
+#define PRINTFLEVEL2(...) \
+    do { \
+        if(OUTPUTLEVEL1) { \
+            printf(__VA_ARGS__); \
+        } \
+    } while(0)
+#else
+
+#define PRINTFLEVEL2(...) \
+    while(0)
+
+#endif
 
 void sigint_handler(int signum);
 
@@ -33,8 +62,26 @@ void fullStart(){
         //start firmware
         system("../Firmware/firmware.elf&");
         printf("software: FirmwareStarted\n");
+        exit(0);
     }else{
     //connect the pipes
+        int status;
+        pid_t terminated_child_pid = waitpid(p, &status, 0);
+
+        if (terminated_child_pid == -1) {
+            perror("Waitpid failed");
+            exit(1);
+        }
+
+        if (WIFEXITED(status)) {
+            printf("Child process %d exited with status %d\n", terminated_child_pid, WEXITSTATUS(status));
+        } else {
+            printf("Child process %d did not exit normally\n", terminated_child_pid);
+        }
+
+    }
+
+    usleep(500000);
     printf("software: Connecting pipes\n");
     setupPipes();
     printf("software: Connecting pipes compleated\n");
@@ -51,42 +98,37 @@ void fullStart(){
     //SETTING UP THE SIMULATION DEMO
     printf("software: Setting up demo\n");
     setModeState(standard);
-    Radio** radios = malloc(sizeof(Radio));
-    setRadios(radios,4);
+    Radio* radios = malloc(sizeof(Radio));
+    setRadios(radios,0);
+    switchToRadioMode(3);
     printf("software: Demo setup complete\n");
     //send that I am ready
     printf("software: Sending I am Ready packet to firmware\n");
     unsigned char* okMessage = (unsigned char*) "ok";
     Inst_packet* iAmReady = create_inst_packet(CONFIG, strlen((char*) okMessage)+1,okMessage, 0);
     firmwareCommandQueue(iAmReady);
-    printf("software: packet reciprecated\n");
     //start key loop after getting the responce
     printf("software: Starting keywatcher\n");
-    startKeyWatcher();
+    keyWatcher(NULL);
     printf("software: Startin Keywatcher complete\n");
-    }
 }
 void sigint_handler(int signum) {
     printf("\033[0;31mTERMINATING FIRMWARE\n");
-    printf("ending firmware\n");
+    printf("end the firmware with pid %i\n", (int) p);
+    kill(p,SIGINT);
+    printf("ending keywatcher\n");
+    freeKeyWatcher();
+    printf("ending firmware communication\n");
     freeFirmwareComunication();
     printf("ending state machine\n");
     freeStateMachine();
-    printf("ending keywatcher\n");
-    freeKeyWatcher();
-    printf("end the firmware\n");
-    kill(p,SIGINT);
-    kill(p,SIGKILL);
-    kill(p,SIGTERM);
     exit(0);
 }
 
 void sigsegv_handler(int signum) {
     printf("\033[0;31mSEGMENTAION FAULT - (Signal %d)\n", signum);
-    printf("Terminating Firmware\n");
+    printf("Terminating Firmware by the software\n");
     kill(p,SIGINT);
-    kill(p,SIGKILL);
-    kill(p,SIGTERM);
     exit(1);
 }
 

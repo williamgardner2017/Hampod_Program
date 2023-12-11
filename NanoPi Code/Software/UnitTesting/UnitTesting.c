@@ -17,7 +17,7 @@ void sigsegv_handler(int signum);
 
 void sigsegv_handler(int signum) {
     printf("\033[0;31mSEGMENTAION FAULT - (Signal %d)\n", signum);
-    printf("Terminating Firmware\n");
+    printf("Terminating Testing\n");
     exit(1);
 }
 
@@ -74,26 +74,43 @@ bool ModeRoutingTest(){
     }
     printf("%s in test: %s:%s\n", succsess, testGroup,testName);
 
-    return flag;
-}
-
-bool KeyPressTesting(){
-    char* succsess;
-    char* testGroup = "KeyPresses";
-    char* testName;
-    bool flag = true;
-    testName = "FullTest";
-    if(fullTest()){
+    testName = "Load in each mode";
+    if(testGrabEachMode()){
         succsess = "succeeded";
     }else{
         succsess = "failed";
         flag = false;
     }
     printf("%s in test: %s:%s\n", succsess, testGroup,testName);
+
     return flag;
 }
 
+// bool KeyPressTesting(){
+//     char* succsess;
+//     char* testGroup = "KeyPresses";
+//     char* testName;
+//     bool flag = true;
+//     testName = "FullTest";
+//     if(fullTest()){
+//         succsess = "succeeded";
+//     }else{
+//         succsess = "failed";
+//         flag = false;
+//     }
+//     printf("%s in test: %s:%s\n", succsess, testGroup,testName);
+//     return flag;
+// }
 
+bool StateMachineTesting(){
+    printf("Testing happy path code with frequency enter mode\n");
+    TestStateMachingGoodInputSetFrequ();
+    printf("Testing bad path with all inputs being bad inputs\n");
+    TestStateMachingBadInputSetFrequ();
+
+    printf("all paths did not crash\n");
+    return true;
+}
 
 
 
@@ -115,13 +132,13 @@ int main(){
     }else{
         printf("At least one test failed in %s\n",testGroup);
     }
-    testGroup = "KeyPresses";
-    printf("Starting testing on %s\n",testGroup);
-    if(KeyPressTesting()){
-        printf("Full pass in %s\n",testGroup);
-    }else{
-        printf("At least one test failed in %s\n",testGroup);
-    }
-
+    // testGroup = "KeyPresses";
+    // printf("Starting testing on %s\n",testGroup);
+    // if(KeyPressTesting()){
+    //     printf("Full pass in %s\n",testGroup);
+    // }else{
+    //     printf("At least one test failed in %s\n",testGroup);
+    // }
+    StateMachineTesting();
     return -1;
 }

@@ -1,4 +1,5 @@
 
+
 ModeStates modeState = bootUp;
 
 int programableKeysOn = 0;
@@ -6,6 +7,7 @@ Radio** radios;
 int maxRadios = 2;
 int currentRadio = 0;
 ModeStates modeFlow(KeyPress* keyInput){
+    PRINTFLEVEL2("Mode flow step 1\n");
     //the inital switch is for the programable keys, thisis so hat things can be avoided and passed over
     //specialty keys will be handled in each of the individual flows 
     switch (modeState)
@@ -166,6 +168,7 @@ int DTMFFlow(KeyPress* keyInput){
 }
 
 int StandardModeFlow(KeyPress* keyInput){
+    PRINTFLEVEL1("Standard flow for modes with key input of %c, shift of %i, and hold of %i\n",keyInput->keyPressed,keyInput->shiftAmount,keyInput->isHold);
     switch (keyInput->keyPressed)
     {
     case 'A': // A
@@ -233,6 +236,7 @@ int StandardModeFlow(KeyPress* keyInput){
         //setRadioToMode
         break;
     default:
+        PRINTFLEVEL1("No letter key was pressed so going to the mode\n");
         runRadioCommand(radios[currentRadio],keyInput);
         break;
     }
@@ -296,14 +300,15 @@ int switchToRadioMode(int modeID){
 
 
 void stateMachineStart(){
-    radios = malloc(sizeof(Radio) * 2);
+    radios = calloc(2,sizeof(Radio));
+    modeRoutingStart();
 }
 
 void setModeState(ModeStates state){
     modeState = state;
 }
-void setRadios(Radio** r, int cR){
-    radios = r;
+void setRadios(Radio* r, int cR){
+    radios[cR] = r;
     currentRadio = cR;
 }
 void setBootUpState(BootUpStates state){
@@ -313,9 +318,15 @@ void setBootUpState(BootUpStates state){
 
 void freeStateMachine(){
     int i;
+
     for(i = 0; i<maxRadios;i++){
-        freeRadio(radios[i]);
+        if(radios[i] != 0){
+            freeRadio(radios[i]);
+        }
     }
+    PRINTFLEVEL2("finished freeing radios\n");
     free(radios);
+    PRINTFLEVEL2("Freed the radios object\n");
     freeModes();
+    PRINTFLEVEL2("freed the modes\n");
 }

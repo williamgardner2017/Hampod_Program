@@ -225,7 +225,7 @@ int main(){
     FIRMWARE_PRINTF("1 second delay over\n");
     FIRMWARE_PRINTF("Sending ok packet to software\n");
     unsigned char ok_signal = 'R';
-    Inst_packet* ready_packet = create_inst_packet(CONFIG, 1, &ok_signal, 0x1234);
+    Inst_packet* ready_packet = create_inst_packet(CONFIG, 1, &ok_signal, 0);
     write(output_pipe_fd, ready_packet, 8);
     write(output_pipe_fd, ready_packet->data, sizeof(char));
     while(running) {
