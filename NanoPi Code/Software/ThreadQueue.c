@@ -17,8 +17,8 @@ void Threadenqueue(Thread_queue* queue, pthread_t thread){
         exit(1);
     }
     //this is to copy the value so it does not get lost
-    memcpy((void*) new_node->thread, (void*) thread, sizeof(pthread_t));
-    //new_node->thread = thread;
+    // memcpy((void*) new_node->thread, (void*) thread, sizeof(pthread_t));
+    new_node->thread = thread;
     new_node->next = NULL;
 
     if(queue->tail == NULL) {
