@@ -5,7 +5,7 @@
 
 extern pid_t controller_pid;
 
-char numpad_symbols[] = {'1', '2', '3', 'a', '4', '5', '6', 'b', '7', '8', '9', 'c', '*', '0', '#', 'd'};//Symbols on the numpad
+char numpad_symbols[] = {'1', '2', '3', 'A', '4', '5', '6', 'B', '7', '8', '9', 'C', '*', '0', '#', 'D'};//Symbols on the numpad
 
 unsigned char keypad_running = 1;
 
@@ -34,9 +34,9 @@ int readNumPad(){
 		digitalWrite(rows[i], HIGH);//Set the row back to high to not interfere with other rows
 	}
 	if(pressed > 1){
-		return -1;//Return invalid if multiple buttons are pressed
+		return '-';//Return invalid if multiple buttons are pressed
 	}else{
-		return pressedNum;
+		return numpad_symbols[pressedNum];
 	}
 }
 
