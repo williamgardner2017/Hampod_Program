@@ -244,17 +244,23 @@ char* sendSpeakerOutput(char* text){
     }
     Inst_packet* speakerPacket = create_inst_packet(AUDIO,strlen(text)+1,(unsigned char*) text, 0);
     int result;
+    PRINTFLEVEL2("SOFTWARE Locking up speakout output\n");
     pthread_mutex_lock(&thread_lock);
+    PRINTFLEVEL2("SOFTWARE Creating the thread\n");
     result = pthread_create(&speakerThread, NULL, firmwareCommandQueue, (void*) speakerPacket);
-    Threadenqueue(threadQueue, speakerThread);
-    pthread_cond_signal(&thread_cond);
-    pthread_mutex_unlock(&thread_lock);
+    PRINTFLEVEL2("SOFTWARE sing if the result was good\n");
     if (result) {
         fprintf(stderr, "Error creating thread: %d\n", result);
         exit(0);
     }
+    PRINTFLEVEL2("SOFTWARE Putting thread onto the queue\n");
+    Threadenqueue(threadQueue, speakerThread);
+    PRINTFLEVEL2("SOFTWARE Signaling the speaker condition\n");
+    pthread_cond_signal(&thread_cond);
+    PRINTFLEVEL2("SOFTWARE unlockiing the speaker lock\n");
+    pthread_mutex_unlock(&thread_lock);
     // return firmwareCommandQueue(speakerPacket);
-
+    PRINTFLEVEL2("SOFTWARE Returning the speaker output value\n");
    return text;
 }
 
