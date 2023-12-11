@@ -20,7 +20,7 @@ int readNumPad(){
 	*  The columns are tied HIGH through an internal pull-up resistor, so if a column reads as low, then that row-column pair button was pressed
 	*/
 	int pressed = 0;//Used to keep track of how many buttons are pressed
-	int pressedNum = -1;//Value to return. -1 corresponds to an invalid input/no input
+	int pressedNum = '-';//Value to return. -1 corresponds to an invalid input/no input
 	int rows[4] = {R1,R2,R3,R4};
 	int cols[4] = {C1,C2,C3,C4};
 	for(int i = 0; i < 4; i++){

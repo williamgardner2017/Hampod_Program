@@ -1,4 +1,3 @@
-
 Radio* loadUpRadioUsingData(char* make, int model, int port, Mode* defaultMode){
     Radio* newRadio = malloc(sizeof(Radio));
     newRadio->make = make;
@@ -25,8 +24,9 @@ void setRadioMode(Radio* thisRadio, Mode* modeToSetTo){
 }
 
 void* runRadioCommand(Radio* thisRadio, KeyPress* keyInput){
+    PRINTFLEVEL1("running mode of %s\n",thisRadio->currentMode->modeDetails->modeName);
     void* results;
-    results = thisRadio->currentMode->modeInput(keyInput,23);
+    results = thisRadio->currentMode->modeInput(keyInput,0);
     return results;
 }
 

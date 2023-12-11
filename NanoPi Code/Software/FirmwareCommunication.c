@@ -4,6 +4,7 @@ pthread_t pipeWatcherThread;
 bool running = true;
 int input_pipe;
 int output_pipe;
+int countOfPackets = 0;
 //this is here the pipes will be set up
 void setupPipes(){
     printf("Connecting to Firmware_o\n");
@@ -12,10 +13,11 @@ void setupPipes(){
     for(i = 0; i < 1000; i++){
         input_pipe = open(OUTPUT_PIPE, O_RDONLY);
         printf("Attempt %d/1000\r", i); 
-        if(input_pipe != -1){
+        if(input_pipe != -1){ 
             break;
         }
     }
+    printf("\n");
     if(input_pipe == -1){
         perror("open");
         exit(-1);
@@ -28,6 +30,7 @@ void setupPipes(){
             break;
         }
     }
+    printf("\n");
     if(output_pipe == -1){
         printf("\nUnsuccessful Connection\n");
         perror("open");
@@ -79,11 +82,11 @@ void firmwareCommunicationStartup(){
 }
 
 void send_packet(Inst_packet* packet){
-    printf("Message = %s\n", packet->data);
+    // printf("Message = %s\n", packet->data);
     write(output_pipe, packet, 8);
     unsigned char buffer[256];
     memcpy(buffer, packet->data, packet->data_len);
-    printf("Message = %s\n", (char*)buffer);
+    // printf("Message = %s\n", (char*)buffer);
     write(output_pipe, buffer, packet->data_len);
     destroy_inst_packet(&packet);
 }
@@ -111,19 +114,38 @@ void* firmwareCommandQueue(void* command){
     pthread_mutex_unlock(&pipe_lock);
     //do the priority locking
     pthread_mutex_lock(&queue_lock);
-    while(IDpeek(IDQueue) != myId){
-       pthread_cond_wait(&queue_cond, &queue_lock);
+    countOfPackets ++;
+    PRINTFLEVEL2("software: waiting for packet with tag %d to finish\n",myId);
+    while(IDpeek(IDQueue) != myId && running){
+        PRINTFLEVEL2("Software: packet with tag %d is still waiting\n",myId);
+        pthread_cond_wait(&queue_cond, &queue_lock);
+        if(!running){
+            //keep on ignaling till it clears up
+            PRINTFLEVEL2("Software: Clearing packet backlog. Current packet tag %d\n",myId);
+            countOfPackets --;
+            pthread_mutex_unlock(&queue_lock);
+            pthread_cond_signal(&queue_cond);
+            return NULL;
+        }
+    }
+    PRINTFLEVEL2("Software: packet with tag %d is being processed\n",myId);
+    countOfPackets --;
+    if(!running){
+        pthread_cond_signal(&queue_cond);
+        pthread_mutex_unlock(&queue_lock);
+        return NULL;
     }
     //grab the data from the queue
     Inst_packet *data = dequeue(softwareQueue);
     IDdequeue(IDQueue);
     pthread_cond_signal(&queue_cond);
     pthread_mutex_unlock(&queue_lock);
-    char* interpertedData;
+    char* interpertedData = malloc(sizeof(data->data)+1);
 
     //temp for now
-    interpertedData = "testing";
+    PRINTFLEVEL2("Software:Saveing over the data\n");
     memccpy(interpertedData,data->data, '\0',sizeof(data->data));
+    PRINTFLEVEL2("Software:data saved\n");
     destroy_inst_packet(&data);
     return interpertedData;
 }  
@@ -142,13 +164,14 @@ void firmwareStartOPipeWatcher(){
 void* firmwareOPipeWatcher(void* arg){
     while(running){
         unsigned char packet_type;
-        unsigned int id;
         unsigned short size;
         unsigned short tag;
         unsigned char* buffer;
         //TODO add the id pipe size thing to this
         //Read packet ID from the pipe
+        PRINTFLEVEL2("Software:Waiting for something to read\n");
         read(input_pipe, &packet_type, 4);
+        PRINTFLEVEL2("Software:I have something to read\n");
         //read packet Length from the pipe
         read(input_pipe, &size, 2);
         //read the ID from the pipe
@@ -162,10 +185,11 @@ void* firmwareOPipeWatcher(void* arg){
         pthread_mutex_lock(&queue_lock);
         //add the data to the queue
         enqueue(softwareQueue, new_packet);
-        IDenqueue(IDQueue,id);
+        IDenqueue(IDQueue,tag);
         //unlock the queue
-        pthread_cond_signal(&queue_cond);
+        PRINTFLEVEL2("Software: Got a packet with the tag of %d\n", tag);
         pthread_mutex_unlock(&queue_lock);
+        pthread_cond_signal(&queue_cond);
         usleep(100);
     }
 
@@ -191,6 +215,14 @@ void* OutputThreadManager(void* arg){
         pthread_mutex_lock(&thread_lock);
         while(ThreadQueueIsEmpty(threadQueue)){
             pthread_cond_wait(&thread_cond, &thread_lock);
+            if(!running){
+                pthread_cond_signal(&thread_cond);
+                pthread_mutex_unlock(&thread_lock);
+                return NULL;
+            }
+        }
+        if(!running){
+                return NULL;
         }
         pthread_t current = ThreadDequeue(threadQueue);
         pthread_mutex_unlock(&thread_lock);
@@ -207,6 +239,10 @@ void* OutputThreadManager(void* arg){
  * //TODO make a thread to clean up those threads 
 */
 char* sendSpeakerOutput(char* text){
+    if(SIMULATEOUTPUT){
+        PRINTFLEVEL1("TESTING SPEAKER OUTPUT: %s", text);
+        return text;
+    }
     Inst_packet* speakerPacket = create_inst_packet(AUDIO,strlen(text)+1,(unsigned char*) text, 0);
     int result;
     pthread_mutex_lock(&thread_lock);
@@ -252,10 +288,10 @@ int maxShifts = 3;
 KeyPress* interperateKeyPresses(char keyPress){
     KeyPress *returnValue = malloc(sizeof(KeyPress));
     returnValue->isHold = false;
-    returnValue->keyPressed = -1;
+    returnValue->keyPressed = '-';
     returnValue->shiftAmount = 0;
-    if(keyPress == -1){
-        if(oldKey != -1 && !holdKeySent && holdWaitCount < holdWaitTime){
+    if(keyPress == '-'){
+        if(oldKey != '-' && !holdKeySent && holdWaitCount < holdWaitTime){
             if(oldKey == 'A' && shiftEnabled){
                 shiftState ++;
                 if(shiftState >= maxShifts){
@@ -268,9 +304,9 @@ KeyPress* interperateKeyPresses(char keyPress){
             }//end inner null
         }//end outer if
         holdKeySent = false;
-        oldKey = -1;
+        oldKey = '-';
         holdWaitCount = 0;
-    }else if(keyPress == oldKey && keyPress != -1){
+    }else if(keyPress == oldKey && keyPress != '-'){
         if(holdWaitCount < holdWaitTime){
             holdWaitCount++;
         }else if(!holdKeySent){
@@ -282,6 +318,10 @@ KeyPress* interperateKeyPresses(char keyPress){
         }
     }else{
         oldKey = keyPress;
+    }
+
+    if(returnValue->keyPressed == -1){
+        returnValue->keyPressed = '-';
     }
     return returnValue;
 }
@@ -304,8 +344,8 @@ bool confirmKeyInputVars(char oK, bool hKS,int sS, int hWC){
 }
 
 void printOutErrors(char oK, bool hKS,int sS, int hWC){
-     printf("OldKey Expeccted:%c Actual:%c\nHoldKeySent Ecpected:%i Actual%i\n",oK, oldKey, hKS, holdKeySent);
-    printf("ShiftState Expected:%i Actual:%i\nHoldCount Expected:%i Actual:%i\n", sS, shiftState, hWC, holdWaitCount);
+    PRINTFLEVEL2("OldKey Expeccted:%c Actual:%c\nHoldKeySent Ecpected:%i Actual%i\n",oK, oldKey, hKS, holdKeySent);
+    PRINTFLEVEL2("ShiftState Expected:%i Actual:%i\nHoldCount Expected:%i Actual:%i\n", sS, shiftState, hWC, holdWaitCount);
 }
 
 
@@ -313,17 +353,41 @@ void printOutErrors(char oK, bool hKS,int sS, int hWC){
 
 void freeFirmwareComunication(){
     running = false;
+    printf("Software:ending pipe watcher\n");
     pthread_join(pipeWatcherThread,NULL);
-    pthread_join(callManagerThread,NULL);
-    close(input_pipe);
-    close(output_pipe);
-    pthread_mutex_destroy(&queue_lock);
-    pthread_mutex_destroy(&pipe_lock);
-    pthread_cond_destroy(&queue_cond);
+
+    printf("Software:destroying packet queue\n");
     destroy_queue(softwareQueue);
+    printf("Software:destroying ID queue\n");
     destroy_IDqueue(IDQueue);
-    destroyThreadQueue(threadQueue);
+    printf("Software: things in call mannager cond %d\n", countOfPackets);
+    printf("Software:clearing conditions\n");
+    pthread_cond_broadcast(&thread_cond);
+    pthread_cond_broadcast(&queue_cond); //trying to fix this
+    //TODO add a wait thing here
+
+    usleep(2000000);
+
+    printf("Software: things in call mannager cond %d\n", countOfPackets);
+    printf("Software:ending call manager\n");
+    pthread_join(callManagerThread,NULL);
+    printf("Software:destroying thread uqueue mutexes\n");
     pthread_mutex_destroy(&thread_lock);
     pthread_cond_destroy(&thread_cond);
+    printf("Software:destroying thread queue\n");
+    destroyThreadQueue(threadQueue);
 
+    printf("Software:destroying packet condition\n");
+    pthread_cond_destroy(&queue_cond);
+    printf("Software:destroying packet queue mutexes\n");
+    pthread_mutex_destroy(&queue_lock);
+    pthread_mutex_destroy(&pipe_lock);
+
+
+
+
+    printf("Software:closing input pipe\n");
+    close(input_pipe);
+    printf("Software:closing output pipe\n");
+    close(output_pipe);
 }

@@ -1,5 +1,9 @@
 #ifndef HAMPOD_TESTING_MODEROUTING
 #define HAMPOD_TESTING_MODEROUTING
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+#include <stdio.h>
 #include "../Modes/ModeRouting.h"
 #include "../Modes/Mode.h"
 //TODO make the connected c file
@@ -9,6 +13,7 @@ bool testGettingOneMode();
 bool testGettingManyModes();
 bool testGettingSameMode();
 bool testFreeModes();
+bool testGrabEachMode();
 
-
+#include "UnitTestModeRouting.c"
 #endif

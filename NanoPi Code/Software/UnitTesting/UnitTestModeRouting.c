@@ -1,10 +1,3 @@
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include "UnitTestModeRouting.h"
-#include "../Modes/Mode.h"
-#include "../Modes/ModeRouting.h"
 bool testCreateModeRoutingFunction(){
     Mode** testObject = modeRoutingStart();
     int modeCount = getModeCount();
@@ -62,4 +55,14 @@ bool testGettingSameMode(){
 
 bool testFreeModes(){
     return true;
+}
+
+bool testGrabEachMode(){
+    modeRoutingStart();
+     getModeById(0);
+     getModeById(1);
+     getModeById(2);
+     getModeById(3);
+     freeModes();
+     return true;
 }

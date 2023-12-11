@@ -1,11 +1,3 @@
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include "UnitTestKeyPresses.h"
-#include "../GeneralFunctions.h"
-#include "../FirmwareCommunication.h"
-
 bool compareKeyInputs(KeyPress* correct, KeyPress* testing){
     if(correct->keyPressed == testing->keyPressed && correct->shiftAmount == testing->shiftAmount && correct->isHold == testing->isHold){
         return true;
@@ -14,28 +6,6 @@ bool compareKeyInputs(KeyPress* correct, KeyPress* testing){
     }
 }
 
-/**
- * This is testing short key presses, one where you hold it down for one tick and another where you hold it down for 2 ticks
-*/
-bool shortPress(){
-    resetKeyInputVars();
-    KeyPress* tester = malloc(sizeof(KeyPress));
-
-    free(tester);
-    return true;
-}
-bool hold(){
-    return false;
-}
-bool shift1(){
-    return false;
-}
-bool shift2(){
-    return false;
-}
-bool shifthold(){
-    return false;
-}
 
 void printOutErrorForWhatWasExpected(KeyPress* exepected, KeyPress* actual, char eo, bool ehks, int ess, int ehc){
     printf("keyPressed Expected:%c Actual:%c\nShiftAmount Expected:%i Actual:%i\nisHold Expected:%i Actual:%i\n",exepected->keyPressed,actual->keyPressed,exepected->shiftAmount,actual->shiftAmount,exepected->isHold,actual->isHold);

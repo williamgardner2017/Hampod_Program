@@ -1,13 +1,15 @@
 #ifndef HAMPOD_TESTING_KEY
 #define HAMPOD_TESTING_KEY
+
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include "UnitTestKeyPresses.h"
 #include "../GeneralFunctions.h"
 #include "../FirmwareCommunication.h"
-bool shortPress();
-bool hold();
-bool shift1();
-bool shift2();
-bool shifthold();
 bool fullTest();
 bool compareKeyInputs(KeyPress* correct, KeyPress* testing);
 
+#include "UnitTestKeyPresses.c"
 #endif
