@@ -124,21 +124,21 @@ void* firmwareCommandQueue(void* command){
             PRINTFLEVEL2("Software: Clearing packet backlog. Current packet tag %d\n",myId);
             countOfPackets --;
             pthread_mutex_unlock(&queue_lock);
-            pthread_cond_signal(&queue_cond);
+            pthread_cond_broadcast(&queue_cond);
             return NULL;
         }
     }
     PRINTFLEVEL2("Software: packet with tag %d is being processed\n",myId);
     countOfPackets --;
     if(!running){
-        pthread_cond_signal(&queue_cond);
+        pthread_cond_broadcast(&queue_cond);
         pthread_mutex_unlock(&queue_lock);
         return NULL;
     }
     //grab the data from the queue
     Inst_packet *data = dequeue(softwareQueue);
     IDdequeue(IDQueue);
-    pthread_cond_signal(&queue_cond);
+    pthread_cond_broadcast(&queue_cond);
     pthread_mutex_unlock(&queue_lock);
     char* interpertedData = malloc(sizeof(data->data)+1);
 
@@ -188,7 +188,7 @@ void* firmwareOPipeWatcher(void* arg){
         //unlock the queue
         PRINTFLEVEL2("Software: Got a packet with the tag of %d\n", tag);
         pthread_mutex_unlock(&queue_lock);
-        pthread_cond_signal(&queue_cond);
+        pthread_cond_broadcast(&queue_cond);
         usleep(100);
     }
 
@@ -215,7 +215,7 @@ void* OutputThreadManager(void* arg){
         while(ThreadQueueIsEmpty(threadQueue)){
             pthread_cond_wait(&thread_cond, &thread_lock);
             if(!running){
-                pthread_cond_signal(&thread_cond);
+                pthread_cond_broadcast(&thread_cond);
                 pthread_mutex_unlock(&thread_lock);
                 return NULL;
             }
@@ -256,7 +256,7 @@ char* sendSpeakerOutput(char* text){
     PRINTFLEVEL2("SOFTWARE Putting thread onto the queue\n");
     Threadenqueue(threadQueue, speakerThread);
     PRINTFLEVEL2("SOFTWARE Signaling the speaker condition\n");
-    pthread_cond_signal(&thread_cond);
+    pthread_cond_broadcast(&thread_cond);
     PRINTFLEVEL2("SOFTWARE unlockiing the speaker lock\n");
     pthread_mutex_unlock(&thread_lock);
     // return firmwareCommandQueue(speakerPacket);
