@@ -5,17 +5,9 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include "../../GeneralFunctions.h"
+#include "../GeneralFunctions.h"
+#include "HashMap.h"
 
-typedef struct ConfigParam{
-    char* name; 
-    double defaultValue;
-    double minValue;
-    double maxValue;
-    double stepSize;
-    void** selectionSet;
-    int selectionSize;
-} ConfigParam;
 
 typedef enum {
     ONOFF,
@@ -25,9 +17,25 @@ typedef enum {
     OTHER
 } ConfigTypes;
 
+typedef struct ConfigParam{
+    char* name; 
+    double defaultValue;
+    double minValue;
+    double maxValue;
+    double stepSize;
+    void** selectionSet;
+    int selectionSize;
+    void* (*configFuntion)(void*);
+    ConfigTypes configType;
+} ConfigParam;
+
+
 void loadConfigParams();
-ConfigParam** getConfigParams();
-void freeConfigParams();
+void* getConfigByName(char* name);
+void freeConfigParam(void* param);
+int ConfigHashing(void* key);
+bool ConfigCompare(void* data, void* key);
+void freeCongigFull();
 
 #include "ConfigParams.c"
 #endif
