@@ -52,6 +52,12 @@ typedef struct Buff_input {
     Packet_queue* queue;
 } Buff_input;
 
+typedef struct Audio_thread_input {
+    int output_pipe_fd;
+    int audio_output_fd;
+} Audio_thread_input;
+
+
 pthread_mutex_t queue_lock;
 pthread_mutex_t queue_available;
 
@@ -60,6 +66,8 @@ char running = 1;
 pid_t controller_pid;
 
 void *io_buffer_thread(void* arg);
+
+void *audio_waiter(void* arg);
 
 void sigsegv_handler(int signum);
 
@@ -201,6 +209,11 @@ int main(){
     thread_input.pipe_fd = input_pipe_fd;
     thread_input.queue = instruction_queue;
     
+    Audio_thread_input audio_pipes;
+    audio_pipes.output_pipe_fd = output_pipe_fd;
+    audio_pipes.audio_output_fd = audio_out_pipe_fd;
+
+
     if(pthread_mutex_init(&queue_lock, NULL) != 0) {
         perror("pthread_mutex_init");
         exit(1);
@@ -245,6 +258,8 @@ int main(){
             continue;
         }
 
+        FIRMWARE_PRINTF("Packet tag %d\n", received_packet->tag);
+
         Packet_type type = received_packet->type;
         //unsigned short data_size = received_packet->data_len;
         if(type == KEYPAD && received_packet->data[0] == 'r') {
@@ -272,19 +287,12 @@ int main(){
             write(audio_in_pipe_fd, received_packet, 8);
             write(audio_in_pipe_fd, received_packet->data, received_packet->data_len);
             FIRMWARE_PRINTF("Packet sent, now waiting for a response\n");
-            Packet_type audio_back;
-            unsigned short audio_back_size;
-            int return_code;
-            unsigned short audio_back_tag;
-            read(audio_out_pipe_fd, &audio_back, sizeof(Packet_type));
-            read(audio_out_pipe_fd, &audio_back_size, sizeof(unsigned short));
-            read(audio_out_pipe_fd, &audio_back_tag, sizeof(unsigned short));
-            read(audio_out_pipe_fd, &return_code, sizeof(int));
-            FIRMWARE_PRINTF("audio sent back %x\n", return_code);
-            write(output_pipe_fd, &audio_back, sizeof(Packet_type));
-            write(output_pipe_fd, &audio_back_size, sizeof(unsigned short));
-            write(output_pipe_fd, &audio_back_tag, sizeof(unsigned short));
-            write(output_pipe_fd, &return_code, sizeof(int));
+            pthread_t new_audio_thread;
+            if(pthread_create(&new_audio_thread, NULL, audio_waiter, (void*)&audio_pipes) != 0) {
+                perror("Audio wait thread failed");
+                exit(1);
+            }
+            
         }
         destroy_inst_packet(&received_packet);
     }
@@ -350,6 +358,29 @@ void *io_buffer_thread(void* arg) {
         usleep(100);
     }
     return NULL;
+}
+
+
+void *audio_waiter(void* arg) {
+    
+    Packet_type audio_back;
+    unsigned short audio_back_size;
+    int return_code;
+    unsigned short audio_back_tag;
+    Audio_thread_input *input = (Audio_thread_input*)arg;
+    int output_pipe_fd = input->output_pipe_fd;
+    int audio_out_pipe_fd = input->audio_output_fd;
+    read(audio_out_pipe_fd, &audio_back, sizeof(Packet_type)); 
+    read(audio_out_pipe_fd, &audio_back_size, sizeof(unsigned short));
+    read(audio_out_pipe_fd, &audio_back_tag, sizeof(unsigned short));
+    read(audio_out_pipe_fd, &return_code, sizeof(int));
+    FIRMWARE_PRINTF("audio sent back %x\n", return_code);
+    write(output_pipe_fd, &audio_back, sizeof(Packet_type));
+    write(output_pipe_fd, &audio_back_size, sizeof(unsigned short));
+    write(output_pipe_fd, &audio_back_tag, sizeof(unsigned short));
+    write(output_pipe_fd, &return_code, sizeof(int));
+    FIRMWARE_PRINTF("Returning packet %d\n", audio_back_tag);
+    pthread_exit(0);
 }
 
 // SEGMENTATION FAULT HANDLER //
