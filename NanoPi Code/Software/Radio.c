@@ -1,13 +1,17 @@
-Radio* loadUpRadioUsingData(char* make, int model, int port, Mode* defaultMode){
+Radio* loadUpRadioUsingData(char* make, int model, int port, Mode* defaultMode, rig_model_t myrig_model){
     Radio* newRadio = malloc(sizeof(Radio));
     newRadio->make = make;
     newRadio->model = model;
     newRadio->port = port;
     newRadio->currentMode = defaultMode;
+    newRadio->myrig_model myrig_model; 
+    newRadio->my_rig = rig_init(myrig_model);
     return newRadio;
 }
 
 void freeRadio(Radio* thisRadio){
+    rig_close(my_rig);
+    rig_cleanup(my_rig);
     free(thisRadio);
 }
 

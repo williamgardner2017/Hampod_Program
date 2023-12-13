@@ -42,15 +42,19 @@
 #include <stdbool.h>
 #include "Modes/Mode.h"
 #include "GeneralFunctions.h"
+#include <hamlib/rig.h>
+#include <hamlib/riglist.h>
 //toy with the idea of the radio struct holding function pointers so they are more like objects
 typedef struct Radio{
     char* make;
     int model;
     int port;
     Mode* currentMode;
+    rig_model_t myrig_model; 
+    RIG *my_rig; 
 } Radio;
 
-Radio* loadUpRadioUsingData(char* make, int model, int port, Mode* defaultMode);
+Radio* loadUpRadioUsingData(char* make, int model, int port, Mode* defaultMode, rig_model_t myrig_model);
 void freeRadio(Radio* thisRadio);
 Mode* getCurrentMode(Radio* thisRadio);
 ModeData* getModeDetails(Radio* thisRadio);

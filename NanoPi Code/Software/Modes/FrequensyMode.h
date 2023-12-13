@@ -47,7 +47,7 @@
 #include "Mode.h"
 #include "../GeneralFunctions.h"
 
-void* frequencyCommandRelay(KeyPress* keyInput, int radioDetails);
+void* frequencyCommandRelay(KeyPress* keyInput, int radioDetails, RIG my_rig);
 Mode* frequencyLoad();
 #include "FrequensyMode.c"
 #endif
