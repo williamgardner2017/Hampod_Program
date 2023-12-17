@@ -111,6 +111,12 @@ void* firmwareCommandQueue(void* command){
     if(CurrentID > 1000){
         CurrentID = 0;
     }
+    while(IDcontains(IDQueue,CurrentID)){
+        CurrentID++;
+        if(CurrentID > 1000){
+            CurrentID = 0;
+       }
+    }
     pthread_mutex_unlock(&pipe_lock);
     //do the priority locking
     pthread_mutex_lock(&queue_lock);
