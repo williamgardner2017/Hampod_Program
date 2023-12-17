@@ -46,6 +46,8 @@
 #include "../FirmwareCommunication.h"
 #include "Mode.h"
 #include "../GeneralFunctions.h"
+#include <hamlib/rig.h>
+#include <hamlib/riglist.h>
 
 void* frequencyCommandRelay(KeyPress* keyInput, int radioDetails, RIG my_rig);
 Mode* frequencyLoad();
