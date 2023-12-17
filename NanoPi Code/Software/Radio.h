@@ -40,10 +40,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include "Modes/Mode.h"
-#include "GeneralFunctions.h"
 #include <hamlib/rig.h>
 #include <hamlib/riglist.h>
+#include "Modes/Mode.h"
+#include "GeneralFunctions.h"
+
 //toy with the idea of the radio struct holding function pointers so they are more like objects
 typedef struct Radio{
     char* make;
