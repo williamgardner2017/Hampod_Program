@@ -43,8 +43,9 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <math.h>
-#include <hamlib/rig.h>
-#include <hamlib/riglist.h>
+// #include <hamlib/rig.h>
+// #include <hamlib/riglist.h>
+#include <hamlib>
 #include "../FirmwareCommunication.h"
 #include "Mode.h"
 #include "../GeneralFunctions.h"
