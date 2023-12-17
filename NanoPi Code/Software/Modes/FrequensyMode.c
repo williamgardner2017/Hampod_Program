@@ -2,7 +2,7 @@ double currentFrequency = 0;
 int decimalPlace = 0;
 bool hasDecimal = false;
 // * does not go back to normal mode 
-void* frequencyCommandRelay(KeyPress* keyInput, int radioDetails, RIG* my_rig){
+void* frequencyCommandRelay(KeyPress* keyInput, RIG* my_rig){
     switch(keyInput->keyPressed){
         case '0':
         case '1':
@@ -32,7 +32,7 @@ void* frequencyCommandRelay(KeyPress* keyInput, int radioDetails, RIG* my_rig){
             
             //TODO add the hamlib code to change the frequency here 
             //enter frequency into the radio
-            retcode = rig_set_freq(my_rig, RIG_VFO_CURR, currentFrequency);
+            int retcode = rig_set_freq(my_rig, RIG_VFO_CURR, currentFrequency);
             if (retcode != RIG_OK)
             {
                 printf("rig_set_freq: error = %s \n", rigerror(retcode));
