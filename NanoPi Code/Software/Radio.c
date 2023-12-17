@@ -4,14 +4,14 @@ Radio* loadUpRadioUsingData(char* make, int model, int port, Mode* defaultMode, 
     newRadio->model = model;
     newRadio->port = port;
     newRadio->currentMode = defaultMode;
-    newRadio->myrig_model myrig_model; 
+    newRadio->myrig_model = myrig_model; 
     newRadio->my_rig = rig_init(myrig_model);
     return newRadio;
 }
 
 void freeRadio(Radio* thisRadio){
-    rig_close(my_rig);
-    rig_cleanup(my_rig);
+    rig_close(newRadio->my_rig);
+    rig_cleanup(newRadio->my_rig);
     free(thisRadio);
 }
 
