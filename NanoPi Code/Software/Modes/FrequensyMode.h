@@ -49,7 +49,7 @@
 #include <hamlib/rig.h>
 #include <hamlib/riglist.h>
 
-void* frequencyCommandRelay(KeyPress* keyInput, int radioDetails, RIG my_rig);
+void* frequencyCommandRelay(KeyPress* keyInput, RIG* my_rig);
 Mode* frequencyLoad();
 #include "FrequensyMode.c"
 #endif

@@ -2,7 +2,7 @@ double currentFrequency = 0;
 int decimalPlace = 0;
 bool hasDecimal = false;
 // * does not go back to normal mode 
-void* frequencyCommandRelay(KeyPress* keyInput, int radioDetails, RIG my_rig){
+void* frequencyCommandRelay(KeyPress* keyInput, int radioDetails, RIG* my_rig){
     switch(keyInput->keyPressed){
         case '0':
         case '1':
