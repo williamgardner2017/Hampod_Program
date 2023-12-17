@@ -40,9 +40,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-// #include <hamlib/rig.h>
-// #include <hamlib/riglist.h>
-#include <hamlib>
+#include <hamlib/rig.h>
+#include <hamlib/riglist.h>
 #include "Modes/Mode.h"
 #include "GeneralFunctions.h"
 
