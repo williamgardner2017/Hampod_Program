@@ -1,6 +1,7 @@
 #define SERIAL_PORT "/dev/ttyUSB0"
 
 Radio* loadUpRadioUsingData(char* make, int model, int port, Mode* defaultMode, rig_model_t myrig_model){
+    rig_load_all_backends(); 
     Radio* newRadio = malloc(sizeof(Radio));
     newRadio->make = make;
     newRadio->model = model;
