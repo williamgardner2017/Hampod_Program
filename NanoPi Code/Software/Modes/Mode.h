@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <hamlib/rig.h>
+#include <hamlib/riglist.h>
 #include "../GeneralFunctions.h"
 
 typedef struct ModeData {
@@ -12,7 +14,7 @@ typedef struct ModeData {
 
 //TODO make a decision for what the modeInput should return if anything
 typedef struct Mode {
-    void* (*modeInput)(KeyPress*,int);
+    void* (*modeInput)(KeyPress*, RIG*);
     void (*freeMode)(struct Mode **self);
     ModeData* modeDetails;
 } Mode;
