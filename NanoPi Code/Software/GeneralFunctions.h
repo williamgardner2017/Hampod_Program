@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 typedef struct KeyPress{
     char keyPressed;
@@ -10,7 +11,12 @@ typedef struct KeyPress{
     bool isHold;
 } KeyPress;
 
+
 int convertCharToKeyValue(KeyPress* keyPressed);
+
+char** textFileToArray(char* filePath);
+
+void freeFileArray(char** list);
 
 #include "GeneralFunctions.c"
 
