@@ -1,27 +1,5 @@
 # CC = gcc
 CFLAGS = -Wall -g -lm
-# TARGETTEST = RunUnitTests
-# TARGETNORMAL = Hampod
-
-# SRCNORMAL := $(wildcard *.c) $(wildcard Modes/*.c) ../Firmware/hampod_firm_packet.c ../Firmware/hampod_queue.c
-# OBJSNORMAL := $(SRCNORMAL:.c=.o)
-
-# SRCTESTS := $(filter-out Startup.c, $(wildcard *.c)) $(wildcard Modes/*.c) $(wildcard UnitTesting/*.c) ../Firmware/hampod_firm_packet.c ../Firmware/hampod_queue.c
-# OBJSTESTS := $(SRCTESTS:.c=.o)
-
-# %.o: %.c
-# 	$(CC) $(CFLAGS) -c $< -o $@ -lpthread
-
-# .PHONY: clean
-
-# tests: $(OBJSTESTS)
-# 	$(CC) $(CFLAGS) -o $@ $^ -lpthread
-
-# hampod: $(OBJSNORMAL)
-# 	$(CC) $(CFLAGS) -o $@ $^ -lpthread
-
-# firmware.elf: firmware.o
-# 	cc firmware.o -o firmware.elf -lpthread
 
 Level0: Software.elf
 Level1: Software1.elf

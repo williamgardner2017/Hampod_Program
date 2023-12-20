@@ -10,6 +10,10 @@ char** textFileToArray(char* filePath){
     FILE *fp;
     char temp[60];
     fp = fopen(filePath , "r");
+    if(fp == NULL) {
+      perror("Error opening file");
+      return(-1);
+   }
     while(fgets(temp, 60, fp)!=NULL){
         currentSize ++;
     }
@@ -18,7 +22,10 @@ char** textFileToArray(char* filePath){
     char** lines = malloc(sizeof(char*) * (currentSize+1));
     for(int i = 0; i<currentSize;i++){
         lines[i] = malloc(sizeof(char)*readSize);
-        fgetc(lines[i],readSize,fp);
+        fgets(lines[i],readSize,fp);
+        if(lines[i][strlen(lines[i])-1] == '\n'){
+            lines[i][strlen(lines[i])-1] = '\0';
+        }
     }
     fclose(fp);
     lines[currentSize] = "END OF ARRAY";
@@ -31,6 +38,5 @@ void freeFileArray(char** list){
         free(list[i]);
         i++;
     }
-    free(list[i]);
     free(list);
 }
