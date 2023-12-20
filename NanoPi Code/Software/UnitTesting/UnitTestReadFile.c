@@ -1,7 +1,7 @@
 bool testReadingFile(){
 
     printf("loading up the file\n");
-    char** data = textFileToArray("testingOutput.txt");
+    char** data = textFileToArray("UnitTesting/testingOutput.txt");
     int index = 0;
     char* expected = "1";
     printf("index %d, Expected %s, Actual %s\n", index,expected, data[index]);
