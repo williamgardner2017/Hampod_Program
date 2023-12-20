@@ -11,6 +11,7 @@
 #include "UnitTestModeRouting.h"
 #include "UnitTestRadio.h"
 #include "UnitTestStateMachine.h"
+#include "UnitTestReadFile.h"
 
 
 void sigsegv_handler(int signum);
@@ -112,6 +113,11 @@ bool StateMachineTesting(){
     return true;
 }
 
+bool ReadingFromFileTest(){
+    printf("Starting test to read from file\n");
+    return testReadingFile();
+}
+
 
 
 int main(){
@@ -120,25 +126,8 @@ int main(){
         perror("signal with stuff");
         exit(1);
     }
-
-
-
-
-    char* testGroup = "ModeRouting";
-    printf("Starting testing on %s\n",testGroup);
-    bool didTheyPass = ModeRoutingTest();
-    if(didTheyPass){
-        printf("Full pass in %s\n",testGroup);
-    }else{
-        printf("At least one test failed in %s\n",testGroup);
-    }
-    // testGroup = "KeyPresses";
-    // printf("Starting testing on %s\n",testGroup);
-    // if(KeyPressTesting()){
-    //     printf("Full pass in %s\n",testGroup);
-    // }else{
-    //     printf("At least one test failed in %s\n",testGroup);
-    // }
-    StateMachineTesting();
+    // ModeRoutingTest();
+    // StateMachineTesting();
+    ReadingFromFileTest();
     return -1;
 }
