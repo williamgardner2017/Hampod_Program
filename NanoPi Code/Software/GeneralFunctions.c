@@ -23,7 +23,9 @@ char** textFileToArray(char* filePath){
     for(int i = 0; i<currentSize;i++){
         lines[i] = malloc(sizeof(char)*readSize);
         fgets(lines[i],readSize,fp);
-        lines[i][strlen(lines[i])-1] = '\0';
+        if(lines[i][strlen(lines[i])-1] == '\n'){
+            lines[i][strlen(lines[i])-1] = '\0';
+        }
     }
     fclose(fp);
     lines[currentSize] = "END OF ARRAY";
