@@ -43,11 +43,15 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <math.h>
+#include <hamlib/rig.h>
+#include <hamlib/riglist.h>
+
 #include "../FirmwareCommunication.h"
 #include "Mode.h"
 #include "../GeneralFunctions.h"
 
-void* frequencyCommandRelay(KeyPress* keyInput, int radioDetails);
+
+void* frequencyCommandRelay(KeyPress* keyInput, RIG* my_rig);
 Mode* frequencyLoad();
 #include "FrequensyMode.c"
 #endif

@@ -70,7 +70,7 @@ BootUpStates BootupFlow(KeyPress* keyInput){
                     bootUpState = chooseCompany;
                     break;
                 }else{
-                    radios[currentRadio] = loadUpRadioUsingData(company,model, convertCharToKeyValue(keyInput), getModeById(0));
+                    radios[currentRadio] = loadUpRadioUsingData(company,model, convertCharToKeyValue(keyInput), getModeById(0), NULL);
                     currentRadio++;
                     bootUpState = linkMore;
                     break;
