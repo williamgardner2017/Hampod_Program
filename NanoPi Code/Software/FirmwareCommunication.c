@@ -100,6 +100,7 @@ int CurrentID = 0;
  * 
  * //TODO make this handle as if the packets had an id to them
 */
+
 void* firmwareCommandQueue(void* command){
     int myId = 0;
     Inst_packet* myCommand = (Inst_packet*) command;
@@ -221,13 +222,21 @@ void* OutputThreadManager(void* arg){
         while(ThreadQueueIsEmpty(threadQueue)){
             pthread_cond_wait(&thread_cond, &thread_lock);
             if(!running){
-                pthread_cond_broadcast(&thread_cond);
-                pthread_mutex_unlock(&thread_lock);
+                while(!ThreadQueueIsEmpty(threadQueue)){
+                  pthread_cancel(ThreadDequeue(threadQueue));  
+                }
+                // pthread_mutex_unlock(&thread_cond);
+                // pthread_cond_broadcast(&thread_cond);
                 return NULL;
             }
         }
+        //tells each of the current threads to just die
         if(!running){
-                return NULL;
+            while(!ThreadQueueIsEmpty(threadQueue)){
+                  pthread_cancel(ThreadDequeue(threadQueue));  
+            }
+            pthread_mutex_unlock(&thread_cond);
+        return NULL;
         }
         pthread_t current = ThreadDequeue(threadQueue);
         pthread_mutex_unlock(&thread_lock);
@@ -384,12 +393,12 @@ void freeFirmwareComunication(){
     pthread_join(callManagerThread,NULL);
     printf("Software:destroying thread uqueue mutexes\n");
     pthread_mutex_destroy(&thread_lock);
-    pthread_cond_destroy(&thread_cond);
+    //pthread_cond_destroy(&thread_cond);
     printf("Software:destroying thread queue\n");
     destroyThreadQueue(threadQueue);
 
-    printf("Software:destroying packet condition\n");
-    pthread_cond_destroy(&queue_cond);
+    //printf("Software:destroying packet condition\n");
+    //pthread_cond_destroy(&queue_cond);
     printf("Software:destroying packet queue mutexes\n");
     pthread_mutex_destroy(&queue_lock);
     pthread_mutex_destroy(&pipe_lock);
