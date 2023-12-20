@@ -5,7 +5,7 @@
 
 extern pid_t controller_pid;
 
-char numpad_symbols[] = {'1', '2', '3', 'a', '4', '5', '6', 'b', '7', '8', '9', 'c', '*', '0', '#', 'd'};//Symbols on the numpad
+char numpad_symbols[] = {'1', '2', '3', 'A', '4', '5', '6', 'B', '7', '8', '9', 'C', '*', '0', '#', 'D'};//Symbols on the numpad
 
 unsigned char keypad_running = 1;
 
@@ -33,7 +33,7 @@ int readNumPad(){
 		}
 		digitalWrite(rows[i], HIGH);//Set the row back to high to not interfere with other rows
 	}
-	if(pressed > 1){
+	if(pressed > 1 || pressedNum == '-'){
 		return '-';//Return invalid if multiple buttons are pressed
 	}else{
 		return numpad_symbols[pressedNum];
@@ -129,7 +129,7 @@ void keypad_process(){
         }
 
         Inst_packet* packet_to_send = create_inst_packet(KEYPAD, 1, (unsigned char*)&read_value, received_packet->tag);
-        KEYPAD_PRINTF("Sending back value of %x\n", read_value);
+        KEYPAD_PRINTF("Sending back value of %x ('%c')\n", read_value, (char) read_value);
         write(output_pipe_fd, packet_to_send, 8);
         write(output_pipe_fd, packet_to_send->data, 1);
 
