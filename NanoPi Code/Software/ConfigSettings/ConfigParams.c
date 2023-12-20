@@ -3,14 +3,23 @@ HashMap* configMapping;
 void loadConfigParams(){
     configMapping = createHashMap(ConfigHashing,ConfigCompare);
     //TODO Load them in via a file
-    ConfigParam* KeyBeepParam = malloc(sizeof(ConfigParam));
-    KeyBeepParam->name = "KeyBeep";
-    KeyBeepParam->defaultValue = 1;
-    KeyBeepParam->configType = ONOFF;
-    configParamsList[0] = KeyBeepParam;
+    char** ConfigsText = textFileToArray("Config.txt");
+    int i = 0;
+    while(strcmp(ConfigsText[i],"END OF ARRAY") != 0){
+        ConfigParam* configObject = malloc()
+        //grab name
+        //grab type
+        //grad default value
+        //then grab the rest till you hit a empty file
+    }
 
-    insertHashMap((void*) KeyBeepParam->name, configMapping);
+    insertHashMap(configMapping, (void*) configObject, (void*) configObject->name);
 }
+
+
+
+
+
 void* getConfigByName(char* name){
     return getConfigByName(name, configMapping);
 }

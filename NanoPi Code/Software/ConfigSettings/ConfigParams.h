@@ -27,6 +27,7 @@ typedef struct ConfigParam{
     int selectionSize;
     void* (*configFuntion)(void*);
     ConfigTypes configType;
+    double currentValue;
 } ConfigParam;
 
 

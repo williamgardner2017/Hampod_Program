@@ -8,7 +8,7 @@ HashMap* createHashMap( int (*hashFunc)(void*), bool (*comparFunc)(void*,void*))
     map->hashFunc = &hashFunc;
     return map;
 }
-void insertHashMap(void* data,void* key,HashMap* hashmap){
+void insertHashMap(HashMap* hashmap,void* data,void* key){
     int index = hashmap->hashFunc(key)%hashmap->size;
     int offset = 0;
     bool placingObject = true;
@@ -34,7 +34,7 @@ void insertHashMap(void* data,void* key,HashMap* hashmap){
         }
     }
 }
-void* getHashMap(void* key,HashMap* hashmap){
+void* getHashMap(HashMap* hashmap,void* key){
     int index = hashmap->hashFunc(key)%hashmap->size;
     int offset = 0;
     bool placingObject = true;
@@ -55,7 +55,7 @@ void* getHashMap(void* key,HashMap* hashmap){
         }
     }
 }
-void* removeHashMap(void* key,HashMap* hashmap){
+void* removeHashMap(HashMap* hashmap,void* key,){
     int index = hashmap->hashFunc(key)%hashmap->size;
     int offset = 0;
     bool placingObject = true;
@@ -107,7 +107,7 @@ void growHashMap(HashMap* hashmap){
     free(oldKeyList);
     hashmap->quantity = oldQuantity;
 }
-void insertHashMapWithIntHash(void* data,int key,HashMap* hashmap){
+void insertHashMapWithIntHash(HashMap* hashmap,void* data,int key){
   int index = key;
     int offset = 0;
     bool placingObject = true;

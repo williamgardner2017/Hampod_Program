@@ -1,0 +1,24 @@
+Name: <Name here>
+Type: <Type Name> 
+Default: <value here> //after this the order does not matter
+
+Name: test1
+Type: OnOff
+Default: 0
+
+Name: Test2
+Type: NUMERIC
+Default: 2
+MinValue: 0
+MaxValue: 4
+StepSize: 1
+
+Name: Test3
+Type: Selection
+Default: 0
+SelectionSet: Test, String, output
+SelectionSize: 3
+
+Name: Test4
+Type: Other
+Default: 1

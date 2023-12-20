@@ -18,11 +18,11 @@ typedef struct HashMap {
 
 
 HashMap* createHashMap( int (*hashFunc)(void*), bool (*comparFunc)(void*,void*));
-void insertHashMap(void* data,void* key,HashMap* hashmap);
-void* getHashMap(void* key,HashMap* hashmap);
-void* removeHashMap(void* key,HashMap* hashmap);
+void insertHashMap(HashMap* hashmap,void* data,void* key);
+void* getHashMap(HashMap* hashmap,void* key);
+void* removeHashMap(HashMap* hashmap,void* key);
 void destroyHashMap(HashMap* hashmap, void (*freeingFunction)(void*));
-void insertHashMapWithIntHash(void* data,int key,HashMap* hashmap);
+void insertHashMapWithIntHash(HashMap* hashmap,void* data,int key);
 void growHashMap(HashMap* hashmap);
 
 #include "HashMap.c"
