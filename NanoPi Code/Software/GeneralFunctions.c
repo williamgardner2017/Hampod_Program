@@ -18,7 +18,7 @@ char** textFileToArray(char* filePath){
     char** lines = malloc(sizeof(char*) * (currentSize+1));
     for(int i = 0; i<currentSize;i++){
         lines[i] = malloc(sizeof(char)*readSize);
-        fgetc(lines[i],readSize,fp);
+        fgets(lines[i],readSize,fp);
     }
     fclose(fp);
     lines[currentSize] = "END OF ARRAY";
