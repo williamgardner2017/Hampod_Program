@@ -57,3 +57,15 @@ void destroy_IDqueue(ID_queue* queue){
     }
     free(queue);
 }
+
+bool IDcontains(ID_queue* queue, int value){
+    IDNode* here = queue->head;
+    while(here != NULL){
+        if(here->id == value){
+            return true;
+        }else{
+            here = here->next;
+        }
+    }
+    return false;
+}

@@ -100,6 +100,7 @@ int CurrentID = 0;
  * 
  * //TODO make this handle as if the packets had an id to them
 */
+
 void* firmwareCommandQueue(void* command){
     int myId = 0;
     Inst_packet* myCommand = (Inst_packet*) command;
@@ -110,6 +111,12 @@ void* firmwareCommandQueue(void* command){
     CurrentID++;
     if(CurrentID > 1000){
         CurrentID = 0;
+    }
+    while(IDcontains(IDQueue,CurrentID)){
+        CurrentID++;
+        if(CurrentID > 1000){
+            CurrentID = 0;
+       }
     }
     pthread_mutex_unlock(&pipe_lock);
     //do the priority locking
@@ -124,21 +131,21 @@ void* firmwareCommandQueue(void* command){
             PRINTFLEVEL2("Software: Clearing packet backlog. Current packet tag %d\n",myId);
             countOfPackets --;
             pthread_mutex_unlock(&queue_lock);
-            pthread_cond_signal(&queue_cond);
+            pthread_cond_broadcast(&queue_cond);
             return NULL;
         }
     }
     PRINTFLEVEL2("Software: packet with tag %d is being processed\n",myId);
     countOfPackets --;
     if(!running){
-        pthread_cond_signal(&queue_cond);
+        pthread_cond_broadcast(&queue_cond);
         pthread_mutex_unlock(&queue_lock);
         return NULL;
     }
     //grab the data from the queue
     Inst_packet *data = dequeue(softwareQueue);
     IDdequeue(IDQueue);
-    pthread_cond_signal(&queue_cond);
+    pthread_cond_broadcast(&queue_cond);
     pthread_mutex_unlock(&queue_lock);
     char* interpertedData = malloc(sizeof(data->data)+1);
 
@@ -166,7 +173,7 @@ void* firmwareOPipeWatcher(void* arg){
         unsigned char packet_type;
         unsigned short size;
         unsigned short tag;
-        unsigned char* buffer;
+        unsigned char buffer[256];
         //TODO add the id pipe size thing to this
         //Read packet ID from the pipe
         PRINTFLEVEL2("Software:Waiting for something to read\n");
@@ -176,7 +183,6 @@ void* firmwareOPipeWatcher(void* arg){
         read(input_pipe, &size, 2);
         //read the ID from the pipe
         read(input_pipe, &tag, 2);
-        buffer = malloc(size*sizeof(unsigned char));
         //read packet Data from pipe as a char string
         read(input_pipe, buffer, size);
         //create the data to put into the queue
@@ -189,7 +195,7 @@ void* firmwareOPipeWatcher(void* arg){
         //unlock the queue
         PRINTFLEVEL2("Software: Got a packet with the tag of %d\n", tag);
         pthread_mutex_unlock(&queue_lock);
-        pthread_cond_signal(&queue_cond);
+        pthread_cond_broadcast(&queue_cond);
         usleep(100);
     }
 
@@ -216,13 +222,21 @@ void* OutputThreadManager(void* arg){
         while(ThreadQueueIsEmpty(threadQueue)){
             pthread_cond_wait(&thread_cond, &thread_lock);
             if(!running){
-                pthread_cond_signal(&thread_cond);
-                pthread_mutex_unlock(&thread_lock);
+                while(!ThreadQueueIsEmpty(threadQueue)){
+                  pthread_cancel(ThreadDequeue(threadQueue));  
+                }
+                // pthread_mutex_unlock(&thread_cond);
+                // pthread_cond_broadcast(&thread_cond);
                 return NULL;
             }
         }
+        //tells each of the current threads to just die
         if(!running){
-                return NULL;
+            while(!ThreadQueueIsEmpty(threadQueue)){
+                  pthread_cancel(ThreadDequeue(threadQueue));  
+            }
+            pthread_mutex_unlock(&thread_cond);
+        return NULL;
         }
         pthread_t current = ThreadDequeue(threadQueue);
         pthread_mutex_unlock(&thread_lock);
@@ -245,17 +259,23 @@ char* sendSpeakerOutput(char* text){
     }
     Inst_packet* speakerPacket = create_inst_packet(AUDIO,strlen(text)+1,(unsigned char*) text, 0);
     int result;
+    PRINTFLEVEL2("SOFTWARE Locking up speakout output\n");
     pthread_mutex_lock(&thread_lock);
+    PRINTFLEVEL2("SOFTWARE Creating the thread\n");
     result = pthread_create(&speakerThread, NULL, firmwareCommandQueue, (void*) speakerPacket);
-    Threadenqueue(threadQueue, speakerThread);
-    pthread_cond_signal(&thread_cond);
-    pthread_mutex_unlock(&thread_lock);
+    PRINTFLEVEL2("SOFTWARE sing if the result was good\n");
     if (result) {
         fprintf(stderr, "Error creating thread: %d\n", result);
         exit(0);
     }
+    PRINTFLEVEL2("SOFTWARE Putting thread onto the queue\n");
+    Threadenqueue(threadQueue, speakerThread);
+    PRINTFLEVEL2("SOFTWARE Signaling the speaker condition\n");
+    pthread_cond_broadcast(&thread_cond);
+    PRINTFLEVEL2("SOFTWARE unlockiing the speaker lock\n");
+    pthread_mutex_unlock(&thread_lock);
     // return firmwareCommandQueue(speakerPacket);
-
+    PRINTFLEVEL2("SOFTWARE Returning the speaker output value\n");
    return text;
 }
 
@@ -373,12 +393,12 @@ void freeFirmwareComunication(){
     pthread_join(callManagerThread,NULL);
     printf("Software:destroying thread uqueue mutexes\n");
     pthread_mutex_destroy(&thread_lock);
-    pthread_cond_destroy(&thread_cond);
+    //pthread_cond_destroy(&thread_cond);
     printf("Software:destroying thread queue\n");
     destroyThreadQueue(threadQueue);
 
-    printf("Software:destroying packet condition\n");
-    pthread_cond_destroy(&queue_cond);
+    //printf("Software:destroying packet condition\n");
+    //pthread_cond_destroy(&queue_cond);
     printf("Software:destroying packet queue mutexes\n");
     pthread_mutex_destroy(&queue_lock);
     pthread_mutex_destroy(&pipe_lock);
