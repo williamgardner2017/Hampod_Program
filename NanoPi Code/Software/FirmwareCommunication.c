@@ -235,7 +235,7 @@ void* OutputThreadManager(void* arg){
             while(!ThreadQueueIsEmpty(threadQueue)){
                   pthread_cancel(ThreadDequeue(threadQueue));  
             }
-            pthread_mutex_unlock(&thread_cond);
+            pthread_mutex_unlock(&thread_lock);
         return NULL;
         }
         pthread_t current = ThreadDequeue(threadQueue);
