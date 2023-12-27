@@ -49,7 +49,7 @@ void* configCommandRelay(KeyPress* keyInput, int radioDetails){
         oldValues = getListOfCurrentValues();
         break;
 
-    case 'y':
+    case '7':
         PRINTFLEVEL1("SOFTWARE: canceling changes to configs\n");
         setListOfcurrentValues(oldValues);
         break;
