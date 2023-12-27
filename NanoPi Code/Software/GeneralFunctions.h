@@ -18,6 +18,9 @@ char** textFileToArray(char* filePath);
 
 void freeFileArray(char** list);
 
+//TODO make simple testing code for this
+char* customSubString(char* original, int start, int length);
+
 #include "GeneralFunctions.c"
 
 #endif

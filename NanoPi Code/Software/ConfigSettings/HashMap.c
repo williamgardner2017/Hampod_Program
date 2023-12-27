@@ -80,10 +80,10 @@ void* removeHashMap(HashMap* hashmap,void* key,){
         }
     }
 }
-void destroyHashMap(HashMap* hashmap){
+void destroyHashMap(HashMap* hashmap, void (*freeingFunction)(void*)){
     for(int i = 0; i<hashmap->size;i++){
         if(hashmap->list[i] != 0){
-            free(hashmap->list[i]);
+            freeingFunction(hashmap->list[i]);
         }
     }
 

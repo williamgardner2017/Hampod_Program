@@ -40,3 +40,23 @@ void freeFileArray(char** list){
     }
     free(list);
 }
+
+/**
+ * Returns the substring of the given string, starting from the offset given to the length
+ * @param original: the original string
+ * @param start: the starting offset, 0 if starting from the start, must be less then the length of the string
+ * @param length: how many characters of the string to the end of the string. if -1 then goes to the end of the string
+ * if start + length is greater  then the length of the string then returns the string 
+*/
+char* customSubString(char* original, int start, int length){
+    int len = 0;// the actual length to be used
+    if(length == -1){
+        len = strlen(original);
+    }else{
+        len = length;
+    }
+    char* returnString = malloc(sizeof(char)*(strlen(original)+1));
+    strncpy(returnString,original + start, len);
+    returnString[len+1] = '\0';
+    return returnString;
+}

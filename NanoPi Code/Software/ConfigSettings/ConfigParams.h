@@ -15,7 +15,7 @@ typedef enum {
     ONOFFNUMERIC,
     SELECTION,
     OTHER
-} ConfigTypes;
+} ConfigType;
 
 typedef struct ConfigParam{
     char* name; 
@@ -23,20 +23,29 @@ typedef struct ConfigParam{
     double minValue;
     double maxValue;
     double stepSize;
-    void** selectionSet;
+    char** selectionSet;
     int selectionSize;
     void* (*configFuntion)(void*);
-    ConfigTypes configType;
+    ConfigType configType;
     double currentValue;
 } ConfigParam;
 
 
+//for loading in configs
 void loadConfigParams();
-void* getConfigByName(char* name);
+ConfigType stringToConfigType(char* str);
+char** convertTocharArray(char* str, int size);
+//for the hashmap
 void freeConfigParam(void* param);
 int ConfigHashing(void* key);
 bool ConfigCompare(void* data, void* key);
 void freeCongigFull();
-
+//for accsessing configs
+ConfigParam* getConfigByName(char* name);
+char** getListOfConfigNames();
+int getLengthOfConfigs();
+double* getListOfCurrentValues();
+void setListOfcurrentValues(double* values);
+char* updateConfig(char* name, bool up);
 #include "ConfigParams.c"
 #endif

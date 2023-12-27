@@ -1,50 +1,42 @@
-
-
-int currentPage = 0;
-int maxPages = 4;
-int CurrentSettings[] = {0,0,0,0};
-char* CurrentSettingName[] = {"V", "sound", "frequency", "donold"};
-int maxValues[] = {4,1,3,2}; 
+char** configNames;
+int currentConfig = 0;
+/**
+ * 4,6 go forward or backwards in a config 
+ * 2,8 go up and down for the configs
+ * _, save changes
+ * _, cancel changes
+ * 5 run the config spesific command 
+*/
 void* configCommandRelay(KeyPress* keyInput, int radioDetails){
-    char output[50];
     switch (keyInput->keyPressed)
     {
     case '4':
-        currentPage --;
-        if(currentPage == -1){
-            currentPage = maxPages-1;
+        currentConfig --;
+        if(currentConfig < 0){
+            currentConfig = getLengthOfConfigs();
         }
-        sprintf(output,"Switched to settings %s", CurrentSettingName[currentPage]);
-        sendSpeakerOutput(output);
+        PRINTFLEVEL1("SOFTWARE: switched configs to %s", configNames[currentConfig]);
+        //say the name
         break;
     
     case '6':
-        currentPage ++;
-        if(currentPage == maxPages){
-            currentPage = 0;
+        currentConfig ++;
+        if(currentConfig >= getLengthOfConfigs()){
+            currentConfig = 0;
         }
-        sprintf(output,"Switched to settings %s", CurrentSettingName[currentPage]);
-        sendSpeakerOutput(output);
+        PRINTFLEVEL1("SOFTWARE: switched configs to %s", configNames[currentConfig]);
+        //say the name
+        break;
+    case '2':
+        char* output = updateConfig(configNames[currentConfig], false);
+        PRINTFLEVEL1("SOFTWARE: Set config %s to %s", configNames[currentConfig], output);
+        free(output);
         break;
     case '8':
-        CurrentSettings[currentPage]++;
-        if(CurrentSettings[currentPage] > maxValues[currentPage]){
-            CurrentSettings[currentPage] = 0;
-        }
-        sprintf(output,"setting value %s to %d", CurrentSettingName[currentPage], CurrentSettings[currentPage]);
-        sendSpeakerOutput(output);
+        char* output = updateConfig(configNames[currentConfig], true);
+        PRINTFLEVEL1("SOFTWARE: Set config %s to %s", configNames[currentConfig], output);
+        free(output);
         break;
-    
-    case '2':
-        CurrentSettings[currentPage]--;
-        if(CurrentSettings[currentPage] == -1){
-            CurrentSettings[currentPage] = maxValues[currentPage];
-        }
-
-        sprintf(output,"setting value %s to %d", CurrentSettingName[currentPage], CurrentSettings[currentPage]);
-        sendSpeakerOutput(output);
-        break;
- 
     default:
         break;
     }
@@ -79,6 +71,6 @@ Mode* ConfigLoad(){
     newData->radioModel = 42;
 
     newMode->modeDetails = newData;
-
+    configKeys = getListOfConfigNames();
     return newMode;
 }

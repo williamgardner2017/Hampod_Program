@@ -7,18 +7,25 @@ Type: OnOff
 Default: 0
 
 Name: Test2
-Type: NUMERIC
+Type: Numeric
 Default: 2
 MinValue: 0
 MaxValue: 4
 StepSize: 1
 
 Name: Test3
-Type: Selection
-Default: 0
-SelectionSet: Test, String, output
-SelectionSize: 3
+Type: OnOffNumeric
+Default: 2
+MinValue: 0
+MaxValue: 4
+StepSize: 1
 
 Name: Test4
+Type: Selection
+Default: 0
+SelectionSize: 3
+SelectionSet: Test, String, output
+
+Name: Test5
 Type: Other
 Default: 1
