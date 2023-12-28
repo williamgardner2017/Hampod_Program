@@ -1,40 +1,52 @@
 #ifndef HAMPOD_SOFT_CONFIGPARAMS
 #define HAMPOD_SOFT_CONFIGPARAMS
 
+
+#ifdef OUTPUTLEVEL1
+#define PRINTFLEVEL1(...) \
+    do { \
+        if(OUTPUTLEVEL1) { \
+            printf(__VA_ARGS__); \
+        } \
+    } while(0)
+#else
+
+#define PRINTFLEVEL1(...) \
+    while(0)
+
+#endif
+
+#ifdef OUTPUTLEVEL2
+#define PRINTFLEVEL2(...) \
+    do { \
+        if(OUTPUTLEVEL1) { \
+            printf(__VA_ARGS__); \
+        } \
+    } while(0)
+#else
+
+#define PRINTFLEVEL2(...) \
+    while(0)
+
+#endif
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include "../GeneralFunctions.h"
 #include "HashMap.h"
+#include "ConfigFunctions.h"
 
 
-typedef enum {
-    ONOFF,
-    NUMERIC,
-    ONOFFNUMERIC,
-    SELECTION,
-    OTHER
-} ConfigType;
 
-typedef struct ConfigParam{
-    char* name; 
-    double defaultValue;
-    double minValue;
-    double maxValue;
-    double stepSize;
-    char** selectionSet;
-    int selectionSize;
-    void* (*configFuntion)(void*);
-    ConfigType configType;
-    double currentValue;
-} ConfigParam;
 
 
 //for loading in configs
 void loadConfigParams();
 ConfigType stringToConfigType(char* str);
 char** convertTocharArray(char* str, int size);
+void loadUpFunctionPointers(void** pointers);
 //for the hashmap
 void freeConfigParam(void* param);
 int ConfigHashing(void* key);

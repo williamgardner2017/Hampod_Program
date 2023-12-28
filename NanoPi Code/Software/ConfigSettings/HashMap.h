@@ -1,6 +1,34 @@
 #ifndef HAMPOD_SOFT_STRINGMAPPING
 #define HAMPOD_SOFT_STRINGMAPPING
 
+#ifdef OUTPUTLEVEL1
+#define PRINTFLEVEL1(...) \
+    do { \
+        if(OUTPUTLEVEL1) { \
+            printf(__VA_ARGS__); \
+        } \
+    } while(0)
+#else
+
+#define PRINTFLEVEL1(...) \
+    while(0)
+
+#endif
+
+#ifdef OUTPUTLEVEL2
+#define PRINTFLEVEL2(...) \
+    do { \
+        if(OUTPUTLEVEL1) { \
+            printf(__VA_ARGS__); \
+        } \
+    } while(0)
+#else
+
+#define PRINTFLEVEL2(...) \
+    while(0)
+
+#endif
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
