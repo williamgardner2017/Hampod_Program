@@ -87,21 +87,21 @@ bool ModeRoutingTest(){
     return flag;
 }
 
-// bool KeyPressTesting(){
-//     char* succsess;
-//     char* testGroup = "KeyPresses";
-//     char* testName;
-//     bool flag = true;
-//     testName = "FullTest";
-//     if(fullTest()){
-//         succsess = "succeeded";
-//     }else{
-//         succsess = "failed";
-//         flag = false;
-//     }
-//     printf("%s in test: %s:%s\n", succsess, testGroup,testName);
-//     return flag;
-// }
+bool KeyPressTesting(){
+    char* succsess;
+    char* testGroup = "KeyPresses";
+    char* testName;
+    bool flag = true;
+    testName = "testKeyPadEntering";
+    if(testKeyPadEntering()){
+        succsess = "succeeded";
+    }else{
+        succsess = "failed";
+        flag = false;
+    }
+    printf("%s in test: %s:%s\n", succsess, testGroup,testName);
+    return flag;
+}
 
 bool StateMachineTesting(){
     printf("Testing happy path code with frequency enter mode\n");
@@ -129,5 +129,6 @@ int main(){
     // ModeRoutingTest();
     // StateMachineTesting();
     ReadingFromFileTest();
+    KeyPressTesting();
     return -1;
 }

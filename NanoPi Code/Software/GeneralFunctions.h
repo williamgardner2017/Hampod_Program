@@ -18,6 +18,7 @@ char** textFileToArray(char* filePath);
 
 void freeFileArray(char** list);
 
+double keypadInput(KeyPress* keyInput);
 #include "GeneralFunctions.c"
 
 #endif
