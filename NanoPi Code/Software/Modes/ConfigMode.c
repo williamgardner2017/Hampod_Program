@@ -41,7 +41,15 @@ void* configCommandRelay(KeyPress* keyInput, int radioDetails){
 
     case '5':
         PRINTFLEVEL1("SOFTWARE: Running function related to config%s\n", configNames[currentConfig]);
-        getConfigByName(configNames[currentConfig])->configFuntion(NULL);
+        if(strcmp(configNames[currentConfig], "Save") == 0){
+            //Figure out how to pass both the name and the data 
+            void** dataPointer = malloc(sizeof(void*)*3);
+            dataPointer[0] = configNames;
+            dataPointer[1] = oldValues; //This may be better if it was the current settings and not the old ones
+            dataPointer[2] = &getLengthOfConfigs(); //This is very janky but should work
+            getConfigByName(configNames[currentConfig])->configFuntion((void*) dataPointer);
+            free(dataPointer);
+        }
         break;
 
     case '9':
