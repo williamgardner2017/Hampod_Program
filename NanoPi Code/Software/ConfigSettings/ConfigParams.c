@@ -3,7 +3,7 @@ HashMap* configMapping;
 void loadConfigParams(){
     configMapping = createHashMap(ConfigHashing,ConfigCompare);
     //TODO Load them in via a file
-    char** ConfigsText = textFileToArray("Config.txt");
+    char** ConfigsText = textFileToArray("ConfigSettings/Config.txt");
     int i = 0;
     while(strcmp(ConfigsText[i],"END OF ARRAY") != 0){
         //create the object
