@@ -1,14 +1,10 @@
+//Config mode is broken up into multiple parts, the idea is to have one section dedicated to navigation and simple selection of configs, the other is ment for more common but complicated stuff, like having the user input a number
 char** configNames;
 int currentConfig = 0;
 double* oldValues;
-/**
- * 4,6 go forward or backwards in a config 
- * 2,8 go up and down for the configs
- * 7, save changes
- * 9, cancel changes
- * 5 run the config spesific command 
-*/
-void* configCommandRelay(KeyPress* keyInput, int radioDetails){
+bool selectingConfig = true;
+
+void configNavigation(KeyPress* keyInput){
     switch (keyInput->keyPressed)
     {
     case '4':
@@ -29,21 +25,45 @@ void* configCommandRelay(KeyPress* keyInput, int radioDetails){
         //say the name
         break;
     case '2':
-        char* output = updateConfig(configNames[currentConfig], false);
-        PRINTFLEVEL1("SOFTWARE: Set config %s to %s\n", configNames[currentConfig], output);
-        free(output);
+        switch (getConfigByName(configNames[currentConfig])->configType)
+        {
+        case ONOFF:
+        case NUMERIC:
+        case ONOFFNUMERIC:
+            char* output = updateConfig(configNames[currentConfig], false);
+            PRINTFLEVEL1("SOFTWARE: Set config %s to %s\n", configNames[currentConfig], output);
+            free(output);
+            break;
+        
+        default:
+            break;
+        }
         break;
     case '8':
-        char* output = updateConfig(configNames[currentConfig], true);
-        PRINTFLEVEL1("SOFTWARE: Set config %s to %s\n", configNames[currentConfig], output);
-        free(output);
+        switch (getConfigByName(configNames[currentConfig])->configType)
+        {
+        case ONOFF:
+        case NUMERIC:
+        case ONOFFNUMERIC:
+            char* output = updateConfig(configNames[currentConfig], true);
+            PRINTFLEVEL1("SOFTWARE: Set config %s to %s\n", configNames[currentConfig], output);
+            free(output);
+        default:
+            break;
+        }
         break;
 
     case '5':
-        PRINTFLEVEL1("SOFTWARE: Running function related to config%s\n", configNames[currentConfig]);
-        getConfigByName(configNames[currentConfig])->configFuntion(NULL);
+        switch(getConfigByName(configNames[currentConfig])->configType){
+            case OTHER:
+            case NUMPAD:
+                PRINTFLEVEL1("SOFTWARE: Running function related to config%s\n", configNames[currentConfig]);
+                getConfigByName(configNames[currentConfig])->configFuntion(NULL);
+            break;
+                default:
+            break;
+        }
         break;
-
     case '9':
         PRINTFLEVEL1("SOFTWARE: Saving changes to configs\n");
         free(oldValues);
@@ -58,6 +78,25 @@ void* configCommandRelay(KeyPress* keyInput, int radioDetails){
     default:
         break;
     }
+}
+
+void configOTHERFlow(KeyPress* keyInput){
+
+}
+
+void configNUMPADFlow(KeyPress* keyInput){
+
+}
+/**
+ * 4,6 go forward or backwards in a config 
+ * 2,8 go up and down for the configs
+ * 7, save changes
+ * 9, cancel changes
+ * 5 run the config spesific command 
+*/
+void* configCommandRelay(KeyPress* keyInput, int radioDetails){
+
+    
     return NULL;
 }
 

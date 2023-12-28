@@ -16,7 +16,8 @@ typedef enum {
     NUMERIC,
     ONOFFNUMERIC,
     SELECTION,
-    OTHER
+    OTHER,
+    NUMPAD
 } ConfigType;
 
 typedef struct ConfigParam{
