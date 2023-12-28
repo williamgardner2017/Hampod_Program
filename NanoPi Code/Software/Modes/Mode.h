@@ -14,6 +14,8 @@ typedef struct ModeData {
 typedef struct Mode {
     void* (*modeInput)(KeyPress*,int);
     void (*freeMode)(struct Mode **self);
+    void (*enterMode)();
+    void (*exitMode)();
     ModeData* modeDetails;
 } Mode;
 

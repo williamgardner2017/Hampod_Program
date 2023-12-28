@@ -46,6 +46,7 @@ void* configCommandRelay(KeyPress* keyInput, int radioDetails){
 
     case '9':
         PRINTFLEVEL1("SOFTWARE: Saving changes to configs\n");
+        free(oldValues);
         oldValues = getListOfCurrentValues();
         break;
 
@@ -60,13 +61,27 @@ void* configCommandRelay(KeyPress* keyInput, int radioDetails){
     return NULL;
 }
 
-
 void freeConfigMode(Mode** modeToFree){
     Mode* temp = *modeToFree;
     free(temp->modeDetails->modeName);
     free(temp->modeDetails);
     free(*modeToFree);
     *modeToFree = 0;
+}
+
+//Grab the current values when loading in
+void enterConfigMode(){
+    configKeys = getListOfConfigNames();
+    oldValues = getListOfCurrentValues();
+}
+
+//exiting without saving will just cancel all changes 
+void exitConfigMode(){
+    setListOfcurrentValues(oldValues);
+    free(configKeys);
+    free(oldValues);
+    configKeys = getListOfConfigNames();
+    oldValues = getListOfCurrentValues();
 }
 
 Mode* ConfigLoad(){
@@ -77,6 +92,8 @@ Mode* ConfigLoad(){
     }
     newMode->modeInput = configCommandRelay;
     newMode->freeMode = freeConfigMode;
+    newMode->enterMode = enterConfigMode;
+    newMode->exitMode = exitConfigMode;
 
     ModeData* newData = (ModeData*)malloc(sizeof(ModeData));
 
@@ -88,7 +105,6 @@ Mode* ConfigLoad(){
     newData->radioModel = 42;
 
     newMode->modeDetails = newData;
-    configKeys = getListOfConfigNames();
-    oldValues = getListOfCurrentValues();
+
     return newMode;
 }
