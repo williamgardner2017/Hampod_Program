@@ -2,7 +2,7 @@
 
 ModeStates modeState = bootUp;
 
-int programableKeysOn = 0;
+bool programableKeysOn = true;
 Radio** radios;
 int maxRadios = 2;
 int currentRadio = 0;
@@ -228,12 +228,20 @@ int StandardModeFlow(KeyPress* keyInput){
         }
         break;
     case 'C': // C
-        //getModesOfProgramableKeys
-        //setRadioToMode
+        if(programableKeysOn){
+            //getModesOfProgramableKeys
+            //setRadioToMode
+        }else{
+            runRadioCommand(radios[currentRadio],keyInput);
+        }
         break;
     case 'D': // D
-        //getModesOfProgramableKeys
-        //setRadioToMode
+        if(programableKeysOn){
+            //getModesOfProgramableKeys
+            //setRadioToMode
+        }else{
+            runRadioCommand(radios[currentRadio],keyInput);
+        }
         break;
     default:
         PRINTFLEVEL1("No letter key was pressed so going to the mode\n");
@@ -315,7 +323,9 @@ void setBootUpState(BootUpStates state){
     bootUpState = state;
 }
 
-
+void toggleCDHotkeys(bool state){
+    programableKeysOn = state;
+}
 void freeStateMachine(){
     int i;
 

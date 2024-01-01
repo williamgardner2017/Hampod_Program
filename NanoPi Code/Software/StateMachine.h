@@ -76,6 +76,8 @@ int readOutModeName(int mode);
 void stateMachineStart();
 
 void freeStateMachine();
+
+void toggleCDHotkeys(bool state);
 /**
  * These functions are for testing purposes only
 */
