@@ -13,6 +13,8 @@
 #include "KeyWatching.h"
 #include "../Firmware/hampod_firm_packet.h"
 
+#include "ConfigSettings/ConfigParams.h"
+#include "ConfigSettings/ConfigFunctions.h"
 #ifdef OUTPUTLEVEL1
 #define PRINTFLEVEL1(...) \
     do { \
@@ -108,6 +110,13 @@ void fullStart(){
     Inst_packet* iAmReady = create_inst_packet(CONFIG, strlen((char*) okMessage)+1,okMessage, 0);
     firmwareCommandQueue(iAmReady);
     //start key loop after getting the responce
+
+
+    //initiate
+    loadConfigParams();
+    populateConfigFunctions();
+
+
     printf("software: Starting keywatcher\n");
     keyWatcher(NULL);
     printf("software: Startin Keywatcher complete\n");
