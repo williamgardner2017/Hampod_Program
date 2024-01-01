@@ -48,5 +48,7 @@ void populateConfigFunctions(HashMap* mapping);
 
 int SaveData(void* hold);
 
+int setHotkeys(void* keyPress);
+
 #include "ConfigFunctions.c"
 #endif

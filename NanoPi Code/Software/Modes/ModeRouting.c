@@ -48,6 +48,7 @@ Mode* getModeById(int modeID){
 
 //Used later on;
 Mode** keyBinds;
+//[C, C shift 1, C shift 2, C hold, C hold Shift 1, C hold shift 2, D , ...]
 
 
 /*

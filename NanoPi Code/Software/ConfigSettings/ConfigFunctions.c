@@ -9,3 +9,8 @@ void populateConfigFunctions(HashMap* mapping){
 int SaveData(void* hold){
     return 1;
 }
+
+
+int setHotkeys(void* keyPress){
+    
+}
