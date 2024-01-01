@@ -46,7 +46,7 @@
 
 void populateConfigFunctions(HashMap* mapping);
 
-void* SaveData(void* hold);
+int SaveData(void* hold);
 
 #include "ConfigFunctions.c"
 #endif

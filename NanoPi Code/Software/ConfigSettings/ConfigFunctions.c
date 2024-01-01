@@ -6,6 +6,6 @@ void populateConfigFunctions(HashMap* mapping){
     OtherFlagged->configFuntion = SaveData
 }
 
-void* SaveData(void* hold){
-    return NULL;
+int SaveData(void* hold){
+    return 1;
 }

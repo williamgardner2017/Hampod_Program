@@ -138,7 +138,11 @@ void setListOfcurrentValues(double* values){
     }
 }
 
-char* updateConfig(char* name, bool up){
+/**
+ * given a config name and true for increment up and false for inclement down
+ * returns new value of the setting as a string
+*/
+char* incrementConfig(char* name, bool up){
     //get the config object
     ConfigParam* param = getHashMap(configMapping,name);
     //incremetn/decrement by the value
@@ -174,6 +178,52 @@ char* updateConfig(char* name, bool up){
         strcpy(str,param->selectionSet[param->currentValue]);
         break;
     
+    default:
+    strcpy(str,"Something went wrong");
+        break;
+    }
+    return str;
+}
+
+/**
+ * directly sets the config value, along with making sure that said value is within the paramiters
+ * Returns a string of what the new value is 
+*/
+char* updateConfigs(char* name, double value){
+ConfigParam* param = getHashMap(configMapping,name);
+    //incremetn/decrement by the value
+    char* str = malloc(sizeof(char)*100);
+    switch (param->configType)
+    {
+    case ONOFF:
+        param->currentValue = value
+        if(param->currentValue == 1){
+            strcpy(str,"on");
+        }else{
+           strcpy(str,"off");
+        }
+        break;
+    case NUMERIC:
+    case NUMPAD:
+        param->currentValue = value;
+        if(param->currentValue > param->maxValue){
+            param->currentValue = param->maxValue;
+        }else if(param->currentValue < param->minValue){
+            param->currentValue = param->minValue;
+        }
+        sprintf(str, "%f", param->currentValue);
+        break;
+    case ONOFFNUMERIC:
+        break;
+    case SELECTION:
+        param->currentValue = value
+        if(param->currentValue > param->selectionSize-1){
+            param->currentValue = 0;
+        }else if(param->currentValue < 0){
+            param->currentValue = param->selectionSize -1;
+        }
+        strcpy(str,param->selectionSet[param->currentValue]);
+        break;
     default:
     strcpy(str,"Something went wrong");
         break;

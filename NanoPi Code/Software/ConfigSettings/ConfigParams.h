@@ -58,6 +58,7 @@ char** getListOfConfigNames();
 int getLengthOfConfigs();
 double* getListOfCurrentValues();
 void setListOfcurrentValues(double* values);
-char* updateConfig(char* name, bool up);
+char* incrementConfig(char* name, bool up);
+char* updateConfigs(char* name, double value);
 #include "ConfigParams.c"
 #endif

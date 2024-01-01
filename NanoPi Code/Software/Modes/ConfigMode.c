@@ -30,7 +30,7 @@ void configNavigation(KeyPress* keyInput){
         case ONOFF:
         case NUMERIC:
         case ONOFFNUMERIC:
-            char* output = updateConfig(configNames[currentConfig], false);
+            char* output = incrementConfig(configNames[currentConfig], false);
             PRINTFLEVEL1("SOFTWARE: Set config %s to %s\n", configNames[currentConfig], output);
             free(output);
             break;
@@ -45,7 +45,7 @@ void configNavigation(KeyPress* keyInput){
         case ONOFF:
         case NUMERIC:
         case ONOFFNUMERIC:
-            char* output = updateConfig(configNames[currentConfig], true);
+            char* output = incrementConfig(configNames[currentConfig], true);
             PRINTFLEVEL1("SOFTWARE: Set config %s to %s\n", configNames[currentConfig], output);
             free(output);
         default:
@@ -55,13 +55,18 @@ void configNavigation(KeyPress* keyInput){
 
     case '5':
         switch(getConfigByName(configNames[currentConfig])->configType){
-            case OTHER:
             case NUMPAD:
+            KeyPress* clearing = malloc(sizeof(KeyPress));
+            clearing->keyPressed = '#';
+            keypadInput(clearing);
+            free(clearing);
+            case OTHER:
                 PRINTFLEVEL1("SOFTWARE: Running function related to config%s\n", configNames[currentConfig]);
-                getConfigByName(configNames[currentConfig])->configFuntion(NULL);
-            break;
-                default:
-            break;
+                selectingConfig = false;
+                configNavigation(keyInput);
+                break;
+            default:
+                break;
         }
         break;
     case '9':
@@ -81,11 +86,27 @@ void configNavigation(KeyPress* keyInput){
 }
 
 void configOTHERFlow(KeyPress* keyInput){
-
+    void* dataToSend;
+    if(strcmp(configNames[currentConfig],"name") == 0){
+        //setup dataToSend here
+    }
+    if(getConfigByName(configNames[currentConfig])->configFuntion(dataToSend) == 1){
+         selectingConfig = true;
+    }
+    if(strcmp(configNames[currentConfig],"name") == 0){
+        //Free dataToSend here
+    }
 }
 
 void configNUMPADFlow(KeyPress* keyInput){
-
+    double value = keypadInput(keyInput);
+    if(value <= 0){
+        //output the number
+    }else{
+        updateConfigs(configNames[currentConfig], value);
+        selectingConfig = true;
+        //output the number
+    }
 }
 /**
  * 4,6 go forward or backwards in a config 
@@ -95,7 +116,20 @@ void configNUMPADFlow(KeyPress* keyInput){
  * 5 run the config spesific command 
 */
 void* configCommandRelay(KeyPress* keyInput, int radioDetails){
-
+    if(selectingConfig){
+        configNavigation(keyInput);
+    }else{
+        switch(getConfigByName(configNames[currentConfig])->configType){
+            case NUMPAD:
+                configNUMPADFlow(keyInput);
+                break;
+            case OTHER:
+                configOTHERFlow(keyInput);
+                break;
+            default:
+                break;
+        }
+    }
     
     return NULL;
 }
