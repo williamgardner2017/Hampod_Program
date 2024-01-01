@@ -1,8 +1,8 @@
 //This is the file that is edited inorder to add new complex configs to the software
 
-void populateConfigFunctions(HashMap* mapping){
+void populateConfigFunctions(){
     ConfigParam* OtherFlagged;
-    OtherFlagged = (ConfigParam*) getHashMap(mapping,"save");
+    OtherFlagged = getConfigByName("save");
     OtherFlagged->configFuntion = SaveData
 }
 

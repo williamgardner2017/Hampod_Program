@@ -43,8 +43,9 @@
 #include <stdio.h>
 #include "../GeneralFunctions.h"
 #include "HashMap.h"
+#include "ConfigParams.h"
 
-void populateConfigFunctions(HashMap* mapping);
+void populateConfigFunctions();
 
 int SaveData(void* hold);
 

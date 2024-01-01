@@ -43,9 +43,6 @@ void loadConfigParams(){
 
         insertHashMap(configMapping, (void*) configObject, (void*) configObject->name);
     }
-    
-    //now have the stuff add in the function to the OTHER type configs
-    populateConfigFunctions(configMapping);
 }
 
 
