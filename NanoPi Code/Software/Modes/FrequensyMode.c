@@ -24,6 +24,7 @@ void* frequencyCommandRelay(KeyPress* keyInput, RIG* my_rig){
             sendSpeakerOutput(putoutmessage);
             break;
         case '#':
+            currentFrequency = currentFrequency * 1000000;
             for(int i = 0; i<decimalPlace; i++){
                 currentFrequency = currentFrequency / 10;
             }
