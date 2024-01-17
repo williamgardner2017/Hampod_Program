@@ -95,11 +95,11 @@ int getModeCount(){
  * Since this file handles the routing of functions, it will also handle the routing on the programable keys
 */
 static int keyPressToBindValue(KeyPress* key){
-    int value = key.shiftAmount;
-    if(key.isHold){
+    int value = key->shiftAmount;
+    if(key->isHold){
         value = value + 3;
     }
-    switch (key.keyPressed)
+    switch (key->keyPressed)
     {
     case 'C':
         break;
