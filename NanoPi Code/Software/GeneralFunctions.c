@@ -59,11 +59,11 @@ char* customSubString(char* original, int start, int length){
     strncpy(returnString,original + start, len);
     returnString[len+1] = '\0';
     return returnString;
+}
 
 int keyPadNumeber = 0;
 int decimalPlaces = 0;
 bool decimalPointPlaced = false;
-}
 /**
  * This is ment to let the user input get a long number from the key pad, like 43.25
  * The number returned will be positive

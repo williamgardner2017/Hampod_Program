@@ -48,6 +48,7 @@ void configNavigation(KeyPress* keyInput){
             char* output = incrementConfig(configNames[currentConfig], true);
             PRINTFLEVEL1("SOFTWARE: Set config %s to %s\n", configNames[currentConfig], output);
             free(output);
+            break;
         default:
             break;
         }
@@ -56,10 +57,11 @@ void configNavigation(KeyPress* keyInput){
     case '5':
         switch(getConfigByName(configNames[currentConfig])->configType){
             case NUMPAD:
-            KeyPress* clearing = malloc(sizeof(KeyPress));
-            clearing->keyPressed = '#';
-            keypadInput(clearing);
-            free(clearing);
+                KeyPress* clearing = malloc(sizeof(KeyPress));
+                clearing->keyPressed = '#';
+                keypadInput(clearing);
+                free(clearing);
+                break;
             case OTHER:
                 PRINTFLEVEL1("SOFTWARE: Running function related to config%s\n", configNames[currentConfig]);
                 selectingConfig = false;
@@ -144,16 +146,16 @@ void freeConfigMode(Mode** modeToFree){
 
 //Grab the current values when loading in
 void enterConfigMode(){
-    configKeys = getListOfConfigNames();
+    configNames = getListOfConfigNames();
     oldValues = getListOfCurrentValues();
 }
 
 //exiting without saving will just cancel all changes 
 void exitConfigMode(){
     setListOfcurrentValues(oldValues);
-    free(configKeys);
+    free(configNames);
     free(oldValues);
-    configKeys = getListOfConfigNames();
+    configNames = getListOfConfigNames();
     oldValues = getListOfCurrentValues();
 }
 

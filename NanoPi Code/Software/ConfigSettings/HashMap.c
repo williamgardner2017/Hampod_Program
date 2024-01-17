@@ -1,11 +1,11 @@
 HashMap* createHashMap( int (*hashFunc)(void*), bool (*comparFunc)(void*,void*)){
     HashMap* map = malloc(sizeof(HashMap));
     map->list = calloc(8,sizeof(void*));
-    map->listOfKeys = calloc(8,sizeOf(int));
+    map->listOfKeys = calloc(8,sizeof(int));
     map->quantity = 0;
     map->size = 8;
-    map->comparFunc = &comparFunc;
-    map->hashFunc = &hashFunc;
+    map->comparFunc = comparFunc;
+    map->hashFunc = hashFunc;
     return map;
 }
 void insertHashMap(HashMap* hashmap,void* data,void* key){
@@ -55,7 +55,7 @@ void* getHashMap(HashMap* hashmap,void* key){
         }
     }
 }
-void* removeHashMap(HashMap* hashmap,void* key,){
+void* removeHashMap(HashMap* hashmap,void* key){
     int index = hashmap->hashFunc(key)%hashmap->size;
     int offset = 0;
     bool placingObject = true;
@@ -97,10 +97,10 @@ void growHashMap(HashMap* hashmap){
     int oldQuantity = hashmap->quantity;
     hashmap->size = hashmap->size*2;
     hashmap->list = calloc(hashmap->size,sizeof(void*));
-    hashmap->oldKeyList = calloc(hashmap->size,sizeof(int));
+    hashmap->listOfKeys = calloc(hashmap->size,sizeof(int));
     for(int i = 0; i<hashmap->size/2;i++){
         if(oldKeyList[i] != 0){
-            insertHashMapWithIntHash(oldList[i],oldKeyList[i]-1,hashmap);
+            insertHashMapWithIntHash(hashmap, oldList[i], oldKeyList[i](int)-1);
         }
     }
     free(oldList);
@@ -120,7 +120,7 @@ void insertHashMapWithIntHash(HashMap* hashmap,void* data,int key){
         }else if(offset != 0 && (index+offset)%hashmap->size == index+offset){
             //TODO 
             //Grow the list size
-            insertHashMap(data, key, hashmap);
+            insertHashMap(hashmap, data, key);
             placingObject = false;
         }else{
             if(offset == 0){

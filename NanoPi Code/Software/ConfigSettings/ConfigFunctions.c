@@ -3,7 +3,7 @@
 void populateConfigFunctions(){
     ConfigParam* OtherFlagged;
     OtherFlagged = getConfigByName("save");
-    OtherFlagged->configFuntion = SaveData
+    OtherFlagged->configFuntion = SaveData;
 }
 
 int SaveData(void* hold){
