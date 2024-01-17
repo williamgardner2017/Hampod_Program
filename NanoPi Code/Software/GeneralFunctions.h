@@ -28,7 +28,7 @@ typedef struct ConfigParam{
     double stepSize;
     char** selectionSet;
     int selectionSize;
-    int (*configFuntion)(void*);
+    int (*configFuntion)(KeyPress*);
     ConfigType configType;
     double currentValue;
 } ConfigParam;

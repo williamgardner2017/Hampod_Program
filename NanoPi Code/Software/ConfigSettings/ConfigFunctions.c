@@ -3,25 +3,25 @@
 void populateConfigFunctions(){
     ConfigParam* OtherFlagged;
     OtherFlagged = getConfigByName("save");
-    OtherFlagged->configFuntion = SaveData
+    OtherFlagged->configFuntion = SaveData;
     OtherFlagged = getConfigByName("HotKey");
-    OtherFlagged->configFuntion = setHotkeys
+    OtherFlagged->configFuntion = setHotkeys;
 }
 
-int SaveData(void* hold){
+int SaveData(KeyPress* hold){
     return 1;
 }
 
 int chosenModeId = 0;
 int pageNumber = 0;
 bool selectingMode = true;
-int setHotkeys(void* keyData){
-    KeyPress* keyinput = (KeyPress*) keyData;
+int setHotkeys(KeyPress* keyData){
     //1 turn of C,D supression
     toggleCDHotkeys(false);
+    int chosenModeId;
     //2 get the mode that they want to use
     if(selectingMode){
-        switch (keyInput->keyPressed)
+        switch (keyData->keyPressed)
         {
             case '#':
                 for(int i = 0;i<9;i++){
@@ -58,7 +58,7 @@ int setHotkeys(void* keyData){
             case '7':
             case '8':
             case '9':
-                int chosenModeId = pageNumber*9 + convertCharToKeyValue(keyInput);
+                chosenModeId = pageNumber*9 + convertCharToKeyValue(keyData);
                 if(chosenModeId > getModeCount()){
                     break;
                 }else{
@@ -70,7 +70,7 @@ int setHotkeys(void* keyData){
         }
     }else{
         //3 get the hot key they want to set
-        setProgramibleKeys(keyInput, chosenModeId);
+        setProgramibleKeys(keyData, chosenModeId);
         pageNumber = 0;
         selectingMode = true;
         toggleCDHotkeys(true);

@@ -90,15 +90,8 @@ void configNavigation(KeyPress* keyInput){
 }
 
 void configOTHERFlow(KeyPress* keyInput){
-    void* dataToSend;
-    if(strcmp(configNames[currentConfig],"name") == 0){
-        //setup dataToSend here
-    }
-    if(getConfigByName(configNames[currentConfig])->configFuntion(dataToSend) == 1){
+    if(getConfigByName(configNames[currentConfig])->configFuntion(keyInput) == 1){
          selectingConfig = true;
-    }
-    if(strcmp(configNames[currentConfig],"name") == 0){
-        //Free dataToSend here
     }
 }
 

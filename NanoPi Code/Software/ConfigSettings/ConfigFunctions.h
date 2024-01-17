@@ -49,9 +49,9 @@
 
 void populateConfigFunctions();
 
-int SaveData(void* hold);
+int SaveData(KeyPress* hold);
 
-int setHotkeys(void* keyData);
+int setHotkeys(KeyPress* keyData);
 
 #include "ConfigFunctions.c"
 #endif
