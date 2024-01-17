@@ -5,6 +5,8 @@ double* oldValues;
 bool selectingConfig = true;
 
 void configNavigation(KeyPress* keyInput){
+    char* output;
+    KeyPress* clearing;
     switch (keyInput->keyPressed)
     {
     case '4':
@@ -30,7 +32,7 @@ void configNavigation(KeyPress* keyInput){
         case ONOFF:
         case NUMERIC:
         case ONOFFNUMERIC:
-            char* output = incrementConfig(configNames[currentConfig], false);
+            output = incrementConfig(configNames[currentConfig], false);
             PRINTFLEVEL1("SOFTWARE: Set config %s to %s\n", configNames[currentConfig], output);
             free(output);
             break;
@@ -45,7 +47,7 @@ void configNavigation(KeyPress* keyInput){
         case ONOFF:
         case NUMERIC:
         case ONOFFNUMERIC:
-            char* output = incrementConfig(configNames[currentConfig], true);
+            output = incrementConfig(configNames[currentConfig], true);
             PRINTFLEVEL1("SOFTWARE: Set config %s to %s\n", configNames[currentConfig], output);
             free(output);
             break;
@@ -57,7 +59,7 @@ void configNavigation(KeyPress* keyInput){
     case '5':
         switch(getConfigByName(configNames[currentConfig])->configType){
             case NUMPAD:
-                KeyPress* clearing = malloc(sizeof(KeyPress));
+                clearing = malloc(sizeof(KeyPress));
                 clearing->keyPressed = '#';
                 keypadInput(clearing);
                 free(clearing);

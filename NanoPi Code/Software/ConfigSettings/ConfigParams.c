@@ -172,7 +172,7 @@ char* incrementConfig(char* name, bool up){
         }else if(param->currentValue < 0){
             param->currentValue = param->selectionSize -1;
         }
-        strcpy(str,param->selectionSet[param->currentValue (int)]);
+        strcpy(str,param->selectionSet[(int)param->currentValue]);
         break;
     
     default:

@@ -100,7 +100,7 @@ void growHashMap(HashMap* hashmap){
     hashmap->listOfKeys = calloc(hashmap->size,sizeof(int));
     for(int i = 0; i<hashmap->size/2;i++){
         if(oldKeyList[i] != 0){
-            insertHashMapWithIntHash(hashmap, oldList[i], oldKeyList[i](int)-1);
+            insertHashMapWithIntHash(hashmap, oldList[i], (int)oldKeyList[i]-1);
         }
     }
     free(oldList);
