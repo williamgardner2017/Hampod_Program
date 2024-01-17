@@ -58,7 +58,7 @@ ConfigType stringToConfigType(char* str){
     }else if(strcmp(str,"Other") == 0){
         return OTHER;
     }else{
-        return NULL;
+        return OTHER; //TODO make this into a error
     }
 }
 
@@ -172,7 +172,7 @@ char* incrementConfig(char* name, bool up){
         }else if(param->currentValue < 0){
             param->currentValue = param->selectionSize -1;
         }
-        strcpy(str,param->selectionSet[param->currentValue]);
+        strcpy(str,param->selectionSet[(int)param->currentValue]);
         break;
     
     default:
@@ -193,7 +193,7 @@ ConfigParam* param = getHashMap(configMapping,name);
     switch (param->configType)
     {
     case ONOFF:
-        param->currentValue = value
+        param->currentValue = value;
         if(param->currentValue == 1){
             strcpy(str,"on");
         }else{
@@ -213,13 +213,13 @@ ConfigParam* param = getHashMap(configMapping,name);
     case ONOFFNUMERIC:
         break;
     case SELECTION:
-        param->currentValue = value
+        param->currentValue = value;
         if(param->currentValue > param->selectionSize-1){
             param->currentValue = 0;
         }else if(param->currentValue < 0){
             param->currentValue = param->selectionSize -1;
         }
-        strcpy(str,param->selectionSet[param->currentValue]);
+        strcpy(str,param->selectionSet[(int) param->currentValue]);
         break;
     default:
     strcpy(str,"Something went wrong");
