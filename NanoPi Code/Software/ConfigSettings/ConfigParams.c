@@ -219,7 +219,7 @@ ConfigParam* param = getHashMap(configMapping,name);
         }else if(param->currentValue < 0){
             param->currentValue = param->selectionSize -1;
         }
-        strcpy(str,param->selectionSet[param->currentValue]);
+        strcpy(str,param->selectionSet[(int) param->currentValue]);
         break;
     default:
     strcpy(str,"Something went wrong");

@@ -54,6 +54,7 @@ void* getHashMap(HashMap* hashmap,void* key){
             }
         }
     }
+    return NULL;
 }
 void* removeHashMap(HashMap* hashmap,void* key){
     int index = hashmap->hashFunc(key)%hashmap->size;
@@ -79,6 +80,7 @@ void* removeHashMap(HashMap* hashmap,void* key){
             }
         }
     }
+    return NULL;
 }
 void destroyHashMap(HashMap* hashmap, void (*freeingFunction)(void*)){
     for(int i = 0; i<hashmap->size;i++){
@@ -120,7 +122,7 @@ void insertHashMapWithIntHash(HashMap* hashmap,void* data,int key){
         }else if(offset != 0 && (index+offset)%hashmap->size == index+offset){
             //TODO 
             //Grow the list size
-            insertHashMap(hashmap, data, key);
+            insertHashMap(hashmap, data, (void*) key);
             placingObject = false;
         }else{
             if(offset == 0){
