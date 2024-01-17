@@ -72,6 +72,7 @@ bool decimalPointPlaced = false;
  * * is the decimal then reset key
 */
 double keypadInput(KeyPress* keyInput){
+    double tempkeyPadNumeber;
     switch(keyInput->keyPressed){
         case '0':
         case '1':
@@ -89,7 +90,7 @@ double keypadInput(KeyPress* keyInput){
             keyPadNumeber = keyPadNumeber*10 + convertCharToKeyValue(keyInput);
             break;
         case '#':
-            double tempkeyPadNumeber = keyPadNumeber;
+            tempkeyPadNumeber = keyPadNumeber + 0.0;
             for(int i = 0; i<decimalPlaces; i++){
                 tempkeyPadNumeber = tempkeyPadNumeber / 10;
             }
@@ -99,7 +100,7 @@ double keypadInput(KeyPress* keyInput){
             decimalPointPlaced = false;
             return tempkeyPadNumeber;
         case '*':
-            if(hasDecimal){
+            if(decimalPointPlaced){
                 keyPadNumeber = 0;
                 decimalPlaces = 0;
                 decimalPointPlaced = false;
@@ -111,9 +112,9 @@ double keypadInput(KeyPress* keyInput){
         default:
             break;
     }
-    double tempkeyPadNumeber = keyPadNumeber;
+    tempkeyPadNumeber = keyPadNumeber + 0.0;
     for(int i = 0; i<decimalPlaces; i++){
         tempkeyPadNumeber = tempkeyPadNumeber / 10;
     }
-    return tempkeyPadNumeber*(-1);
+    return tempkeyPadNumeber* -1.0 ;
 }
