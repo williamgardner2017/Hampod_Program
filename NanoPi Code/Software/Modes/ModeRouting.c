@@ -94,7 +94,7 @@ int getModeCount(){
 /**
  * Since this file handles the routing of functions, it will also handle the routing on the programable keys
 */
-static int keyPressToBindValue(KeyPress key){
+static int keyPressToBindValue(KeyPress* key){
     int value = key.shiftAmount;
     if(key.isHold){
         value = value + 3;
@@ -117,7 +117,7 @@ static int keyPressToBindValue(KeyPress key){
 /**
  * binds the programable keys
 */
-void setProgramibleKeys(KeyPress key, int modeID){
+void setProgramibleKeys(KeyPress* key, int modeID){
     
     int value = keyPressToBindValue(key);
     if(value == -1){
@@ -132,7 +132,7 @@ void setProgramibleKeys(KeyPress key, int modeID){
 /**
  * gets the mode via the programable keys
 */
-Mode* getModeViaProgramableKey(KeyPress key){
+Mode* getModeViaProgramableKey(KeyPress* key){
     int value = keyPressToBindValue(key);
     if(value == -1){
         //should not get here
