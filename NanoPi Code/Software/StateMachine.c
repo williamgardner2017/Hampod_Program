@@ -1,4 +1,9 @@
-
+/* TODO list
+* 1) remove the old functions
+* 2) add a way to toggle if the letter keys are being used for standard input
+* 3) redue how loading up a mode works to properly use the toggles
+* 4) add a new mode metadata to say if it uses the letter keys and which ones, This sould be in pairs A,B and C,D
+*/
 
 ModeStates modeState = bootUp;
 
@@ -24,11 +29,11 @@ ModeStates modeFlow(KeyPress* keyInput){
             ModeSelectFlow(keyInput);
             return modeSelect;
             break;
-        case configMode:
+        case configMode: // TODO OUTDATED
             ConfigFlow(keyInput);
             return configMode;
             break;
-        case dtmf:
+        case dtmf: //TODO OUTDATED
             DTMFFlow(keyInput);
             return dtmf;
             break;
@@ -111,7 +116,7 @@ BootUpStates BootupFlow(KeyPress* keyInput){
 }
 
 int modeSelectPage = 0; //the page number that we are on for mode select
-int isReadingOut = 0;
+int isReadingOut = 0; //TODO make this actualy cause a read out
 /**
  * this handles the select mode state
 */
@@ -158,7 +163,7 @@ int ModeSelectFlow(KeyPress* keyInput){
 }
 
 //dependint on firmware
-int DTMFFlow(KeyPress* keyInput){
+int DTMFFlow(KeyPress* keyInput){ //REMOVE 
     if(keyInput->keyPressed == 'B' && keyInput->isHold){
          switchToRadioMode(0);
     }else{
@@ -167,7 +172,7 @@ int DTMFFlow(KeyPress* keyInput){
     return -1;
 }
 
-int StandardModeFlow(KeyPress* keyInput){
+int StandardModeFlow(KeyPress* keyInput){ //TODO be able to toggle the letter keys
     PRINTFLEVEL1("Standard flow for modes with key input of %c, shift of %i, and hold of %i\n",keyInput->keyPressed,keyInput->shiftAmount,keyInput->isHold);
     switch (keyInput->keyPressed)
     {
@@ -249,13 +254,14 @@ int StandardModeFlow(KeyPress* keyInput){
  * See if makeing this be treated like a normal mode would work
  * See if there are any reasons a standard mode could not affect the hampod data
 */
-int ConfigFlow(KeyPress* KeyInput){
+int ConfigFlow(KeyPress* KeyInput){ //TODO REMOVE
     //This may be easyer to just treat as a standard mode but make special. 
     return -1;
 }
 
 /**
  * Reads out the name of the asked for mode
+ * TODO make this use firmware output
 */
 int readOutModeName(int modeID){
     //DEBUG
@@ -274,7 +280,7 @@ int readOutModeName(int modeID){
  * TODO see if this can just be replaced with the new modeRouting file
  * Idea, have this be what takes in the modeID and then using it would also switch the modeState as needed
 */
-int switchToRadioMode(int modeID){
+int switchToRadioMode(int modeID){ //TODO redue this to be better sueted, all this needs to do is to set what the letter toggles are when swiching to said mode
     switch (modeID)
     {
         case 1: //DTMF

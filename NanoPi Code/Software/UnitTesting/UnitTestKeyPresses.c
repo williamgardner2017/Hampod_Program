@@ -62,50 +62,50 @@ bool testKeyPadEntering(){
     double returnValue = 0;
     testInput->keyPressed = '1';
     returnValue = keypadInput(testInput);
-    printf("expected %f, actual %f",-1,returnValue);
-    if(returnValue != -1){
+    printf("expected %f, actual %f",-1.0,returnValue);
+    if(returnValue != -1.0){
         return false;
     }
     testInput->keyPressed = '2';
     returnValue = keypadInput(testInput);
-    printf("expected %f, actual %f",-12,returnValue);
-    if(returnValue != -12){
+    printf("expected %f, actual %f",-12.0,returnValue);
+    if(returnValue != -12.0){
         return false;
     }
     testInput->keyPressed = '3';
     returnValue = keypadInput(testInput);
-    printf("expected %f, actual %f",-123,returnValue);
-    if(returnValue != -123){
+    printf("expected %f, actual %f",-123.0,returnValue);
+    if(returnValue != -123.0){
         return false;
     }
     testInput->keyPressed = '4';
     returnValue = keypadInput(testInput);
-    printf("expected %f, actual %f",-1234,returnValue);
-    if(returnValue != -1234){
+    printf("expected %f, actual %f",-1234.0,returnValue);
+    if(returnValue != -1234.0){
         return false;
     }
     testInput->keyPressed = '#';
     returnValue = keypadInput(testInput);
-    printf("expected %f, actual %f",1234,returnValue);
-    if(returnValue != 1234){
+    printf("expected %f, actual %f",1234.0,returnValue);
+    if(returnValue != 1234.0){
         return false;
     }
     testInput->keyPressed = '5';
     returnValue = keypadInput(testInput);
-    printf("expected %f, actual %f",-5,returnValue);
-    if(returnValue != -5){
+    printf("expected %f, actual %f",-5.0,returnValue);
+    if(returnValue != -5.0){
         return false;
     }
     testInput->keyPressed = '6';
     returnValue = keypadInput(testInput);
-    printf("expected %f, actual %f",-56,returnValue);
-    if(returnValue != -56){
+    printf("expected %f, actual %f",-56.0,returnValue);
+    if(returnValue != -56.0){
         return false;
     }
     testInput->keyPressed = '*';
     returnValue = keypadInput(testInput);
-    printf("expected %f, actual %f",-56,returnValue);
-    if(returnValue != -56){
+    printf("expected %f, actual %f",-56.0,returnValue);
+    if(returnValue != -56.0){
         return false;
     }
     testInput->keyPressed = '7';
@@ -128,20 +128,20 @@ bool testKeyPadEntering(){
     }
     testInput->keyPressed = '9';
     returnValue = keypadInput(testInput);
-    printf("expected %f, actual %f",-9,returnValue);
-    if(returnValue != -9){
+    printf("expected %f, actual %f",-9.0,returnValue);
+    if(returnValue != -9.0){
         return false;
     }
     testInput->keyPressed = '*';
     returnValue = keypadInput(testInput);
-    printf("expected %f, actual %f",-9,returnValue);
-    if(returnValue != -9){
+    printf("expected %f, actual %f",-9.0,returnValue);
+    if(returnValue != -9.0){
         return false;
     }
     testInput->keyPressed = '*';
     returnValue = keypadInput(testInput);
-    printf("expected %f, actual %f",0,returnValue);
-    if(returnValue != 0){
+    printf("expected %f, actual %f",0.0,returnValue);
+    if(returnValue != 0.0){
         return false;
     }
     return true;
