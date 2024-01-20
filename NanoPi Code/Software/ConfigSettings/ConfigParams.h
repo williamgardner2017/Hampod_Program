@@ -45,7 +45,6 @@
 void loadConfigParams();
 ConfigType stringToConfigType(char* str);
 char** convertTocharArray(char* str, int size);
-void loadUpFunctionPointers(void** pointers);
 //for the hashmap
 void freeConfigParam(void* param);
 int ConfigHashing(void* key);

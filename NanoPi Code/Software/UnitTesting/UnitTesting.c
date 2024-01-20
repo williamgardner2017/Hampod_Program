@@ -12,7 +12,7 @@
 #include "UnitTestRadio.h"
 #include "UnitTestStateMachine.h"
 #include "UnitTestReadFile.h"
-
+#include "UnitTestConfigs.h"
 
 void sigsegv_handler(int signum);
 
@@ -118,7 +118,51 @@ bool ReadingFromFileTest(){
     return testReadingFile();
 }
 
+bool HashMapTest(){
+    printf("Starting Config testing\n");
+    printf("Creating and destroying Hash: ");
+    if(TestCreateDestroyHash()){
+        printf("Passed\n");
+    }else{
+        printf("Failed\n");
+        return false;
+    }
+    printf("Just Creating Hash: ");
+    if(TestCreateHash()){
+        printf("Passed\n");
+    }else{
+        printf("Failed\n");
+        return false;
+    }
+    printf("Insert into Hash: ");
+    if(TestInsertHash()){
+        printf("Passed\n");
+    }else{
+        printf("Failed\n");
+        return false;
+    }
 
+    printf("Get from hash: ");
+    if(TestGetHash()){
+        printf("Passed\n");
+    }else{
+        printf("Failed\n");
+    }
+    printf("Remove from hash: ");
+    if(TestRemoveHash()){
+        printf("Passed\n");
+    }else{
+        printf("Failed\n");
+    }
+    printf("Grow hash: ");
+    if(TestGrowHash()){
+        printf("Passed\n");
+    }else{
+        printf("Failed\n");
+    }
+    printf("ending testing for hashes\n");
+    return true;
+}
 
 int main(){
 
@@ -130,5 +174,6 @@ int main(){
     // StateMachineTesting();
     ReadingFromFileTest();
     KeyPressTesting();
+    HashMapTest();
     return -1;
 }
