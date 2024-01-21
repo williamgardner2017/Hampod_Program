@@ -1,7 +1,7 @@
 HashMap* createHashMap( int (*hashFunc)(void*), bool (*comparFunc)(void*,void*)){
     HashMap* map = malloc(sizeof(HashMap));
     map->list = calloc(8,sizeof(void*));
-    map->listOfKeys = calloc(8,sizeof(int));
+    map->listOfKeys = calloc(8,sizeof(void*));
     map->quantity = 0;
     map->size = 8;
     map->comparFunc = comparFunc;
@@ -22,7 +22,7 @@ void insertHashMap(HashMap* hashmap,void* data,void* key){
             PRINTFLEVEL2("SOFTWARE: Hash Found an index %i to place item at\n", (index+offset)%hashmap->size);
             placingObject = false;
             hashmap->list[(index+offset)%hashmap->size] = data;
-            hashmap->listOfKeys[(index+offset)%hashmap->size] = index+1;
+            hashmap->listOfKeys[(index+offset)%hashmap->size] = key;
             hashmap->quantity ++;
         }else if(offset != 0 && (index+offset)%hashmap->size == index+offset){
             //TODO 
@@ -50,9 +50,9 @@ void* getHashMap(HashMap* hashmap,void* key){
     while(placingObject){
         PRINTFLEVEL2("SOFTWARE: in while with offset of %i\n", offset);
         int offsetIndex = (index+offset)%hashmap->size;
-        void* foundValue = hashmap->list[offsetIndex];
+        void* foundValue = hashmap->listOfKeys[offsetIndex];
         PRINTFLEVEL2("SOFTWARE: got the value of the offset index of %i to be compared\n",offsetIndex);
-        if(hashmap->comparFunc(foundValue, key)){
+        if(foundValue != 0 && hashmap->comparFunc(foundValue, key)){
             PRINTFLEVEL2("SOFTWARE: Found key in hashmap at index %i\n",index+offset);
             return  hashmap->list[(index+offset)%hashmap->size];
         }else if(offset != 0 && (index+offset)%hashmap->size == index+offset){
@@ -77,7 +77,9 @@ void* removeHashMap(HashMap* hashmap,void* key){
     int offset = 0;
     bool placingObject = true;
     while(placingObject){
-        if(hashmap->comparFunc(hashmap->list[(index+offset)%hashmap->size], key)){
+        int offsetIndex = (index+offset)%hashmap->size;
+        void* foundValue = hashmap->listOfKeys[offsetIndex];
+        if(foundValue != 0 && hashmap->comparFunc(foundValue, key)){
             void* value = hashmap->list[(index+offset)%hashmap->size];
             hashmap->list[(index+offset)%hashmap->size] = 0;
             hashmap->listOfKeys[(index+offset)%hashmap->size] = 0;
@@ -103,6 +105,9 @@ void destroyHashMap(HashMap* hashmap, void (*freeingFunction)(void*)){
         if(hashmap->list[i] != 0){
             freeingFunction(hashmap->list[i]);
         }
+        if(hashmap->listOfKeys[i] != 0){
+            freeingFunction(hashmap->listOfKeys[i]);
+        }
     }
 
     free(hashmap->list);
@@ -111,14 +116,14 @@ void destroyHashMap(HashMap* hashmap, void (*freeingFunction)(void*)){
 }
 void growHashMap(HashMap* hashmap){
     void** oldList = hashmap->list;
-    int* oldKeyList = hashmap->listOfKeys;
+    void** oldKeyList = hashmap->listOfKeys;
     int oldQuantity = hashmap->quantity;
     hashmap->size = hashmap->size*2;
     hashmap->list = calloc(hashmap->size,sizeof(void*));
-    hashmap->listOfKeys = calloc(hashmap->size,sizeof(int));
+    hashmap->listOfKeys = calloc(hashmap->size,sizeof(void*));
     for(int i = 0; i<hashmap->size/2;i++){
         if(oldKeyList[i] != 0){
-            insertHashMapWithIntHash(hashmap, oldList[i], (int)oldKeyList[i]-1);
+            insertHashMap(hashmap, oldList[i], oldKeyList[i]);
         }
     }
     free(oldList);
