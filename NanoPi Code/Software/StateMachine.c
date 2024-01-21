@@ -1,5 +1,4 @@
 /* TODO list
-* 1) remove the old functions
 * 2) add a way to toggle if the letter keys are being used for standard input
 * 3) redue how loading up a mode works to properly use the toggles
 * 4) add a new mode metadata to say if it uses the letter keys and which ones, This sould be in pairs A,B and C,D
@@ -162,16 +161,6 @@ int ModeSelectFlow(KeyPress* keyInput){
         return -1;
 }
 
-//dependint on firmware
-int DTMFFlow(KeyPress* keyInput){ //REMOVE 
-    if(keyInput->keyPressed == 'B' && keyInput->isHold){
-         switchToRadioMode(0);
-    }else{
-        //do the beep boop
-    }
-    return -1;
-}
-
 int StandardModeFlow(KeyPress* keyInput){ //TODO be able to toggle the letter keys
     PRINTFLEVEL1("Standard flow for modes with key input of %c, shift of %i, and hold of %i\n",keyInput->keyPressed,keyInput->shiftAmount,keyInput->isHold);
     switch (keyInput->keyPressed)
@@ -256,16 +245,6 @@ int StandardModeFlow(KeyPress* keyInput){ //TODO be able to toggle the letter ke
         return -1;
 }
 
-/**
- * TODO figure out how to do this
- * Create a new file to handle this
- * See if makeing this be treated like a normal mode would work
- * See if there are any reasons a standard mode could not affect the hampod data
-*/
-int ConfigFlow(KeyPress* KeyInput){ //TODO REMOVE
-    //This may be easyer to just treat as a standard mode but make special. 
-    return -1;
-}
 
 /**
  * Reads out the name of the asked for mode

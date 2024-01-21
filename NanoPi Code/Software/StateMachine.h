@@ -67,11 +67,10 @@ typedef enum {
 */
 ModeStates modeFlow(KeyPress* keyInput);
 BootUpStates BootupFlow(KeyPress* keyInput);
-int DTMFFlow(KeyPress* keyInput);
+
 int ModeSelectFlow(KeyPress* keyInput);
 int switchToRadioMode(int mode);
 int StandardModeFlow(KeyPress* keyInput);
-int ConfigFlow(KeyPress* keyInput);
 int readOutModeName(int mode);
 void stateMachineStart();
 
