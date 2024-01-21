@@ -7,6 +7,7 @@ int TestHash(void* input){
     return hash;
 }
 bool TestCompare(void* a, void* b){
+    printf("Runing the compare function\n");
     if(strcmp((char*) a, (char*) b) == 0){
         return true;
     }else{

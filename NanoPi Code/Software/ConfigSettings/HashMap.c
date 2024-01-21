@@ -50,12 +50,14 @@ void* getHashMap(HashMap* hashmap,void* key){
     while(placingObject){
         PRINTFLEVEL2("SOFTWARE: in while with offset of %i\n", offset);
         if(hashmap->comparFunc(hashmap->list[(index+offset)%hashmap->size], key)){
-            PRINTFLEVEL2("Found index at %i\n",index+offset);
+            PRINTFLEVEL2("SOFTWARE: Found key in hashmap at index %i\n",index+offset);
             return  hashmap->list[(index+offset)%hashmap->size];
         }else if(offset != 0 && (index+offset)%hashmap->size == index+offset){
+             PRINTFLEVEL2("SOFTWARE: Could not find key in the hashmap\n");
             return NULL; //failed to find anything
         }
         else{
+            PRINTFLEVEL2("SOFTWARE: Increaseing get offset\n");
             if(offset == 0){
                 offset = 1;
             }else if(offset == 1){
