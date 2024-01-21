@@ -1,9 +1,11 @@
 int TestHash(void* input){
     char* st = (char*) input;
     int hash = 0;
-    for(int i = 0; i<strlen(st); i++){
+    int leng = strlen(st);
+    for(int i = 0; i<leng; i++){
         hash += st[i];
     }
+    printf("Got a string of %s with a length of %i and turned into a hash of %i\n",st,leng,hash);
     return hash;
 }
 bool TestCompare(void* a, void* b){
