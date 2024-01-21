@@ -47,11 +47,11 @@ bool TestInsertHash(){
     strcpy(key3,"KeyKeyKeyz");
     char* data3 = malloc(sizeof(char*)*20);
     strcpy(data3,"5151234");
-    insertHashMap(TestingHash, key1, data1);
+    insertHashMap(TestingHash, data1, key1);
     printf("first insert compleate\n");
-    insertHashMap(TestingHash, key2, data2);
+    insertHashMap(TestingHash, data2,key2);
     printf("Second insert compleate\n");
-    insertHashMap(TestingHash, key3, data3);
+    insertHashMap(TestingHash, data3,key3);
     return true;
 }
 bool TestGetHash(){
