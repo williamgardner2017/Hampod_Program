@@ -51,7 +51,9 @@ bool TestInsertHash(){
 bool TestGetHash(){
     char* key1 = "TestText1";
     char* key2 = "TestText2";
-    if(strcmp((char*) getHashMap(TestingHash,key1), "tehwt") != 0){
+    char* actual = (char*) getHashMap(TestingHash,key1);
+    printf("Ran the first grab test\n");
+    if(strcmp(actual, "tehwt") != 0){
         return false;
     }
     if(strcmp((char*) getHashMap(TestingHash,key2), "tehvsdwt") != 0){
