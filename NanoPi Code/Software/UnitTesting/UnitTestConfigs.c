@@ -53,10 +53,11 @@ bool TestInsertHash(){
     return true;
 }
 bool TestGetHash(){
-    char* key1 = "TestText1";
+    char* key1 = malloc(sizeof(char*)*20);
+    strcpy(key1,"TestText1");
     char* key2 = "TestText2";
     char* actual = (char*) getHashMap(TestingHash,key1);
-    printf("Ran the first grab test\n");
+    printf("Ran the first grab test and got a result of %s\n",actual);
     if(strcmp(actual, "tehwt") != 0){
         return false;
     }

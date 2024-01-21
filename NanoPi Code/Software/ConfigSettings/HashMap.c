@@ -24,7 +24,7 @@ void insertHashMap(HashMap* hashmap,void* data,void* key){
             hashmap->list[(index+offset)%hashmap->size] = data;
             hashmap->listOfKeys[(index+offset)%hashmap->size] = key;
             hashmap->quantity ++;
-        }else if(offset != 0 && (index+offset)%hashmap->size == index+offset){
+        }else if(offset != 0 && (index+offset)%hashmap->size == index){
             //TODO 
             //Grow the list size
              PRINTFLEVEL2("SOFTWARE: Hash Growing the size of the hashmap\n");
@@ -55,7 +55,7 @@ void* getHashMap(HashMap* hashmap,void* key){
         if(foundValue != 0 && hashmap->comparFunc(foundValue, key)){
             PRINTFLEVEL2("SOFTWARE: Found key in hashmap at index %i\n",index+offset);
             return  hashmap->list[(index+offset)%hashmap->size];
-        }else if(offset != 0 && (index+offset)%hashmap->size == index+offset){
+        }else if(offset != 0 && (index+offset)%hashmap->size == index){
              PRINTFLEVEL2("SOFTWARE: Could not find key in the hashmap\n");
             return NULL; //failed to find anything
         }
@@ -85,7 +85,7 @@ void* removeHashMap(HashMap* hashmap,void* key){
             hashmap->listOfKeys[(index+offset)%hashmap->size] = 0;
             hashmap->quantity --;
             return value;
-        }else if(offset != 0 && (index+offset)%hashmap->size == index+offset){
+        }else if(offset != 0 && (index+offset)%hashmap->size == index){
             return NULL; //failed to find anything
         }
         else{
