@@ -91,9 +91,12 @@ bool TestLoad(){
     return true;
 }
 bool TestGetConfig(){
+    printf("Getting the names\n");
     char** names = getListOfConfigNames();
+    printf("Getting a spesific one via the gotten names\n");
     getConfigByName(names[1]);
     getConfigByName(names[2]);
+    printf("Getting configs via a string input\n");
     getConfigByName("HotKey");
     return true;
 }
