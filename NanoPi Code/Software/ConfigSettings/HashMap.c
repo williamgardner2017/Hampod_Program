@@ -10,7 +10,9 @@ HashMap* createHashMap( int (*hashFunc)(void*), bool (*comparFunc)(void*,void*))
 }
 void insertHashMap(HashMap* hashmap,void* data,void* key){
     PRINTFLEVEL2("SOFTWARE: Hash Start of the inesert funciton\n");
-    int index = hashmap->hashFunc(key) % hashmap->size;
+    int hashOfKey = hashmap->hashFunc(key);
+    PRINTFLEVEL2("SOFTWARE: Hash ran the key throug the hashing function");
+    int index = hashOfKey % hashmap->size;
     PRINTFLEVEL2("SOFTWARE: Hash got the index after the has\n");
     int offset = 0;
     bool placingObject = true;

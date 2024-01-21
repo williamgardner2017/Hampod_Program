@@ -23,7 +23,7 @@ bool TestCreateDestroyHash(){
 }
 HashMap* TestingHash;
 bool TestCreateHash(){
-    TestingHash = createHashMap(TestingHash,TestCompare);
+    TestingHash = createHashMap(TestHash,TestCompare);
     return true;
 }
 bool TestInsertHash(){
