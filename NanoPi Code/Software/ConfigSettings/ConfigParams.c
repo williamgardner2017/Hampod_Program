@@ -40,8 +40,8 @@ void loadConfigParams(){
             }
         }
         //TODO add in a check to make sure that everything is filled out properly
-
-        insertHashMap(configMapping, (void*) configObject, (void*) configObject->name);
+        PRINTFLEVEL2("Software: adding config with name %s to the hash\n",configObject->name);
+        insertHashMap(configMapping, (void*) configObject, (void*) (configObject->name));
     }
 }
 
@@ -95,6 +95,7 @@ int ConfigHashing(void* key){
     //just adding together the asci values;
     char* st = (char*) key;
     int hash = 0;
+    PRINTFLEVEL2("Creating a hash for the string %s\n", st);
     for(int i = 0; i<strlen(st); i++){
         hash += st[i];
     }

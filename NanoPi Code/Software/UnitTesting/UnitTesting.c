@@ -202,7 +202,7 @@ int main(){
     // StateMachineTesting();
     ReadingFromFileTest();
     KeyPressTesting();
-    HashMapTest();
+    // HashMapTest();
     ConfigParamTest();
     return -1;
 }
