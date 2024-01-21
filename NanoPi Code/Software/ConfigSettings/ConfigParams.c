@@ -15,26 +15,36 @@ void loadConfigParams(){
             if (targetPosition != NULL) {
                 size_t index = targetPosition - ConfigsText[i];
                 char* paramName = customSubString(ConfigsText[i], 0,index-1);
+                PRINTFLEVEL2("Finding value for header of %s: ",paramName);
                 //go through and see which things was picked up and then fill out that part
                 if(strcmp(paramName,"Name") == 0){
                     strcpy(configObject->name, targetPosition + 2);
+                    PRINTFLEVEL2("It was the name %s\n", configObject->name);
                 }else if(strcmp(paramName,"Type") == 0){
                     configObject->configType = stringToConfigType(targetPosition + 2);
+                     PRINTFLEVEL2("It was a type \n");
                 }else if(strcmp(paramName,"Default") == 0){
                     configObject->defaultValue = strtod(targetPosition + 2, NULL);
                     configObject->currentValue = strtod(targetPosition + 2, NULL);
+                    PRINTFLEVEL2("It was a default value of %f\n",configObject->defaultValue);
                 }else if(strcmp(paramName,"MinValue") == 0){
                     configObject->minValue = strtod(targetPosition + 2, NULL);
+                     PRINTFLEVEL2("It was a Min value of %f\n",configObject->minValue);
                 }else if(strcmp(paramName,"MaxValue") == 0){
                     configObject->maxValue = strtod(targetPosition + 2, NULL);
+                     PRINTFLEVEL2("It was a max value of %f\n",configObject->maxValue);
                 }else if(strcmp(paramName,"StepSize") == 0){
                     configObject->stepSize = strtod(targetPosition + 2, NULL);
+                     PRINTFLEVEL2("It was a Stepsize of %f\n",configObject->stepSize);
                 }else if(strcmp(paramName,"SelectionSize") == 0){
                     configObject->selectionSize = strtod(targetPosition + 2, NULL);
+                     PRINTFLEVEL2("It was the selection set size of %i\n",configObject->selectionSize);
                 }else if(strcmp(paramName,"SelectionSet") == 0){
                     configObject->selectionSet = convertTocharArray(targetPosition+2,configObject->selectionSize);
+                    PRINTFLEVEL2("It was the selection set\n");
                 }else{
                     //TODO: throw error that bad config was found
+                    PRINTFLEVEL2("Nothing was found for this\n");
                 }
                 i++;
             }
