@@ -52,7 +52,9 @@ void loadConfigParams(){
         //TODO add in a check to make sure that everything is filled out properly
         PRINTFLEVEL2("Software: adding config with name %s to the hash\n",configObject->name);
         insertHashMap(configMapping, (void*) configObject, (void*) (configObject->name));
+        PRINTFLEVEL2("the next line of the array is %s\n",ConfigsText[i]);
         i++;
+        PRINTFLEVEL2("the next line of the array is %s\n",ConfigsText[i]);
     }
 }
 
