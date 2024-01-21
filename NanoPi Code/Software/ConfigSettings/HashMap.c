@@ -49,7 +49,10 @@ void* getHashMap(HashMap* hashmap,void* key){
     bool placingObject = true;
     while(placingObject){
         PRINTFLEVEL2("SOFTWARE: in while with offset of %i\n", offset);
-        if(hashmap->comparFunc(hashmap->list[(index+offset)%hashmap->size], key)){
+        int offsetIndex = (index+offset)%hashmap->size;
+        void* foundValue = hashmap->list[offsetIndex];
+        PRINTFLEVEL2("SOFTWARE: got the value of the offset index to be compared\n");
+        if(hashmap->comparFunc(foundValue, key)){
             PRINTFLEVEL2("SOFTWARE: Found key in hashmap at index %i\n",index+offset);
             return  hashmap->list[(index+offset)%hashmap->size];
         }else if(offset != 0 && (index+offset)%hashmap->size == index+offset){

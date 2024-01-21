@@ -8,7 +8,10 @@ int TestHash(void* input){
 }
 bool TestCompare(void* a, void* b){
     printf("Runing the compare function\n");
-    if(strcmp((char*) a, (char*) b) == 0){
+    char* A = (char*) a;
+    char* B = (char*) b;
+    printf("comparing the strings %s and %s\n", A,B);
+    if(strcmp(A,B) == 0){
         return true;
     }else{
         return false;
