@@ -161,7 +161,7 @@ void setListOfcurrentValues(double* values){
          if(configMapping->list[i] != 0){
         ConfigParam* temp = (ConfigParam*) configMapping->list[i];
         temp->currentValue = values[j];
-        j++
+        j++;
          }
     }
 }
