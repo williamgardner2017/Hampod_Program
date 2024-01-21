@@ -42,9 +42,9 @@ bool TestInsertHash(){
     char* data3 = malloc(sizeof(char*)*20);
     strcpy(data3,"5151234");
     insertHashMap(TestingHash, key1, data1);
-    printf("first insert compleate\n")
+    printf("first insert compleate\n");
     insertHashMap(TestingHash, key2, data2);
-    printf("Second insert compleate\n")
+    printf("Second insert compleate\n");
     insertHashMap(TestingHash, key3, data3);
     return true;
 }
