@@ -164,6 +164,34 @@ bool HashMapTest(){
     return true;
 }
 
+
+bool ConfigParamTest(){
+    printf("test load and unload Configs\n");
+    TestLoadUnloadConfig();
+    TestLoad();
+    printf("Test get config\n");
+    TestGetConfig();
+    printf("test get length of configs\n");
+    TestGetConfigLength();
+    printf("test get current values\n");
+    TestGetCurrentValues();
+    printf("test set current values\n");
+    TestSetCurrentValues();
+    printf("test Increment values:")
+    if(TestInrementValue()){
+        printf("Passed\n");
+    }else{
+        printf("Failed\n");
+    }
+    printf("test update configs:");
+    if(TestUpdateConfig()){
+        printf("Passed\n");
+    }else{
+        printf("Failed\n");
+    }
+    printf("End of configs testings\n");
+    return true;
+}
 int main(){
 
     if(signal(SIGSEGV, sigsegv_handler) == SIG_ERR) {
@@ -175,5 +203,6 @@ int main(){
     ReadingFromFileTest();
     KeyPressTesting();
     HashMapTest();
+    ConfigParamTest();
     return -1;
 }

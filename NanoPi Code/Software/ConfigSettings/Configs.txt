@@ -1,7 +1,3 @@
-Name: <Name here>
-Type: <Type Name> 
-Default: <value here> //after this the order does not matter
-
 Name: test1
 Type: OnOff
 Default: 0

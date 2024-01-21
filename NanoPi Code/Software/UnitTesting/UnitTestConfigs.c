@@ -78,3 +78,55 @@ bool TestGrowHash(){
     growHashMap(TestingHash);
     return true;
 }
+
+
+bool TestLoadUnloadConfig(){
+    loadConfigParams();
+    freeCongigFull();
+    return true;
+}
+bool TestLoad(){
+    loadConfigParams();
+    return true;
+}
+bool TestGetConfig(){
+    char** names = getListOfConfigNames();
+    getConfigByName(names[1]);
+    getConfigByName(names[2]);
+    getConfigByName("HotKey");
+    return true;
+}
+bool TestGetConfigLength(){
+    getLengthOfConfigs();
+    return true;
+}
+bool TestGetCurrentValues(){
+    getListOfCurrentValues();
+    return true;
+}
+bool TestSetCurrentValues(){
+    double* vals = getListOfCurrentValues()
+    vals[2] = vals[2]+2;
+    vals[1] = vals[1]-2;
+    setListOfcurrentValues(vals);
+    return true;
+}
+bool TestInrementValue(){
+    double initalVal = getConfigByName("Test2")->currentValue;
+    incrementConfig("Test2", true);
+    if(initalVal+1 != getConfigByName("Test2")->currentValue){
+        return false
+    }
+    incrementConfig("Test2", false);
+    if(initalVal != getConfigByName("Test2")->currentValue){
+        return false
+    }
+    return true;
+}
+bool TestUpdateConfig(){
+    updateConfigs("Test4",2);
+    if(getConfigByName("Test4")->currentValue != 2){
+        return false;
+    }
+    return true;
+}
