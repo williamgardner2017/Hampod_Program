@@ -9,7 +9,9 @@ HashMap* createHashMap( int (*hashFunc)(void*), bool (*comparFunc)(void*,void*))
     return map;
 }
 void insertHashMap(HashMap* hashmap,void* data,void* key){
-    int index = hashmap->hashFunc(key)%hashmap->size;
+    PRINTFLEVEL2("SOFTWARE: Hash Start of the inesert funciton\n");
+    int index = hashmap->hashFunc(key) % hashmap->size;
+    PRINTFLEVEL2("SOFTWARE: Hash got the index after the has\n");
     int offset = 0;
     bool placingObject = true;
     PRINTFLEVEL2("SOFTWARE: Hash going into the while loop\n");
