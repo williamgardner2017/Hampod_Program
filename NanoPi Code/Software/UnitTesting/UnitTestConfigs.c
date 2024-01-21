@@ -27,17 +27,24 @@ bool TestCreateHash(){
     return true;
 }
 bool TestInsertHash(){
-    char* key1 = "TestText1";
-    char* data1 = "tehwt";
+    char* key1 = malloc(sizeof(char*)*20);
+    strcpy(key1,"TestText1");
+    char* data1 = malloc(sizeof(char*)*20);
+    strcpy(data1,"tehwt");
 
-    char* key2 = "TestText2";
-    char* data2 = "tehvsdwt";
+    char* key2 = malloc(sizeof(char*)*20);
+    strcpy(key2,"TestText2");
+    char* data2 = malloc(sizeof(char*)*20);
+    strcpy(data2,"tehvsdwt");
 
-    char* key3 = "KeyKeyKeyz";
-    char* data3 = "5151234";
-
+    char* key3 = malloc(sizeof(char*)*20);
+    strcpy(key3,"KeyKeyKeyz");
+    char* data3 = malloc(sizeof(char*)*20);
+    strcpy(data3,"5151234");
     insertHashMap(TestingHash, key1, data1);
+    printf("first insert compleate\n")
     insertHashMap(TestingHash, key2, data2);
+    printf("Second insert compleate\n")
     insertHashMap(TestingHash, key3, data3);
     return true;
 }
