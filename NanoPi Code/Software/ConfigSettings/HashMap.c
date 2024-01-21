@@ -48,7 +48,9 @@ void* getHashMap(HashMap* hashmap,void* key){
     int offset = 0;
     bool placingObject = true;
     while(placingObject){
+        PRINTFLEVEL2("SOFTWARE: in while with offset of %i\n", offset);
         if(hashmap->comparFunc(hashmap->list[(index+offset)%hashmap->size], key)){
+            PRINTFLEVEL2("Found index at %i\n",index+offset);
             return  hashmap->list[(index+offset)%hashmap->size];
         }else if(offset != 0 && (index+offset)%hashmap->size == index+offset){
             return NULL; //failed to find anything
