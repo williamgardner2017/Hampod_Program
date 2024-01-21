@@ -177,7 +177,7 @@ bool ConfigParamTest(){
     TestGetCurrentValues();
     printf("test set current values\n");
     TestSetCurrentValues();
-    printf("test Increment values:")
+    printf("test Increment values:");
     if(TestInrementValue()){
         printf("Passed\n");
     }else{

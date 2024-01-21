@@ -105,7 +105,7 @@ bool TestGetCurrentValues(){
     return true;
 }
 bool TestSetCurrentValues(){
-    double* vals = getListOfCurrentValues()
+    double* vals = getListOfCurrentValues();
     vals[2] = vals[2]+2;
     vals[1] = vals[1]-2;
     setListOfcurrentValues(vals);
@@ -115,11 +115,11 @@ bool TestInrementValue(){
     double initalVal = getConfigByName("Test2")->currentValue;
     incrementConfig("Test2", true);
     if(initalVal+1 != getConfigByName("Test2")->currentValue){
-        return false
+        return false;
     }
     incrementConfig("Test2", false);
     if(initalVal != getConfigByName("Test2")->currentValue){
-        return false
+        return false;
     }
     return true;
 }
