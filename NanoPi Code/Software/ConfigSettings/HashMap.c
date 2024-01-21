@@ -12,8 +12,10 @@ void insertHashMap(HashMap* hashmap,void* data,void* key){
     int index = hashmap->hashFunc(key)%hashmap->size;
     int offset = 0;
     bool placingObject = true;
+    PRINTFLEVEL2("SOFTWARE: Hash going into the while loop\n");
     while(placingObject){
         if(hashmap->list[(index+offset)%hashmap->size] == 0){
+            PRINTFLEVEL2("SOFTWARE: Hash Found an index to place item at\n");
             placingObject = false;
             hashmap->list[(index+offset)%hashmap->size] = data;
             hashmap->listOfKeys[(index+offset)%hashmap->size] = index+1;
@@ -21,9 +23,12 @@ void insertHashMap(HashMap* hashmap,void* data,void* key){
         }else if(offset != 0 && (index+offset)%hashmap->size == index+offset){
             //TODO 
             //Grow the list size
-            insertHashMap(data, key, hashmap);
+             PRINTFLEVEL2("SOFTWARE: Hash Growing the size of the hashmap\n");
+            growHashMap(hashmap);
+            insertHashMap(hashmap,data, key);
             placingObject = false;
         }else{
+             PRINTFLEVEL2("SOFTWARE: Hash Finding a new offset for the hash\n");
             if(offset == 0){
                 offset = 1;
             }else if(offset == 1){
@@ -32,7 +37,7 @@ void insertHashMap(HashMap* hashmap,void* data,void* key){
                 offset = offset * offset;
             }
         }
-    }
+    }//end while
 }
 void* getHashMap(HashMap* hashmap,void* key){
     int index = hashmap->hashFunc(key)%hashmap->size;
