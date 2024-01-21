@@ -57,7 +57,7 @@ char* customSubString(char* original, int start, int length){
     }
     char* returnString = malloc(sizeof(char)*(strlen(original)+1));
     strncpy(returnString,original + start, len);
-    returnString[len+1] = '\0';
+    returnString[len] = '\0';
     return returnString;
 }
 
