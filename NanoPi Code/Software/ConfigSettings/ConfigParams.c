@@ -125,11 +125,16 @@ bool ConfigCompare(void* data, void* key){
 char** getListOfConfigNames(){
     char** configNames = malloc(sizeof(char*)*configMapping->quantity);
     PRINTFLEVEL2("SOFTWARE: CONFIGS: created the return object\n");
-    for(int i = 0; i<configMapping->quantity;i++){
-        ConfigParam* temp = (ConfigParam*) (configMapping->list[i]);
-        PRINTFLEVEL2("SOFTWARE: CONFIGS: created the temp object\n");
-        configNames[i] = temp->name;
-        PRINTFLEVEL2("SOFTWARE: CONFIGS: Populated it with the name %s\n", temp->name);
+    int j = 0;
+    for(int i = 0; i<configMapping->size;i++){
+        //problem, not all indexes have stuff in them
+        if(configMapping->list[i] != 0){
+            ConfigParam* temp = (ConfigParam*) (configMapping->list[i]);
+            PRINTFLEVEL2("SOFTWARE: CONFIGS: created the temp object\n");
+            configNames[j] = temp->name;
+            PRINTFLEVEL2("SOFTWARE: CONFIGS: Populated it with the name %s\n", temp->name);
+            j++;
+        }
     }
     return configNames;
 }
@@ -139,17 +144,25 @@ int getLengthOfConfigs(){
 
 double* getListOfCurrentValues(){
     double* values = malloc(sizeof(double)*configMapping->quantity);
+    int j = 0;
     for(int i = 0; i<configMapping->quantity;i++){
+        if(configMapping->list[i] != 0){
         ConfigParam* temp = (ConfigParam*) configMapping->list[i];
-        values[i] = temp->currentValue;
+        values[j] = temp->currentValue;
+        j++;
+        }
     }
     return values;
 
 }
 void setListOfcurrentValues(double* values){
+    int j =0;
     for(int i = 0; i<configMapping->quantity;i++){
+         if(configMapping->list[i] != 0){
         ConfigParam* temp = (ConfigParam*) configMapping->list[i];
-        temp->currentValue = values[i];
+        temp->currentValue = values[j];
+        j++
+         }
     }
 }
 
