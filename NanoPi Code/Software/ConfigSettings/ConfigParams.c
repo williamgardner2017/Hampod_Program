@@ -14,7 +14,7 @@ void loadConfigParams(){
             char *targetPosition = strchr(ConfigsText[i], ':');
             if (targetPosition != NULL) {
                 size_t index = targetPosition - ConfigsText[i];
-                char* paramName = customSubString(ConfigsText[i], 0,index-1);
+                char* paramName = customSubString(ConfigsText[i], 0,index);
                 PRINTFLEVEL2("Finding value for header of %s: ",paramName);
                 //go through and see which things was picked up and then fill out that part
                 if(strcmp(paramName,"Name") == 0){
