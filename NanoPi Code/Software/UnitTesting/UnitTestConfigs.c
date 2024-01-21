@@ -82,6 +82,7 @@ bool TestGrowHash(){
 
 bool TestLoadUnloadConfig(){
     loadConfigParams();
+    printf("testing the freeing part of the configs\n");
     freeCongigFull();
     return true;
 }
