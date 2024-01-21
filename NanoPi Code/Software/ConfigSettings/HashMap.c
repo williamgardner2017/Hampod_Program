@@ -13,7 +13,7 @@ void insertHashMap(HashMap* hashmap,void* data,void* key){
     int hashOfKey = hashmap->hashFunc(key);
     PRINTFLEVEL2("SOFTWARE: Hash ran the key throug the hashing function");
     int index = hashOfKey % hashmap->size;
-    PRINTFLEVEL2("SOFTWARE: Hash got the index after the has\n");
+    PRINTFLEVEL2("SOFTWARE: Hash got the index after the hash of %i\n", index);
     int offset = 0;
     bool placingObject = true;
     PRINTFLEVEL2("SOFTWARE: Hash going into the while loop\n");
@@ -45,6 +45,7 @@ void insertHashMap(HashMap* hashmap,void* data,void* key){
 }
 void* getHashMap(HashMap* hashmap,void* key){
     int index = hashmap->hashFunc(key)%hashmap->size;
+    PRINTFLEVEL2("SOFTWARE: Hash got the index after the hash of %i\n", index);
     int offset = 0;
     bool placingObject = true;
     while(placingObject){
