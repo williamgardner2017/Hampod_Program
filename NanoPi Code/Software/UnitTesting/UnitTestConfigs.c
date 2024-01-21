@@ -23,42 +23,42 @@ bool TestCreateDestroyHash(){
 }
 HashMap* TestingHash;
 bool TestCreateHash(){
-    TestingHash = createHashMap(TestHash,TestCompare);
+    TestingHash = createHashMap(TestingHash,TestCompare);
     return true;
 }
 bool TestInsertHash(){
-    char[20] key1 = "TestText1";
-    char[20] data1 = "tehwt";
+    char* key1 = "TestText1";
+    char* data1 = "tehwt";
 
-    char[20] key2 = "TestText2";
-    char[20] data2 = "tehvsdwt";
+    char* key2 = "TestText2";
+    char* data2 = "tehvsdwt";
 
-    char[20] key3 = "KeyKeyKeyz";
-    char[20] data3 = "5151234";
+    char* key3 = "KeyKeyKeyz";
+    char* data3 = "5151234";
 
-    insertHashMap(TestHash, key1, data1);
-    insertHashMap(TestHash, key2, data2);
-    insertHashMap(TestHash, key3, data3);
+    insertHashMap(TestingHash, key1, data1);
+    insertHashMap(TestingHash, key2, data2);
+    insertHashMap(TestingHash, key3, data3);
     return true;
 }
 bool TestGetHash(){
-    char[20] key1 = "TestText1";
-    char[20] key2 = "TestText2";
-    if(strcmp((char*) getHashMap(TestHash,key1), "tehwt") != 0){
+    char* key1 = "TestText1";
+    char* key2 = "TestText2";
+    if(strcmp((char*) getHashMap(TestingHash,key1), "tehwt") != 0){
         return false;
     }
-    if(strcmp((char*) getHashMap(TestHash,key2), "tehvsdwt") != 0){
+    if(strcmp((char*) getHashMap(TestingHash,key2), "tehvsdwt") != 0){
         return false;
     }
     return true;
 }
 bool TestRemoveHash(){
-    if(strcmp(removeHashMap(TestHash,"KeyKeyKeyz"),"5151234") != 0){
+    if(strcmp(removeHashMap(TestingHash,"KeyKeyKeyz"),"5151234") != 0){
         return false;
     }
     return true;
 }
 bool TestGrowHash(){
-    growHashMap(TestHash);
+    growHashMap(TestingHash);
     return true;
 }
