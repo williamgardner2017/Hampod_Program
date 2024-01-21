@@ -124,9 +124,11 @@ bool ConfigCompare(void* data, void* key){
 }
 char** getListOfConfigNames(){
     char** configNames = malloc(sizeof(char*)*configMapping->quantity);
+    PRINTFLEVEL2("SOFTWARE: CONFIGS: created the return object\n");
     for(int i = 0; i<configMapping->quantity;i++){
         ConfigParam* temp = (ConfigParam*) configMapping->list[i];
         configNames[i] = temp->name;
+        PRINTFLEVEL2("SOFTWARE: CONFIGS: Populated it with the name %s\n", temp->name);
     }
     return configNames;
 }
