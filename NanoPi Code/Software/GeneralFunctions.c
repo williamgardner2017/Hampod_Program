@@ -51,7 +51,7 @@ void freeFileArray(char** list){
 char* customSubString(char* original, int start, int length){
     int len = 0;// the actual length to be used
     if(length == -1){
-        len = strlen(original);
+        len = strlen(original) - start;
     }else{
         len = length;
     }

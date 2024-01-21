@@ -18,7 +18,7 @@ void loadConfigParams(){
                 PRINTFLEVEL2("Finding value for header of %s: ",paramName);
                 //go through and see which things was picked up and then fill out that part
                 if(strcmp(paramName,"Name") == 0){
-                    strcpy(configObject->name, targetPosition + 2);
+                    configObject->name = customSubString(ConfigsText[i],index,-1);
                     PRINTFLEVEL2("It was the name %s\n", configObject->name);
                 }else if(strcmp(paramName,"Type") == 0){
                     configObject->configType = stringToConfigType(targetPosition + 2);
