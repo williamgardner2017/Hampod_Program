@@ -318,7 +318,7 @@ void setupAudioHashMap(){
         char* nameAndPath = malloc(sizeof(char)*(strlen(de->d_name)+strlen(softwarePath)));
         char* nameOnly = malloc(sizeof(char)*(strlen(de->d_name)));
         strcat(nameAndPath, softwarePath);
-        strncpy(nameOnly,de->name,strlen(de->d_name)-5);
+        strncpy(nameOnly,de->d_name,strlen(de->d_name)-5);
         nameOnly[strlen(de->d_name)-4] = '\0'; //add back in the null
         strcat(nameAndPath,nameOnly);
         //TODO insert into the hash with (path/name, name)

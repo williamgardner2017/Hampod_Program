@@ -13,6 +13,7 @@
 #include "UnitTestStateMachine.h"
 #include "UnitTestReadFile.h"
 #include "UnitTestConfigs.h"
+#include "UnitTestAudio.h"
 
 void sigsegv_handler(int signum);
 
