@@ -113,7 +113,7 @@ int isReadingOut = 0; //TODO make this actualy cause a read out
 */
 int ModeSelectFlow(KeyPress* keyInput){
     if(isReadingOut){
-        readOutModeName(modeSelectPage*9 + (convertCharToKeyValue(keyInput)/10));
+        readOutModeName(modeSelectPage*9 + convertCharToKeyValue(keyInput)-1);
         isReadingOut = 0;
     }else{
         switch (keyInput->keyPressed){
@@ -142,7 +142,7 @@ int ModeSelectFlow(KeyPress* keyInput){
             case '7':
             case '8':
             case '9':
-                switchToRadioMode((modeSelectPage*9) + convertCharToKeyValue(keyInput));
+                switchToRadioMode((modeSelectPage*9) + convertCharToKeyValue(keyInput)-1);
                 break;
         
             default:

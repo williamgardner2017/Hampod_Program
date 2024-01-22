@@ -316,7 +316,7 @@ void setupAudioHashMap(){
     while ((de = readdir(dr)) != NULL){
         printf("%s\n", de->d_name);
         //TODO see if this will grab also the .wav part and if it grabs the path.
-        if(strcmp(de->d_name, ".") != 0){   
+        if(strcmp(de->d_name, ".") != 0 && strcmp(de->d_name, "..") != 0){   
             char* nameAndPath = malloc(sizeof(char)*(strlen(de->d_name)+strlen(softwarePath)));
             char* nameOnly = malloc(sizeof(char)*(strlen(de->d_name)));
             strcat(nameAndPath, softwarePath);
