@@ -303,7 +303,7 @@ char* sendSpeakerOutput(char* text){
 
 
 void setupAudioHashMap(){
-    char* softwarePath = "../Firmware/pregen_audio/";
+    char* softwarePath = "~/Hampod_Program/NanoPi Code/Firmware/pregen_audio/";
     PRINTFLEVEL2("SOFTWARE:Creating the hashmap\n");
     audioHashMap = createHashMap(audioHash,audioCompare);
     struct dirent *de; 
@@ -320,8 +320,8 @@ void setupAudioHashMap(){
             char* nameAndPath = malloc(sizeof(char)*(strlen(de->d_name)+strlen(softwarePath)));
             char* nameOnly = malloc(sizeof(char)*(strlen(de->d_name)));
             strcat(nameAndPath, softwarePath);
-            strncpy(nameOnly,de->d_name,strlen(de->d_name)-5);
-            nameOnly[strlen(de->d_name)-4] = '\0'; //add back in the null
+            strncpy(nameOnly,de->d_name,strlen(de->d_name)-3);
+            nameOnly[strlen(de->d_name)-2] = '\0'; //add back in the null
             strcat(nameAndPath,nameOnly);
             //TODO insert into the hash with (path/name, name)
             PRINTFLEVEL2("SOFTWARE: adding the data %s with the key of %s\n",nameAndPath,nameOnly);
