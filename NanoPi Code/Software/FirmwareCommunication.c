@@ -313,19 +313,21 @@ void setupAudioHashMap(){
         printf("Could not open current directory" ); 
         return 0; 
     } 
-    PRINTFLEVEL2("SOFTWARE:Directory has been created\n");
+    PRINTFLEVEL2("SOFTWARE:Directory has been created at location %s\n");
     while ((de = readdir(dr)) != NULL){
         printf("%s\n", de->d_name);
         //TODO see if this will grab also the .wav part and if it grabs the path.
-        char* nameAndPath = malloc(sizeof(char)*(strlen(de->d_name)+strlen(softwarePath)));
-        char* nameOnly = malloc(sizeof(char)*(strlen(de->d_name)));
-        strcat(nameAndPath, softwarePath);
-        strncpy(nameOnly,de->d_name,strlen(de->d_name)-5);
-        nameOnly[strlen(de->d_name)-4] = '\0'; //add back in the null
-        strcat(nameAndPath,nameOnly);
-        //TODO insert into the hash with (path/name, name)
-        PRINTFLEVEL2("SOFTWARE: adding the data %s with the key of %s\n",nameAndPath,nameOnly);
-        insertHashMap(audioHashMap,nameAndPath,nameOnly);
+        if(strcmp(de->d_name, ".") != 0){   
+            char* nameAndPath = malloc(sizeof(char)*(strlen(de->d_name)+strlen(softwarePath)));
+            char* nameOnly = malloc(sizeof(char)*(strlen(de->d_name)));
+            strcat(nameAndPath, softwarePath);
+            strncpy(nameOnly,de->d_name,strlen(de->d_name)-5);
+            nameOnly[strlen(de->d_name)-4] = '\0'; //add back in the null
+            strcat(nameAndPath,nameOnly);
+            //TODO insert into the hash with (path/name, name)
+            PRINTFLEVEL2("SOFTWARE: adding the data %s with the key of %s\n",nameAndPath,nameOnly);
+            insertHashMap(audioHashMap,nameAndPath,nameOnly);
+        }
     }
     PRINTFLEVEL2("SOFTWARE:Finished adding stuff to Hashmap\n");
     closedir(dr);     
