@@ -318,10 +318,10 @@ void setupAudioHashMap(){
         //TODO see if this will grab also the .wav part and if it grabs the path.
         if(strcmp(de->d_name, ".") != 0 && strcmp(de->d_name, "..") != 0){   
             char* nameAndPath = malloc(sizeof(char)*(strlen(de->d_name)+strlen(softwarePath)));
-            char* nameOnly = malloc(sizeof(char)*(strlen(de->d_name)));
+            char* nameOnly = malloc(sizeof(char)*(strlen(de->d_name)+10));
             strcat(nameAndPath, softwarePath);
-            strncpy(nameOnly,de->d_name,strlen(de->d_name)-3);
-            nameOnly[strlen(de->d_name)-2] = '\0'; //add back in the null
+            strncpy(nameOnly,de->d_name,strlen(de->d_name));
+            nameOnly[strlen(de->d_name)+1] = '\0'; //add back in the null
             strcat(nameAndPath,nameOnly);
             //TODO insert into the hash with (path/name, name)
             PRINTFLEVEL2("SOFTWARE: adding the data %s with the key of %s\n",nameAndPath,nameOnly);
