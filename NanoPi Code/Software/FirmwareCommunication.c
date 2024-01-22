@@ -303,7 +303,7 @@ char* sendSpeakerOutput(char* text){
 
 
 void setupAudioHashMap(){
-    char* softwarePath = "~/Hampod_Program/NanoPi Code/Firmware/pregen_audio";
+    char* softwarePath = "/home/pi/Hampod_Program/NanoPi Code/Firmware/pregen_audio";
     PRINTFLEVEL2("SOFTWARE:Creating the hashmap\n");
     audioHashMap = createHashMap(audioHash,audioCompare);
     struct dirent *de; 
