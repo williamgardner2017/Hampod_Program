@@ -192,6 +192,16 @@ bool ConfigParamTest(){
     printf("End of configs testings\n");
     return true;
 }
+
+bool AudioTesting(){
+    printf("Start testing the audio\n");
+    printf("testing creating the hashmap\n");
+    testCreatingAudioHash();
+    printf("test doing a few audios\n");
+    testGetAudio();
+    printf("End audio testing\n");
+    return true;
+}
 int main(){
 
     if(signal(SIGSEGV, sigsegv_handler) == SIG_ERR) {
@@ -203,6 +213,7 @@ int main(){
     ReadingFromFileTest();
     KeyPressTesting();
     // HashMapTest();
-    ConfigParamTest();
+    // ConfigParamTest();
+    AudioTesting();
     return -1;
 }

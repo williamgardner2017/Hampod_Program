@@ -12,6 +12,7 @@
 #include <signal.h>
 #include <stdbool.h>
 #include <string.h>
+#include <dirent.h> 
 
 
 #include "GeneralFunctions.h"

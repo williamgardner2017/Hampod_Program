@@ -258,7 +258,13 @@ void* OutputThreadManager(void* arg){
 char* sendSpeakerOutput(char* text){
     //
     if(SIMULATEOUTPUT){
-        PRINTFLEVEL1("TESTING SPEAKER OUTPUT: %s", text);
+        PRINTFLEVEL1("TESTING SPEAKER OUTPUT: %s\n", text);
+         bool hasAudioFile = getHashMap(audioHashMap, text) != NULL;
+         if(hasAudioFile){
+            PRINTFLEVEL1("SOFTWARE: Audio file was found\n");
+         }else{
+            PRINTFLEVEL1("SOFTWARE:No audio file found\n");
+         }
         return text;
     }
     //TODO add the stuff for checking if it exits
@@ -272,7 +278,7 @@ char* sendSpeakerOutput(char* text){
         strcat(outputText,text);
     }
 
-
+    
     Inst_packet* speakerPacket = create_inst_packet(AUDIO,strlen(outputText)+1,(unsigned char*) outputText, 0);
     int result;
     PRINTFLEVEL2("SOFTWARE Locking up speakout output\n");
@@ -297,10 +303,28 @@ char* sendSpeakerOutput(char* text){
 
 
 void setupAudioHashMap(){
+    char* softwarePath = "../Firmware/pregen_audio/";
     audioHashMap = createHashMap(audioHash,audioCompare);
-    //get the files
-    //for each
-    //inset path,name into it
+    struct dirent *de; 
+    DIR *dr = opendir(".");//TODO set this to the correct location
+    if (dr == NULL)  // opendir returns NULL if couldn't open directory 
+    { 
+        printf("Could not open current directory" ); 
+        return 0; 
+    } 
+    while ((de = readdir(dr)) != NULL){
+        printf("%s\n", de->d_name);
+        //TODO see if this will grab also the .wav part and if it grabs the path.
+        char* nameAndPath = malloc(sizeof(char)*(strlen(de->d_name)+strlen(softwarePath)));
+        char* nameOnly = malloc(sizeof(char)*(strlen(de->d_name)));
+        strcat(nameAndPath, softwarePath);
+        strncpy(nameOnly,de->name,strlen(de->d_name)-5);
+        nameOnly[strlen(de->d_name)-4] = '\0'; //add back in the null
+        strcat(nameAndPath,nameOnly);
+        //TODO insert into the hash with (path/name, name)
+        insertHashMap(audioHashMap,nameAndPath,nameOnly);
+    }
+    closedir(dr);     
 }
 int audioHash(void* key){
     char* st = (char*) key;
@@ -452,4 +476,5 @@ void freeFirmwareComunication(){
     close(input_pipe);
     printf("Software:closing output pipe\n");
     close(output_pipe);
+    destroyHashMap(audioHashMap,audioFree);
 }
