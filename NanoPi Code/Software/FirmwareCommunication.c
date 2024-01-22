@@ -307,7 +307,7 @@ void setupAudioHashMap(){
     PRINTFLEVEL2("SOFTWARE:Creating the hashmap\n");
     audioHashMap = createHashMap(audioHash,audioCompare);
     struct dirent *de; 
-    DIR *dr = opendir(".");//TODO set this to the correct location
+    DIR *dr = opendir(softwarePath);//TODO set this to the correct location
     if (dr == NULL)  // opendir returns NULL if couldn't open directory 
     { 
         printf("Could not open current directory" ); 
