@@ -304,6 +304,7 @@ char* sendSpeakerOutput(char* text){
 
 void setupAudioHashMap(){
     char* softwarePath = "../Firmware/pregen_audio/";
+    PRINTFLEVEL2("SOFTWARE:Creating the hashmap\n");
     audioHashMap = createHashMap(audioHash,audioCompare);
     struct dirent *de; 
     DIR *dr = opendir(".");//TODO set this to the correct location
@@ -312,6 +313,7 @@ void setupAudioHashMap(){
         printf("Could not open current directory" ); 
         return 0; 
     } 
+    PRINTFLEVEL2("SOFTWARE:Directory has been created\n");
     while ((de = readdir(dr)) != NULL){
         printf("%s\n", de->d_name);
         //TODO see if this will grab also the .wav part and if it grabs the path.
@@ -322,6 +324,7 @@ void setupAudioHashMap(){
         nameOnly[strlen(de->d_name)-4] = '\0'; //add back in the null
         strcat(nameAndPath,nameOnly);
         //TODO insert into the hash with (path/name, name)
+        PRINTFLEVEL2("SOFTWARE: adding the data %s with the key of %s\n",nameAndPath,nameOnly);
         insertHashMap(audioHashMap,nameAndPath,nameOnly);
     }
     closedir(dr);     
