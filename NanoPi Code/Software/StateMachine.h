@@ -47,9 +47,7 @@
 typedef enum {
     bootUp,
     standard,
-    modeSelect,
-    configMode,
-    dtmf
+    modeSelect
 } ModeStates;
 
 typedef enum {
@@ -75,8 +73,8 @@ int readOutModeName(int mode);
 void stateMachineStart();
 
 void freeStateMachine();
-
 void toggleCDHotkeys(bool state);
+
 /**
  * These functions are for testing purposes only
 */

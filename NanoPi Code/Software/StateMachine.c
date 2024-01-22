@@ -28,14 +28,6 @@ ModeStates modeFlow(KeyPress* keyInput){
             ModeSelectFlow(keyInput);
             return modeSelect;
             break;
-        case configMode: // TODO OUTDATED
-            ConfigFlow(keyInput);
-            return configMode;
-            break;
-        case dtmf: //TODO OUTDATED
-            DTMFFlow(keyInput);
-            return dtmf;
-            break;
         default:
             //make a screem of unknown
             //it should never get here
@@ -268,26 +260,9 @@ int readOutModeName(int modeID){
  * Idea, have this be what takes in the modeID and then using it would also switch the modeState as needed
 */
 int switchToRadioMode(int modeID){ //TODO redue this to be better sueted, all this needs to do is to set what the letter toggles are when swiching to said mode
-    switch (modeID)
-    {
-        case 1: //DTMF
-            modeState = dtmf;
-            setRadioMode(radios[currentRadio], getModeById(modeID));
-            break;
-        case 2: //config mode
-            modeState = configMode;
-            setRadioMode(radios[currentRadio], getModeById(modeID));
-            break;
-        case -3: //mode select
-            modeState = modeSelect;
-            break;
-        default:
-            modeState = standard;
-            //radio.setMode(mode);
-            setRadioMode(radios[currentRadio], getModeById(modeID));
-            break;
-    }
-        return -1;
+    modeState = standard;
+    setRadioMode(radios[currentRadio], getModeById(modeID));
+    return -1;
 }
 
 
