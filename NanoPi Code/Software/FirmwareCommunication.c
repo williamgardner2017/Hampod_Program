@@ -303,7 +303,7 @@ char* sendSpeakerOutput(char* text){
 
 
 void setupAudioHashMap(){
-    char* softwarePath = "../Firmware/pregen_audio/";
+    char* softwarePath = "~/Hampod_Program/NanoPi Code/Firmware/pregen_audio";
     PRINTFLEVEL2("SOFTWARE:Creating the hashmap\n");
     audioHashMap = createHashMap(audioHash,audioCompare);
     struct dirent *de; 
@@ -327,6 +327,7 @@ void setupAudioHashMap(){
         PRINTFLEVEL2("SOFTWARE: adding the data %s with the key of %s\n",nameAndPath,nameOnly);
         insertHashMap(audioHashMap,nameAndPath,nameOnly);
     }
+    PRINTFLEVEL2("SOFTWARE:Finished adding stuff to Hashmap\n");
     closedir(dr);     
 }
 int audioHash(void* key){
