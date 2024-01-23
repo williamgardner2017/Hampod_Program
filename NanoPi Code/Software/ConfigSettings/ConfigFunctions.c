@@ -8,8 +8,55 @@ void populateConfigFunctions(){
     OtherFlagged->configFuntion = setHotkeys;
 }
 
+void saveToFile(int fileNumber){
+    char* fileName = strcat()
+    char fileName[40];
+    sprintf(fileName, "SaveFiles/saveNumber%i",fileNumber);
+    FILE *fp = fopen(fileName, "w");
+    if (fp == NULL)
+    {
+        printf("Error opening the file %s", filename);
+        return -1;
+    }
+
+    //fprintf(fp, "This is the line #%d\n", i + 1);
+
+    //Save the configs
+    fprintf(fp, "Start of Configs\n");
+    char** configsToSave = getListOfConfigNames();
+    int num = getLengthOfConfigs();
+    for(int i = 0 ; i<num;i++){
+        fprintf(fp, "%s : %f\n",configsToSave[i], getConfigByName(configsToSave[i])->currentValue);
+    }
+    //save the hotkeys
+    fprintf(fp,"Start of Hotkeys\n");
+    Mode** modesToSave = getHotKeyList();
+    for(int i = 0; i<12;i++){
+        if(modesToSave[i] == 0){ //TODO make it so that you can get the mode id's
+            fprintf(fp,"%i : %i : %s\n",i,-1,"NULL");
+        }else{
+            fprintf(fp,"%i : %i : %s\n",i,-1,modesToSave[i]->modeDetails->modeName);
+        }
+    }
+    //save the hamlib
+    fprintf(fp,"Start of radios\n");
+    Radio** radiosToSave = getRadios();
+    for(int i = 0, i<2;i++){
+        char** saveableData = (char**) getRadioDetailsInSavableFormat();
+        fprintf(fp,"%s : %s", saveableData[0], saveableData[1]);
+        free(saveableData);
+    }
+    // close the file
+    fclose(fp);
+
+    return 0;
+}
+
 int SaveData(KeyPress* hold){
-    return 1;
+    //1 select save to save to
+    int selectedFile = 1;
+
+    //2 create the save file
 }
 
 int chosenModeId = 0;

@@ -83,6 +83,7 @@ void setRadios(Radio* r, int cR);
 void setBootUpState(BootUpStates state);
 void setCompanyAndModel(char* comp, int mod);
 
+Radio** getRadios();
 
 #include "FirmwareCommunication.h"
 #include "StateMachine.c"
