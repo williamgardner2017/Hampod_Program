@@ -300,3 +300,7 @@ void freeStateMachine(){
     freeModes();
     PRINTFLEVEL2("freed the modes\n");
 }
+
+Radio** getRadios(){
+    return radios;
+}

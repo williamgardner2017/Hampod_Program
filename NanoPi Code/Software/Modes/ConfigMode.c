@@ -67,6 +67,7 @@ void configNavigation(KeyPress* keyInput){
             case OTHER:
                 PRINTFLEVEL1("SOFTWARE: Running function related to config%s\n", configNames[currentConfig]);
                 selectingConfig = false;
+                keyInput->keyPressed = '-';
                 configNavigation(keyInput);
                 break;
             default:

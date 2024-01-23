@@ -36,7 +36,3 @@ void* runRadioCommand(Radio* thisRadio, KeyPress* keyInput){
     results = thisRadio->currentMode->modeInput(keyInput,0);
     return results;
 }
-
-void* getRadioDetailsInSavableFormat(Radio* thisRadio){
-    return NULL;
-}

@@ -143,3 +143,6 @@ Mode* getModeViaProgramableKey(KeyPress* key){
     return keyBinds[value];
 }
 
+Mode** getHotKeyList(){
+    return keyBinds;
+}

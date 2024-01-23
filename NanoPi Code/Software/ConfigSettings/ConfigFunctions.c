@@ -42,8 +42,7 @@ void saveToFile(int fileNumber){
     fprintf(fp,"Start of radios\n");
     Radio** radiosToSave = getRadios();
     for(int i = 0, i<2;i++){
-        char** saveableData = (char**) getRadioDetailsInSavableFormat();
-        fprintf(fp,"%s : %s", saveableData[0], saveableData[1]);
+        fprintf(fp,"%i : %i", radiosToSave[i]->port, radiosToSave[i]->model); //TODO update this to be correct
         free(saveableData);
     }
     // close the file
@@ -52,11 +51,31 @@ void saveToFile(int fileNumber){
     return 0;
 }
 
-int SaveData(KeyPress* hold){
-    //1 select save to save to
-    int selectedFile = 1;
-
-    //2 create the save file
+int SaveData(KeyPress* keyData){
+    if(keyData->keyPressed == '-'){
+        sendSpeakerOutput("Select save slot 0 to 9 to save to");
+        return -1;
+    }
+    switch (keyData->keyPressed)
+        {
+            case '#':
+                return 1;
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+                saveToFile(convertCharToKeyValue(keyData));
+                return 1;
+            default:
+            break;
+        }
+        return -1;
 }
 
 int chosenModeId = 0;

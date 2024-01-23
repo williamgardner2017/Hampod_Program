@@ -46,11 +46,12 @@
 #include "ConfigParams.h"
 #include "../Modes/ModeRouting.h"
 #include "../StateMachine.h"
-#include "../Radio.h"
+#include "../FirmwareCommunication.h"
 
 void populateConfigFunctions();
 
-int SaveData(KeyPress* hold);
+void saveToFile(int fileNumber);
+int SaveData(KeyPress* keyData);
 
 int setHotkeys(KeyPress* keyData);
 
