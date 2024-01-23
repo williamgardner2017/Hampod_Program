@@ -12,6 +12,7 @@
 #include <signal.h>
 #include <stdbool.h>
 #include <string.h>
+#include <dirent.h> 
 
 
 #include "GeneralFunctions.h"
@@ -19,7 +20,7 @@
 #include "ThreadQueue.h"
 #include "../Firmware/hampod_queue.h"
 #include "../Firmware/hampod_firm_packet.h"
-
+#include "ConfigSettings/HashMap.h"
 
 
 #define INPUT_PIPE "Firmware_i"
@@ -69,7 +70,10 @@ void resetKeyInputVars();
 bool confirmKeyInputVars(char oK, bool hKS,int sS, int hWC);
 
 char* sendSpeakerOutput(char* text);
-
+void setupAudioHashMap();
+int audioHash(void* key);
+bool audioCompare(void* key1, void* key2);
+void audioFree(void* data);
 
 void firmwareCommunicationStartup();
 void printOutErrors(char oK, bool hKS,int sS, int hWC);

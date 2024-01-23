@@ -36,7 +36,6 @@
 #include <stdio.h>
 #include "../GeneralFunctions.h"
 #include "HashMap.h"
-#include "ConfigFunctions.h"
 
 
 
@@ -46,7 +45,6 @@
 void loadConfigParams();
 ConfigType stringToConfigType(char* str);
 char** convertTocharArray(char* str, int size);
-void loadUpFunctionPointers(void** pointers);
 //for the hashmap
 void freeConfigParam(void* param);
 int ConfigHashing(void* key);
@@ -58,6 +56,7 @@ char** getListOfConfigNames();
 int getLengthOfConfigs();
 double* getListOfCurrentValues();
 void setListOfcurrentValues(double* values);
-char* updateConfig(char* name, bool up);
+char* incrementConfig(char* name, bool up);
+char* updateConfigs(char* name, double value);
 #include "ConfigParams.c"
 #endif

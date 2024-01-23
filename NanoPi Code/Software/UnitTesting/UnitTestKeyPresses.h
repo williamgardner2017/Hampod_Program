@@ -10,6 +10,7 @@
 #include "../FirmwareCommunication.h"
 bool fullTest();
 bool compareKeyInputs(KeyPress* correct, KeyPress* testing);
+bool testKeyPadEntering();
 
 #include "UnitTestKeyPresses.c"
 #endif

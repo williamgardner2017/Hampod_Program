@@ -1,14 +1,12 @@
+//Config mode is broken up into multiple parts, the idea is to have one section dedicated to navigation and simple selection of configs, the other is ment for more common but complicated stuff, like having the user input a number
 char** configNames;
 int currentConfig = 0;
 double* oldValues;
-/**
- * 4,6 go forward or backwards in a config 
- * 2,8 go up and down for the configs
- * 7, save changes
- * 9, cancel changes
- * 5 run the config spesific command 
-*/
-void* configCommandRelay(KeyPress* keyInput, int radioDetails){
+bool selectingConfig = true;
+
+void configNavigation(KeyPress* keyInput){
+    char* output;
+    KeyPress* clearing;
     switch (keyInput->keyPressed)
     {
     case '4':
@@ -29,29 +27,52 @@ void* configCommandRelay(KeyPress* keyInput, int radioDetails){
         //say the name
         break;
     case '2':
-        char* output = updateConfig(configNames[currentConfig], false);
-        PRINTFLEVEL1("SOFTWARE: Set config %s to %s\n", configNames[currentConfig], output);
-        free(output);
+        switch (getConfigByName(configNames[currentConfig])->configType)
+        {
+        case ONOFF:
+        case NUMERIC:
+        case ONOFFNUMERIC:
+            output = incrementConfig(configNames[currentConfig], false);
+            PRINTFLEVEL1("SOFTWARE: Set config %s to %s\n", configNames[currentConfig], output);
+            free(output);
+            break;
+        
+        default:
+            break;
+        }
         break;
     case '8':
-        char* output = updateConfig(configNames[currentConfig], true);
-        PRINTFLEVEL1("SOFTWARE: Set config %s to %s\n", configNames[currentConfig], output);
-        free(output);
-        break;
-
-    case '5':
-        PRINTFLEVEL1("SOFTWARE: Running function related to config%s\n", configNames[currentConfig]);
-        if(strcmp(configNames[currentConfig], "Save") == 0){
-            //Figure out how to pass both the name and the data 
-            void** dataPointer = malloc(sizeof(void*)*3);
-            dataPointer[0] = configNames;
-            dataPointer[1] = oldValues; //This may be better if it was the current settings and not the old ones
-            dataPointer[2] = &getLengthOfConfigs(); //This is very janky but should work
-            getConfigByName(configNames[currentConfig])->configFuntion((void*) dataPointer);
-            free(dataPointer);
+        switch (getConfigByName(configNames[currentConfig])->configType)
+        {
+        case ONOFF:
+        case NUMERIC:
+        case ONOFFNUMERIC:
+            output = incrementConfig(configNames[currentConfig], true);
+            PRINTFLEVEL1("SOFTWARE: Set config %s to %s\n", configNames[currentConfig], output);
+            free(output);
+            break;
+        default:
+            break;
         }
         break;
 
+    case '5':
+        switch(getConfigByName(configNames[currentConfig])->configType){
+            case NUMPAD:
+                clearing = malloc(sizeof(KeyPress));
+                clearing->keyPressed = '#';
+                keypadInput(clearing);
+                free(clearing);
+                break;
+            case OTHER:
+                PRINTFLEVEL1("SOFTWARE: Running function related to config%s\n", configNames[currentConfig]);
+                selectingConfig = false;
+                configNavigation(keyInput);
+                break;
+            default:
+                break;
+        }
+        break;
     case '9':
         PRINTFLEVEL1("SOFTWARE: Saving changes to configs\n");
         free(oldValues);
@@ -66,6 +87,47 @@ void* configCommandRelay(KeyPress* keyInput, int radioDetails){
     default:
         break;
     }
+}
+
+void configOTHERFlow(KeyPress* keyInput){
+    if(getConfigByName(configNames[currentConfig])->configFuntion(keyInput) == 1){
+         selectingConfig = true;
+    }
+}
+
+void configNUMPADFlow(KeyPress* keyInput){
+    double value = keypadInput(keyInput);
+    if(value <= 0){
+        //output the number
+    }else{
+        updateConfigs(configNames[currentConfig], value);
+        selectingConfig = true;
+        //output the number
+    }
+}
+/**
+ * 4,6 go forward or backwards in a config 
+ * 2,8 go up and down for the configs
+ * 7, save changes
+ * 9, cancel changes
+ * 5 run the config spesific command 
+*/
+void* configCommandRelay(KeyPress* keyInput, int radioDetails){
+    if(selectingConfig){
+        configNavigation(keyInput);
+    }else{
+        switch(getConfigByName(configNames[currentConfig])->configType){
+            case NUMPAD:
+                configNUMPADFlow(keyInput);
+                break;
+            case OTHER:
+                configOTHERFlow(keyInput);
+                break;
+            default:
+                break;
+        }
+    }
+    
     return NULL;
 }
 
@@ -79,16 +141,16 @@ void freeConfigMode(Mode** modeToFree){
 
 //Grab the current values when loading in
 void enterConfigMode(){
-    configKeys = getListOfConfigNames();
+    configNames = getListOfConfigNames();
     oldValues = getListOfCurrentValues();
 }
 
 //exiting without saving will just cancel all changes 
 void exitConfigMode(){
     setListOfcurrentValues(oldValues);
-    free(configKeys);
+    free(configNames);
     free(oldValues);
-    configKeys = getListOfConfigNames();
+    configNames = getListOfConfigNames();
     oldValues = getListOfCurrentValues();
 }
 

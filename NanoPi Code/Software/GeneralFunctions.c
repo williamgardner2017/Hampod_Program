@@ -51,12 +51,70 @@ void freeFileArray(char** list){
 char* customSubString(char* original, int start, int length){
     int len = 0;// the actual length to be used
     if(length == -1){
-        len = strlen(original);
+        len = strlen(original) - start;
     }else{
         len = length;
     }
     char* returnString = malloc(sizeof(char)*(strlen(original)+1));
     strncpy(returnString,original + start, len);
-    returnString[len+1] = '\0';
+    returnString[len] = '\0';
     return returnString;
+}
+
+int keyPadNumeber = 0;
+int decimalPlaces = 0;
+bool decimalPointPlaced = false;
+/**
+ * This is ment to let the user input get a long number from the key pad, like 43.25
+ * The number returned will be positive
+ * Negitive number outputs mean user has not finished inputting their number yet
+ * \# is the enter key
+ * * is the decimal then reset key
+*/
+double keypadInput(KeyPress* keyInput){
+    double tempkeyPadNumeber;
+    switch(keyInput->keyPressed){
+        case '0':
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+            if(decimalPointPlaced){
+                decimalPlaces ++;
+            }
+            keyPadNumeber = keyPadNumeber*10 + convertCharToKeyValue(keyInput);
+            break;
+        case '#':
+            tempkeyPadNumeber = keyPadNumeber + 0.0;
+            for(int i = 0; i<decimalPlaces; i++){
+                tempkeyPadNumeber = tempkeyPadNumeber / 10;
+            }
+            //set up dummy to be returned
+            keyPadNumeber = 0;
+            decimalPlaces = 0;
+            decimalPointPlaced = false;
+            return tempkeyPadNumeber;
+        case '*':
+            if(decimalPointPlaced){
+                keyPadNumeber = 0;
+                decimalPlaces = 0;
+                decimalPointPlaced = false;
+            }else{
+                decimalPlaces = 0;
+                decimalPointPlaced = true;
+            }
+            break;
+        default:
+            break;
+    }
+    tempkeyPadNumeber = keyPadNumeber + 0.0;
+    for(int i = 0; i<decimalPlaces; i++){
+        tempkeyPadNumeber = tempkeyPadNumeber / 10;
+    }
+    return tempkeyPadNumeber* -1.0 ;
 }

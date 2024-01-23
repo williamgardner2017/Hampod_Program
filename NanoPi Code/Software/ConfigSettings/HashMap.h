@@ -37,7 +37,7 @@
 
 typedef struct HashMap {
     void** list;
-    int * listOfKeys; //note , the keys are added by one to avoid 0 ing
+    void** listOfKeys; //note , the keys are added by one to avoid 0 ing
     int size;
     int quantity;
     int (*hashFunc)(void*);

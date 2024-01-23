@@ -16,7 +16,8 @@ typedef enum {
     NUMERIC,
     ONOFFNUMERIC,
     SELECTION,
-    OTHER
+    OTHER,
+    NUMPAD
 } ConfigType;
 
 typedef struct ConfigParam{
@@ -27,7 +28,7 @@ typedef struct ConfigParam{
     double stepSize;
     char** selectionSet;
     int selectionSize;
-    void* (*configFuntion)(void*);
+    int (*configFuntion)(KeyPress*);
     ConfigType configType;
     double currentValue;
 } ConfigParam;
@@ -41,6 +42,7 @@ void freeFileArray(char** list);
 //TODO make simple testing code for this
 char* customSubString(char* original, int start, int length);
 
+double keypadInput(KeyPress* keyInput);
 #include "GeneralFunctions.c"
 
 #endif

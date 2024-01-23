@@ -1,8 +1,12 @@
-
+/* TODO list
+* 2) add a way to toggle if the letter keys are being used for standard input
+* 3) redue how loading up a mode works to properly use the toggles
+* 4) add a new mode metadata to say if it uses the letter keys and which ones, This sould be in pairs A,B and C,D
+*/
 
 ModeStates modeState = bootUp;
 
-int programableKeysOn = 0;
+bool programableKeysOn = true;
 Radio** radios;
 int maxRadios = 2;
 int currentRadio = 0;
@@ -23,14 +27,6 @@ ModeStates modeFlow(KeyPress* keyInput){
         case modeSelect:
             ModeSelectFlow(keyInput);
             return modeSelect;
-            break;
-        case configMode:
-            ConfigFlow(keyInput);
-            return configMode;
-            break;
-        case dtmf:
-            DTMFFlow(keyInput);
-            return dtmf;
             break;
         default:
             //make a screem of unknown
@@ -111,13 +107,13 @@ BootUpStates BootupFlow(KeyPress* keyInput){
 }
 
 int modeSelectPage = 0; //the page number that we are on for mode select
-int isReadingOut = 0;
+int isReadingOut = 0; //TODO make this actualy cause a read out
 /**
  * this handles the select mode state
 */
 int ModeSelectFlow(KeyPress* keyInput){
     if(isReadingOut){
-        readOutModeName(modeSelectPage*9 + (convertCharToKeyValue(keyInput)/10));
+        readOutModeName(modeSelectPage*9 + convertCharToKeyValue(keyInput)-1);
         isReadingOut = 0;
     }else{
         switch (keyInput->keyPressed){
@@ -146,7 +142,7 @@ int ModeSelectFlow(KeyPress* keyInput){
             case '7':
             case '8':
             case '9':
-                switchToRadioMode((modeSelectPage*9) + convertCharToKeyValue(keyInput));
+                switchToRadioMode((modeSelectPage*9) + convertCharToKeyValue(keyInput)-1);
                 break;
         
             default:
@@ -157,17 +153,7 @@ int ModeSelectFlow(KeyPress* keyInput){
         return -1;
 }
 
-//dependint on firmware
-int DTMFFlow(KeyPress* keyInput){
-    if(keyInput->keyPressed == 'B' && keyInput->isHold){
-         switchToRadioMode(0);
-    }else{
-        //do the beep boop
-    }
-    return -1;
-}
-
-int StandardModeFlow(KeyPress* keyInput){
+int StandardModeFlow(KeyPress* keyInput){ //TODO be able to toggle the letter keys
     PRINTFLEVEL1("Standard flow for modes with key input of %c, shift of %i, and hold of %i\n",keyInput->keyPressed,keyInput->shiftAmount,keyInput->isHold);
     switch (keyInput->keyPressed)
     {
@@ -228,12 +214,20 @@ int StandardModeFlow(KeyPress* keyInput){
         }
         break;
     case 'C': // C
-        //getModesOfProgramableKeys
-        //setRadioToMode
+        if(programableKeysOn){
+            //getModesOfProgramableKeys
+            //setRadioToMode
+        }else{
+            runRadioCommand(radios[currentRadio],keyInput);
+        }
         break;
     case 'D': // D
-        //getModesOfProgramableKeys
-        //setRadioToMode
+        if(programableKeysOn){
+            //getModesOfProgramableKeys
+            //setRadioToMode
+        }else{
+            runRadioCommand(radios[currentRadio],keyInput);
+        }
         break;
     default:
         PRINTFLEVEL1("No letter key was pressed so going to the mode\n");
@@ -243,19 +237,10 @@ int StandardModeFlow(KeyPress* keyInput){
         return -1;
 }
 
-/**
- * TODO figure out how to do this
- * Create a new file to handle this
- * See if makeing this be treated like a normal mode would work
- * See if there are any reasons a standard mode could not affect the hampod data
-*/
-int ConfigFlow(KeyPress* KeyInput){
-    //This may be easyer to just treat as a standard mode but make special. 
-    return -1;
-}
 
 /**
  * Reads out the name of the asked for mode
+ * TODO make this use firmware output
 */
 int readOutModeName(int modeID){
     //DEBUG
@@ -274,27 +259,10 @@ int readOutModeName(int modeID){
  * TODO see if this can just be replaced with the new modeRouting file
  * Idea, have this be what takes in the modeID and then using it would also switch the modeState as needed
 */
-int switchToRadioMode(int modeID){
-    switch (modeID)
-    {
-        case 1: //DTMF
-            modeState = dtmf;
-            setRadioMode(radios[currentRadio], getModeById(modeID));
-            break;
-        case 2: //config mode
-            modeState = configMode;
-            setRadioMode(radios[currentRadio], getModeById(modeID));
-            break;
-        case -3: //mode select
-            modeState = modeSelect;
-            break;
-        default:
-            modeState = standard;
-            //radio.setMode(mode);
-            setRadioMode(radios[currentRadio], getModeById(modeID));
-            break;
-    }
-        return -1;
+int switchToRadioMode(int modeID){ //TODO redue this to be better sueted, all this needs to do is to set what the letter toggles are when swiching to said mode
+    modeState = standard;
+    setRadioMode(radios[currentRadio], getModeById(modeID));
+    return -1;
 }
 
 
@@ -315,7 +283,9 @@ void setBootUpState(BootUpStates state){
     bootUpState = state;
 }
 
-
+void toggleCDHotkeys(bool state){
+    programableKeysOn = state;
+}
 void freeStateMachine(){
     int i;
 

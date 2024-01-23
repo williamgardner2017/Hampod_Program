@@ -43,10 +43,15 @@
 #include <stdio.h>
 #include "../GeneralFunctions.h"
 #include "HashMap.h"
+#include "ConfigParams.h"
+#include "../Modes/ModeRouting.h"
+#include "../StateMachine.h"
 
-void populateConfigFunctions(HashMap* mapping);
+void populateConfigFunctions();
 
-void* SaveData(void* data);
+int SaveData(KeyPress* hold);
+
+int setHotkeys(KeyPress* keyData);
 
 #include "ConfigFunctions.c"
 #endif
