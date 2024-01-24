@@ -10,7 +10,7 @@ void populateConfigFunctions(){
 
 void saveToFile(int fileNumber){
     char fileName[40];
-    sprintf(fileName, "SaveFiles/saveNumber%i",fileNumber);
+    sprintf(fileName, "SaveFiles/saveNumber%i.txt",fileNumber);
     FILE *fp = fopen(fileName, "w+");
     if (fp == NULL)
     {
