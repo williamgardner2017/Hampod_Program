@@ -52,6 +52,8 @@ pthread_cond_t queue_cond;
 
 pthread_mutex_t thread_lock;
 pthread_cond_t thread_cond;
+
+HashMap* audioHashMap;
 //this starts up the communication of the firmware
 void firmwareCommunicationStartup(){
     if(pthread_mutex_init(&queue_lock, NULL) != 0) {
@@ -79,6 +81,7 @@ void firmwareCommunicationStartup(){
     threadQueue = createThreadQueue();
     firmwareStartOPipeWatcher();
     startOutputThreadManager();
+    setupAudioHashMap();
 }
 
 void send_packet(Inst_packet* packet){
@@ -249,15 +252,34 @@ void* OutputThreadManager(void* arg){
 /**
  * Creates the speeker output and puts it onto the qeueu asycronusly 
  * Return a string
- * //TODO make it use threads 
- * //TODO make a thread to clean up those threads 
+ * //TODO make it check if the file exists first
+ * //TODO set up the text based upon that for sending out
 */
 char* sendSpeakerOutput(char* text){
+    //
     if(SIMULATEOUTPUT){
-        PRINTFLEVEL1("TESTING SPEAKER OUTPUT: %s", text);
+        PRINTFLEVEL1("TESTING SPEAKER OUTPUT: %s\n", text);
+         bool hasAudioFile = getHashMap(audioHashMap, text) != NULL;
+         if(hasAudioFile){
+            PRINTFLEVEL1("SOFTWARE: Audio file was found\n");
+         }else{
+            PRINTFLEVEL1("SOFTWARE:No audio file found\n");
+         }
         return text;
     }
-    Inst_packet* speakerPacket = create_inst_packet(AUDIO,strlen(text)+1,(unsigned char*) text, 0);
+    //TODO add the stuff for checking if it exits
+    bool hasAudioFile = getHashMap(audioHashMap, text) != NULL;
+    char* outputText = malloc((strlen(text)+2)*sizeof(char));
+    if(hasAudioFile){
+        strcat(outputText,"p");
+        strcat(outputText,getHashMap(audioHashMap, text));
+    }else{
+        strcat(outputText,"s");
+        strcat(outputText,text);
+    }
+
+    
+    Inst_packet* speakerPacket = create_inst_packet(AUDIO,strlen(outputText)+1,(unsigned char*) outputText, 0);
     int result;
     PRINTFLEVEL2("SOFTWARE Locking up speakout output\n");
     pthread_mutex_lock(&thread_lock);
@@ -279,6 +301,55 @@ char* sendSpeakerOutput(char* text){
    return text;
 }
 
+
+void setupAudioHashMap(){
+    char* softwarePath = "/home/pi/Hampod_Program/NanoPi Code/Firmware/pregen_audio/";
+    PRINTFLEVEL2("SOFTWARE:Creating the hashmap\n");
+    audioHashMap = createHashMap(audioHash,audioCompare);
+    struct dirent *de; 
+    DIR *dr = opendir(softwarePath);//TODO set this to the correct location
+    if (dr == NULL)  // opendir returns NULL if couldn't open directory 
+    { 
+        printf("Could not open current directory" ); 
+        return 0; 
+    }
+    while ((de = readdir(dr)) != NULL){
+        printf("%s\n", de->d_name);
+        //TODO see if this will grab also the .wav part and if it grabs the path.
+        if(strcmp(de->d_name, ".") != 0 && strcmp(de->d_name, "..") != 0){   
+            char* nameAndPath = malloc(sizeof(char)*(strlen(de->d_name)+strlen(softwarePath)));
+            char* nameOnly = malloc(sizeof(char)*(strlen(de->d_name)+10));
+            strcpy(nameAndPath, softwarePath);
+            strcpy(nameOnly,de->d_name);
+            nameOnly[strlen(de->d_name)-4] = '\0'; //add back in the null
+            strcat(nameAndPath,nameOnly);
+            //TODO insert into the hash with (path/name, name)
+            PRINTFLEVEL2("SOFTWARE: adding the data %s with the key of %s\n",nameAndPath,nameOnly);
+            insertHashMap(audioHashMap,nameAndPath,nameOnly);
+        }
+    }
+    PRINTFLEVEL2("SOFTWARE:Finished adding stuff to Hashmap\n");
+    closedir(dr);     
+}
+int audioHash(void* key){
+    char* st = (char*) key;
+    int hash = 0;
+    PRINTFLEVEL2("Creating a hash for the string %s\n", st);
+    for(int i = 0; i<strlen(st); i++){
+        hash += st[i];
+    }
+    return hash;
+}
+bool audioCompare(void* key1, void* key2){
+    if(strcmp((char*) key1, (char*) key2) == 0){
+        return true;
+    }else{
+        return false;
+    }
+}
+void audioFree(void* data){
+    free(data);
+}
 
 
 
@@ -410,4 +481,5 @@ void freeFirmwareComunication(){
     close(input_pipe);
     printf("Software:closing output pipe\n");
     close(output_pipe);
+    destroyHashMap(audioHashMap,audioFree);
 }

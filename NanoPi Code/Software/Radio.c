@@ -28,8 +28,15 @@ ModeData* getModeDetails(Radio* thisRadio){
     return thisRadio->currentMode->modeDetails;
     }
 
+//TODO make sure each mode has this, even if it is set to null
 void setRadioMode(Radio* thisRadio, Mode* modeToSetTo){
+    if(thisRadio->currentMode->exitMode != NULL){
+        thisRadio->currentMode->exitMode();
+    }
     thisRadio->currentMode = modeToSetTo;
+    if(modeToSetTo->enterMode != NULL){
+        modeToSetTo->enterMode();
+    }
 }
 
 void* runRadioCommand(Radio* thisRadio, KeyPress* keyInput){

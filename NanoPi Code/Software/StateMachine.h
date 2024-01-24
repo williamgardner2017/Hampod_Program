@@ -47,9 +47,7 @@
 typedef enum {
     bootUp,
     standard,
-    modeSelect,
-    configMode,
-    dtmf
+    modeSelect
 } ModeStates;
 
 typedef enum {
@@ -67,15 +65,16 @@ typedef enum {
 */
 ModeStates modeFlow(KeyPress* keyInput);
 BootUpStates BootupFlow(KeyPress* keyInput);
-int DTMFFlow(KeyPress* keyInput);
+
 int ModeSelectFlow(KeyPress* keyInput);
 int switchToRadioMode(int mode);
 int StandardModeFlow(KeyPress* keyInput);
-int ConfigFlow(KeyPress* keyInput);
 int readOutModeName(int mode);
 void stateMachineStart();
 
 void freeStateMachine();
+void toggleCDHotkeys(bool state);
+
 /**
  * These functions are for testing purposes only
 */
