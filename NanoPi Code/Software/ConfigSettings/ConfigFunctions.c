@@ -11,7 +11,7 @@ void populateConfigFunctions(){
 void saveToFile(int fileNumber){
     char fileName[40];
     sprintf(fileName, "SaveFiles/saveNumber%i",fileNumber);
-    FILE *fp = fopen(fileName, "w");
+    FILE *fp = fopen(fileName, "w+");
     if (fp == NULL)
     {
         printf("Error opening the file %s", fileName);
