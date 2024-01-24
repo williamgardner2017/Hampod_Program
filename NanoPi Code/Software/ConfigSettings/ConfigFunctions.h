@@ -1,5 +1,5 @@
-#ifndef HAMPOD_SOFT_CONFIG
-#define HAMPOD_SOFT_CONFIG
+#ifndef HAMPOD_SOFT_CONFIGFUNCTIONS
+#define HAMPOD_SOFT_CONFIGFUNCTIONS
 
 #ifndef SIMULATEOUTPUT
 #ifdef TESTING
@@ -41,12 +41,17 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include "../FirmwareCommunication.h"
-#include "Mode.h"
 #include "../GeneralFunctions.h"
-#include"../ConfigSettings/ConfigParams.h"
+#include "HashMap.h"
+#include "ConfigParams.h"
+#include "../Modes/ModeRouting.h"
+#include "../StateMachine.h"
 
-void* configCommandRelay(KeyPress* keyInput, int radioDetails);
-Mode* ConfigLoad();
-#include "ConfigMode.c"
+void populateConfigFunctions();
+
+int SaveData(KeyPress* hold);
+
+int setHotkeys(KeyPress* keyData);
+
+#include "ConfigFunctions.c"
 #endif

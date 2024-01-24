@@ -31,6 +31,8 @@ Mode* createMode(){
     }
     newMode->modeInput = demoCommandRelay;
     newMode->freeMode = freeDemoMode;
+    newMode->enterMode = NULL;
+    newMode->exitMode = NULL;
 
     ModeData* newData = (ModeData*)malloc(sizeof(ModeData));
 
