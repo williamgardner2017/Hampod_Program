@@ -9,13 +9,12 @@ void populateConfigFunctions(){
 }
 
 void saveToFile(int fileNumber){
-    char* fileName = strcat()
     char fileName[40];
     sprintf(fileName, "SaveFiles/saveNumber%i",fileNumber);
     FILE *fp = fopen(fileName, "w");
     if (fp == NULL)
     {
-        printf("Error opening the file %s", filename);
+        printf("Error opening the file %s", fileName);
         return -1;
     }
 
@@ -41,9 +40,8 @@ void saveToFile(int fileNumber){
     //save the hamlib
     fprintf(fp,"Start of radios\n");
     Radio** radiosToSave = getRadios();
-    for(int i = 0, i<2;i++){
+    for(int i = 0; i<2;i++){
         fprintf(fp,"%i : %i", radiosToSave[i]->port, radiosToSave[i]->model); //TODO update this to be correct
-        free(saveableData);
     }
     // close the file
     fclose(fp);
