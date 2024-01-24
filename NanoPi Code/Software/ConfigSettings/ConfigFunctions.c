@@ -10,12 +10,13 @@ void populateConfigFunctions(){
 
 void saveToFile(int fileNumber){
     char fileName[40];
-    sprintf(fileName, "./SaveFiles/saveNumber%i.txt",fileNumber);
+    sprintf(fileName, "SaveFiles/saveNumber%i.txt",fileNumber);
     FILE *fp = fopen(fileName, "w+");
+    printf("File Path: %s\n", fileName);
     if (fp == NULL)
     {
         printf("Error opening the file %s\n", fileName);
-        return -1;
+        return;
     }
 
     //fprintf(fp, "This is the line #%d\n", i + 1);
@@ -45,8 +46,6 @@ void saveToFile(int fileNumber){
     }
     // close the file
     fclose(fp);
-
-    return 0;
 }
 
 int SaveData(KeyPress* keyData){
