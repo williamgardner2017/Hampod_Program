@@ -142,7 +142,7 @@ int ModeSelectFlow(KeyPress* keyInput){
             case '7':
             case '8':
             case '9':
-                switchToRadioMode((modeSelectPage*9) + convertCharToKeyValue(keyInput)-1);
+                switchToRadioMode((modeSelectPage*9) + convertCharToKeyValue(keyInput) - 1);
                 break;
         
             default:
