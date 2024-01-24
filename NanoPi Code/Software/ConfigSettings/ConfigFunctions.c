@@ -10,11 +10,11 @@ void populateConfigFunctions(){
 
 void saveToFile(int fileNumber){
     char fileName[40];
-    sprintf(fileName, "SaveFiles/saveNumber%i.txt",fileNumber);
+    sprintf(fileName, "./SaveFiles/saveNumber%i.txt",fileNumber);
     FILE *fp = fopen(fileName, "w+");
     if (fp == NULL)
     {
-        printf("Error opening the file %s", fileName);
+        printf("Error opening the file %s\n", fileName);
         return -1;
     }
 
