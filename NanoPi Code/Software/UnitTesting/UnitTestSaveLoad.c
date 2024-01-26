@@ -5,12 +5,24 @@ void saveLoadSetupStuffToSave(){
     modeRoutingStart();
     KeyPress* testingInput = malloc(sizeof(KeyPress));
     //set key input
+    testingInput->keyPressed = 'c';
+    testingInput->isHold = false;
+    testingInput->shiftAmount = 0;
     setProgramibleKeys(testingInput, 0);
     //set keyinput
+    testingInput->keyPressed = 'c';
+    testingInput->isHold = false;
+    testingInput->shiftAmount = 2;
     setProgramibleKeys(testingInput, 1);
     //set keyinput
+    testingInput->keyPressed = 'd';
+    testingInput->isHold = true;
+    testingInput->shiftAmount = 1;
     setProgramibleKeys(testingInput, 2);
     //set keyinput
+    testingInput->keyPressed = 'd';
+    testingInput->isHold = true;
+    testingInput->shiftAmount = 0;
     setProgramibleKeys(testingInput, 3);
     //create radios
     stateMachineStart();
