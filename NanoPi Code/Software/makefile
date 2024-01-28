@@ -1,6 +1,6 @@
 # CC = gcc
 CFLAGS = -Wall -g -lm
-LDFLAGS = -lhamlib -L/home/pi/hamlib/lib
+LDFLAGS = -lhamlib
 Level0: Software.elf
 Level1: Software1.elf
 Level2: Software2.elf
