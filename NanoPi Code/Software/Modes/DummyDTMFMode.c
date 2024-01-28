@@ -1,5 +1,5 @@
 
-void* DTMFCommandRelay(KeyPress* keyInput, int radioDetails){
+void* DTMFCommandRelay(KeyPress* keyInput, RIG* radioDetails){
     return NULL;
 }
 

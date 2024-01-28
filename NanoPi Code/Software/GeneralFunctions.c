@@ -12,7 +12,7 @@ char** textFileToArray(char* filePath){
     fp = fopen(filePath , "r");
     if(fp == NULL) {
       perror("Error opening file");
-      return(-1);
+      return (char**) -1;
    }
     while(fgets(temp, 60, fp)!=NULL){
         currentSize ++;

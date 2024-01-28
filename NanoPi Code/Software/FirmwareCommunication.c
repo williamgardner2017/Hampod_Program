@@ -311,7 +311,7 @@ void setupAudioHashMap(){
     if (dr == NULL)  // opendir returns NULL if couldn't open directory 
     { 
         printf("Could not open current directory" ); 
-        return 0; 
+        return; 
     }
     while ((de = readdir(dr)) != NULL){
         printf("%s\n", de->d_name);

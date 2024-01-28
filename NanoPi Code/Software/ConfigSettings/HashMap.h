@@ -50,7 +50,6 @@ void insertHashMap(HashMap* hashmap,void* data,void* key);
 void* getHashMap(HashMap* hashmap,void* key);
 void* removeHashMap(HashMap* hashmap,void* key);
 void destroyHashMap(HashMap* hashmap,void (*dataFree)(void*), void(*keyFree)(void*));//TODO update this so it can take 2 inputs, both the key and the data in the case where both are not the smae thing
-void insertHashMapWithIntHash(HashMap* hashmap,void* data,int key);
 void growHashMap(HashMap* hashmap);
 void** getAllEntriesHashMap(HashMap* hashmap);
 

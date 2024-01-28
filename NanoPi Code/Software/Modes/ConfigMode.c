@@ -112,7 +112,7 @@ void configNUMPADFlow(KeyPress* keyInput){
  * 9, cancel changes
  * 5 run the config spesific command 
 */
-void* configCommandRelay(KeyPress* keyInput, int radioDetails){
+void* configCommandRelay(KeyPress* keyInput, RIG* radioDetails){
     if(selectingConfig){
         configNavigation(keyInput);
     }else{

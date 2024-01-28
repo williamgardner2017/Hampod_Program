@@ -1,6 +1,6 @@
 
 
-void* normalCommandRelay(KeyPress* keyInput, int radioDetails){
+void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
     switch (keyInput->keyPressed)
     {
     case '0':

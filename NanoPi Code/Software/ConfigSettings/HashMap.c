@@ -131,32 +131,6 @@ void growHashMap(HashMap* hashmap){
     free(oldKeyList);
     hashmap->quantity = oldQuantity;
 }
-void insertHashMapWithIntHash(HashMap* hashmap,void* data,int key){
-  int index = key;
-    int offset = 0;
-    bool placingObject = true;
-    while(placingObject){
-        if(hashmap->list[(index+offset)%hashmap->size] == 0){
-            placingObject = false;
-            hashmap->list[(index+offset)%hashmap->size] = data;
-            hashmap->listOfKeys[(index+offset)%hashmap->size] = index+1;
-            hashmap->quantity ++;
-        }else if(offset != 0 && (index+offset)%hashmap->size == index+offset){
-            //TODO 
-            //Grow the list size
-            insertHashMap(hashmap, data, (void*) key);
-            placingObject = false;
-        }else{
-            if(offset == 0){
-                offset = 1;
-            }else if(offset == 1){
-                offset = 2;
-            }else{
-                offset = offset * offset;
-            }
-        }
-    }
-}
 
 /**
  * This will return a list of all of the entires within a hashmap
