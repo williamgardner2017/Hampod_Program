@@ -1,92 +1,48 @@
-
+HashMap* ModeHashMap;
+Mode** keyBinds;
 
 /*
-*The idea of this that users only need to edit this one place inorder to add in their new modes.
+* Creaes both the hashmap of the modes and creates the array of the keybinds
 */
-
-const int modeCount = 4;
-Mode** modes;
-
-/**
-*This is where all of the modes will converge so that this is one of the few files that will need to be eddited inorder to add in a new modeCount
-* Mode structs will only be created when initialy requested. This is to make sure users only have to edit one place to add in new modes 
-*/
-Mode* getModeById(int modeID){
-
-    switch(modeID){
-        case 0: //NORMAL Mode
-            if(modes[0] == 0){
-                modes[0] = NormalLoad();
-            }
-            return modes[0];
-            break;
-        case 1: //DTMF mode so that things run smoothly
-            if(modes[1] == 0){
-                modes[1] = DTMFDummyLoad();
-            }
-            return modes[1];
-            break;
-        case 2: //ConfigMode since this is already done
-            if(modes[2] == 0){
-                modes[2] = ConfigLoad();
-            }
-            return modes[2];
-            break;
-        case 3: //ConfigMode since this is already done
-            if(modes[3] == 0){
-                modes[3] = frequencyLoad();
-            }
-            return modes[3];
-            break;
-        default:
-            return NULL;
-            break;
-    }
-    
+void modeRoutingStart(){
+    ModeHashMap = createHashMap(StringHash,StringHashCompare);
+    Mode* tempMode;
+    tempMode = NormalLoad();
+    insertHashMap(ModeHashMap, tempMode, tempMode->modeDetails->modeName);
+    tempMode = DTMFDummyLoad();
+    insertHashMap(ModeHashMap, tempMode, tempMode->modeDetails->modeName);
+    tempMode = ConfigLoad();
+    insertHashMap(ModeHashMap, tempMode, tempMode->modeDetails->modeName);
+    tempMode = frequencyLoad();
+    insertHashMap(ModeHashMap, tempMode, tempMode->modeDetails->modeName);
+    keyBinds = calloc(12, sizeof(Mode));
 }
 
-
+Mode* getModeByName(char* name){
+    return (Mode*) getHashMap(ModeHashMap, name);
+}
+Mode** getAllModes(){
+    return (Mode**) getAllEntriesHashMap(ModeHashMap);
+}
 //Used later on;
-Mode** keyBinds;
 //[C, C shift 1, C shift 2, C hold, C hold Shift 1, C hold shift 2, D , ...]
 
 
-/*
-* Creates the array to hold all of the modes
-//TODO make sure that this way of initilizin a 2d array
-*/
-Mode** modeRoutingStart(){
-    modes = calloc(modeCount, sizeof(Mode));
-    keyBinds = calloc(12, sizeof(Mode));
-    return modes;
-}
 
+void freeModesLambda(void* data){
+    Mode* tempMode = (Mode*) data;
+    tempMode->freeMode(tempMode);
+}
 /*
 * Frees all of the mode structts and the array
 */
 void freeModes(){
-    int i;
-    for(i = 0; i< modeCount;i++){
-        if(modes[i] != 0){
-            modes[i]->freeMode(&(modes[i]));
-        }else{
-            free(modes[i]);
-        }
-        modes[i] = 0;
-    }
-    free(modes);
-    for(i = 0; i<12;i++){
-        if(keyBinds[i] != 0){
-            keyBinds[i]->freeMode(&keyBinds[i]);
-        }else{
-            free(keyBinds[i]);
-        }
-    }
+    destroyHashMap(ModeHashMap, freeModesLambda, StringHashFree);
     free(keyBinds);
 }
 
 int getModeCount(){
-    return modeCount;
+    return ModeHashMap->quantity;
 }
 
 
@@ -117,7 +73,7 @@ static int keyPressToBindValue(KeyPress* key){
 /**
  * binds the programable keys
 */
-void setProgramibleKeys(KeyPress* key, int modeID){
+void setProgramibleKeys(KeyPress* key,char* name){
     
     int value = keyPressToBindValue(key);
     if(value == -1){
@@ -126,7 +82,7 @@ void setProgramibleKeys(KeyPress* key, int modeID){
     }
     //value has not been translated
 
-    keyBinds[value] = getModeById(modeID);
+    keyBinds[value] = getModeByName(name);
 }
 
 /**
@@ -143,3 +99,6 @@ Mode* getModeViaProgramableKey(KeyPress* key){
     return keyBinds[value];
 }
 
+void setProgramibleKeysByIndex(int index, char* name){
+    keyBinds[index] = getModeByName(name);
+}

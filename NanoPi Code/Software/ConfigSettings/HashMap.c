@@ -101,13 +101,13 @@ void* removeHashMap(HashMap* hashmap,void* key){
     }
     return NULL;
 }
-void destroyHashMap(HashMap* hashmap, void (*freeingFunction)(void*)){
+void destroyHashMap(HashMap* hashmap,void (*dataFree)(void*), void(*keyFree)(void*)){
     for(int i = 0; i<hashmap->size;i++){
         if(hashmap->list[i] != 0){
-            freeingFunction(hashmap->list[i]);
+            dataFree(hashmap->list[i]);
         }
         if(hashmap->listOfKeys[i] != 0){
-            freeingFunction(hashmap->listOfKeys[i]);
+            keyFree(hashmap->listOfKeys[i]);
         }
     }
 
@@ -156,4 +156,43 @@ void insertHashMapWithIntHash(HashMap* hashmap,void* data,int key){
             }
         }
     }
+}
+
+/**
+ * This will return a list of all of the entires within a hashmap
+ * the order will be consisant but adding new items to the map will NOT add it to the end of this list
+*/
+void** getAllEntriesHashMap(HashMap* hashmap){
+    void** entries = malloc(sizeof(void**)*hashmap->quantity);
+    int j = 0;
+    for(int i = 0; i<hashmap->size;i++){
+        if(hashmap->list[i] != 0){
+            entries[j] = hashmap->list[j];
+            j++;
+        }
+    }
+    return entries;
+}
+
+
+
+int StringHash(void* key){
+    char* st = (char*) key;
+    int hash = 0;
+    PRINTFLEVEL2("Creating a hash for the string %s\n", st);
+    for(int i = 0; i<strlen(st); i++){
+        hash += st[i];
+    }
+    return hash;
+}
+bool StringHashCompare(void* a, void* b){
+    if(strcmp((char*) a, (char*) b) == 0){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+void StringHashFree(void* s){
+    free((char*) s);
 }

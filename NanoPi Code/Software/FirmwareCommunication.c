@@ -481,5 +481,5 @@ void freeFirmwareComunication(){
     close(input_pipe);
     printf("Software:closing output pipe\n");
     close(output_pipe);
-    destroyHashMap(audioHashMap,audioFree);
+    destroyHashMap(audioHashMap,audioFree,audioFree);
 }

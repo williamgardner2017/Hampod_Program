@@ -103,7 +103,7 @@ void freeConfigParam(void* param){
     free(temp);
 }
 void freeCongigFull(){
-    destroyHashMap(configMapping,freeConfigParam);
+    destroyHashMap(configMapping,freeConfigParam, StringHashFree);
 }
 int ConfigHashing(void* key){
     //just adding together the asci values;
