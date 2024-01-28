@@ -69,9 +69,9 @@ ModeStates modeFlow(KeyPress* keyInput);
 BootUpStates BootupFlow(KeyPress* keyInput);
 
 int ModeSelectFlow(KeyPress* keyInput);
-int switchToRadioMode(int mode);
+int switchToRadioMode(char* modeName);
 int StandardModeFlow(KeyPress* keyInput);
-int readOutModeName(int mode);
+int readOutModeName(char* modeName);
 void stateMachineStart();
 
 void freeStateMachine();

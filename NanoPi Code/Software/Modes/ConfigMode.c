@@ -171,7 +171,7 @@ Mode* ConfigLoad(){
         free(newMode);
         return NULL;
     }
-    newData->modeName = strdup("ExampleMake");
+    newData->modeName = strdup("Config");
     newData->radioModel = 42;
 
     newMode->modeDetails = newData;

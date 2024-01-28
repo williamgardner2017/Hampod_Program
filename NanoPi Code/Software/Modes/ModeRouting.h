@@ -41,7 +41,7 @@
 #endif
 
 
-Mode* getModeById(int modeID); //goal is to make this outdated Done
+// Mode* getModeById(int modeID); //goal is to make this outdated Done
 void modeRoutingStart(); //change to this return type Done
 void freeModesLambda(void* data);
 void freeModes();
@@ -53,7 +53,7 @@ int getModeCount();
 void setProgramibleKeys(KeyPress* key, char* name); //make this use the name and not the ID
 Mode* getModeViaProgramableKey(KeyPress* key);
 void setProgramibleKeysByIndex(int index, char* name);
-
+char** getAllModeNames();
 
 #include "ModeRouting.c"
 #endif

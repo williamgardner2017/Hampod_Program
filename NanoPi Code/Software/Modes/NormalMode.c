@@ -39,7 +39,7 @@ Mode* NormalLoad(){
         free(newMode);
         return NULL;
     }
-    newData->modeName = strdup("ExampleMake");
+    newData->modeName = strdup("Normal");
     newData->radioModel = 42;
 
     newMode->modeDetails = newData;

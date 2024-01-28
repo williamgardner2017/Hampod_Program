@@ -27,7 +27,7 @@ Mode* DTMFDummyLoad(){
         free(newMode);
         return NULL;
     }
-    newData->modeName = strdup("ExampleMake");
+    newData->modeName = strdup("DTMF");
     newData->radioModel = 42;
 
     newMode->modeDetails = newData;

@@ -102,7 +102,7 @@ void fullStart(){
     setModeState(standard);
     Radio* radios = loadUpRadioUsingData("ICOM", 7300, 0, NULL, 3073);
     setRadios(radios,0);
-    switchToRadioMode(3);
+    switchToRadioMode("frequency mode");
     printf("software: Demo setup complete\n");
     //send that I am ready
     printf("software: Sending I am Ready packet to firmware\n");

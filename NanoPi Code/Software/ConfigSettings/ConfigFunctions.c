@@ -24,11 +24,12 @@ int setHotkeys(KeyPress* keyData){
         switch (keyData->keyPressed)
         {
             case '#':
+                char** modeNames = getAllModeNames();
                 for(int i = 0;i<9;i++){
                     if(getModeCount() < pageNumber*9 +1){
                         break;
                     }
-                    ModeData* data = getModeById(pageNumber*9 + i)->modeDetails;
+                    sendSpeakerOutput(modeNames[pageNumber*9 + i]);
                     //readout i data->name
                 }
                 break;
@@ -70,7 +71,7 @@ int setHotkeys(KeyPress* keyData){
         }
     }else{
         //3 get the hot key they want to set
-        setProgramibleKeys(keyData, chosenModeId);
+        setProgramibleKeys(keyData, getAllModeNames()[chosenModeId]);
         pageNumber = 0;
         selectingMode = true;
         toggleCDHotkeys(true);

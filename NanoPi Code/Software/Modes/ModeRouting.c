@@ -24,6 +24,15 @@ Mode* getModeByName(char* name){
 Mode** getAllModes(){
     return (Mode**) getAllEntriesHashMap(ModeHashMap);
 }
+
+char** getAllModeNames(){
+    char** names = malloc(sizeof(char*)*ModeHashMap->quantity);
+    Mode** modes = getAllModes();
+    for(int i = 0;i<ModeHashMap->quantity;i++){
+        names[i] = modes[i]->modeDetails->modeName;
+    }
+    return names;
+}
 //Used later on;
 //[C, C shift 1, C shift 2, C hold, C hold Shift 1, C hold shift 2, D , ...]
 
