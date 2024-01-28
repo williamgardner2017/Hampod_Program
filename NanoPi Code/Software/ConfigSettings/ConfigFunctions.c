@@ -40,9 +40,9 @@ if (getcwd(cwd, sizeof(cwd)) != NULL) {
     Mode** modesToSave = getHotKeyList();
     for(int i = 0; i<12;i++){
         if(modesToSave[i] == 0){ //TODO make it so that you can get the mode id's
-            fprintf(fp,"%i : %i : %s\n",i,-1,"NULL");
+            fprintf(fp,"%i : %s\n",i,"NULL");
         }else{
-            fprintf(fp,"%i : %i : %s\n",i,-1,modesToSave[i]->modeDetails->modeName);
+            fprintf(fp,"%i : %s\n",i,modesToSave[i]->modeDetails->modeName);
         }
     }
     //save the hamlib
@@ -99,7 +99,7 @@ int setHotkeys(KeyPress* keyData){
                         break;
                     }
                     ModeData* data = getModeById(pageNumber*9 + i)->modeDetails;
-                    //readout i data->name
+                    sendSpeakerOutput(data->modeName);
                 }
                 break;
             case 'C':
