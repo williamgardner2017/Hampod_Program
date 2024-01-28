@@ -48,7 +48,7 @@
 #include "../GeneralFunctions.h"
 #include"../ConfigSettings/ConfigParams.h"
 
-void* configCommandRelay(KeyPress* keyInput, int radioDetails);
+void* configCommandRelay(KeyPress* keyInput, RIG* radioDetails);
 Mode* ConfigLoad();
 #include "ConfigMode.c"
 #endif

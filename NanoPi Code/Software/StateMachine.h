@@ -40,6 +40,8 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <hamlib/rig.h>
+#include <hamlib/riglist.h>
 #include "Modes/ModeRouting.h"
 #include "GeneralFunctions.h"
 #include "Radio.h"
