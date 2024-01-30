@@ -31,7 +31,7 @@ value the code returns.
 |Row 1|1: `0`|2: `1`|3: `2`|A: `3`|
 |Row 2|4: `4`|5: `5`|6: `6`|B: `7`|
 |Row 3|7: `8`|8: `9`|9: `10`|C: `11`|
-|Row 4|*: `12`|0: `13`|#: `14`|D: `14`|
+|Row 4|*: `12`|0: `13`|#: `14`|D: `15`|
 
 A properly formatted packet will conatin a lowercase `r` in the data field. More data could follow but the keypad code only cares about the first character in the data field. Subsequent data after the first charater are ignored.
 

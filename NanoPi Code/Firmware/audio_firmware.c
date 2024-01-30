@@ -75,10 +75,21 @@ void audio_process() {
         char* remaining_string = requested_string + 1;
         int system_result;
         unsigned short packet_tag = received_packet->tag;
-        if(audio_type_byte == 's') {
-            AUDIO_PRINTF("Festival tts %s\n", remaining_string);
-            sprintf(buffer, "echo '%s' | festival --tts", remaining_string);
+        if(audio_type_byte == 'd') {
+            AUDIO_PRINTF("Festival tts without saving file");
+            system("cd /tmp");
+            sprintf(buffer, "echo '%s' | text2wave -o output.wav", remaining_string);
             system_result = system(buffer);
+            system_result = system("aplay output.wav");
+            system("cd -");
+        } if(audio_type_byte == 's') {
+            AUDIO_PRINTF("Festival tts %s with saving file\n", remaining_string);
+            system("cd ../Firmware/pregen_audio");
+            sprintf(buffer, "echo '%s' | text2wave -o %s.wav", remaining_string, remaining_string);
+            system_result = system(buffer);
+            sprintf(buffer, "aplay %s.wav", remaining_string);
+            system(buffer);
+            system("cd -");
         } else if(audio_type_byte == 'p') {
             strcpy(buffer, "aplay ");
             strcat(remaining_string, ".wav");
