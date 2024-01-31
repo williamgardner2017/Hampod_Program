@@ -41,8 +41,10 @@ if (getcwd(cwd, sizeof(cwd)) != NULL) {
     for(int i = 0; i<12;i++){
         if(modesToSave[i] == 0){ //TODO make it so that you can get the mode id's
             fprintf(fp,"%i : %s\n",i,"NULL");
+            PRINTFLEVEL2("NO Mode in save%i\n", i);
         }else{
             fprintf(fp,"%i : %s\n",i,modesToSave[i]->modeDetails->modeName);
+            PRINTFLEVEL2("Mode %s found at index %i\n",modesToSave[i]->modeDetails->modeName, i);
         }
     }
     //save the hamlib
