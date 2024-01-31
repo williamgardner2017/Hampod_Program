@@ -54,7 +54,7 @@ if (getcwd(cwd, sizeof(cwd)) != NULL) {
     Radio** radiosToSave = getRadios();
     for(int j = 0; j<2;j++){
         PRINTFLEVEL2("Savin radio with port %i and model %i\n", radiosToSave[j]->port, radiosToSave[j]->model);
-        fprintf(fp,"%i : %i", radiosToSave[j]->port, radiosToSave[j]->model); //TODO update this to be correct
+        fprintf(fp,"%i : %i\n", radiosToSave[j]->port, radiosToSave[j]->model); //TODO update this to be correct
     }
     // close the file
     fclose(fp);
