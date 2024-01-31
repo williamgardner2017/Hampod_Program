@@ -52,8 +52,8 @@ if (getcwd(cwd, sizeof(cwd)) != NULL) {
     //save the hamlib
     fprintf(fp,"Start of radios\n");
     Radio** radiosToSave = getRadios();
-    for(int i = 0; i<2;i++){
-        fprintf(fp,"%i : %i", radiosToSave[i]->port, radiosToSave[i]->model); //TODO update this to be correct
+    for(int j = 0; j<2;j++){
+        fprintf(fp,"%i : %i", radiosToSave[j]->port, radiosToSave[j]->model); //TODO update this to be correct
     }
     // close the file
     fclose(fp);
