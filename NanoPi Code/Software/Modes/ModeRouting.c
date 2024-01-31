@@ -146,5 +146,9 @@ Mode* getModeViaProgramableKey(KeyPress* key){
 }
 
 Mode** getHotKeyList(){
-    return keyBinds;
+    Mode** tempKeyBinds = malloc(sizeof(Mode*)*12);
+    for(int i = 0; i<12;i++){
+        tempKeyBinds[i] = keyBinds[i];
+    }
+    return tempKeyBinds;
 }
