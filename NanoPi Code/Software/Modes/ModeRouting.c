@@ -125,8 +125,9 @@ void setProgramibleKeys(KeyPress* key, int modeID){
         return;
     }
     //value has not been translated
-    PRINTFLEVEL2("found a mode with id %i to bind to key %c\n",modeID,key->keyPressed);
-    keyBinds[value] = getModeById(modeID);
+    Mode* temp = getModeById(modeID);
+    PRINTFLEVEL2("found a mode with id %i to bind to key %c with memory location of %i\n",modeID,key->keyPressed, (int) temp);
+    keyBinds[value] = temp;
 }
 
 /**
