@@ -113,9 +113,13 @@ void fullStart(){
     usleep(500000);
 
     sendSpeakerOutput("hello");
+    usleep(500000);
     sendSpeakerOutput("next output should not save");
+    usleep(500000);
     sendSpeakerOutput("123123");
+    usleep(500000);
     sendSpeakerOutput("I skipped hamlib becuse I can");
+    usleep(500000);
     sendSpeakerOutput("William please make hamlib work before you push it");  
 
     //start key loop after getting the responce
@@ -130,7 +134,7 @@ void fullStart(){
     // keyWatcher(NULL);
     printf("software: Startin Keywatcher complete\n");
     while(true){
-        
+
     }
 }
 void sigint_handler(int signum) {
