@@ -38,6 +38,7 @@ if (getcwd(cwd, sizeof(cwd)) != NULL) {
     //save the hotkeys
     fprintf(fp,"Start of Hotkeys\n");
     Mode** modesToSave = getHotKeyList();
+    PRINTFLEVEL2("got the modesToSave with address of %i\n",(int)modesToSave);
     for(int i = 0; i<12;i++){
     PRINTFLEVEL2("Mode at index %i has the address of %i\n",i, (int) modesToSave[i]);
         if(modesToSave[i] == 0){ //TODO make it so that you can get the mode id's

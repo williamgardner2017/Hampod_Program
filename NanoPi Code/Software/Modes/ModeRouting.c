@@ -58,6 +58,7 @@ Mode** keyBinds;
 Mode** modeRoutingStart(){
     modes = calloc(modeCount, sizeof(Mode));
     keyBinds = calloc(12, sizeof(Mode));
+    PRINTFLEVEL2("Address of the keybinds%i\n",(int)keyBinds);
     return modes;
 }
 
@@ -145,5 +146,5 @@ Mode* getModeViaProgramableKey(KeyPress* key){
 }
 
 Mode** getHotKeyList(){
-    return &keyBinds;
+    return keyBinds;
 }
