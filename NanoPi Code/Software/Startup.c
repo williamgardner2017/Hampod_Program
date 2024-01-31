@@ -99,16 +99,25 @@ void fullStart(){
 
     //SETTING UP THE SIMULATION DEMO
     printf("software: Setting up demo\n");
-    setModeState(standard);
-    Radio* radios = loadUpRadioUsingData("ICOM", 7300, 0, NULL, 3073);
-    setRadios(radios,0);
-    switchToRadioMode(3);
+    // setModeState(standard);
+    // Radio* radios = loadUpRadioUsingData("ICOM", 7300, 0, NULL, 3073);
+    // setRadios(radios,0);
+    // switchToRadioMode(3);
     printf("software: Demo setup complete\n");
     //send that I am ready
     printf("software: Sending I am Ready packet to firmware\n");
     unsigned char* okMessage = (unsigned char*) "ok";
     Inst_packet* iAmReady = create_inst_packet(CONFIG, strlen((char*) okMessage)+1,okMessage, 0);
     firmwareCommandQueue(iAmReady);
+
+    usleep(500000);
+
+    sendSpeakerOutput("hello");
+    sendSpeakerOutput("next output should not save");
+    sendSpeakerOutput("123123");
+    sendSpeakerOutput("I skipped hamlib becuse I can");
+    sendSpeakerOutput("William please make hamlib work before you push it");  
+
     //start key loop after getting the responce
 
 
