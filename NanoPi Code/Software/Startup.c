@@ -101,7 +101,9 @@ void fullStart(){
     printf("software: Setting up demo\n");
     setModeState(standard);
     Radio* radios = loadUpRadioUsingData("ICOM", 7300, 0, NULL, 3073);
+    printf("SOFTWARE: Hamlib is done initiliing so going to add the radio\n");
     setRadios(radios,0);
+    printf("SOFTWARE: Switching the mode to mode3\n");
     switchToRadioMode(3);
     printf("software: Demo setup complete\n");
     //send that I am ready
