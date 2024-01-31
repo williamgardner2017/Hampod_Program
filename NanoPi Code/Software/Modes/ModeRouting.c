@@ -56,8 +56,8 @@ Mode** keyBinds;
 //TODO make sure that this way of initilizin a 2d array
 */
 Mode** modeRoutingStart(){
-    modes = calloc(modeCount, sizeof(Mode));
-    keyBinds = calloc(12, sizeof(Mode));
+    *modes = calloc(modeCount, sizeof(Mode));
+    *keyBinds = calloc(12, sizeof(Mode));
     PRINTFLEVEL2("Address of the keybinds%i\n",(int)keyBinds);
     return modes;
 }
