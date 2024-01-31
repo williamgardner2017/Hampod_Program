@@ -120,7 +120,7 @@ void fullStart(){
     usleep(500000);
     sendSpeakerOutput("I skipped hamlib becuse I can");
     usleep(500000);
-    sendSpeakerOutput("William please make hamlib work before you push it");  
+    sendSpeakerOutput("9");  
 
     //start key loop after getting the responce
 

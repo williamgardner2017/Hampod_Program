@@ -274,10 +274,10 @@ char* sendSpeakerOutput(char* text){
     bool hasAudioFile = getHashMap(audioHashMap, text) != NULL;
     char* outputText = malloc((strlen(text)+2)*sizeof(char));
     if(hasAudioFile){
-        strcat(outputText,"p");
+        strcpy(outputText,"p");
         strcat(outputText,getHashMap(audioHashMap, text));
     }else if(shouldCreateAudioFile(text)){
-        strcat(outputText,"s");
+        strcpy(outputText,"s");
         strcat(outputText,text);
         //TODO add it to the hashmap
         char* nameAndPath = malloc(sizeof(char)*(strlen(text)+strlen(audioFolderPath)));
@@ -289,7 +289,7 @@ char* sendSpeakerOutput(char* text){
         PRINTFLEVEL2("SOFTWARE: adding the data %s with the key of %s\n",nameAndPath,nameOnly);
         insertHashMap(audioHashMap,nameAndPath,nameOnly);
     }else{
-        strcat(outputText,"d");
+        strcpy(outputText,"d");
         strcat(outputText,text);
     }
 
