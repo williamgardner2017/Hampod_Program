@@ -8,9 +8,13 @@ Radio* loadUpRadioUsingData(char* make, int model, int port, Mode* defaultMode, 
     newRadio->port = port;
     newRadio->currentMode = defaultMode;
     newRadio->myrig_model = myrig_model; 
+    PRINTFLEVEL1("SOFTWARE:Starting the connection to hamlib\n");
     newRadio->my_rig = rig_init(myrig_model);
+    PRINTFLEVEL1("SOFTWARE:Setting up the port path\n");
     rig_set_conf(newRadio->my_rig, rig_token_lookup(newRadio->my_rig, "rig_pathname"), SERIAL_PORT);
+    PRINTFLEVEL1("SOFTWARE:Connecting the rig object\n");
     rig_open(newRadio->my_rig); 
+    PRINTFLEVEL1("SOFTWARE:The loading up is done\n")
     return newRadio;
 }
 
