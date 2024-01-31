@@ -99,10 +99,10 @@ void fullStart(){
 
     //SETTING UP THE SIMULATION DEMO
     printf("software: Setting up demo\n");
-    // setModeState(standard);
-    // Radio* radios = loadUpRadioUsingData("ICOM", 7300, 0, NULL, 3073);
-    // setRadios(radios,0);
-    // switchToRadioMode(3);
+    setModeState(standard);
+    Radio* radios = loadUpRadioUsingData("ICOM", 7300, 0, NULL, 3073);
+    setRadios(radios,0);
+    switchToRadioMode(3);
     printf("software: Demo setup complete\n");
     //send that I am ready
     printf("software: Sending I am Ready packet to firmware\n");
@@ -126,16 +126,16 @@ void fullStart(){
 
 
     //initiate
-    // loadConfigParams();
-    // populateConfigFunctions();
+    loadConfigParams();
+    populateConfigFunctions();
 
 
     printf("software: Starting keywatcher\n");
-    // keyWatcher(NULL);
+    keyWatcher(NULL);
     printf("software: Startin Keywatcher complete\n");
-    while(true){
+    // while(true){
 
-    }
+    // }
 }
 void sigint_handler(int signum) {
     printf("\033[0;31mTERMINATING FIRMWARE\n");
