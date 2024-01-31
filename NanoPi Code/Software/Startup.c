@@ -122,13 +122,16 @@ void fullStart(){
 
 
     //initiate
-    loadConfigParams();
-    populateConfigFunctions();
+    // loadConfigParams();
+    // populateConfigFunctions();
 
 
     printf("software: Starting keywatcher\n");
-    keyWatcher(NULL);
+    // keyWatcher(NULL);
     printf("software: Startin Keywatcher complete\n");
+    while(true){
+        
+    }
 }
 void sigint_handler(int signum) {
     printf("\033[0;31mTERMINATING FIRMWARE\n");
