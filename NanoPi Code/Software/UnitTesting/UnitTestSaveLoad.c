@@ -2,7 +2,7 @@ void saveLoadSetupStuffToSave(){
     //load up the configs
     loadConfigParams();
     //create new hotkeys
-    modeRoutingStart();
+    stateMachineStart();
     KeyPress* testingInput = malloc(sizeof(KeyPress));
     //set key input
     testingInput->keyPressed = 'C';
@@ -25,7 +25,7 @@ void saveLoadSetupStuffToSave(){
     testingInput->shiftAmount = 0;
     setProgramibleKeys(testingInput, 3);
     //create radios
-    stateMachineStart();
+    
     char* makeTemp = malloc(sizeof(char)*30);
     strcpy(makeTemp,"model 1");
     setRadios(loadUpRadioUsingData(makeTemp,10,12,getModeById(1)),0);
