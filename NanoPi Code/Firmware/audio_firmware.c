@@ -78,6 +78,7 @@ void audio_process() {
         if(audio_type_byte == 'd') {
             AUDIO_PRINTF("Festival tts without saving file");
             system("cd /tmp");
+            system("pwd");
             sprintf(buffer, "echo '%s' | text2wave -o output.wav", remaining_string);
             system_result = system(buffer);
             system_result = system("aplay output.wav");
