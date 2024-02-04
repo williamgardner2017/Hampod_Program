@@ -9,12 +9,16 @@ void modeRoutingStart(){
     Mode* tempMode;
     tempMode = NormalLoad();
     insertHashMap(ModeHashMap, tempMode, tempMode->modeDetails->modeName);
+    PRINTFLEVEL1("SOFTWARE: Adding Normal compleate\n");
     tempMode = DTMFDummyLoad();
     insertHashMap(ModeHashMap, tempMode, tempMode->modeDetails->modeName);
+    PRINTFLEVEL1("SOFTWARE: Adding DRML compleate\n");
     tempMode = ConfigLoad();
     insertHashMap(ModeHashMap, tempMode, tempMode->modeDetails->modeName);
+    PRINTFLEVEL1("SOFTWARE: Adding config compleate\n");
     tempMode = frequencyLoad();
     insertHashMap(ModeHashMap, tempMode, tempMode->modeDetails->modeName);
+    PRINTFLEVEL1("SOFTWARE: Adding frequency compleate\n");
     keyBinds = calloc(12, sizeof(Mode*));
 }
 
