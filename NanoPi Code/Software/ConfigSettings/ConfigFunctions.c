@@ -96,11 +96,12 @@ int setHotkeys(KeyPress* keyData){
     toggleCDHotkeys(false);
     int chosenModeId;
     //2 get the mode that they want to use
+    Mode** modes;
     if(selectingMode){
         switch (keyData->keyPressed)
         {
             case '#':
-                Mode** modes = getAllModes();
+                modes = getAllModes();
                 for(int i = 0;i<9;i++){
                     if(getModeCount() < pageNumber*9 +1){
                         break;

@@ -47,6 +47,7 @@
 #include "../Modes/ModeRouting.h"
 #include "../StateMachine.h"
 #include "../FirmwareCommunication.h"
+#include "../Modes/Mode.h"
 
 void populateConfigFunctions();
 
