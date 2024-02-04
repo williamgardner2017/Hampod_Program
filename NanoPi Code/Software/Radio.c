@@ -6,7 +6,7 @@ Radio* loadUpRadioUsingData(char* make, int model, int port, Mode* defaultMode, 
     newRadio->make = make;
     newRadio->model = model;
     newRadio->port = port;
-    newRadio->currentMode = defaultMode;
+    newRadio->currentMode = defaultMode; //THIS NEEDS TO BE SET TO SOMETHING
     newRadio->myrig_model = myrig_model; 
     PRINTFLEVEL1("SOFTWARE:Starting the connection to hamlib\n");
     newRadio->my_rig = rig_init(myrig_model);
@@ -34,7 +34,7 @@ ModeData* getModeDetails(Radio* thisRadio){
 
 //TODO make sure each mode has this, even if it is set to null
 void setRadioMode(Radio* thisRadio, Mode* modeToSetTo){
-    if(thisRadio->currentMode->exitMode != NULL){
+    if(thisRadio->currentMode != NULL && thisRadio->currentMode->exitMode != NULL){
         thisRadio->currentMode->exitMode();
     }
     thisRadio->currentMode = modeToSetTo;
