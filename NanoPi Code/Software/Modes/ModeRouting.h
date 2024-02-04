@@ -48,6 +48,7 @@ void freeModes();
 
 Mode* getModeByName(char* name);//new
 Mode** getAllModes();//new
+char** getAllModeNames();
 int getModeCount();
 
 void setProgramibleKeys(KeyPress* key, char* name); //make this use the name and not the ID

@@ -222,7 +222,7 @@ int main(){
         perror("signal with stuff");
         exit(1);
     }
-    // ModeRoutingTest();
+    ModeRoutingTest();
     // StateMachineTesting();
     // ReadingFromFileTest();
     // KeyPressTesting();

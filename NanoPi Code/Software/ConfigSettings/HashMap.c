@@ -11,7 +11,7 @@ HashMap* createHashMap( int (*hashFunc)(void*), bool (*comparFunc)(void*,void*))
 void insertHashMap(HashMap* hashmap,void* data,void* key){
     PRINTFLEVEL2("SOFTWARE: Hash Start of the inesert funciton\n");
     int hashOfKey = hashmap->hashFunc(key);
-    PRINTFLEVEL2("SOFTWARE: Hash ran the key throug the hashing function");
+    PRINTFLEVEL2("SOFTWARE: Hash ran the key throug the hashing function\n");
     int index = hashOfKey % hashmap->size;
     PRINTFLEVEL2("SOFTWARE: Hash got the index after the hash of %i\n", index);
     int offset = 0;
