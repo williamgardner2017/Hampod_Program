@@ -47,6 +47,7 @@ void freeModesLambda(void* data){
 */
 void freeModes(){
     destroyHashMap(ModeHashMap, freeModesLambda, StringHashFree);
+    ModeHashMap = 0;
     free(keyBinds);
 }
 
