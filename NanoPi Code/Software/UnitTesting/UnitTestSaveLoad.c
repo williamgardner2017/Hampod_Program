@@ -28,10 +28,10 @@ void saveLoadSetupStuffToSave(){
     
     char* makeTemp = malloc(sizeof(char)*30);
     strcpy(makeTemp,"model 1");
-    setRadios(loadUpRadioUsingData(makeTemp,10,12,getModeById(1)),0);
+    setRadios(loadUpRadioUsingData(makeTemp,10,12,getModeByName("Normal")),0);
     makeTemp = malloc(sizeof(char)*30);
     strcpy(makeTemp,"icom thing I think");
-    setRadios(loadUpRadioUsingData(makeTemp,43,62,getModeById(2)),1);
+    setRadios(loadUpRadioUsingData(makeTemp,43,62,getModeByName("frequency mode")),1);
 }
 
 bool testSaveFile(){

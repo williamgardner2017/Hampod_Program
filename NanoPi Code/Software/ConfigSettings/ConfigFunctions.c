@@ -54,8 +54,8 @@ if (getcwd(cwd, sizeof(cwd)) != NULL) {
     Radio** radiosToSave = getRadios();
     for(int j = 0; j<2;j++){
         //TODO, add in the moade, model, port, and rigmodel
-        PRINTFLEVEL2("Savin radio with port %i and model %i\n", radiosToSave[j]->port, radiosToSave[j]->model);
-        fprintf(fp,"%i : %i\n", radiosToSave[j]->port, radiosToSave[j]->model); //TODO update this to be correct
+        PRINTFLEVEL2("Saving radio with port %i and model %i\n", radiosToSave[j]->port, radiosToSave[j]->model);
+        fprintf(fp,"%s : %i: %i : %i\n", radiosToSave[j]->make, radiosToSave[j]->model, radiosToSave[j]->port, (int) radiosToSave[j]->myrig_model); //TODO update this to be correct
     }
     // close the file
     fclose(fp);

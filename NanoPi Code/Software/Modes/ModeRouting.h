@@ -52,6 +52,7 @@ int getModeCount();
 
 void setProgramibleKeys(KeyPress* key, char* name); //make this use the name and not the ID
 Mode* getModeViaProgramableKey(KeyPress* key);
+void setProgramibleKeysByIndex(int index, char* name);
 Mode** getHotKeyList();
 #include "ModeRouting.c"
 #endif

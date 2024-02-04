@@ -32,7 +32,8 @@ void loadUpFromSave(int saveFileNumber){
         int index = atoi(customSubString(saveFile[i],0, seporatorIndex));
         //2
         if(strcmp("NULL", nameString) != 0){
-            //TODO set them
+            PRINTFLEVEL1("Loading up mode %s into index %i\n",nameString,index);
+            setProgramibleKeysByIndex(index,nameString);
         }
     }
     int j = 0;
@@ -43,11 +44,15 @@ void loadUpFromSave(int saveFileNumber){
         3) link them together
         4) save it to the thing
         */
-       char* sMake = strchr(saveFile[i], ':') + 1;
-       char* sModel = strchr(sMake[i], ':') + 1;
-       char* sPort = strchr(sModel[i], ':') + 1;
-       char* sRigModel = strchr(sPort[i], ':') + 1;
-       setRadios(loadUpRadioUsingData(make,iModel,iPort,getModeById("Normal"),sRigModel),j);
-       j++;
+        char* sMake = strchr(saveFile[i], ':') + 1;
+        char* sModel = strchr(sMake[i], ':') + 1;
+        char* sPort = strchr(sModel[i], ':') + 1;
+        char* sRigModel = strchr(sPort[i], ':') + 1;
+        int iModel = atoi(sModel);
+        int iPort = atoi(sPort);
+        int iRigModel = atoi(sRigModel);
+        PRINTFLEVEL1("Loading up radio id %i\n",iRigModel);
+        setRadios(loadUpRadioUsingData(sMake,iModel,iPort,getModeByName("Normal"),iRigModel),j);
+        j++;
     }
 }
