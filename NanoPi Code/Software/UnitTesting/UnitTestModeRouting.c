@@ -4,49 +4,50 @@ bool testCreateModeRoutingFunction(){
     return true;
 }
 bool testGettingOneMode(){
-    modeRoutingStart();
+    // modeRoutingStart();
     Mode* testMode = getModeByName("Normal");
     if(testMode==0){
-        freeModes();
+        // freeModes();
         return false;
     }
-    freeModes();
+    // freeModes();
     return true;
 }
 bool testGettingManyModes(){
-    modeRoutingStart();
+    // modeRoutingStart();
     Mode* testMode = getModeByName("Config");
     if(testMode == 0){
-        freeModes();
+        // freeModes();
         return false;
     }
     testMode = getModeByName("Normal");
     if(testMode == 0){
-        freeModes();
+        // freeModes();
         return false;
     }
-    freeModes();
+    // freeModes();
     return true;
 }
 bool testGettingSameMode(){
-    modeRoutingStart();
+    // modeRoutingStart();
     Mode* testMode1 = getModeByName("Normal");
     Mode* testMode2 = getModeByName("Normal");
 
     if(testMode1 == testMode2){
-        freeModes();
+        // freeModes();
         return true;
     }
-    freeModes();
+    // freeModes();
     return false;
 }
 
 bool testFreeModes(){
+    modeRoutingStart();
     return true;
 }
 
 bool testGrabEachMode(){
-    modeRoutingStart();
+    // modeRoutingStart();
      getModeByName("Normal");
      getModeByName("Config");
      getModeByName("DTMF");
