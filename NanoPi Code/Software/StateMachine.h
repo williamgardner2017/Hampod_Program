@@ -40,6 +40,8 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <hamlib/rig.h>
+#include <hamlib/riglist.h>
 #include "Modes/ModeRouting.h"
 #include "GeneralFunctions.h"
 #include "Radio.h"
@@ -67,9 +69,9 @@ ModeStates modeFlow(KeyPress* keyInput);
 BootUpStates BootupFlow(KeyPress* keyInput);
 
 int ModeSelectFlow(KeyPress* keyInput);
-int switchToRadioMode(int mode);
+int switchToRadioMode(char* modeName);
 int StandardModeFlow(KeyPress* keyInput);
-int readOutModeName(int mode);
+int readOutModeName(char* modeName);
 void stateMachineStart();
 
 void freeStateMachine();

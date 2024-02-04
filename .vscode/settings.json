@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "stdlib.h": "c",
+        "generalfunctions.h": "c",
+        "firmwarecommunication.h": "c",
+        "mode.h": "c"
+    }
+}

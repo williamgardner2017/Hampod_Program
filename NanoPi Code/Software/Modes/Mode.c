@@ -1,5 +1,5 @@
 
-void* demoCommandRelay(KeyPress* keyInput, int radioDetails){
+void* demoCommandRelay(KeyPress* keyInput, RIG* my_rig){
     switch (keyInput->keyPressed)
     {
     case '0':

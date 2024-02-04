@@ -49,9 +49,12 @@ HashMap* createHashMap( int (*hashFunc)(void*), bool (*comparFunc)(void*,void*))
 void insertHashMap(HashMap* hashmap,void* data,void* key);
 void* getHashMap(HashMap* hashmap,void* key);
 void* removeHashMap(HashMap* hashmap,void* key);
-void destroyHashMap(HashMap* hashmap, void (*freeingFunction)(void*));
-void insertHashMapWithIntHash(HashMap* hashmap,void* data,int key);
+void destroyHashMap(HashMap* hashmap,void (*dataFree)(void*), void(*keyFree)(void*));//TODO update this so it can take 2 inputs, both the key and the data in the case where both are not the smae thing
 void growHashMap(HashMap* hashmap);
+void** getAllEntriesHashMap(HashMap* hashmap);
 
+int StringHash(void* key);
+bool StringHashCompare(void* a, void* b);
+void StringHashFree(void* s);
 #include "HashMap.c"
 #endif

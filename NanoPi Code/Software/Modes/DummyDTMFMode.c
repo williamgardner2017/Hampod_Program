@@ -1,5 +1,5 @@
 
-void* DTMFCommandRelay(KeyPress* keyInput, int radioDetails){
+void* DTMFCommandRelay(KeyPress* keyInput, RIG* radioDetails){
     return NULL;
 }
 
@@ -27,7 +27,7 @@ Mode* DTMFDummyLoad(){
         free(newMode);
         return NULL;
     }
-    newData->modeName = strdup("ExampleMake");
+    newData->modeName = strdup("DTMF");
     newData->radioModel = 42;
 
     newMode->modeDetails = newData;

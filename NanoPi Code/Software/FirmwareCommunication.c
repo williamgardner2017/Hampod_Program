@@ -238,7 +238,7 @@ void* OutputThreadManager(void* arg){
             while(!ThreadQueueIsEmpty(threadQueue)){
                   pthread_cancel(ThreadDequeue(threadQueue));  
             }
-            pthread_mutex_unlock(&thread_cond);
+            pthread_mutex_unlock(&thread_lock);
         return NULL;
         }
         pthread_t current = ThreadDequeue(threadQueue);
@@ -311,7 +311,7 @@ void setupAudioHashMap(){
     if (dr == NULL)  // opendir returns NULL if couldn't open directory 
     { 
         printf("Could not open current directory" ); 
-        return 0; 
+        return; 
     }
     while ((de = readdir(dr)) != NULL){
         printf("%s\n", de->d_name);
@@ -481,5 +481,5 @@ void freeFirmwareComunication(){
     close(input_pipe);
     printf("Software:closing output pipe\n");
     close(output_pipe);
-    destroyHashMap(audioHashMap,audioFree);
+    destroyHashMap(audioHashMap,audioFree,audioFree);
 }

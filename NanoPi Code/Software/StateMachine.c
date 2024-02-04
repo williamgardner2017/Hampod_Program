@@ -5,7 +5,7 @@
 */
 
 ModeStates modeState = bootUp;
-
+char** modeNames;
 bool programableKeysOn = true;
 Radio** radios;
 int maxRadios = 2;
@@ -66,7 +66,7 @@ BootUpStates BootupFlow(KeyPress* keyInput){
                     bootUpState = chooseCompany;
                     break;
                 }else{
-                    radios[currentRadio] = loadUpRadioUsingData(company,model, convertCharToKeyValue(keyInput), getModeById(0));
+                    radios[currentRadio] = loadUpRadioUsingData(company,model, convertCharToKeyValue(keyInput), getModeByName("Normal"), (rig_model_t) NULL);
                     currentRadio++;
                     bootUpState = linkMore;
                     break;
@@ -80,7 +80,7 @@ BootUpStates BootupFlow(KeyPress* keyInput){
                 currentRadio--;
                 //set radio to normal mode
                 //TODO make the number the one coresponding to normal mode
-                setRadioMode(radios[currentRadio],getModeById(1));
+                setRadioMode(radios[currentRadio],getModeByName("Normal"));
                 //loadUpNormalMode
                 break; 
             }
@@ -113,7 +113,7 @@ int isReadingOut = 0; //TODO make this actualy cause a read out
 */
 int ModeSelectFlow(KeyPress* keyInput){
     if(isReadingOut){
-        readOutModeName(modeSelectPage*9 + convertCharToKeyValue(keyInput)-1);
+        readOutModeName(modeNames[modeSelectPage*9 + convertCharToKeyValue(keyInput)-1]);
         isReadingOut = 0;
     }else{
         switch (keyInput->keyPressed){
@@ -127,7 +127,7 @@ int ModeSelectFlow(KeyPress* keyInput){
                 if(keyInput->isHold){
                     int i;
                     for(i = modeSelectPage*9; i< (modeSelectPage+1)*9;i++){
-                        readOutModeName(i);
+                        readOutModeName(modeNames[i]);
                     }
                 }else{
                     isReadingOut = 1;
@@ -142,7 +142,7 @@ int ModeSelectFlow(KeyPress* keyInput){
             case '7':
             case '8':
             case '9':
-                switchToRadioMode((modeSelectPage*9) + convertCharToKeyValue(keyInput)-1);
+                switchToRadioMode(modeNames[(modeSelectPage*9) + convertCharToKeyValue(keyInput) - 1]);
                 break;
         
             default:
@@ -242,13 +242,13 @@ int StandardModeFlow(KeyPress* keyInput){ //TODO be able to toggle the letter ke
  * Reads out the name of the asked for mode
  * TODO make this use firmware output
 */
-int readOutModeName(int modeID){
+int readOutModeName(char* modeName){
     //DEBUG
-    printf("%s", getModeById(modeID)->modeDetails->modeName);
+    printf("%s", getModeByName(modeName)->modeDetails->modeName);
     //actual
 
     //problem? 
-    char* holdName = strdup(getModeById(modeID)->modeDetails->modeName);
+    char* holdName = strdup(getModeByName(modeName)->modeDetails->modeName);
     sendSpeakerOutput(holdName);
     return 1;
 }
@@ -259,9 +259,9 @@ int readOutModeName(int modeID){
  * TODO see if this can just be replaced with the new modeRouting file
  * Idea, have this be what takes in the modeID and then using it would also switch the modeState as needed
 */
-int switchToRadioMode(int modeID){ //TODO redue this to be better sueted, all this needs to do is to set what the letter toggles are when swiching to said mode
+int switchToRadioMode(char* modeName){ //TODO redue this to be better sueted, all this needs to do is to set what the letter toggles are when swiching to said mode
     modeState = standard;
-    setRadioMode(radios[currentRadio], getModeById(modeID));
+    setRadioMode(radios[currentRadio], getModeByName(modeName));
     return -1;
 }
 
@@ -270,6 +270,7 @@ int switchToRadioMode(int modeID){ //TODO redue this to be better sueted, all th
 void stateMachineStart(){
     radios = calloc(2,sizeof(Radio*));
     modeRoutingStart();
+    modeNames = getAllModeNames();
 }
 
 void setModeState(ModeStates state){
