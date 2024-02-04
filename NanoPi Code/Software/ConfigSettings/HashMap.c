@@ -19,7 +19,8 @@ void insertHashMap(HashMap* hashmap,void* data,void* key){
     PRINTFLEVEL2("SOFTWARE: Hash going into the while loop\n");
     while(placingObject){
         if(hashmap->list[(index+offset)%hashmap->size] == 0){
-            PRINTFLEVEL2("SOFTWARE: Hash Found an index %i to place item at\n", (index+offset)%hashmap->size);
+            PRINTFLEVEL1("SOFTWARE: Hash Found an index %i to place item at\n", (index+offset)%hashmap->size);
+            PRINTFLEVEL2("SOFTWARE: Hash placing data %s with key %s\n",(char*) data, (char*) key);
             placingObject = false;
             hashmap->list[(index+offset)%hashmap->size] = data;
             hashmap->listOfKeys[(index+offset)%hashmap->size] = key;

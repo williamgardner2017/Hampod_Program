@@ -226,7 +226,7 @@ int main(){
     // StateMachineTesting();
     // ReadingFromFileTest();
     // KeyPressTesting();
-    // HashMapTest();
+    HashMapTest();
     // ConfigParamTest();
     // AudioTesting();
     SaveLoadTesting();
