@@ -32,11 +32,23 @@ clean:
 	@rm -f *.exe  # Remove the executable (replace 'my_program' with the actual name)
 	@rm -f *.elf
 
-testing: UnitTesting.elf
-UnitTesting.elf: UnitTesting.o
-	cc $(CFLAGS) -o UnitTesting.elf UnitTesting.o -lpthread $(LDFLAGS)
-UnitTesting.o: UnitTesting.c
-	cc $(CFLAGS) -DTESTING -DOUTPUTLEVEL2 -DOUTPUTLEVEL1 -c UnitTesting/UnitTesting.c -o UnitTesting.o -lpthread $(LDFLAGS)
+testing0: UnitTesting0.elf
+testing1: UnitTesting1.elf
+testing2: UnitTesting2.elf
+UnitTesting0.elf: UnitTesting0.o
+	cc $(CFLAGS) -o UnitTesting0.elf UnitTesting0.o -lpthread $(LDFLAGS)
+UnitTesting1.elf: UnitTesting1.o
+	cc $(CFLAGS) -o UnitTesting1.elf UnitTesting1.o -lpthread $(LDFLAGS)
+UnitTesting2.elf: UnitTesting2.o
+	cc $(CFLAGS) -o UnitTesting2.elf UnitTesting2.o -lpthread $(LDFLAGS)
+
+
+UnitTesting0.o: UnitTesting.c
+	cc $(CFLAGS) -DTESTING -c UnitTesting/UnitTesting.c -o UnitTesting0.o -lpthread $(LDFLAGS)
+UnitTesting1.o: UnitTesting.c
+	cc $(CFLAGS) -DTESTING -DOUTPUTLEVEL1 -c UnitTesting/UnitTesting.c -o UnitTesting1.o -lpthread $(LDFLAGS)
+UnitTesting2.o: UnitTesting.c
+	cc $(CFLAGS) -DTESTING -DOUTPUTLEVEL2 -DOUTPUTLEVEL1 -c UnitTesting/UnitTesting.c -o UnitTesting2.o -lpthread $(LDFLAGS)
 UnitTesting.c:
 	@echo "Missing firmware.c file. Repull the git repo"
 
