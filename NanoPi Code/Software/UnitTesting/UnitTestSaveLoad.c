@@ -1,6 +1,7 @@
 void saveLoadSetupStuffToSave(){
     //load up the configs
     loadConfigParams();
+    printf("Configs loaded up\n");
     //create new hotkeys
     stateMachineStart();
     printf("Done staring components\n");
