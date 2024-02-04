@@ -40,7 +40,7 @@ char** getAllModeNames(){
 
 void freeModesLambda(void* data){
     Mode* tempMode = (Mode*) data;
-    tempMode->freeMode(&tempMode);
+    tempMode->freeMode(tempMode);
 }
 /*
 * Frees all of the mode structts and the array

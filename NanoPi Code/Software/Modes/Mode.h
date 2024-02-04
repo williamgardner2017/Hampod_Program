@@ -15,7 +15,7 @@ typedef struct ModeData {
 //TODO make a decision for what the modeInput should return if anything
 typedef struct Mode {
     void* (*modeInput)(KeyPress*, RIG*);
-    void (*freeMode)(struct Mode **self);
+    void (*freeMode)(struct Mode *self);
     void (*enterMode)();
     void (*exitMode)();
     ModeData* modeDetails;

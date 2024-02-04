@@ -132,12 +132,11 @@ void* configCommandRelay(KeyPress* keyInput, RIG* radioDetails){
     return NULL;
 }
 
-void freeConfigMode(Mode** modeToFree){
-    Mode* temp = *modeToFree;
-    free(temp->modeDetails->modeName);
-    free(temp->modeDetails);
-    free(*modeToFree);
-    *modeToFree = 0;
+void freeConfigMode(Mode* modeToFree){
+    free(modeToFree->modeDetails->modeName);
+    free(modeToFree->modeDetails);
+    free(modeToFree);
+    &modeToFree = 0;
 }
 
 //Grab the current values when loading in
