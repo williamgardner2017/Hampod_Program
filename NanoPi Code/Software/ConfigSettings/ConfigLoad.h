@@ -46,6 +46,7 @@
 #include "ConfigParams.h"
 #include "../Modes/ModeRouting.h"
 #include "../StateMachine.h"
+#include "../Radio.h"
 
 #include "ConfigLoad.c"
 #endif

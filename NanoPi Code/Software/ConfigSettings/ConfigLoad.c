@@ -22,20 +22,32 @@ void loadUpFromSave(int saveFileNumber){
     i++;
     while(strcmp(saveFile[i], "Hamlib start") != 0){
         /*
-        1) Convert substring into index and ID
+        1) Convert substring into index and Name
         2) See if the name not null
         3) set the hotkey via getting the mode by name
         */
        //TODO set this up
+        char* nameString = strchr(saveFile[i], ':') + 1;
+        int seporatorIndex = (int)(doubleString - saveFile[i]);
+        int index = atoi(customSubString(saveFile[i],0, seporatorIndex));
+        //2
+        if(strcmp("NULL", nameString) != 0){
+            //TODO set them
+        }
     }
-     while(strcmp(saveFile[i], "End of file") != 0){
+    int j = 0;
+    while(strcmp(saveFile[i], "End of file") != 0){
         /*
         1) substring to get the components
         2) get the hampod ID and the port name
         3) link them together
         4) save it to the thing
         */
+       char* sMake = strchr(saveFile[i], ':') + 1;
+       char* sModel = strchr(sMake[i], ':') + 1;
+       char* sPort = strchr(sModel[i], ':') + 1;
+       char* sRigModel = strchr(sPort[i], ':') + 1;
+       setRadios(loadUpRadioUsingData(make,iModel,iPort,getModeById("Normal"),sRigModel),j);
+       j++;
     }
-    //do an integer set hotkeys
-    //load up the radios
 }
