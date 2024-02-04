@@ -154,15 +154,13 @@ void exitConfigMode(){
 }
 
 Mode* ConfigLoad(){
-    Mode* newMode = (Mode*) malloc(sizeof(Mode));
+     Mode* newMode = (Mode*) malloc(sizeof(Mode));
 
     if(newMode == NULL){
         return NULL;
     }
     newMode->modeInput = configCommandRelay;
     newMode->freeMode = freeConfigMode;
-    // newMode->enterMode = enterConfigMode;
-    // newMode->exitMode = exitConfigMode;
 
     ModeData* newData = (ModeData*)malloc(sizeof(ModeData));
 
