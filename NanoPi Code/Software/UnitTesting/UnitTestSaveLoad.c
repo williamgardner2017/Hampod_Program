@@ -3,6 +3,7 @@ void saveLoadSetupStuffToSave(){
     loadConfigParams();
     //create new hotkeys
     stateMachineStart();
+    printf("Done staring components\n");
     KeyPress* testingInput = malloc(sizeof(KeyPress));
     //set key input
     testingInput->keyPressed = 'C';
@@ -25,13 +26,14 @@ void saveLoadSetupStuffToSave(){
     testingInput->shiftAmount = 0;
     setProgramibleKeys(testingInput, "frequency mode");
     //create radios
-    
+    printf("Done loading up hotkeys\n");
     char* makeTemp = malloc(sizeof(char)*30);
     strcpy(makeTemp,"model 1");
     setRadios(loadUpRadioUsingData(makeTemp,10,12,getModeByName("Normal"),0),0);
     makeTemp = malloc(sizeof(char)*30);
     strcpy(makeTemp,"icom thing I think");
     setRadios(loadUpRadioUsingData(makeTemp,43,62,getModeByName("frequency mode"),1),1);
+    printf("Done loading up radios\n");
 }
 
 bool testSaveFile(){
