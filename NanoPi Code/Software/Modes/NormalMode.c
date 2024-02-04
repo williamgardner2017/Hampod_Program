@@ -20,7 +20,6 @@ void freeNormalMode(Mode* modeToFree){
     free(modeToFree->modeDetails->modeName);
     free(modeToFree->modeDetails);
     free(modeToFree);
-    &modeToFree = 0;
 }
 
 Mode* NormalLoad(){
