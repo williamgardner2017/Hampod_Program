@@ -1,5 +1,14 @@
 void loadUpFromSave(int saveFileNumber){
     //get the file to load
+    char fileName[40];
+    sprintf(fileName, "ConfigSettings/SaveFiles/saveNumber%i.txt",fileNumber);
+    FILE *fp = fopen(fileName, "r");
+    printf("File Path: %s\n", fileName);
+    if (fp == NULL)
+    {
+        printf("Error opening the file %s\n", fileName);
+        return;
+    }
     char** saveFile;
     int i = 0
     while(strcmp(saveFile[i], "Hotkey start") != 0){

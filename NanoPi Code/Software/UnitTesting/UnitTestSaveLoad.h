@@ -11,8 +11,11 @@
 #include "../Modes/ModeRouting.h"
 #include "../Radio.h"
 #include "../StateMachine.h"
+#include "../ConfigSettings/ConfigLoad.h"
 void saveLoadSetupStuffToSave();
 bool testSaveFile();
+void setUpForLoadTesting();
+bool testLoadFile();
 
 #include "UnitTestSaveLoad.c"
 #endif
