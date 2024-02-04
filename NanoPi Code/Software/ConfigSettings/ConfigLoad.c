@@ -1,7 +1,7 @@
 void loadUpFromSave(int saveFileNumber){
     //get the file to load
     char fileName[40];
-    sprintf(fileName, "ConfigSettings/SaveFiles/saveNumber%i.txt",fileNumber);
+    sprintf(fileName, "ConfigSettings/SaveFiles/saveNumber%i.txt",saveFileNumber);
     FILE *fp = fopen(fileName, "r");
     printf("File Path: %s\n", fileName);
     if (fp == NULL)
@@ -10,7 +10,7 @@ void loadUpFromSave(int saveFileNumber){
         return;
     }
     char** saveFile;
-    int i = 0
+    int i = 0;
     while(strcmp(saveFile[i], "Hotkey start") != 0){
         /*
         1) substring to get the components
@@ -37,7 +37,7 @@ void loadUpFromSave(int saveFileNumber){
         */
        //TODO set this up
         char* nameString = strchr(saveFile[i], ':') + 1;
-        int seporatorIndex = (int)(doubleString - saveFile[i]);
+        int seporatorIndex = (int)(nameString - saveFile[i]);
         int index = atoi(customSubString(saveFile[i],0, seporatorIndex));
         //2
         if(strcmp("NULL", nameString) != 0){
@@ -54,9 +54,9 @@ void loadUpFromSave(int saveFileNumber){
         4) save it to the thing
         */
         char* sMake = strchr(saveFile[i], ':') + 1;
-        char* sModel = strchr(sMake[i], ':') + 1;
-        char* sPort = strchr(sModel[i], ':') + 1;
-        char* sRigModel = strchr(sPort[i], ':') + 1;
+        char* sModel = strchr(sMake, ':') + 1;
+        char* sPort = strchr(sModel, ':') + 1;
+        char* sRigModel = strchr(sPort, ':') + 1;
         int iModel = atoi(sModel);
         int iPort = atoi(sPort);
         int iRigModel = atoi(sRigModel);
