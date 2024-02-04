@@ -161,8 +161,8 @@ Mode* ConfigLoad(){
     }
     newMode->modeInput = configCommandRelay;
     newMode->freeMode = freeConfigMode;
-    newMode->enterMode = enterConfigMode;
-    newMode->exitMode = exitConfigMode;
+    // newMode->enterMode = enterConfigMode;
+    // newMode->exitMode = exitConfigMode;
 
     ModeData* newData = (ModeData*)malloc(sizeof(ModeData));
 
