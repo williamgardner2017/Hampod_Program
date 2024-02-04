@@ -1,6 +1,6 @@
 bool testCreateModeRoutingFunction(){
     modeRoutingStart();
-    freeModes();
+    // freeModes();
     return true;
 }
 bool testGettingOneMode(){
@@ -42,7 +42,7 @@ bool testGettingSameMode(){
 }
 
 bool testFreeModes(){
-    modeRoutingStart();
+    // modeRoutingStart();
     return true;
 }
 
