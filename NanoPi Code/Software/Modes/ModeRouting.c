@@ -41,6 +41,7 @@ void modeRoutingStart(){
         printf("Mallocing the keybings failded\n");
         exit(-1);
     }
+    PRINTFLEVEL1("SOFTWARE: keybings object created\n");
 }
 
 Mode* getModeByName(char* name){

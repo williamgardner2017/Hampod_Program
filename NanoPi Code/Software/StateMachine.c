@@ -271,6 +271,7 @@ void stateMachineStart(){
     radios = calloc(2,sizeof(Radio*));
     modeRoutingStart();
     modeNames = getAllModeNames();
+    PRINTFLEVEL1("SOFTWARE: mode names retreaved\n");
 }
 
 void setModeState(ModeStates state){
