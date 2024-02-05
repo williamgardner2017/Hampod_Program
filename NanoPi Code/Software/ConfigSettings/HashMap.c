@@ -138,11 +138,11 @@ void growHashMap(HashMap* hashmap){
  * the order will be consisant but adding new items to the map will NOT add it to the end of this list
 */
 void** getAllEntriesHashMap(HashMap* hashmap){
-    void** entries = malloc(sizeof(void**)*hashmap->quantity);
+    void** entries = malloc(sizeof(void*) * hashmap->quantity);
     int j = 0;
     for(int i = 0; i<hashmap->size;i++){
         if(hashmap->list[i] != 0){
-            entries[j] = hashmap->list[j];
+            entries[j] = hashmap->list[i];
             j++;
         }
     }
