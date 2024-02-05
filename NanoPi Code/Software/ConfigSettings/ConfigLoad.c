@@ -4,8 +4,8 @@ void loadUpFromSave(int saveFileNumber){
     sprintf(fileName, "ConfigSettings/SaveFiles/saveNumber%i.txt",saveFileNumber);
 
     char** saveFile = textFileToArray(fileName);
-
-    int i = 0;
+    PRINTFLEVEL1("SOFTWARE: loaded up the file %s\n", fileName);
+    int i = 1;
     while(strcmp(saveFile[i], "Hotkey start") != 0){
         /*
         1) substring to get the components
