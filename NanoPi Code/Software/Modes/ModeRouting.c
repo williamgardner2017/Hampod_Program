@@ -60,13 +60,13 @@ char** getAllModeNames(){
         PRINTFLEVEL2("SOFTWARE: Got temp mode\n");
          if(tempMode == NULL){
             printf("Something went wrong the mode is NULL in getAllModeNames\n");
-            exit(-1);
+            continue;
         }
         ModeData* tempMetaData = tempMode->modeDetails;
         PRINTFLEVEL2("SOFTWRE: Got the metadata\n");
         if(tempMetaData == NULL){
             printf("Something went wrong in getAllModeNames with getting the metadata\n");
-            exit(-1);
+            continue;
         }
         char* modeName = tempMetaData->modeName;
         PRINTFLEVEL2("SOFTWARE; got mode name of %s\n",modeName);
