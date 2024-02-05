@@ -59,7 +59,8 @@ void loadUpFromSave(int saveFileNumber){
         char* point0 = strchr(saveFile[i], ':');
         char* point1 = strchr(point0, ':');
         char* point2 = strchr(point1, ':');
-        int dis0 = (int) (point0 - saveFile[i])+2;
+        PRINTFLEVEL2("SOFTWARE: Points found are %s,%s,%s\n",point0,point1,point2);
+        int dis0 = (int) (point0 - saveFile[i]);
         int dis1 = (int) (point1 - point0)+2;
         int dis2 = (int) (point2 - point1)+2;
         int dis3 =  strlen(point2);
