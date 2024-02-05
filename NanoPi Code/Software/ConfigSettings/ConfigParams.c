@@ -219,6 +219,10 @@ char* incrementConfig(char* name, bool up){
 */
 char* updateConfigs(char* name, double value){
 ConfigParam* param = getHashMap(configMapping,name);
+if(param == NULL){
+    PRINTFLEVEL1("SOFTWARE: Failed to set value for given config\n");
+    return NULL;
+}
     //incremetn/decrement by the value
     char* str = malloc(sizeof(char)*100);
     switch (param->configType)
