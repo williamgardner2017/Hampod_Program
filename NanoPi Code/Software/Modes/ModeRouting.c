@@ -52,10 +52,12 @@ Mode** getAllModes(){
 }
 
 char** getAllModeNames(){
-    char** names = malloc(sizeof(char*)*ModeHashMap->quantity);
+    char** names = malloc(sizeof(char*) * ModeHashMap->quantity);
     Mode** modes = getAllModes();
+    PRINTFLEVEL2("SOFTWARE:Gotten all mode objects\n");
     for(int i = 0;i<ModeHashMap->quantity;i++){
         names[i] = modes[i]->modeDetails->modeName;
+        PRINTFLEVEL2("SOFTWARE:Added name %s to the list\n",modes[i]->modeDetails->modeName);
     }
     return names;
 }
