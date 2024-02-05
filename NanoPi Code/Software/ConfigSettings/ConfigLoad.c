@@ -56,17 +56,17 @@ void loadUpFromSave(int saveFileNumber){
         3) link them together
         4) save it to the thing
         */
-        char* sMake = strchr(saveFile[i], ':') + 1;
-        char* sModel = strchr(sMake, ':') + 1;
-        char* sPort = strchr(sModel, ':') + 1;
-        char* sRigModel = strchr(sPort, ':');
-        PRINTFLEVEL2("SOFTWARE: Created RAW strings %s, %s, %s, %s to load in\n",sMake,sModel,sPort,sRigModel);
-        int length = (int) (sModel-sMake);
-        sMake = customSubString(sMake,0,length);
-        length = (int) (sPort - sModel);
-        sModel = customSubString(sModel,0,length);
-        length = (int) (sRigModel-sPort);
-        sPort = customSubString(sPort,0,length);
+        char* point0 = strchr(saveFile[i], ':');
+        char* point1 = strchr(point0, ':');
+        char* point2 = strchr(point1, ':');
+        int dis0 = (int) (point0 - saveFile[i]);
+        int dis1 = (int) (point1 - point0);
+        int dis2 = (int) (point2 - point1);
+        int dis3 =  strlen(point2)-1;
+        char* sMake = customSubString(saveFile[i],0,dis0);
+        char* sModel = customSubString(saveFile[i],point0 - saveFile[i] + 1,dis1);
+        char* sPort = customSubString(saveFile[i],point1 - saveFile[i] + 1,dis2);
+        char* sRigModel =customSubString(saveFile[i],point2 - saveFile[i] + 1,dis3);
         PRINTFLEVEL2("SOFTWARE: Created filtered strings %s, %s, %s, %s to load in\n",sMake,sModel,sPort,sRigModel);
         int iModel = atoi(sModel);
         int iPort = atoi(sPort);
