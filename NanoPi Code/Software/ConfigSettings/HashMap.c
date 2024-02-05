@@ -171,3 +171,7 @@ bool StringHashCompare(void* a, void* b){
 void StringHashFree(void* s){
     free((char*) s);
 }
+
+void NullHashFree(void* s){
+    return;
+}
