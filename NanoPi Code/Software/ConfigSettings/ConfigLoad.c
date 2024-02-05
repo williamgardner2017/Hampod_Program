@@ -59,7 +59,7 @@ void loadUpFromSave(int saveFileNumber){
         char* sMake = strchr(saveFile[i], ':') + 1;
         char* sModel = strchr(sMake, ':') + 1;
         char* sPort = strchr(sModel, ':') + 1;
-        char* sRigModel = strchr(sPort, ':') + 1;
+        char* sRigModel = strchr(sPort, ':');
         PRINTFLEVEL2("SOFTWARE: Created RAW strings %s, %s, %s, %s to load in\n",sMake,sModel,sPort,sRigModel);
         int length = (int) (sModel-sMake);
         sMake = customSubString(sMake,0,length);
