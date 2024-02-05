@@ -61,9 +61,12 @@ void loadUpFromSave(int saveFileNumber){
         char* sPort = strchr(sModel, ':') + 1;
         char* sRigModel = strchr(sPort, ':') + 1;
         PRINTFLEVEL2("SOFTWARE: Created RAW strings %s, %s, %s, %s to load in\n",sMake,sModel,sPort,sRigModel);
-        sMake = customSubString(sMake,0,(int) (sModel-sMake));
-        sModel = customSubString(sModel,0,(int) (sPort - sModel));
-        sPort = customSubString(sPort,0,(int) (sRigModel-sPort));
+        int length = (int) (sModel-sMake);
+        sMake = customSubString(sMake,0,length);
+        length = (int) (sPort - sModel);
+        sModel = customSubString(sModel,0,length);
+        length = (int) (sRigModel-sPort);
+        sPort = customSubString(sPort,0,length);
         PRINTFLEVEL2("SOFTWARE: Created filtered strings %s, %s, %s, %s to load in\n",sMake,sModel,sPort,sRigModel);
         int iModel = atoi(sModel);
         int iPort = atoi(sPort);
