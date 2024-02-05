@@ -5,7 +5,9 @@ void loadUpFromSave(int saveFileNumber){
 
     char** saveFile = textFileToArray(fileName);
     PRINTFLEVEL1("SOFTWARE: loaded up the file %s\n", fileName);
-    int i = 1;
+    int i = 0;
+    printf("%s\n",saveFile[i]);
+    i++;
     while(strcmp(saveFile[i], "Hotkey start") != 0){
         /*
         1) substring to get the components
@@ -25,6 +27,7 @@ void loadUpFromSave(int saveFileNumber){
         updateConfigs(Name, value);
         i++;
     }
+    printf("%s\n",saveFile[i]);
     i++;
     while(strcmp(saveFile[i], "Hamlib start") != 0){
         /*
@@ -42,6 +45,8 @@ void loadUpFromSave(int saveFileNumber){
             setProgramibleKeysByIndex(index,nameString);
         }
     }
+    printf("%s\n",saveFile[i]);
+    i++;
     int j = 0;
     while(strcmp(saveFile[i], "End of file") != 0){
         /*
