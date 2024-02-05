@@ -56,8 +56,12 @@ char** getAllModeNames(){
     Mode** modes = getAllModes();
     PRINTFLEVEL2("SOFTWARE:Gotten all mode objects\n");
     for(int i = 0;i<ModeHashMap->quantity;i++){
-        names[i] = modes[i]->modeDetails->modeName;
-        PRINTFLEVEL2("SOFTWARE:Added name %s to the list\n",modes[i]->modeDetails->modeName);
+        Mode* tempMode = modes[i];
+        PRINTFLEVEL2("SOFTWARE: Got temp mode\n");
+        char* modeName = tempMode->modeDetails->modeName;
+        PRINTFLEVEL2("SOFTWARE; got mode name of %s\n",modeName);
+        names[i] = modeName;
+        PRINTFLEVEL2("SOFTWARE:Added name %s to the list at index %i\n",modes[i]->modeDetails->modeName,i);
     }
     return names;
 }
