@@ -58,7 +58,13 @@ char** getAllModeNames(){
     for(int i = 0;i<ModeHashMap->quantity;i++){
         Mode* tempMode = modes[i];
         PRINTFLEVEL2("SOFTWARE: Got temp mode\n");
-        char* modeName = tempMode->modeDetails->modeName;
+        ModeData* tempMetaData = tempMode->modeDetails;
+        PRINTFLEVEL2("SOFTWRE: Got the metadata\n");
+        if(tempMetaData == NULL){
+            printf("Something went wrong in getAllModeNames\n");
+            exit(-1);
+        }
+        char* modeName = tempMetaData->modeName;
         PRINTFLEVEL2("SOFTWARE; got mode name of %s\n",modeName);
         names[i] = modeName;
         PRINTFLEVEL2("SOFTWARE:Added name %s to the list at index %i\n",modes[i]->modeDetails->modeName,i);
