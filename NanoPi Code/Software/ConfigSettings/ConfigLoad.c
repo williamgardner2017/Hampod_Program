@@ -25,6 +25,8 @@ void loadUpFromSave(int saveFileNumber){
         // 2
         double value = atof(doubleString+1);
         //3 4 
+
+        PRINTFLEVEL1("SOFTWARE: loading value %f for config %s\n",value,Name);
         updateConfigs(Name, value);
         i++;
     }
