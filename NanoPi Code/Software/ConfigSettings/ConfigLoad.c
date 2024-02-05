@@ -44,6 +44,7 @@ void loadUpFromSave(int saveFileNumber){
             PRINTFLEVEL1("Loading up mode %s into index %i\n",nameString,index);
             setProgramibleKeysByIndex(index,nameString);
         }
+        i++;
     }
     printf("%s\n",saveFile[i]);
     i++;
@@ -65,5 +66,6 @@ void loadUpFromSave(int saveFileNumber){
         PRINTFLEVEL1("Loading up radio id %i\n",iRigModel);
         setRadios(loadUpRadioUsingData(sMake,iModel,iPort,getModeByName("Normal"),iRigModel),j);
         j++;
+        i++;
     }
 }
