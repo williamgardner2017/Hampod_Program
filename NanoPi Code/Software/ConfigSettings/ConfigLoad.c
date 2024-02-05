@@ -61,8 +61,8 @@ void loadUpFromSave(int saveFileNumber){
         char* point2 = strchr(point1+1, ':');
         PRINTFLEVEL2("SOFTWARE: Points found are %s,%s,%s\n",point0,point1,point2);
         int dis0 = (int) (point0 - saveFile[i]);
-        int dis1 = (int) (point1 - point0);
-        int dis2 = (int) (point2 - point1);
+        int dis1 = (int) (point1+1 - point0);
+        int dis2 = (int) (point2+1 - point1);
         int dis3 =  strlen(point2);
         PRINTFLEVEL2("SOFTWAR: the lengths are %i,%i,%i,%i\n",dis0,dis1,dis2,dis3);
         char* sMake = customSubString(saveFile[i],0,dis0);
