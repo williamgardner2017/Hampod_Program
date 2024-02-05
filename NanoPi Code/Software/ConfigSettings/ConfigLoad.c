@@ -8,7 +8,7 @@ void loadUpFromSave(int saveFileNumber){
     int i = 0;
     printf("%s\n",saveFile[i]);
     i++;
-    while(strcmp(saveFile[i], "Hotkey start") != 0){
+    while(strcmp(saveFile[i], "Start of Hotkeys") != 0){
         /*
         1) substring to get the components
         2) convert the 2nd part to a double
@@ -29,7 +29,7 @@ void loadUpFromSave(int saveFileNumber){
     }
     printf("%s\n",saveFile[i]);
     i++;
-    while(strcmp(saveFile[i], "Hamlib start") != 0){
+    while(strcmp(saveFile[i], "Start of radios") != 0){
         /*
         1) Convert substring into index and Name
         2) See if the name not null
