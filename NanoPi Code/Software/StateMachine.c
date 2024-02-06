@@ -38,11 +38,12 @@ ModeStates modeFlow(KeyPress* keyInput){
 
 //no idea how to store these yet
 //TODO have there be another file dedicated to figureing this out since it will probably be a large function
-static char** companiesList = textFileToArray("CompanyList.txt");
+static char** companiesList; 
 char* company;
 int model;
 BootUpStates bootUpState = selectNewOrSave;
 BootUpStates BootupFlow(KeyPress* keyInput){
+    companiesList = textFileToArray("CompanyList.txt");
     switch (bootUpState)
     {
         case selectNewOrSave:
