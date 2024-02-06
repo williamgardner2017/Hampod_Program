@@ -1,4 +1,7 @@
-#define SERIAL_PORT "/dev/ttyUSB0"
+#define SERIAL_PORT_S0 "/dev/ttyS0"
+#define SERIAL_PORT_S1 "/dev/ttyS1"
+#define SERIAL_PORT_USB0 "/dev/ttyUSB0"
+#define SERIAL_PORT_USB1 "/dev/ttyUSB1"
 
 Radio* loadUpRadioUsingData(char* make, int model, int port, Mode* defaultMode, rig_model_t myrig_model){
     rig_load_all_backends(); 
@@ -9,7 +12,25 @@ Radio* loadUpRadioUsingData(char* make, int model, int port, Mode* defaultMode, 
     newRadio->currentMode = defaultMode;
     newRadio->myrig_model = myrig_model; 
     newRadio->my_rig = rig_init(myrig_model);
-    rig_set_conf(newRadio->my_rig, rig_token_lookup(newRadio->my_rig, "rig_pathname"), SERIAL_PORT);
+
+    switch (port) {
+        case 1:
+            rig_set_conf(newRadio->my_rig, rig_token_lookup(newRadio->my_rig, "rig_pathname"), SERIAL_PORT_S0);
+            break;
+        case 2:
+            rig_set_conf(newRadio->my_rig, rig_token_lookup(newRadio->my_rig, "rig_pathname"), SERIAL_PORT_S1);
+            break;
+        case 3:
+            rig_set_conf(newRadio->my_rig, rig_token_lookup(newRadio->my_rig, "rig_pathname"), SERIAL_PORT_USB0);
+            break;
+        case 4:
+            rig_set_conf(newRadio->my_rig, rig_token_lookup(newRadio->my_rig, "rig_pathname"), SERIAL_PORT_USB1);
+            break;
+        default:
+            // Handle invalid port value, e.g., set a default or log an error
+            break;
+    }
+
     rig_open(newRadio->my_rig); 
     return newRadio;
 }
