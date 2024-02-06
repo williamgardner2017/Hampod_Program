@@ -38,6 +38,7 @@ ModeStates modeFlow(KeyPress* keyInput){
 
 //no idea how to store these yet
 //TODO have there be another file dedicated to figureing this out since it will probably be a large function
+static char** companiesList = textFileToArray("CompanyList.txt");
 char* company;
 int model;
 BootUpStates bootUpState = selectNewOrSave;
@@ -53,13 +54,17 @@ BootUpStates BootupFlow(KeyPress* keyInput){
                 break;
             }
         case chooseCompany:
-            if(keyInput->keyPressed == '0') /*Back*/{
+            if (keyInput->keyPressed == '0') {
                 bootUpState = selectNewOrSave;
+                freeFileArray(companiesList);
                 break;
             }
-            company = strdup("ExampleCompany");;//TODO getCompanyByInput(keyInput);
-            model = 1;//TODO testForModel(company);
-            bootUpState = selectLink;
+            int selectedCompanyIndex = convertCharToKeyValue(keyInput) - 1;
+            if (selectedCompanyIndex >= 0 && strcmp(companiesList[selectedCompanyIndex], "END OF ARRAY") != 0) {
+                company = strdup(companiesList[selectedCompanyIndex]);
+                model = 1;  // TODO: testForModel(company);
+                bootUpState = selectLink;
+            }
             break;
         case selectLink:
             if(keyInput->keyPressed == '0')/*Back*/{
