@@ -12,24 +12,49 @@
 #include <hamlib/config.h>
 
 #define SERIAL_PORT "/dev/ttyUSB0"
+#define FOLDER_PATH "./StartupFiles/"
 
 void removeTextFiles() {
   DIR *d;
   struct dirent *dir;
-  d = opendir(".");
+  d = opendir(FOLDER_PATH);
   if (d) {
     while ((dir = readdir(d)) != NULL) {
       if (dir->d_type == DT_REG && strstr(dir->d_name, ".txt")) {
-        remove(dir->d_name);
+        char fullFilePath[256];
+        snprintf(fullFilePath, sizeof(fullFilePath), "%s%s", FOLDER_PATH, dir->d_name);
+        remove(fullFilePath);
       }
     }
     closedir(d);
   }
 }
 
+void createTextFileList() {
+  DIR *d;
+  struct dirent *dir;
+  FILE *file = fopen(FOLDER_PATH "CompanyList.txt", "w");
+  if (!file) {
+    fprintf(stderr, "Error opening file for writing\n");
+    exit(1);
+  }
+
+  d = opendir(FOLDER_PATH);
+  if (d) {
+    while ((dir = readdir(d)) != NULL) {
+      if (dir->d_type == DT_REG && strstr(dir->d_name, ".txt")) {
+        fprintf(file, "%s\n", dir->d_name);
+      }
+    }
+    closedir(d);
+  }
+
+  fclose(file);
+}
+
 int callback(struct rig_caps *caps, rig_ptr_t rigp) {
   char filename[256];
-  snprintf(filename, sizeof(filename), "%s.txt", caps->mfg_name);
+  snprintf(filename, sizeof(filename), FOLDER_PATH "%s.txt", caps->mfg_name);
 
   FILE *file = fopen(filename, "a");
   if (!file) {
@@ -65,5 +90,6 @@ int createRigLists() {
   removeTextFiles();
   rig_load_all_backends();
   rig_list_foreach(callback, &rig);
+  createTextFileList(); 
   return 0;
 }
