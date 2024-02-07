@@ -5,6 +5,7 @@ bool running = true;
 int input_pipe;
 int output_pipe;
 int countOfPackets = 0;
+char* audioFolderPath = "/home/pi/Hampod_Program/NanoPi Code/Firmware/pregen_audio/";
 //this is here the pipes will be set up
 void setupPipes(){
     printf("Connecting to Firmware_o\n");
@@ -262,8 +263,10 @@ char* sendSpeakerOutput(char* text){
          bool hasAudioFile = getHashMap(audioHashMap, text) != NULL;
          if(hasAudioFile){
             PRINTFLEVEL1("SOFTWARE: Audio file was found\n");
+         }else if(shouldCreateAudioFile(text)){
+            PRINTFLEVEL1("SOFTWARE:No audio file found but saving new file\n");
          }else{
-            PRINTFLEVEL1("SOFTWARE:No audio file found\n");
+            PRINTFLEVEL1("SOFTWARE:No audio file found and NOT creating a new file\n");
          }
         return text;
     }
@@ -271,17 +274,29 @@ char* sendSpeakerOutput(char* text){
     bool hasAudioFile = getHashMap(audioHashMap, text) != NULL;
     char* outputText = malloc((strlen(text)+2)*sizeof(char));
     if(hasAudioFile){
-        strcat(outputText,"p");
+        strcpy(outputText,"p");
         strcat(outputText,getHashMap(audioHashMap, text));
+    }else if(shouldCreateAudioFile(text)){
+        strcpy(outputText,"s");
+        strcat(outputText,text);
+        //TODO add it to the hashmap
+        char* nameAndPath = malloc(sizeof(char)*(strlen(text)+strlen(audioFolderPath)));
+        char* nameOnly = malloc(sizeof(char)*(strlen(text)+10));
+        strcpy(nameAndPath,audioFolderPath);
+        strcpy(nameOnly,text);
+        strcat(nameAndPath,nameOnly);
+        //TODO insert into the hash with (path/name, name)
+        PRINTFLEVEL2("SOFTWARE: adding the data %s with the key of %s\n",nameAndPath,nameOnly);
+        insertHashMap(audioHashMap,nameAndPath,nameOnly);
     }else{
-        strcat(outputText,"s");
+        strcpy(outputText,"d");
         strcat(outputText,text);
     }
 
     
     Inst_packet* speakerPacket = create_inst_packet(AUDIO,strlen(outputText)+1,(unsigned char*) outputText, 0);
     int result;
-    PRINTFLEVEL2("SOFTWARE Locking up speakout output\n");
+    PRINTFLEVEL2("SOFTWARE Locking up speakout output to send out %s\n", outputText);
     pthread_mutex_lock(&thread_lock);
     PRINTFLEVEL2("SOFTWARE Creating the thread\n");
     result = pthread_create(&speakerThread, NULL, firmwareCommandQueue, (void*) speakerPacket);
@@ -303,7 +318,7 @@ char* sendSpeakerOutput(char* text){
 
 
 void setupAudioHashMap(){
-    char* softwarePath = "/home/pi/Hampod_Program/NanoPi Code/Firmware/pregen_audio/";
+    char* softwarePath = audioFolderPath;
     PRINTFLEVEL2("SOFTWARE:Creating the hashmap\n");
     audioHashMap = createHashMap(audioHash,audioCompare);
     struct dirent *de; 
@@ -351,7 +366,31 @@ void audioFree(void* data){
     free(data);
 }
 
-
+/**
+ * Returns true if the audio is appropreate for creating a new text output
+ * Currently filtering out any text with numbers in it
+*/
+bool shouldCreateAudioFile(char* text){
+    for(int i = 0; i<strlen(text); i++){
+        switch (text[i]){
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+                return false;
+                break;
+            default:
+                break;
+        }
+    }
+    return true;
+}
 
 /*
 Functions related to the key presses 

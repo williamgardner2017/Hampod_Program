@@ -261,6 +261,7 @@ int readOutModeName(char* modeName){
 */
 int switchToRadioMode(char* modeName){ //TODO redue this to be better sueted, all this needs to do is to set what the letter toggles are when swiching to said mode
     modeState = standard;
+    PRINTFLEVEL1("Switching to radio mode%s\n",modeName);
     setRadioMode(radios[currentRadio], getModeByName(modeName));
     return -1;
 }

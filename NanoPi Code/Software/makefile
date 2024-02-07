@@ -28,9 +28,10 @@ cleanWindows:
 
 clean:
 	@rm -f /s *.o   # Remove object files
-	@rm -f /s ../Firmware/*.o   # Remove object files
+	# @rm -f /s ../Firmware/*.o   # Remove object files
 	@rm -f *.exe  # Remove the executable (replace 'my_program' with the actual name)
 	@rm -f *.elf
+	@rm -f *.wav
 
 testing: UnitTesting.elf
 UnitTesting.elf: UnitTesting.o

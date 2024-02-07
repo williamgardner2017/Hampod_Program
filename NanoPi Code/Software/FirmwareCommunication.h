@@ -74,6 +74,7 @@ void setupAudioHashMap();
 int audioHash(void* key);
 bool audioCompare(void* key1, void* key2);
 void audioFree(void* data);
+bool shouldCreateAudioFile(char* text);
 
 void firmwareCommunicationStartup();
 void printOutErrors(char oK, bool hKS,int sS, int hWC);
