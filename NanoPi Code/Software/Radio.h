@@ -61,7 +61,6 @@ Mode* getCurrentMode(Radio* thisRadio);
 ModeData* getModeDetails(Radio* thisRadio);
 void setRadioMode(Radio* thisRadio, Mode* modeToSetTo);
 void* runRadioCommand(Radio* thisRadio, KeyPress* keyInput);
-void* getRadioDetailsInSavableFormat(Radio* thisRadio);
 
 #include "Radio.c"
 #endif

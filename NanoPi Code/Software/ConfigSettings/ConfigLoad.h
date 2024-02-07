@@ -1,5 +1,5 @@
-#ifndef HAMPOD_SOFT_CONFIGFUNCTIONS
-#define HAMPOD_SOFT_CONFIGFUNCTIONS
+#ifndef HAMPOD_SOFT_CONFIGLOAD
+#define HAMPOD_SOFT_CONFIGLOAD
 
 #ifndef SIMULATEOUTPUT
 #ifdef TESTING
@@ -46,15 +46,10 @@
 #include "ConfigParams.h"
 #include "../Modes/ModeRouting.h"
 #include "../StateMachine.h"
-#include "../FirmwareCommunication.h"
-#include "../Modes/Mode.h"
+#include "../Radio.h"
 
-void populateConfigFunctions();
+bool loadUpFromSave(int saveFileNumber);
 
-void saveToFile(int fileNumber);
-int SaveData(KeyPress* keyData);
 
-int setHotkeys(KeyPress* keyData);
-
-#include "ConfigFunctions.c"
+#include "ConfigLoad.c"
 #endif

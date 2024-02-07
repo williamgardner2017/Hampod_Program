@@ -127,7 +127,10 @@ int ModeSelectFlow(KeyPress* keyInput){
                 if(keyInput->isHold){
                     int i;
                     for(i = modeSelectPage*9; i< (modeSelectPage+1)*9;i++){
-                        readOutModeName(modeNames[i]);
+                        //TODO put a limit on this
+                        if(i > getModeCount()){
+                            readOutModeName(modeNames[i]);
+                        }
                     }
                 }else{
                     isReadingOut = 1;
@@ -244,12 +247,8 @@ int StandardModeFlow(KeyPress* keyInput){ //TODO be able to toggle the letter ke
 */
 int readOutModeName(char* modeName){
     //DEBUG
-    printf("%s", getModeByName(modeName)->modeDetails->modeName);
-    //actual
-
-    //problem? 
-    char* holdName = strdup(getModeByName(modeName)->modeDetails->modeName);
-    sendSpeakerOutput(holdName);
+    printf("%s", modeName);
+    sendSpeakerOutput(modeName);
     return 1;
 }
 
@@ -269,9 +268,10 @@ int switchToRadioMode(char* modeName){ //TODO redue this to be better sueted, al
 
 
 void stateMachineStart(){
-    radios = calloc(2,sizeof(Radio));
+    radios = calloc(2,sizeof(Radio*));
     modeRoutingStart();
     modeNames = getAllModeNames();
+    PRINTFLEVEL1("SOFTWARE: mode names retreaved\n");
 }
 
 void setModeState(ModeStates state){
@@ -301,4 +301,8 @@ void freeStateMachine(){
     PRINTFLEVEL2("Freed the radios object\n");
     freeModes();
     PRINTFLEVEL2("freed the modes\n");
+}
+
+Radio** getRadios(){
+    return radios;
 }

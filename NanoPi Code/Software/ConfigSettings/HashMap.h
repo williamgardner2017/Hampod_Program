@@ -56,5 +56,6 @@ void** getAllEntriesHashMap(HashMap* hashmap);
 int StringHash(void* key);
 bool StringHashCompare(void* a, void* b);
 void StringHashFree(void* s);
+void NullHashFree(void* s);
 #include "HashMap.c"
 #endif

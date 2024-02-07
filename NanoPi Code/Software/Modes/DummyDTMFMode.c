@@ -4,12 +4,10 @@ void* DTMFCommandRelay(KeyPress* keyInput, RIG* radioDetails){
 }
 
 
-void freeDummyDTMFMode(Mode** modeToFree){
-    Mode* temp = *modeToFree;
-    free(temp->modeDetails->modeName);
-    free(temp->modeDetails);
-    free(*modeToFree);
-    *modeToFree = 0;
+void freeDummyDTMFMode(Mode* modeToFree){
+    free(modeToFree->modeDetails->modeName);
+    free(modeToFree->modeDetails);
+    free(modeToFree);
 }
 
 Mode* DTMFDummyLoad(){

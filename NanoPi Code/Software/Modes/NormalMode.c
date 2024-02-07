@@ -16,12 +16,10 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
 }
 
 
-void freeNormalMode(Mode** modeToFree){
-    Mode* temp = *modeToFree;
-    free(temp->modeDetails->modeName);
-    free(temp->modeDetails);
-    free(*modeToFree);
-    *modeToFree = 0;
+void freeNormalMode(Mode* modeToFree){
+    free(modeToFree->modeDetails->modeName);
+    free(modeToFree->modeDetails);
+    free(modeToFree);
 }
 
 Mode* NormalLoad(){

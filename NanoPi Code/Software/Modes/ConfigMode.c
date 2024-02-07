@@ -67,6 +67,7 @@ void configNavigation(KeyPress* keyInput){
             case OTHER:
                 PRINTFLEVEL1("SOFTWARE: Running function related to config%s\n", configNames[currentConfig]);
                 selectingConfig = false;
+                keyInput->keyPressed = '-';
                 configNavigation(keyInput);
                 break;
             default:
@@ -131,12 +132,10 @@ void* configCommandRelay(KeyPress* keyInput, RIG* radioDetails){
     return NULL;
 }
 
-void freeConfigMode(Mode** modeToFree){
-    Mode* temp = *modeToFree;
-    free(temp->modeDetails->modeName);
-    free(temp->modeDetails);
-    free(*modeToFree);
-    *modeToFree = 0;
+void freeConfigMode(Mode* modeToFree){
+    free(modeToFree->modeDetails->modeName);
+    free(modeToFree->modeDetails);
+    free(modeToFree);
 }
 
 //Grab the current values when loading in
@@ -155,7 +154,7 @@ void exitConfigMode(){
 }
 
 Mode* ConfigLoad(){
-    Mode* newMode = (Mode*) malloc(sizeof(Mode));
+     Mode* newMode = (Mode*) malloc(sizeof(Mode));
 
     if(newMode == NULL){
         return NULL;
@@ -163,7 +162,7 @@ Mode* ConfigLoad(){
     newMode->modeInput = configCommandRelay;
     newMode->freeMode = freeConfigMode;
     newMode->enterMode = enterConfigMode;
-    newMode->exitMode = exitConfigMode;
+    newMode->exitMode = enterConfigMode;
 
     ModeData* newData = (ModeData*)malloc(sizeof(ModeData));
 

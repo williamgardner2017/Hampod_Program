@@ -62,12 +62,10 @@ void* frequencyCommandRelay(KeyPress* keyInput, RIG* my_rig){
 }
 
 
-void freeFrequencyMode(Mode** modeToFree){
-    Mode* temp = *modeToFree;
-    free(temp->modeDetails->modeName);
-    free(temp->modeDetails);
-    free(*modeToFree);
-    *modeToFree = 0;
+void freeFrequencyMode(Mode* modeToFree){
+    free(modeToFree->modeDetails->modeName);
+    free(modeToFree->modeDetails);
+    free(modeToFree);
 }
 
 Mode* frequencyLoad(){

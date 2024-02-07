@@ -11,7 +11,7 @@ HashMap* createHashMap( int (*hashFunc)(void*), bool (*comparFunc)(void*,void*))
 void insertHashMap(HashMap* hashmap,void* data,void* key){
     PRINTFLEVEL2("SOFTWARE: Hash Start of the inesert funciton\n");
     int hashOfKey = hashmap->hashFunc(key);
-    PRINTFLEVEL2("SOFTWARE: Hash ran the key throug the hashing function");
+    PRINTFLEVEL2("SOFTWARE: Hash ran the key throug the hashing function\n");
     int index = hashOfKey % hashmap->size;
     PRINTFLEVEL2("SOFTWARE: Hash got the index after the hash of %i\n", index);
     int offset = 0;
@@ -19,7 +19,8 @@ void insertHashMap(HashMap* hashmap,void* data,void* key){
     PRINTFLEVEL2("SOFTWARE: Hash going into the while loop\n");
     while(placingObject){
         if(hashmap->list[(index+offset)%hashmap->size] == 0){
-            PRINTFLEVEL2("SOFTWARE: Hash Found an index %i to place item at\n", (index+offset)%hashmap->size);
+            PRINTFLEVEL1("SOFTWARE: Hash Found an index %i to place item at\n", (index+offset)%hashmap->size);
+            PRINTFLEVEL2("SOFTWARE: Hash placing data %s with key %s\n",(char*) data, (char*) key);
             placingObject = false;
             hashmap->list[(index+offset)%hashmap->size] = data;
             hashmap->listOfKeys[(index+offset)%hashmap->size] = key;
@@ -137,11 +138,11 @@ void growHashMap(HashMap* hashmap){
  * the order will be consisant but adding new items to the map will NOT add it to the end of this list
 */
 void** getAllEntriesHashMap(HashMap* hashmap){
-    void** entries = malloc(sizeof(void**)*hashmap->quantity);
+    void** entries = malloc(sizeof(void*) * hashmap->quantity);
     int j = 0;
     for(int i = 0; i<hashmap->size;i++){
         if(hashmap->list[i] != 0){
-            entries[j] = hashmap->list[j];
+            entries[j] = hashmap->list[i];
             j++;
         }
     }
@@ -169,4 +170,8 @@ bool StringHashCompare(void* a, void* b){
 
 void StringHashFree(void* s){
     free((char*) s);
+}
+
+void NullHashFree(void* s){
+    return;
 }

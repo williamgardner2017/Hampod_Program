@@ -14,6 +14,7 @@
 #include "UnitTestReadFile.h"
 #include "UnitTestConfigs.h"
 #include "UnitTestAudio.h"
+#include "UnitTestSaveLoad.h"
 
 void sigsegv_handler(int signum);
 
@@ -203,6 +204,20 @@ bool AudioTesting(){
     printf("End audio testing\n");
     return true;
 }
+
+bool SaveLoadTesting(){
+    printf("Starting testing save load\n");
+    printf("Creating dummy data to save\n");
+    saveLoadSetupStuffToSave();
+    printf("Starting Save test\n");
+    testSaveFile();
+    printf("clearing all the currest stuff an restarting everthing to test load\n");
+    setUpForLoadTesting();
+    printf("Starting Load Test\n");
+    testLoadFile(); 
+    printf("Ending testing save load\n");
+    return true;
+}
 int main(){
 
     if(signal(SIGSEGV, sigsegv_handler) == SIG_ERR) {
@@ -211,10 +226,11 @@ int main(){
     }
     // ModeRoutingTest();
     // StateMachineTesting();
-    ReadingFromFileTest();
-    KeyPressTesting();
+    // ReadingFromFileTest();
+    // KeyPressTesting();
     // HashMapTest();
     // ConfigParamTest();
-    AudioTesting();
+    // AudioTesting();
+    SaveLoadTesting();
     return -1;
 }
