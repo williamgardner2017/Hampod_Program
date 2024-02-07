@@ -111,12 +111,12 @@ void* firmwareCommandQueue(void* command){
     myId = CurrentID;
     myCommand->tag = myId;
     send_packet(myCommand);
-    insertHashMap(IDHashSet,myId);
+    insertHashMap(IDHashSet,(void*) myId, (void*) myId);
     CurrentID++;
     if(CurrentID > 1000){
         CurrentID = 0;
     }
-    while(containsHashMap(IDHashSet,CurrentID)){
+    while(containsHashMap(IDHashSet,(void*) CurrentID)){
         CurrentID++;
         if(CurrentID > 1000){
             CurrentID = 0;
@@ -148,7 +148,7 @@ void* firmwareCommandQueue(void* command){
     }
     //grab the data from the queue
     Inst_packet *data = dequeue(softwareQueue);
-    removeHashMap(IDHashSet,myId);
+    removeHashMap(IDHashSet,(void*) myId);
     pthread_cond_broadcast(&queue_cond);
     pthread_mutex_unlock(&queue_lock);
     char* interpertedData = malloc(sizeof(data->data)+1);
@@ -194,7 +194,7 @@ void* firmwareOPipeWatcher(void* arg){
         //lock the queue
         pthread_mutex_lock(&queue_lock);
         //add the data to the queue
-        if(containsHashMap(IDHashSet,tag)){
+        if(containsHashMap(IDHashSet,(void*) tag)){
             enqueue(softwareQueue, new_packet);
         }else{
             PRINTFLEVEL1("SOFTWARE: Bad packet with ID %i receved\n",tag);
@@ -454,7 +454,7 @@ void freeFirmwareComunication(){
     printf("Software:destroying packet queue\n");
     destroy_queue(softwareQueue);
     printf("Software:destroying ID queue\n");
-    destroyHashMap(IDHashSet);
+    destroyHashMap(IDHashSet,IntHashFree);
     printf("Software: things in call mannager cond %d\n", countOfPackets);
     printf("Software:clearing conditions\n");
     pthread_cond_broadcast(&thread_cond);
