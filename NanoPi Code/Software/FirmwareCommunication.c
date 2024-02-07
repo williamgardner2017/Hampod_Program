@@ -148,7 +148,6 @@ void* firmwareCommandQueue(void* command){
     }
     //grab the data from the queue
     Inst_packet *data = dequeue(softwareQueue);
-    removeHashMap(IDHashSet,(void*) myId);
     pthread_cond_broadcast(&queue_cond);
     pthread_mutex_unlock(&queue_lock);
     char* interpertedData = malloc(sizeof(data->data)+1);
@@ -195,7 +194,9 @@ void* firmwareOPipeWatcher(void* arg){
         pthread_mutex_lock(&queue_lock);
         //add the data to the queue
         if(containsHashMap(IDHashSet,(void*) tag)){
+            PRINTFLEVEL1("SOFTWARE: revived packet %i and adding to queue\n",tag);
             enqueue(softwareQueue, new_packet);
+            removeHashMap(IDHashSet,(void*) tag);
         }else{
             PRINTFLEVEL1("SOFTWARE: Bad packet with ID %i receved\n",tag);
         }
