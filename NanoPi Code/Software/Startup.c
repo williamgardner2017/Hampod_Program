@@ -95,7 +95,7 @@ void fullStart(){
     printf("software: Starting Firmware communication\n");
     firmwareCommunicationStartup();
     printf("software: Starting Firmware Compunication compleat\n");
-    stateMachineStart();
+    // stateMachineStart();
 
     //SETTING UP THE SIMULATION DEMO
     printf("software: Setting up demo\n");
@@ -130,8 +130,8 @@ void fullStart(){
 
 
     //initiate
-    loadConfigParams();
-    populateConfigFunctions();
+    // loadConfigParams();
+    // populateConfigFunctions();
 
 
     printf("software: Starting keywatcher\n");
