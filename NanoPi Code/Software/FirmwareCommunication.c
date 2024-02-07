@@ -454,7 +454,7 @@ void freeFirmwareComunication(){
     printf("Software:destroying packet queue\n");
     destroy_queue(softwareQueue);
     printf("Software:destroying ID queue\n");
-    destroyHashMap(IDHashSet,IntHashFree);
+    destroyHashMap(IDHashSet,IntHashFree, IntHashFree);
     printf("Software: things in call mannager cond %d\n", countOfPackets);
     printf("Software:clearing conditions\n");
     pthread_cond_broadcast(&thread_cond);
