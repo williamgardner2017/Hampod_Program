@@ -51,13 +51,19 @@ BootUpStates BootupFlow(KeyPress* keyInput){
         case selectNewOrSave:
             if(keyInput->keyPressed == '0')/*Save*/{
                 bootUpState = selectSave;
+                sendSpeakerOutput("Select save file to load up");
                 break;
             }else if(keyInput->keyPressed == '1')/*Load new*/{
+                sendSpeakerOutput("Select company of the radio to load up");
                 bootUpState = chooseCompany;
                 break;
             }
         case chooseCompany:
             if (keyInput->keyPressed == '0') {
+                sendSpeakerOutput("0");
+                sendSpeakerOutput("Select save");
+                sendSpeakerOutput("1");
+                sendSpeakerOutput("Select company");
                 bootUpState = selectNewOrSave;
                 break;
             }
@@ -70,15 +76,21 @@ BootUpStates BootupFlow(KeyPress* keyInput){
                 sprintf(modeFileName,"%s_Hamlib.txt",company);
                 hamlibIDList = textFileToArray(modeFileName);
                 bootUpState = chooseModel;
+                sendSpeakerOutput("Select Model of radio");
             }
             break;
         case chooseModel:
             if (keyInput->keyPressed == '0') {
                 bootUpState = chooseCompany;
+                sendSpeakerOutput("Select company of the radio to load up");
                 break;
             }
             int index = selectEntryInList(keyInput,modelList);
             if(index != -1){
+                sendSpeakerOutput("Select port radio is connected to. Choose number");
+                sendSpeakerOutput("1");
+                sendSpeakerOutput("to");
+                sendSpeakerOutput("4");
                 modelIndex = index
                 bootUpState = selectLink;
             }
@@ -97,9 +109,11 @@ BootUpStates BootupFlow(KeyPress* keyInput){
                             radios[currentRadio] = loadUpRadioUsingData(company,modelList[modelIndex], convertCharToKeyValue(keyInput), getModeById(0), atoi(hamlibIDList[modelIndex]));
                             if(currentRadio == 1){
                                 modeState = standard;
+                                sendSpeakerOutput("Starting normal operations");
                             }else{
                                 currentRadio++;
                                 bootUpState = linkMore;
+                                sendSpeakerOutput("Do you have more radios to link up?");
                             }
                             break;
                         default:
@@ -114,9 +128,11 @@ BootUpStates BootupFlow(KeyPress* keyInput){
         case linkMore:
             if(keyInput->keyPressed == '1')/*Yes*/{
                 bootUpState = chooseCompany;
+                sendSpeakerOutput("Select company of the radio to load up");
                 break;
             }else if(keyInput->keyPressed == '0')/*No*/{
                 modeState = standard;
+                sendSpeakerOutput("Starting normal operations");
                 break; 
             }
         case selectSave:
@@ -336,6 +352,7 @@ void freeStateMachine(){
     PRINTFLEVEL2("Freed the radios object\n");
     freeModes();
     PRINTFLEVEL2("freed the modes\n");
+    free(companiesList);
 }
 
 int charIndex = 0;
