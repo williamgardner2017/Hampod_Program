@@ -117,7 +117,7 @@ void fullStart(){
     sendSpeakerOutput("next output should not save");
     sendSpeakerOutput("123123");
     for(int i = 0; i<10;i++){
-        char[30] stuff;
+        char stuff[30];
         sprintf(stuff, "%i",i);
         sendSpeakerOutput(stuff);
     }
