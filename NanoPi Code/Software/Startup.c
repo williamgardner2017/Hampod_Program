@@ -95,7 +95,7 @@ void fullStart(){
     printf("software: Starting Firmware communication\n");
     firmwareCommunicationStartup();
     printf("software: Starting Firmware Compunication compleat\n");
-    // stateMachineStart();
+    stateMachineStart();
 
     //SETTING UP THE SIMULATION DEMO
     printf("software: Setting up demo\n");
@@ -106,10 +106,10 @@ void fullStart(){
     // switchToRadioMode("frequency mode");
     printf("software: Demo setup complete\n");
     //send that I am ready
-    // printf("software: Sending I am Ready packet to firmware\n");
-    // unsigned char* okMessage = (unsigned char*) "ok";
-    // Inst_packet* iAmReady = create_inst_packet(CONFIG, strlen((char*) okMessage)+1,okMessage, 0);
-    // firmwareCommandQueue(iAmReady);
+    printf("software: Sending I am Ready packet to firmware\n");
+    unsigned char* okMessage = (unsigned char*) "ok";
+    Inst_packet* iAmReady = create_inst_packet(CONFIG, strlen((char*) okMessage)+1,okMessage, 0);
+    firmwareCommandQueue(iAmReady);
 
     usleep(500000);
 
@@ -118,22 +118,27 @@ void fullStart(){
     sendSpeakerOutput("next output should not save");
     usleep(500000);
     sendSpeakerOutput("123123");
-    // for(int i = 0; i<10;i++){
-    //     char stuff[30];
-    //     sprintf(stuff, "%i",i);
-    //     sendSpeakerOutput(stuff);
-    // }
+    usleep(500000);
+    for(int i = 0; i<10;i++){
+        char stuff[30];
+        sprintf(stuff, "%i",i);
+        sendSpeakerOutput(stuff);
+        usleep(500000);
+    }
     sendSpeakerOutput("The");
+    usleep(500000);
     sendSpeakerOutput("next");
+    usleep(500000);
     sendSpeakerOutput("Words");
+    usleep(500000);
     sendSpeakerOutput("This is a very long output that kind of goes on for a while after starting");
 
     //start key loop after getting the responce
 
 
     //initiate
-    // loadConfigParams();
-    // populateConfigFunctions();
+    loadConfigParams();
+    populateConfigFunctions();
 
 
     printf("software: Starting keywatcher\n");
