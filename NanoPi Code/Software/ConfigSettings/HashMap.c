@@ -73,6 +73,16 @@ void* getHashMap(HashMap* hashmap,void* key){
     }
     return NULL;
 }
+
+bool containsHashMap(HashMap* hashmap, void* key){
+    if(getHashMap(hashmap,key) == NULL){
+        return false;
+    }else{
+        return true;
+    }
+}
+
+
 void* removeHashMap(HashMap* hashmap,void* key){
     int index = hashmap->hashFunc(key)%hashmap->size;
     int offset = 0;
@@ -169,4 +179,16 @@ bool StringHashCompare(void* a, void* b){
 
 void StringHashFree(void* s){
     free((char*) s);
+}
+
+int IntHash(void* key){
+    return (int) key;
+}
+bool IntHashCompare(void* a, void* b){
+    int a1 = (int) a;
+    int b1 = (int) b;
+    return a1 == b1;
+}
+void IntHashFree(void* i){
+    return;
 }
