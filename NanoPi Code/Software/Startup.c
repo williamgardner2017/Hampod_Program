@@ -100,10 +100,10 @@ void fullStart(){
     //SETTING UP THE SIMULATION DEMO
     printf("software: Setting up demo\n");
     setModeState(standard);
-    Radio* radios = loadUpRadioUsingData("ICOM", 7300, 0, NULL, 3073);
-    printf("SOFTWARE: Hamlib is done initiliing so going to add the radio\n");
-    setRadios(radios,0);
-    switchToRadioMode("frequency mode");
+    // Radio* radios = loadUpRadioUsingData("ICOM", 7300, 0, NULL, 3073);
+    // printf("SOFTWARE: Hamlib is done initiliing so going to add the radio\n");
+    // setRadios(radios,0);
+    // switchToRadioMode("frequency mode");
     printf("software: Demo setup complete\n");
     //send that I am ready
     printf("software: Sending I am Ready packet to firmware\n");
@@ -114,14 +114,17 @@ void fullStart(){
     usleep(500000);
 
     sendSpeakerOutput("hello");
-    usleep(500000);
     sendSpeakerOutput("next output should not save");
-    usleep(500000);
     sendSpeakerOutput("123123");
-    usleep(500000);
-    sendSpeakerOutput("I skipped hamlib becuse I can");
-    usleep(500000);
-    sendSpeakerOutput("9");  
+    for(int i = 0; i<10;i++){
+        char[30] stuff;
+        sprintf(stuff, "%i",i);
+        sendSpeakerOutput(stuff);
+    }
+    sendSpeakerOutput("The");
+    sendSpeakerOutput("next");
+    sendSpeakerOutput("Words");
+    sendSpeakerOutput("This is a very long output that kind of goes on for a while after starting");
 
     //start key loop after getting the responce
 
@@ -132,11 +135,11 @@ void fullStart(){
 
 
     printf("software: Starting keywatcher\n");
-    keyWatcher(NULL);
+    // keyWatcher(NULL);
     printf("software: Startin Keywatcher complete\n");
-    // while(true){
+    while(true){
 
-    // }
+    }
 }
 void sigint_handler(int signum) {
     printf("\033[0;31mTERMINATING FIRMWARE\n");
