@@ -113,15 +113,23 @@ int isReadingOut = 0; //TODO make this actualy cause a read out
 */
 int ModeSelectFlow(KeyPress* keyInput){
     if(isReadingOut){
-        readOutModeName(modeNames[modeSelectPage*9 + convertCharToKeyValue(keyInput)-1]);
+        if(modeSelectPage*9 + convertCharToKeyValue(keyInput)-1 < getModeCount()){
+            sendSpeakerOutput(modeNames[modeSelectPage*9 + convertCharToKeyValue(keyInput)-1]);
+        }
         isReadingOut = 0;
     }else{
         switch (keyInput->keyPressed){
             case 'C':
-                modeSelectPage = modeSelectPage + 1;
+                if(modeSelectPage*9 < getModeCount()){
+                    modeSelectPage = modeSelectPage + 1;
+                }
+                sendSpeakerOutput("next mode page");
                 break;
             case 'D':
-                modeSelectPage = modeSelectPage - 1;
+                if(modeSelectPage > 0){
+                    modeSelectPage = modeSelectPage - 1;
+                    sendSpeakerOutput("Prior mode page");
+                }
                 break;
             case '*':
                 if(keyInput->isHold){
