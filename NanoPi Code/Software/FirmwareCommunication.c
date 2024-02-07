@@ -44,7 +44,7 @@ Actual communication section
 */
 //creating the queue
 Packet_queue* softwareQueue;
-ID_queue* IDQueue;
+HashMap* IDHashSet;
 Thread_queue* threadQueue;
 // creating the locks
 pthread_mutex_t queue_lock;
@@ -78,7 +78,7 @@ void firmwareCommunicationStartup(){
         exit(1);
     }
     softwareQueue = create_packet_queue();
-    IDQueue = create_IDqueue();
+    IDHashSet = createHashMap(IntHash,IntHashCompare);
     threadQueue = createThreadQueue();
     firmwareStartOPipeWatcher();
     startOutputThreadManager();
@@ -112,11 +112,12 @@ void* firmwareCommandQueue(void* command){
     myId = CurrentID;
     myCommand->tag = myId;
     send_packet(myCommand);
+    insertHashMap(IDHashSet,(void*) myId, (void*) myId);
     CurrentID++;
     if(CurrentID > 1000){
         CurrentID = 0;
     }
-    while(IDcontains(IDQueue,CurrentID)){
+    while(containsHashMap(IDHashSet,(void*) CurrentID)){
         CurrentID++;
         if(CurrentID > 1000){
             CurrentID = 0;
@@ -127,7 +128,7 @@ void* firmwareCommandQueue(void* command){
     pthread_mutex_lock(&queue_lock);
     countOfPackets ++;
     PRINTFLEVEL2("software: waiting for packet with tag %d to finish\n",myId);
-    while(IDpeek(IDQueue) != myId && running){
+    while(running && (softwareQueue->head != NULL || softwareQueue->head->packet->tag != myId)){
         PRINTFLEVEL2("Software: packet with tag %d is still waiting\n",myId);
         pthread_cond_wait(&queue_cond, &queue_lock);
         if(!running){
@@ -148,7 +149,6 @@ void* firmwareCommandQueue(void* command){
     }
     //grab the data from the queue
     Inst_packet *data = dequeue(softwareQueue);
-    IDdequeue(IDQueue);
     pthread_cond_broadcast(&queue_cond);
     pthread_mutex_unlock(&queue_lock);
     char* interpertedData = malloc(sizeof(data->data)+1);
@@ -194,8 +194,13 @@ void* firmwareOPipeWatcher(void* arg){
         //lock the queue
         pthread_mutex_lock(&queue_lock);
         //add the data to the queue
-        enqueue(softwareQueue, new_packet);
-        IDenqueue(IDQueue,tag);
+        if(containsHashMap(IDHashSet,(void*) tag)){
+            PRINTFLEVEL1("SOFTWARE: revived packet %i and adding to queue\n",tag);
+            enqueue(softwareQueue, new_packet);
+            removeHashMap(IDHashSet,(void*) tag);
+        }else{
+            PRINTFLEVEL1("SOFTWARE: Bad packet with ID %i receved\n",tag);
+        }
         //unlock the queue
         PRINTFLEVEL2("Software: Got a packet with the tag of %d\n", tag);
         pthread_mutex_unlock(&queue_lock);
@@ -489,7 +494,7 @@ void freeFirmwareComunication(){
     printf("Software:destroying packet queue\n");
     destroy_queue(softwareQueue);
     printf("Software:destroying ID queue\n");
-    destroy_IDqueue(IDQueue);
+    destroyHashMap(IDHashSet,IntHashFree, IntHashFree);
     printf("Software: things in call mannager cond %d\n", countOfPackets);
     printf("Software:clearing conditions\n");
     pthread_cond_broadcast(&thread_cond);
