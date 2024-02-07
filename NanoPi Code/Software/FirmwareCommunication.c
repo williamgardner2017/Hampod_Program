@@ -128,7 +128,12 @@ void* firmwareCommandQueue(void* command){
     pthread_mutex_lock(&queue_lock);
     countOfPackets ++;
     PRINTFLEVEL2("software: waiting for packet with tag %d to finish\n",myId);
-    while(running && (softwareQueue->head != NULL || softwareQueue->head->packet->tag != myId)){
+    while(running){
+        if(softwareQueue->head == NULL){
+            continue;
+        }else if(softwareQueue->head->packet->tag == myId){
+            break;
+        }
         PRINTFLEVEL2("Software: packet with tag %d is still waiting\n",myId);
         pthread_cond_wait(&queue_cond, &queue_lock);
         if(!running){
