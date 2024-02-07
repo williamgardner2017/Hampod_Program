@@ -114,13 +114,15 @@ void fullStart(){
     usleep(500000);
 
     sendSpeakerOutput("hello");
+    usleep(500000);
     sendSpeakerOutput("next output should not save");
+    usleep(500000);
     sendSpeakerOutput("123123");
-    for(int i = 0; i<10;i++){
-        char stuff[30];
-        sprintf(stuff, "%i",i);
-        sendSpeakerOutput(stuff);
-    }
+    // for(int i = 0; i<10;i++){
+    //     char stuff[30];
+    //     sprintf(stuff, "%i",i);
+    //     sendSpeakerOutput(stuff);
+    // }
     sendSpeakerOutput("The");
     sendSpeakerOutput("next");
     sendSpeakerOutput("Words");
