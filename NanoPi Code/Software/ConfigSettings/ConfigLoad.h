@@ -48,5 +48,8 @@
 #include "../StateMachine.h"
 #include "../Radio.h"
 
+bool loadUpFromSave(int saveFileNumber);
+
+
 #include "ConfigLoad.c"
 #endif

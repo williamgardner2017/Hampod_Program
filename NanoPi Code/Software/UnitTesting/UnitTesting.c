@@ -214,7 +214,7 @@ bool SaveLoadTesting(){
     printf("clearing all the currest stuff an restarting everthing to test load\n");
     setUpForLoadTesting();
     printf("Starting Load Test\n");
-    testLoadFile();
+    testLoadFile(); 
     printf("Ending testing save load\n");
     return true;
 }

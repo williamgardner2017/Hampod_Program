@@ -1,9 +1,12 @@
-void loadUpFromSave(int saveFileNumber){
+bool loadUpFromSave(int saveFileNumber){
     //get the file to load
     char fileName[40];
     sprintf(fileName, "ConfigSettings/SaveFiles/saveNumber%i.txt",saveFileNumber);
 
     char** saveFile = textFileToArray(fileName);
+    if( (int) saveFile == -1){
+        return false;
+    }
     PRINTFLEVEL1("SOFTWARE: loaded up the file %s\n", fileName);
     int i = 0;
     printf("%s\n",saveFile[i]);
@@ -78,4 +81,33 @@ void loadUpFromSave(int saveFileNumber){
         j++;
         i++;
     }
+    return true;
+}
+
+/**
+ * Takes in a key press
+ * Returns 0 when no selection has been made
+ * Returns 1 when a file is loaded up
+*/
+int loadSaveBootup(KeyPress* keyinput){
+    switch (keyinput->keyPressed)
+    {
+    case 'A':
+    case 'B':
+    case 'C':
+    case 'D':
+    case '*':
+    case '#':
+        PRINTFLEVEL1("Software: Invalid save file chosen\n");
+        return false;
+        break;
+    default:
+        if(loadUpFromSave(convertCharToKeyValue(keyinput->keyPressed))){
+            return 1;
+        }else{
+            return 0;
+        }
+        break;
+    }
+    return 0;
 }
