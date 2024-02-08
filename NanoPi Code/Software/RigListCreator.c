@@ -53,8 +53,20 @@ void createTextFileList() {
 }
 
 int callback(struct rig_caps *caps, rig_ptr_t rigp) {
+  
+  RIG *rig = (RIG *) rigp;
+  rig = rig_init(caps->rig_model);
+  if (!rig)
+  {
+    fprintf(stderr, "Unknown rig num: %u\n", caps->rig_model);
+    fprintf(stderr, "Please check riglist.h\n");
+    exit(1);
+  }
+  const char *port = "/dev/pts/3";
+
+  // Rig info list file
   char filename[256];
-  snprintf(filename, sizeof(filename), FOLDER_PATH "%s.txt", caps->mfg_name);
+  snprintf(filename, sizeof(filename), FOLDER_PATH "%s_info.txt", caps->mfg_name);
 
   FILE *file = fopen(filename, "a");
   if (!file) {
@@ -62,22 +74,31 @@ int callback(struct rig_caps *caps, rig_ptr_t rigp) {
     exit(1);
   }
 
-  RIG *rig = (RIG *) rigp;
-  rig = rig_init(caps->rig_model);
-  if (!rig)
-  {
-    fprintf(stderr, "Unknown rig num: %u\n", caps->rig_model);
-    fprintf(stderr, "Please check riglist.h\n");
-    exit(1); /* whoops! something went wrong (mem alloc?) */
-  }
-  const char *port = "/dev/pts/3";
+
   strcpy(rig->state.rigport.pathname, port);
   fprintf(file, "%s, %s, %u\n", caps->mfg_name, caps->model_name, caps->rig_model);
   fclose(file);
   // printf("%s, %u\n", caps->model_name, caps->rig_model);
 
   fflush(stdout);
-  rig_cleanup(rig); /* if you care about memory */
+
+  // Rig id list file
+  snprintf(filename, sizeof(filename), FOLDER_PATH "%s_id.txt", caps->mfg_name);
+
+  FILE *file = fopen(filename, "a");
+  if (!file) {
+    fprintf(stderr, "Error opening file for writing\n");
+    exit(1);
+  }
+
+  strcpy(rig->state.rigport.pathname, port);
+  fprintf(file, "%s, %s, %u\n", caps->mfg_name, caps->model_name, caps->rig_model);
+  fclose(file);
+  // printf("%s, %u\n", caps->model_name, caps->rig_model);
+
+  fflush(stdout);
+
+  rig_cleanup(rig);
   return 1;
 }
 
