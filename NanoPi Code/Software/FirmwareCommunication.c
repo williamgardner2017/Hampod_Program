@@ -5,7 +5,7 @@ bool running = true;
 int input_pipe;
 int output_pipe;
 int countOfPackets = 0;
-char* audioFolderPath = "/home/pi/Hampod_Program/NanoPi Code/Firmware/pregen_audio/";
+char* audioFolderPath = "../Firmware/pregen_audio/";
 //this is here the pipes will be set up
 void setupPipes(){
     printf("Connecting to Firmware_o\n");
