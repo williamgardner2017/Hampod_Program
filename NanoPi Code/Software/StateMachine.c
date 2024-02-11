@@ -60,10 +60,7 @@ BootUpStates BootupFlow(KeyPress* keyInput){
             }
         case chooseCompany:
             if (keyInput->keyPressed == '0') {
-                sendSpeakerOutput("0");
-                sendSpeakerOutput("Select save");
-                sendSpeakerOutput("1");
-                sendSpeakerOutput("Select company");
+                sendSpeakerOutput("zero Select Save. One select company");
                 bootUpState = selectNewOrSave;
                 break;
             }
@@ -71,9 +68,9 @@ BootUpStates BootupFlow(KeyPress* keyInput){
             if(index != -1){
                 company = companiesList[index];
                 char fileNames[100];
-                sprintf(modeFileName,"%s_Model.txt",company);
+                sprintf(modeFileName,"StartupFiles/%s_Model.txt",company);
                 modelList = textFileToArray(modeFileName);
-                sprintf(modeFileName,"%s_Hamlib.txt",company);
+                sprintf(modeFileName,"StartupFiles/%s_Hamlib.txt",company);
                 hamlibIDList = textFileToArray(modeFileName);
                 bootUpState = chooseModel;
                 sendSpeakerOutput("Select Model of radio");
@@ -87,10 +84,7 @@ BootUpStates BootupFlow(KeyPress* keyInput){
             }
             int index = selectEntryInList(keyInput,modelList);
             if(index != -1){
-                sendSpeakerOutput("Select port radio is connected to. Choose number");
-                sendSpeakerOutput("1");
-                sendSpeakerOutput("to");
-                sendSpeakerOutput("4");
+                sendSpeakerOutput("Select port radio is connected to. Choose number one to four");
                 modelIndex = index
                 bootUpState = selectLink;
             }
@@ -107,6 +101,9 @@ BootUpStates BootupFlow(KeyPress* keyInput){
                         case '3':
                         case '4':
                             radios[currentRadio] = loadUpRadioUsingData(company,modelList[modelIndex], convertCharToKeyValue(keyInput), getModeById(0), atoi(hamlibIDList[modelIndex]));
+                            char outputText[100];
+                            sprintf(outputText, "Linking radio make %s of model %s to port %i", company, modelList[modelIndex], convertCharToKeyValue(keyInput));
+                            sendSpeakerOutput(outputText);
                             if(currentRadio == 1){
                                 modeState = standard;
                                 sendSpeakerOutput("Starting normal operations");
@@ -117,10 +114,7 @@ BootUpStates BootupFlow(KeyPress* keyInput){
                             }
                             break;
                         default:
-                            sendSpeakerOutput("Choose number");
-                            sendSpeakerOutput("1");
-                            sendSpeakerOutput("to");
-                            sendSpeakerOutput("4");
+                            sendSpeakerOutput("Choose number one to four");
                             break;
                     }
                     break;

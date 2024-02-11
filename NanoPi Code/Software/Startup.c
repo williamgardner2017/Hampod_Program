@@ -12,6 +12,7 @@
 #include "Radio.h"
 #include "KeyWatching.h"
 #include "../Firmware/hampod_firm_packet.h"
+#include "RigListCreator.h"
 
 #include "ConfigSettings/ConfigParams.h"
 #include "ConfigSettings/ConfigFunctions.h"
@@ -98,12 +99,12 @@ void fullStart(){
     stateMachineStart();
 
     //SETTING UP THE SIMULATION DEMO
-    printf("software: Setting up demo\n");
-    setModeState(standard);
-    Radio* radios = loadUpRadioUsingData("ICOM", 7300, 0, NULL, 3073);
-    setRadios(radios,0);
-    switchToRadioMode(3);
-    printf("software: Demo setup complete\n");
+    // printf("software: Setting up demo\n");
+    setModeState(bootUp);
+    // Radio* radios = loadUpRadioUsingData("ICOM", 7300, 0, NULL, 3073);
+    // setRadios(radios,0);
+    // switchToRadioMode(3);
+    // printf("software: Demo setup complete\n");
     //send that I am ready
     printf("software: Sending I am Ready packet to firmware\n");
     unsigned char* okMessage = (unsigned char*) "ok";
@@ -115,6 +116,7 @@ void fullStart(){
     //initiate
     loadConfigParams();
     populateConfigFunctions();
+    createRigLists();
 
 
     printf("software: Starting keywatcher\n");
