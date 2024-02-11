@@ -120,6 +120,7 @@ void fullStart(){
 
 
     printf("software: Starting keywatcher\n");
+    sendSpeakerOutput("zero Select Save. One select company");
     keyWatcher(NULL);
     printf("software: Startin Keywatcher complete\n");
 }
