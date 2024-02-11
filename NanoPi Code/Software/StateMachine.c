@@ -318,7 +318,8 @@ int switchToRadioMode(int modeID){ //TODO redue this to be better sueted, all th
 void stateMachineStart(){
     radios = calloc(2,sizeof(Radio));
     modeRoutingStart();
-    companiesList = textFileToArray("StartupFiles/CompanyList.txt");
+    companiesList = textFileToArray("StartupFiles/Company_List.txt");
+    PRINTFLEVEL1("SOFTWARE: Testing loaded up companyString %s, %s, %s, %s\n");
 }
 
 void setModeState(ModeStates state){
