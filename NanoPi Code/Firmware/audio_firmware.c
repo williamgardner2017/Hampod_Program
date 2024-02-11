@@ -75,26 +75,26 @@ void audio_process() {
         char* remaining_string = requested_string + 1;
         int system_result;
         unsigned short packet_tag = received_packet->tag;
+	char default_directory[0x100];
+	getcwd(default_directory, sizeof(default_directory));
         if(audio_type_byte == 'd') {
             AUDIO_PRINTF("Festival tts without saving file");
-            system("cd /tmp");
+            chdir("/tmp");
             sprintf(buffer, "echo '%s' | text2wave -o output.wav", remaining_string);
             system_result = system(buffer);
             system_result = system("aplay output.wav");
-            system("cd -");
+            chdir(default_directory);
         } if(audio_type_byte == 's') {
             AUDIO_PRINTF("Festival tts %s with saving file\n", remaining_string);
-            system("pwd");
-            system("cd ../Firmware/pregen_audio");
-            system("pwd");
-            sprintf(buffer, "echo '%s' | text2wave -o %s.wav", remaining_string, remaining_string);
+	    chdir("../Firmware/pregen_audio");
+            sprintf(buffer, "echo '%s' | text2wave -o '%s.wav'", remaining_string, remaining_string);
             system_result = system(buffer);
-            sprintf(buffer, "aplay %s.wav", remaining_string);
+            sprintf(buffer, "aplay '%s.wav'", remaining_string);
             system(buffer);
-            system("cd -");
+            chdir(default_directory);
         } else if(audio_type_byte == 'p') {
-            strcpy(buffer, "aplay ");
-            strcat(remaining_string, ".wav");
+            strcpy(buffer, "aplay '");
+            strcat(remaining_string, ".wav'");
             strcat(buffer, remaining_string);
             AUDIO_PRINTF("Now playing %s with aplay\n", remaining_string);
             system_result = system(buffer);
