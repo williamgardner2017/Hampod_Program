@@ -118,7 +118,7 @@ void* firmwareCommandQueue(void* command){
     if(CurrentID > 1000){
         CurrentID = 0;
     }
-    while(containsHashMap(IDHashSet,(void*) CurrentID)){
+    while(containsHashMap(IDHashSet,(void*) &CurrentID)){
         CurrentID++;
         if(CurrentID > 1000){
             CurrentID = 0;
