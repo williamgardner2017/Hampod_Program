@@ -101,10 +101,10 @@ BootUpStates BootupFlow(KeyPress* keyInput){
                         case '2':
                         case '3':
                         case '4':
-                            radios[currentRadio] = loadUpRadioUsingData(company,modelList[modelIndex], convertCharToKeyValue(keyInput), getModeById(0), atoi(hamlibIDList[modelIndex]));
                             char outputText[100];
                             sprintf(outputText, "Linking radio make %s of model %s to port %i", company, modelList[modelIndex], convertCharToKeyValue(keyInput));
                             sendSpeakerOutput(outputText);
+                            radios[currentRadio] = loadUpRadioUsingData(company,modelList[modelIndex], convertCharToKeyValue(keyInput), getModeById(3), atoi(hamlibIDList[modelIndex]));
                             if(currentRadio == 1){
                                 modeState = standard;
                                 sendSpeakerOutput("Starting normal operations");
