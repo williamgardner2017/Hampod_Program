@@ -66,6 +66,7 @@ BootUpStates BootupFlow(KeyPress* keyInput){
                 break;
             }
             int index = selectEntryInList(keyInput,companiesList);
+            PRINTFLEVEL1("Software: gotback company index of %i\n", index);
             if(index != -1){
                 company = companiesList[index];
                 char fileNames[100];
@@ -319,7 +320,6 @@ void stateMachineStart(){
     radios = calloc(2,sizeof(Radio));
     modeRoutingStart();
     companiesList = textFileToArray("StartupFiles/Company_List.txt");
-    PRINTFLEVEL1("SOFTWARE: Testing loaded up companyString %s, %s, %s, %s\n");
 }
 
 void setModeState(ModeStates state){
@@ -424,7 +424,7 @@ int selectEntryInList(KeyPress* keyInput, char** list){
                             break;
                         }else{
                             char* shortName = malloc(sizeof(char)*30);
-                            sprintf(shortName, "%i %s", i-charSelectPage*9 ,list[i] );
+                            sprintf(shortName, " %i %s ", i-charSelectPage*9 + 1 ,list[i] );
                             strcat(LongOutput,shortName);
                             free(shortName);
                         }
