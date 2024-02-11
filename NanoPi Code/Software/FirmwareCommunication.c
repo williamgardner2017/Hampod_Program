@@ -112,6 +112,7 @@ void* firmwareCommandQueue(void* command){
     myId = CurrentID;
     myCommand->tag = myId;
     send_packet(myCommand);
+    PRINTFLEVEL2("SOFTWARE: Adding id %i to the hashset\n", myId);
     insertHashMap(IDHashSet,(void*) myId, (void*) myId);
     CurrentID++;
     if(CurrentID > 1000){
