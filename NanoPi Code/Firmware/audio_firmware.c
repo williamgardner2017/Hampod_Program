@@ -84,7 +84,9 @@ void audio_process() {
             system("cd -");
         } if(audio_type_byte == 's') {
             AUDIO_PRINTF("Festival tts %s with saving file\n", remaining_string);
+            system("pwd");
             system("cd ../Firmware/pregen_audio");
+            system("pwd");
             sprintf(buffer, "echo '%s' | text2wave -o %s.wav", remaining_string, remaining_string);
             system_result = system(buffer);
             sprintf(buffer, "aplay %s.wav", remaining_string);
@@ -106,6 +108,7 @@ void audio_process() {
         write(output_pipe_fd, packet_to_send->data, sizeof(int));
         free(requested_string);
         destroy_inst_packet(&packet_to_send);
+        usleep(1000000);
     }
 
     pthread_join(audio_io_buffer, NULL);
