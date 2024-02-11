@@ -68,10 +68,10 @@ BootUpStates BootupFlow(KeyPress* keyInput){
             if(index != -1){
                 company = companiesList[index];
                 char fileNames[100];
-                sprintf(modeFileName,"StartupFiles/%s_Model.txt",company);
-                modelList = textFileToArray(modeFileName);
-                sprintf(modeFileName,"StartupFiles/%s_Hamlib.txt",company);
-                hamlibIDList = textFileToArray(modeFileName);
+                sprintf(fileNames,"StartupFiles/%s_Model.txt",company);
+                modelList = textFileToArray(fileNames);
+                sprintf(fileNames,"StartupFiles/%s_Hamlib.txt",company);
+                hamlibIDList = textFileToArray(fileNames);
                 bootUpState = chooseModel;
                 sendSpeakerOutput("Select Model of radio");
             }
@@ -82,10 +82,9 @@ BootUpStates BootupFlow(KeyPress* keyInput){
                 sendSpeakerOutput("Select company of the radio to load up");
                 break;
             }
-            int index = selectEntryInList(keyInput,modelList);
-            if(index != -1){
+            modelIndex = selectEntryInList(keyInput,modelList);
+            if(modelIndex != -1){
                 sendSpeakerOutput("Select port radio is connected to. Choose number one to four");
-                modelIndex = index
                 bootUpState = selectLink;
             }
             break;
@@ -392,9 +391,10 @@ int selectEntryInList(KeyPress* keyInput, char** list){
             }
             return -1;
     }else{
+        bool flag;
         switch (keyInput->keyPressed){
             case 'C':
-                bool flag = true;
+                flag = true;
                 for(int i = charSelectPage*9; i < (charSelectPage+ 1) * 9 ; i++){
                     if(strcmp(list[i], "END OF ARRAY") == 0){
                         flag = false;
