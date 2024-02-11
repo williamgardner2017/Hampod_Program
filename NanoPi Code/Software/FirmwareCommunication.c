@@ -109,7 +109,7 @@ void* firmwareCommandQueue(void* command){
     int* myId = malloc(sizeof(int));
     Inst_packet* myCommand = (Inst_packet*) command;
     pthread_mutex_lock(&pipe_lock);
-    myId* = CurrentID;
+    myId[0] = CurrentID;
     myCommand->tag = *myId;
     send_packet(myCommand);
     PRINTFLEVEL2("SOFTWARE: Adding id %i to the hashset\n", *myId);

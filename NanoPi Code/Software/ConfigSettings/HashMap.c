@@ -185,7 +185,7 @@ void NullHashFree(void* s){
     return;
 }
 int IntHash(void* key){
-    int* data = (int* key);
+    int* data = (int*) key;
     return *data;
 }
 bool IntHashCompare(void* a, void* b){
@@ -194,5 +194,5 @@ bool IntHashCompare(void* a, void* b){
     return *a1 == *b1;
 }
 void IntHashFree(void* i){
-    free((int*) i)
+    free((int*) i);
 }
