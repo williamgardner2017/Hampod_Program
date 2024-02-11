@@ -126,9 +126,9 @@ void* firmwareCommandQueue(void* command){
     //do the priority locking
     pthread_mutex_lock(&queue_lock);
     countOfPackets ++;
-    PRINTFLEVEL2("software: waiting for packet with tag %d to finish\n",myId);
+    // PRINTFLEVEL2("software: waiting for packet with tag %d to finish\n",myId);
     while(IDpeek(IDQueue) != myId && running){
-        PRINTFLEVEL2("Software: packet with tag %d is still waiting\n",myId);
+        // PRINTFLEVEL2("Software: packet with tag %d is still waiting\n",myId);
         pthread_cond_wait(&queue_cond, &queue_lock);
         if(!running){
             //keep on ignaling till it clears up
@@ -139,7 +139,7 @@ void* firmwareCommandQueue(void* command){
             return NULL;
         }
     }
-    PRINTFLEVEL2("Software: packet with tag %d is being processed\n",myId);
+    // PRINTFLEVEL2("Software: packet with tag %d is being processed\n",myId);
     countOfPackets --;
     if(!running){
         pthread_cond_broadcast(&queue_cond);
@@ -154,9 +154,9 @@ void* firmwareCommandQueue(void* command){
     char* interpertedData = malloc(sizeof(data->data)+1);
 
     //temp for now
-    PRINTFLEVEL2("Software:Saveing over the data\n");
+    // PRINTFLEVEL2("Software:Saveing over the data\n");
     memccpy(interpertedData,data->data, '\0',sizeof(data->data));
-    PRINTFLEVEL2("Software:data saved\n");
+    // PRINTFLEVEL2("Software:data saved\n");
     destroy_inst_packet(&data);
     return interpertedData;
 }  
@@ -276,11 +276,11 @@ char* sendSpeakerOutput(char* text){
     char* outputText = malloc((strlen(text)+100)*sizeof(char));
     PRINTFLEVEL2("SOFTWARE: Malloced a new array\n");
     if(hasAudioFile){
-        strcat(outputText,"p");
+        strcpy(outputText,"p");
         strcat(outputText,getHashMap(audioHashMap, text));
     }else if(shouldCreateAudioFile(text)){
          PRINTFLEVEL2("SOFTWARE:Creating new audio hashmap entrie for this\n");
-        strcat(outputText,"s");
+        strcpy(outputText,"s");
         strcat(outputText,text);
         //TODO add it to the hashmap
         char* nameAndPath = malloc(sizeof(char)*(strlen(text)+strlen(audioFolderPath)));
@@ -292,7 +292,7 @@ char* sendSpeakerOutput(char* text){
         PRINTFLEVEL2("SOFTWARE: adding the data %s with the key of %s\n",nameAndPath,nameOnly);
         insertHashMap(audioHashMap,nameAndPath,nameOnly);
     }else{
-        strcat(outputText,"d");
+        strcpy(outputText,"d");
         strcat(outputText,text);
     }
 
