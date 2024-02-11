@@ -95,13 +95,14 @@ BootUpStates BootupFlow(KeyPress* keyInput){
                     bootUpState = chooseModel;
                     break;
                 }else{
+                    char outputText[100];
                     //Add in 1234 protection
                     switch(keyInput->keyPressed){
                         case '1':
                         case '2':
                         case '3':
                         case '4':
-                            char outputText[100];
+                            
                             sprintf(outputText, "Linking radio make %s of model %s to port %i", company, modelList[modelIndex], convertCharToKeyValue(keyInput));
                             sendSpeakerOutput(outputText);
                             radios[currentRadio] = loadUpRadioUsingData(company,modelList[modelIndex], convertCharToKeyValue(keyInput), getModeById(3), atoi(hamlibIDList[modelIndex]));
