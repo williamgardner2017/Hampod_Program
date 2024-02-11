@@ -272,11 +272,14 @@ char* sendSpeakerOutput(char* text){
     }
     //TODO add the stuff for checking if it exits
     bool hasAudioFile = getHashMap(audioHashMap, text) != NULL;
-    char* outputText = malloc((strlen(text)+2)*sizeof(char));
+    PRINTFLEVEL2("SOFTWARE: Gotted %i from the audioHashmap\n",hasAudioFile);
+    char* outputText = malloc((strlen(text)+100)*sizeof(char));
+    PRINTFLEVEL2("SOFTWARE: Malloced a new array\n");
     if(hasAudioFile){
         strcat(outputText,"p");
         strcat(outputText,getHashMap(audioHashMap, text));
     }else if(shouldCreateAudioFile(text)){
+         PRINTFLEVEL2("SOFTWARE:Creating new audio hashmap entrie for this\n");
         strcat(outputText,"s");
         strcat(outputText,text);
         //TODO add it to the hashmap
