@@ -58,6 +58,7 @@ BootUpStates BootupFlow(KeyPress* keyInput){
                 bootUpState = chooseCompany;
                 break;
             }
+            break;
         case chooseCompany:
             if (keyInput->keyPressed == '0') {
                 sendSpeakerOutput("zero Select Save. One select company");
@@ -118,6 +119,7 @@ BootUpStates BootupFlow(KeyPress* keyInput){
                     }
                     break;
                 }
+                break;
         case linkMore:
             if(keyInput->keyPressed == '1')/*Yes*/{
                 bootUpState = chooseCompany;
@@ -128,6 +130,7 @@ BootUpStates BootupFlow(KeyPress* keyInput){
                 sendSpeakerOutput("Starting normal operations");
                 break; 
             }
+            break;
         case selectSave:
             if(keyInput->keyPressed == '0')/*Back*/{
                     bootUpState = selectNewOrSave;
