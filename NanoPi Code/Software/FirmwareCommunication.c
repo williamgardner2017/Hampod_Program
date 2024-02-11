@@ -198,6 +198,7 @@ void* firmwareOPipeWatcher(void* arg){
         //create the data to put into the queue
         Inst_packet* new_packet = create_inst_packet(packet_type, size, buffer, tag);
         //lock the queue
+        PRINTFLEVEL2("Got a packet with the data of %s and tag of %i\n",new_packet->data,new_packet->tag);
         pthread_mutex_lock(&queue_lock);
         //add the data to the queue
         if(containsHashMap(IDHashSet,(void*) tag)){
