@@ -212,6 +212,7 @@ void* firmwareOPipeWatcher(void* arg){
         }else{
             PRINTFLEVEL1("SOFTWARE: Bad packet with ID %i receved\n",tag);
         }
+        free(tagPointer);
         //unlock the queue
         PRINTFLEVEL2("Software: Got a packet with the tag of %d\n", tag);
         pthread_mutex_unlock(&queue_lock);

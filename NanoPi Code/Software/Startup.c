@@ -112,7 +112,7 @@ void fullStart(){
     Inst_packet* iAmReady = create_inst_packet(CONFIG, strlen((char*) okMessage)+1,okMessage, 0);
     firmwareCommandQueue(iAmReady);
 
-    usleep(50000000);
+    usleep(500000);
 
     //start key loop after getting the responce
 
