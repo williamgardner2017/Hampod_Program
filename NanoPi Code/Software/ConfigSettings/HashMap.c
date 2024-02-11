@@ -191,7 +191,7 @@ int IntHash(void* key){
 bool IntHashCompare(void* a, void* b){
     int* a1 = (int*) a;
     int* b1 = (int*) b;
-    return *a1 == *b1;
+    return a1[0] == b1[0];
 }
 void IntHashFree(void* i){
     free((int*) i);
