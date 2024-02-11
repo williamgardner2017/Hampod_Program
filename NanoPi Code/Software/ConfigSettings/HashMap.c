@@ -9,17 +9,17 @@ HashMap* createHashMap( int (*hashFunc)(void*), bool (*comparFunc)(void*,void*))
     return map;
 }
 void insertHashMap(HashMap* hashmap,void* data,void* key){
-    // PRINTFLEVEL2("SOFTWARE: Hash Start of the inesert funciton\n");
+    PRINTFLEVEL2("SOFTWARE: Hash Start of the inesert funciton\n");
     int hashOfKey = hashmap->hashFunc(key);
-    // PRINTFLEVEL2("SOFTWARE: Hash ran the key throug the hashing function");
+    PRINTFLEVEL2("SOFTWARE: Hash ran the key throug the hashing function");
     int index = hashOfKey % hashmap->size;
-    // PRINTFLEVEL2("SOFTWARE: Hash got the index after the hash of %i\n", index);
+    PRINTFLEVEL2("SOFTWARE: Hash got the index after the hash of %i\n", index);
     int offset = 0;
     bool placingObject = true;
-    // PRINTFLEVEL2("SOFTWARE: Hash going into the while loop\n");
+    PRINTFLEVEL2("SOFTWARE: Hash going into the while loop\n");
     while(placingObject){
         if(hashmap->list[(index+offset)%hashmap->size] == 0){
-            // PRINTFLEVEL2("SOFTWARE: Hash Found an index %i to place item at\n", (index+offset)%hashmap->size);
+            PRINTFLEVEL2("SOFTWARE: Hash Found an index %i to place item at\n", (index+offset)%hashmap->size);
             placingObject = false;
             hashmap->list[(index+offset)%hashmap->size] = data;
             hashmap->listOfKeys[(index+offset)%hashmap->size] = key;
@@ -27,12 +27,12 @@ void insertHashMap(HashMap* hashmap,void* data,void* key){
         }else if(offset != 0 && (index+offset)%hashmap->size == index){
             //TODO 
             //Grow the list size
-            //  PRINTFLEVEL2("SOFTWARE: Hash Growing the size of the hashmap\n");
+             PRINTFLEVEL2("SOFTWARE: Hash Growing the size of the hashmap\n");
             growHashMap(hashmap);
             insertHashMap(hashmap,data, key);
             placingObject = false;
         }else{
-            //  PRINTFLEVEL2("SOFTWARE: Hash Finding a new offset for the hash\n");
+             PRINTFLEVEL2("SOFTWARE: Hash Finding a new offset for the hash\n");
             if(offset == 0){
                 offset = 1;
             }else if(offset == 1){
@@ -186,7 +186,7 @@ void NullHashFree(void* s){
 }
 int IntHash(void* key){
     int* data = (int*) key;
-    return *data;
+    return data[0];
 }
 bool IntHashCompare(void* a, void* b){
     int* a1 = (int*) a;
