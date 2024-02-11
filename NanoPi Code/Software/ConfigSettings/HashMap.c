@@ -191,6 +191,7 @@ int IntHash(void* key){
 bool IntHashCompare(void* a, void* b){
     int* a1 = (int*) a;
     int* b1 = (int*) b;
+    printf("comparing values %i and %i\n",a1[0],b1[0]);
     return a1[0] == b1[0];
 }
 void IntHashFree(void* i){
