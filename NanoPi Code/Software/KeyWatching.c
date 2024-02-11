@@ -13,9 +13,10 @@ void* keyWatcher(void* args){
         if(interpretedKey->keyPressed != '-'){
             PRINTFLEVEL1("Software: key prKessed %c, shift value %i, was held %i\n", interpretedKey->keyPressed, interpretedKey->shiftAmount,interpretedKey->isHold);
             modeFlow(interpretedKey);
-        }else{
-            PRINTFLEVEL2("Software: key prKessed %c, shift value %i, was held %i\n", interpretedKey->keyPressed, interpretedKey->shiftAmount,interpretedKey->isHold);
         }
+        // else{
+        //     // PRINTFLEVEL2("Software: key prKessed %c, shift value %i, was held %i\n", interpretedKey->keyPressed, interpretedKey->shiftAmount,interpretedKey->isHold);
+        // }
         free(temp);
         free(interpretedKey);
         usleep(keyRequestFrequency);

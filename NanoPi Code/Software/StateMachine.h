@@ -55,6 +55,7 @@ typedef enum {
 typedef enum {
     selectNewOrSave,
     chooseCompany,
+    chooseModel,
     selectLink,
     linkMore,
     selectSave
@@ -86,6 +87,7 @@ void setBootUpState(BootUpStates state);
 void setCompanyAndModel(char* comp, int mod);
 
 Radio** getRadios();
+int selectEntryInList(KeyPress* keyInput, char** list);
 
 #include "FirmwareCommunication.h"
 #include "StateMachine.c"

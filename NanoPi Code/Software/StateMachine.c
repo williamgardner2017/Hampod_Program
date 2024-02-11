@@ -38,52 +38,101 @@ ModeStates modeFlow(KeyPress* keyInput){
 
 //no idea how to store these yet
 //TODO have there be another file dedicated to figureing this out since it will probably be a large function
+char** companiesList;
+char** modelList;
+char** hamlibIDList;
 char* company;
-int model;
+int modelIndex;
 BootUpStates bootUpState = selectNewOrSave;
 BootUpStates BootupFlow(KeyPress* keyInput){
+    
     switch (bootUpState)
     {
         case selectNewOrSave:
             if(keyInput->keyPressed == '0')/*Save*/{
                 bootUpState = selectSave;
+                sendSpeakerOutput("Select save file to load up");
                 break;
             }else if(keyInput->keyPressed == '1')/*Load new*/{
+                sendSpeakerOutput("Select company of the radio to load up");
                 bootUpState = chooseCompany;
                 break;
             }
+            break;
         case chooseCompany:
-            if(keyInput->keyPressed == '0') /*Back*/{
+            if (keyInput->keyPressed == '0') {
+                sendSpeakerOutput("zero Select Save. One select company");
                 bootUpState = selectNewOrSave;
                 break;
             }
-            company = strdup("ExampleCompany");;//TODO getCompanyByInput(keyInput);
-            model = 1;//TODO testForModel(company);
-            bootUpState = selectLink;
+            int index = selectEntryInList(keyInput,companiesList);
+            PRINTFLEVEL1("Software: gotback company index of %i\n", index);
+            if(index != -1){
+                company = companiesList[index];
+                char fileNames[100];
+                sprintf(fileNames,"StartupFiles/%s_Model.txt",company);
+                modelList = textFileToArray(fileNames);
+                sprintf(fileNames,"StartupFiles/%s_Hamlib.txt",company);
+                hamlibIDList = textFileToArray(fileNames);
+                bootUpState = chooseModel;
+                sendSpeakerOutput("Select Model of radio");
+            }
+            break;
+        case chooseModel:
+            if (keyInput->keyPressed == '0') {
+                bootUpState = chooseCompany;
+                sendSpeakerOutput("Select company of the radio to load up");
+                break;
+            }
+            modelIndex = selectEntryInList(keyInput,modelList);
+            if(modelIndex != -1){
+                sendSpeakerOutput("Select port radio is connected to. Choose number one to four");
+                bootUpState = selectLink;
+            }
             break;
         case selectLink:
             if(keyInput->keyPressed == '0')/*Back*/{
-                    bootUpState = chooseCompany;
+                    bootUpState = chooseModel;
                     break;
                 }else{
-                    radios[currentRadio] = loadUpRadioUsingData(company,model, convertCharToKeyValue(keyInput), getModeByName("Normal"), (rig_model_t) NULL);
-                    currentRadio++;
-                    bootUpState = linkMore;
+                    char outputText[100];
+                    //Add in 1234 protection
+                    switch(keyInput->keyPressed){
+                        case '1':
+                        case '2':
+                        case '3':
+                        case '4':
+                            
+                            sprintf(outputText, "Linking radio make %s of model %s to port %i", company, modelList[modelIndex], convertCharToKeyValue(keyInput));
+                            sendSpeakerOutput(outputText);
+                            radios[currentRadio] = loadUpRadioUsingData(company,modelList[modelIndex], convertCharToKeyValue(keyInput), getModeByName("frequency mode"), atoi(hamlibIDList[modelIndex]));
+                            if(currentRadio == 1){
+                                modeState = standard;
+                                sendSpeakerOutput("Starting normal operations");
+                            }else{
+                                currentRadio++;
+                                bootUpState = linkMore;
+                                sendSpeakerOutput("Do you have more radios to link up?");
+                            }
+                            break;
+                        default:
+                            sendSpeakerOutput("Choose number one to four");
+                            break;
+                    }
                     break;
                 }
+                break;
         case linkMore:
             if(keyInput->keyPressed == '1')/*Yes*/{
                 bootUpState = chooseCompany;
+                sendSpeakerOutput("Select company of the radio to load up");
                 break;
             }else if(keyInput->keyPressed == '0')/*No*/{
                 modeState = standard;
-                currentRadio--;
-                //set radio to normal mode
-                //TODO make the number the one coresponding to normal mode
-                setRadioMode(radios[currentRadio],getModeByName("Normal"));
-                //loadUpNormalMode
+                sendSpeakerOutput("Starting normal operations");
                 break; 
             }
+            break;
         case selectSave:
             if(keyInput->keyPressed == '0')/*Back*/{
                     bootUpState = selectNewOrSave;
@@ -105,6 +154,7 @@ BootUpStates BootupFlow(KeyPress* keyInput){
     }
     return bootUpState;
 }
+
 
 int modeSelectPage = 0; //the page number that we are on for mode select
 int isReadingOut = 0; //TODO make this actualy cause a read out
@@ -280,6 +330,7 @@ void stateMachineStart(){
     modeRoutingStart();
     modeNames = getAllModeNames();
     PRINTFLEVEL1("SOFTWARE: mode names retreaved\n");
+    companiesList = textFileToArray("StartupFiles/Company_List.txt");
 }
 
 void setModeState(ModeStates state){
@@ -309,8 +360,125 @@ void freeStateMachine(){
     PRINTFLEVEL2("Freed the radios object\n");
     freeModes();
     PRINTFLEVEL2("freed the modes\n");
+        free(companiesList);
 }
 
 Radio** getRadios(){
     return radios;
+}
+
+
+int charIndex = 0;
+int charSelectPage = 0;
+bool listReadOut = false;
+/**
+ * When # is pressed it read out next key press
+ * When # is held down 
+ * returns the index of where in the list the selected entry is
+ * will return -1 when nothing is selected yet
+ * Assumes you have used the textFileToArray function
+ * pass in a keypress of key '-' to clear it
+*/
+int selectEntryInList(KeyPress* keyInput, char** list){
+    if(keyInput->keyPressed == '-'){
+        charIndex = 0;
+        charSelectPage = 0;
+        listReadOut = false;
+    }
+    if(listReadOut){
+        switch(keyInput->keyPressed){
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+                for(int i = charSelectPage*9; i < (charSelectPage) * 9 + convertCharToKeyValue(keyInput) - 1 ; i++){
+                    if(strcmp(list[i], "END OF ARRAY") == 0){
+                        sendSpeakerOutput("Out of range");
+                        return -1;
+                        break;
+                    }
+                }
+                sendSpeakerOutput(list[charSelectPage*9 + convertCharToKeyValue(keyInput) - 1]);
+                listReadOut = false;
+                break;
+            default:
+                break;
+            }
+            return -1;
+    }else{
+        bool flag;
+        switch (keyInput->keyPressed){
+            case 'C':
+                flag = true;
+                for(int i = charSelectPage*9; i < (charSelectPage+ 1) * 9 ; i++){
+                    if(strcmp(list[i], "END OF ARRAY") == 0){
+                        flag = false;
+                        break;
+                    }
+                }
+                if(flag){
+                    charSelectPage = charSelectPage + 1;
+                }
+                break;
+            case 'D':
+                charSelectPage = charSelectPage - 1;
+                if(charSelectPage > 0){ 
+                    charSelectPage = 0;
+                }
+                break;
+            case '*':
+                if(keyInput->isHold){
+                    char* LongOutput = malloc(sizeof(char)*200);
+                    strcpy(LongOutput, "");
+                    for(int i = charSelectPage*9; i < (charSelectPage+ 1) * 9 ; i++){
+                        if(strcmp(list[i], "END OF ARRAY") == 0){
+                            break;
+                        }else{
+                            char* shortName = malloc(sizeof(char)*30);
+                            sprintf(shortName, " %i %s ", i-charSelectPage*9 + 1 ,list[i] );
+                            strcat(LongOutput,shortName);
+                            free(shortName);
+                        }
+                    }
+                    sendSpeakerOutput(LongOutput);
+                    free(LongOutput);
+                }else{
+                    listReadOut = true;
+                }
+                break;
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+                for(int i = charSelectPage*9; i < (charSelectPage) * 9 + convertCharToKeyValue(keyInput) - 1 ; i++){
+                    if(strcmp(list[i], "END OF ARRAY") == 0){
+                        sendSpeakerOutput("Out of range");
+                        return -1;
+                        break;
+                    }
+                }
+                sendSpeakerOutput(list[charSelectPage*9 + convertCharToKeyValue(keyInput) - 1]);
+                int returnValue = charSelectPage*9 + convertCharToKeyValue(keyInput) - 1;
+                charIndex = 0;
+                charSelectPage = 0;
+                listReadOut = false;
+                return returnValue;
+                break;
+        
+            default:
+                //Error should never get here
+                break;
+        }
+    }
+    return -1;
 }

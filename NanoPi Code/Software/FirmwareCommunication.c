@@ -145,7 +145,7 @@ void* firmwareCommandQueue(void* command){
             return NULL;
         }
     }
-    PRINTFLEVEL2("Software: packet with tag %d is being processed\n",myId);
+    // PRINTFLEVEL2("Software: packet with tag %d is being processed\n",myId);
     countOfPackets --;
     if(!running){
         pthread_cond_broadcast(&queue_cond);
@@ -159,9 +159,9 @@ void* firmwareCommandQueue(void* command){
     char* interpertedData = malloc(sizeof(data->data)+1);
 
     //temp for now
-    PRINTFLEVEL2("Software:Saveing over the data\n");
+    // PRINTFLEVEL2("Software:Saveing over the data\n");
     memccpy(interpertedData,data->data, '\0',sizeof(data->data));
-    PRINTFLEVEL2("Software:data saved\n");
+    // PRINTFLEVEL2("Software:data saved\n");
     destroy_inst_packet(&data);
     return interpertedData;
 }  
@@ -282,11 +282,14 @@ char* sendSpeakerOutput(char* text){
     }
     //TODO add the stuff for checking if it exits
     bool hasAudioFile = getHashMap(audioHashMap, text) != NULL;
-    char* outputText = malloc((strlen(text)+2)*sizeof(char));
+    PRINTFLEVEL2("SOFTWARE: Gotted %i from the audioHashmap\n",hasAudioFile);
+    char* outputText = malloc((strlen(text)+100)*sizeof(char));
+    PRINTFLEVEL2("SOFTWARE: Malloced a new array\n");
     if(hasAudioFile){
         strcpy(outputText,"p");
         strcat(outputText,getHashMap(audioHashMap, text));
     }else if(shouldCreateAudioFile(text)){
+         PRINTFLEVEL2("SOFTWARE:Creating new audio hashmap entrie for this\n");
         strcpy(outputText,"s");
         strcat(outputText,text);
         //TODO add it to the hashmap
@@ -303,7 +306,7 @@ char* sendSpeakerOutput(char* text){
         strcat(outputText,text);
     }
 
-    
+    PRINTFLEVEL1("SOFTWARE: Sending text %s to be outputed by speakers\n",outputText);
     Inst_packet* speakerPacket = create_inst_packet(AUDIO,strlen(outputText)+1,(unsigned char*) outputText, 0);
     int result;
     PRINTFLEVEL2("SOFTWARE Locking up speakout output to send out %s\n", outputText);

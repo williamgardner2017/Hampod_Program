@@ -12,6 +12,7 @@
 #include "Radio.h"
 #include "KeyWatching.h"
 #include "../Firmware/hampod_firm_packet.h"
+#include "RigListCreator.h"
 
 #include "ConfigSettings/ConfigParams.h"
 #include "ConfigSettings/ConfigFunctions.h"
@@ -95,16 +96,16 @@ void fullStart(){
     printf("software: Starting Firmware communication\n");
     firmwareCommunicationStartup();
     printf("software: Starting Firmware Compunication compleat\n");
+    createRigLists();
     stateMachineStart();
 
     //SETTING UP THE SIMULATION DEMO
-    printf("software: Setting up demo\n");
-    setModeState(standard);
+    // printf("software: Setting up demo\n");
+    setModeState(bootUp);
     // Radio* radios = loadUpRadioUsingData("ICOM", 7300, 0, NULL, 3073);
-    // printf("SOFTWARE: Hamlib is done initiliing so going to add the radio\n");
     // setRadios(radios,0);
-    // switchToRadioMode("frequency mode");
-    printf("software: Demo setup complete\n");
+    // switchToRadioMode(3);
+    // printf("software: Demo setup complete\n");
     //send that I am ready
     printf("software: Sending I am Ready packet to firmware\n");
     unsigned char* okMessage = (unsigned char*) "ok";
@@ -112,26 +113,6 @@ void fullStart(){
     firmwareCommandQueue(iAmReady);
 
     usleep(50000000);
-
-    sendSpeakerOutput("hello");
-    usleep(500000);
-    sendSpeakerOutput("next output should not save");
-    usleep(500000);
-    sendSpeakerOutput("123123");
-    usleep(500000);
-    for(int i = 0; i<10;i++){
-        char stuff[30];
-        sprintf(stuff, "%i",i);
-        sendSpeakerOutput(stuff);
-        usleep(500000);
-    }
-    sendSpeakerOutput("The");
-    usleep(500000);
-    sendSpeakerOutput("next");
-    usleep(500000);
-    sendSpeakerOutput("Words");
-    usleep(500000);
-    sendSpeakerOutput("This is a very long output that kind of goes on for a while after starting");
 
     //start key loop after getting the responce
 
@@ -142,7 +123,8 @@ void fullStart(){
 
 
     printf("software: Starting keywatcher\n");
-    // keyWatcher(NULL);
+    sendSpeakerOutput("zero Select Save. One select company");
+    keyWatcher(NULL);
     printf("software: Startin Keywatcher complete\n");
     while(true){
 
