@@ -185,13 +185,14 @@ void NullHashFree(void* s){
     return;
 }
 int IntHash(void* key){
-    return (int) key;
+    int* data = (int* key);
+    return *data;
 }
 bool IntHashCompare(void* a, void* b){
-    int a1 = (int) a;
-    int b1 = (int) b;
-    return a1 == b1;
+    int* a1 = (int*) a;
+    int* b1 = (int*) b;
+    return *a1 == *b1;
 }
 void IntHashFree(void* i){
-    return;
+    free((int*) i)
 }

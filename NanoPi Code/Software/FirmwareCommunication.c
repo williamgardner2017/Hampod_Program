@@ -106,13 +106,13 @@ int CurrentID = 0;
 */
 
 void* firmwareCommandQueue(void* command){
-    int myId = 0;
+    int* myId = malloc(sizeof(int));
     Inst_packet* myCommand = (Inst_packet*) command;
     pthread_mutex_lock(&pipe_lock);
-    myId = CurrentID;
-    myCommand->tag = myId;
+    myId* = CurrentID;
+    myCommand->tag = *myId;
     send_packet(myCommand);
-    PRINTFLEVEL2("SOFTWARE: Adding id %i to the hashset\n", myId);
+    PRINTFLEVEL2("SOFTWARE: Adding id %i to the hashset\n", *myId);
     insertHashMap(IDHashSet,(void*) myId, (void*) myId);
     CurrentID++;
     if(CurrentID > 1000){
@@ -203,10 +203,10 @@ void* firmwareOPipeWatcher(void* arg){
         PRINTFLEVEL2("Got a packet with the data of %s and tag of %i\n",new_packet->data,new_packet->tag);
         pthread_mutex_lock(&queue_lock);
         //add the data to the queue
-        if(containsHashMap(IDHashSet,(void*) tag)){
+        if(containsHashMap(IDHashSet,(void*) &tag)){
             PRINTFLEVEL1("SOFTWARE: revived packet %i and adding to queue\n",tag);
             enqueue(softwareQueue, new_packet);
-            removeHashMap(IDHashSet,(void*) tag);
+            removeHashMap(IDHashSet,(void*) &tag);
         }else{
             PRINTFLEVEL1("SOFTWARE: Bad packet with ID %i receved\n",tag);
         }
