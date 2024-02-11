@@ -203,10 +203,12 @@ void* firmwareOPipeWatcher(void* arg){
         PRINTFLEVEL2("Got a packet with the data of %s and tag of %i\n",new_packet->data,new_packet->tag);
         pthread_mutex_lock(&queue_lock);
         //add the data to the queue
-        if(containsHashMap(IDHashSet,(void*) &tag)){
+        int* tagPointer = malloc(sizeof(int));
+        tagPointer[0] = tag;
+        if(containsHashMap(IDHashSet,(void*) tagPointer)){
             PRINTFLEVEL1("SOFTWARE: revived packet %i and adding to queue\n",tag);
             enqueue(softwareQueue, new_packet);
-            removeHashMap(IDHashSet,(void*) &tag);
+            removeHashMap(IDHashSet,(void*) tagPointer);
         }else{
             PRINTFLEVEL1("SOFTWARE: Bad packet with ID %i receved\n",tag);
         }
