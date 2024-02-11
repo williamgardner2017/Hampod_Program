@@ -96,6 +96,7 @@ void fullStart(){
     printf("software: Starting Firmware communication\n");
     firmwareCommunicationStartup();
     printf("software: Starting Firmware Compunication compleat\n");
+    createRigLists();
     stateMachineStart();
 
     //SETTING UP THE SIMULATION DEMO
@@ -116,7 +117,6 @@ void fullStart(){
     //initiate
     loadConfigParams();
     populateConfigFunctions();
-    createRigLists();
 
 
     printf("software: Starting keywatcher\n");
