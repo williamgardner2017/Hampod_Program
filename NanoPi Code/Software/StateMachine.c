@@ -417,13 +417,20 @@ int selectEntryInList(KeyPress* keyInput, char** list){
                 break;
             case '*':
                 if(keyInput->isHold){
+                    char* LongOutput = malloc(sizeof(char)*200);
+                    strcpy(LongOutput, "");
                     for(int i = charSelectPage*9; i < (charSelectPage+ 1) * 9 ; i++){
                         if(strcmp(list[i], "END OF ARRAY") == 0){
                             break;
                         }else{
-                            sendSpeakerOutput(list[i]);
+                            char* shortName = malloc(sizeof(char)*30);
+                            sprintf(shortName, "%i %s", i-charSelectPage*9 ,list[i] );
+                            strcat(LongOutput,shortName);
+                            free(shortName);
                         }
                     }
+                    sendSpeakerOutput(LongOutput);
+                    free(LongOutput);
                 }else{
                     listReadOut = true;
                 }
