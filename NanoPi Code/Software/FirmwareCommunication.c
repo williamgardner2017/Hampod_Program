@@ -130,6 +130,7 @@ void* firmwareCommandQueue(void* command){
     PRINTFLEVEL2("software: waiting for packet with tag %d to finish\n",myId);
     while(running){
         if(softwareQueue->head == NULL){
+            pthread_cond_wait(&queue_cond, &queue_lock);
             continue;
         }else if(softwareQueue->head->packet->tag == myId){
             break;
