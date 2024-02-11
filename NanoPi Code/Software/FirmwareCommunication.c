@@ -293,7 +293,7 @@ char* sendSpeakerOutput(char* text){
         strcat(outputText,text);
     }
 
-    
+    PRINTFLEVEL1("SOFTWARE: Sending text %s to be outputed by speakers\n",outputText);
     Inst_packet* speakerPacket = create_inst_packet(AUDIO,strlen(outputText)+1,(unsigned char*) outputText, 0);
     int result;
     PRINTFLEVEL2("SOFTWARE Locking up speakout output\n");
