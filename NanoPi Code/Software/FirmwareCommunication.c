@@ -128,20 +128,20 @@ void* firmwareCommandQueue(void* command){
     //do the priority locking
     pthread_mutex_lock(&queue_lock);
     countOfPackets ++;
-    PRINTFLEVEL2("software: waiting for packet with tag %d to finish\n",myId);
+    PRINTFLEVEL2("software: waiting for packet with tag %d to finish\n",myId[0]);
     while(running){
         if(softwareQueue->head == NULL){
-            PRINTFLEVEL2("Software: packet with tag %d is still waiting\n",myId);
+            PRINTFLEVEL2("Software: packet with tag %d is still waiting\n",myId[0]);
             pthread_cond_wait(&queue_cond, &queue_lock);
             continue;
-        }else if(softwareQueue->head->packet->tag == myId){
+        }else if(softwareQueue->head->packet->tag == myId[0]){
             break;
         }
-        PRINTFLEVEL2("Software: packet with tag %d is still waiting\n",myId);
+        PRINTFLEVEL2("Software: packet with tag %d is still waiting\n",myId[0]);
         pthread_cond_wait(&queue_cond, &queue_lock);
         if(!running){
             //keep on ignaling till it clears up
-            PRINTFLEVEL2("Software: Clearing packet backlog. Current packet tag %d\n",myId);
+            PRINTFLEVEL2("Software: Clearing packet backlog. Current packet tag %d\n",myId[0]);
             countOfPackets --;
             pthread_mutex_unlock(&queue_lock);
             pthread_cond_broadcast(&queue_cond);

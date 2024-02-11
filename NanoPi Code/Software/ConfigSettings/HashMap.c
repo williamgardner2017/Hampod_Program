@@ -11,7 +11,7 @@ HashMap* createHashMap( int (*hashFunc)(void*), bool (*comparFunc)(void*,void*))
 void insertHashMap(HashMap* hashmap,void* data,void* key){
     PRINTFLEVEL2("SOFTWARE: Hash Start of the inesert funciton\n");
     int hashOfKey = hashmap->hashFunc(key);
-    PRINTFLEVEL2("SOFTWARE: Hash ran the key throug the hashing function");
+    PRINTFLEVEL2("SOFTWARE: Hash ran the key throug the hashing function\n");
     int index = hashOfKey % hashmap->size;
     PRINTFLEVEL2("SOFTWARE: Hash got the index after the hash of %i\n", index);
     int offset = 0;
@@ -45,23 +45,23 @@ void insertHashMap(HashMap* hashmap,void* data,void* key){
 }
 void* getHashMap(HashMap* hashmap,void* key){
     int index = hashmap->hashFunc(key)%hashmap->size;
-    // PRINTFLEVEL2("SOFTWARE: Hash got the index after the hash of %i\n", index);
+    PRINTFLEVEL2("SOFTWARE: Hash got the index after the hash of %i\n", index);
     int offset = 0;
     bool placingObject = true;
     while(placingObject){
-        // PRINTFLEVEL2("SOFTWARE: in while with offset of %i\n", offset);
+        PRINTFLEVEL2("SOFTWARE: in while with offset of %i\n", offset);
         int offsetIndex = (index+offset)%hashmap->size;
         void* foundValue = hashmap->listOfKeys[offsetIndex];
-        // PRINTFLEVEL2("SOFTWARE: got the value of the offset index of %i to be compared\n",offsetIndex);
+        PRINTFLEVEL2("SOFTWARE: got the value of the offset index of %i to be compared\n",offsetIndex);
         if(foundValue != 0 && hashmap->comparFunc(foundValue, key)){
-            // PRINTFLEVEL2("SOFTWARE: Found key in hashmap at index %i\n",index+offset);
+            PRINTFLEVEL2("SOFTWARE: Found key in hashmap at index %i\n",index+offset);
             return  hashmap->list[(index+offset)%hashmap->size];
         }else if(offset != 0 && (index+offset)%hashmap->size == index){
-            //  PRINTFLEVEL2("SOFTWARE: Could not find key in the hashmap\n");
+             PRINTFLEVEL2("SOFTWARE: Could not find key in the hashmap\n");
             return NULL; //failed to find anything
         }
         else{
-            // PRINTFLEVEL2("SOFTWARE: Increaseing get offset\n");
+            PRINTFLEVEL2("SOFTWARE: Increaseing get offset\n");
             if(offset == 0){
                 offset = 1;
             }else if(offset == 1){
