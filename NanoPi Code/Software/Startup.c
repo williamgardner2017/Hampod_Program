@@ -107,10 +107,10 @@ void fullStart(){
     // switchToRadioMode(3);
     // printf("software: Demo setup complete\n");
     //send that I am ready
-    // printf("software: Sending I am Ready packet to firmware\n");
-    // unsigned char* okMessage = (unsigned char*) "ok";
-    // Inst_packet* iAmReady = create_inst_packet(CONFIG, strlen((char*) okMessage)+1,okMessage, 0);
-    // firmwareCommandQueue(iAmReady);
+    printf("software: Sending I am Ready packet to firmware\n");
+    unsigned char* okMessage = (unsigned char*) "ok";
+    Inst_packet* iAmReady = create_inst_packet(CONFIG, strlen((char*) okMessage)+1,okMessage, 0);
+    firmwareCommandQueue(iAmReady);
 
     usleep(50000000);
 
