@@ -78,7 +78,7 @@ Mode* frequencyLoad(){
     newMode->modeInput = frequencyCommandRelay;
     newMode->freeMode = freeFrequencyMode;
     newMode->enterMode = NULL;
-    nodeMode->exitMode = NULL;
+    newMode->exitMode = NULL;
 
     ModeData* newData = (ModeData*)malloc(sizeof(ModeData));
 
