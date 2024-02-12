@@ -7,8 +7,8 @@
 #include <sys/time.h>
 #include <dirent.h>
 #include <hamlib/rig.h>
-#include <hamlib/config.h>
-
+// #include <hamlib/config.h>
+#define SERIAL_PORT "/dev/ttyUSB0"
 void removeTextFiles();
 int callback(struct rig_caps *caps, rig_ptr_t rigp); 
 int createRigLists(); 
