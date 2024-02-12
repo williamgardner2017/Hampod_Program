@@ -15,6 +15,7 @@
 #include "UnitTestConfigs.h"
 #include "UnitTestAudio.h"
 #include "UnitTestSaveLoad.h"
+#include "UnitTestSimulateOperation.h"
 
 void sigsegv_handler(int signum);
 
@@ -218,6 +219,16 @@ bool SaveLoadTesting(){
     printf("Ending testing save load\n");
     return true;
 }
+
+bool SimulationTestingFull(){
+    printf("Starting simulation setup\n");
+    SimulationStart();
+    printf("Starting actual testing\n");
+    SimulationKeyPress();
+    printf("Testing compleate\n");
+    return true;
+}
+
 int main(){
 
     if(signal(SIGSEGV, sigsegv_handler) == SIG_ERR) {
@@ -231,6 +242,7 @@ int main(){
     // HashMapTest();
     // ConfigParamTest();
     // AudioTesting();
-    SaveLoadTesting();
+    // SaveLoadTesting();
+    SimulationTestingFull();
     return -1;
 }

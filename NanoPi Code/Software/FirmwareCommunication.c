@@ -206,7 +206,7 @@ void* firmwareOPipeWatcher(void* arg){
         int* tagPointer = malloc(sizeof(int));
         tagPointer[0] = tag;
         if(containsHashMap(IDHashSet,(void*) tagPointer)){
-            PRINTFLEVEL1("SOFTWARE: revived packet %i and adding to queue\n",tag);
+            PRINTFLEVEL2("SOFTWARE: revived packet %i and adding to queue\n",tag);
             enqueue(softwareQueue, new_packet);
             removeHashMap(IDHashSet,(void*) tagPointer);
         }else{
