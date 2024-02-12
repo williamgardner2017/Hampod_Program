@@ -129,6 +129,7 @@ BootUpStates BootupFlow(KeyPress* keyInput){
                 break;
             }else if(keyInput->keyPressed == '0')/*No*/{
                 modeState = standard;
+                currentRadio--;
                 sendSpeakerOutput("Starting normal operations");
                 break; 
             }
