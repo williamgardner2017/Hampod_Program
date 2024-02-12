@@ -291,7 +291,7 @@ int StandardModeFlow(KeyPress* keyInput){ //TODO be able to toggle the letter ke
         }
         break;
     default:
-        PRINTFLEVEL1("No letter key was pressed so going to the mode\n");
+        PRINTFLEVEL1("No letter key was pressed so going to the mode of radio numbered %i\n",currentRadio);
         runRadioCommand(radios[currentRadio],keyInput);
         break;
     }

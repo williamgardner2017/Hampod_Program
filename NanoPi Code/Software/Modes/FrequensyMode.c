@@ -19,8 +19,8 @@ void* frequencyCommandRelay(KeyPress* keyInput, RIG* my_rig){
             }
             currentFrequency = currentFrequency*10 + convertCharToKeyValue(keyInput);
             //read out the number
-            char putoutmessage[3] = "sq";
-            putoutmessage[1] = keyInput->keyPressed;          
+            char putoutmessage[10];
+            sprintf(putoutmessage, "%i",convertCharToKeyValue(keyInput));       
             sendSpeakerOutput(putoutmessage);
             break;
         case '#':
@@ -68,6 +68,7 @@ void freeFrequencyMode(Mode* modeToFree){
     free(modeToFree);
 }
 
+
 Mode* frequencyLoad(){
     Mode* newMode = (Mode*) malloc(sizeof(Mode));
 
@@ -76,6 +77,8 @@ Mode* frequencyLoad(){
     }
     newMode->modeInput = frequencyCommandRelay;
     newMode->freeMode = freeFrequencyMode;
+    newMode->enterMode = NULL;
+    nodeMode->exitMode = NULL;
 
     ModeData* newData = (ModeData*)malloc(sizeof(ModeData));
 
