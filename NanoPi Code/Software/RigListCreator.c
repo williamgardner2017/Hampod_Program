@@ -9,7 +9,7 @@
 
 // #include "misc.h"
 
-#include <hamlib/config.h>
+// #include <hamlib/config.h>
 
 #define SERIAL_PORT "/dev/ttyUSB0"
 
