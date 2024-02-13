@@ -217,7 +217,7 @@ void* firmwareOPipeWatcher(void* arg){
             close(fd);
             return 1;
         }
-        PRINTFLEVEL2("SOFTWARE: THere is %zd bytes in the pipe and looking for %i bytes to read\n",bytes_available,tag);
+        PRINTFLEVEL2("SOFTWARE: THere is %zd bytes in the pipe and looking for %i bytes to read\n",bytes_available,size);
         //read packet Data from pipe as a char string
         read(input_pipe, buffer, size);
         //create the data to put into the queue
