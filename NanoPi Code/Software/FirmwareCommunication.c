@@ -201,7 +201,7 @@ void* firmwareOPipeWatcher(void* arg){
         PRINTFLEVEL2("Software:Waiting for something to read\n");
         readTries = 0;
         bytes_available = -1;
-        while(bytes_available < 4){
+        while(bytes_available < 9){
             if (ioctl(fd, FIONREAD, &bytes_available) == -1) {
                 PRINTFLEVEL2("PIPE IS EMPTY WITH ERRORR\n");
                 perror("PIPE IS EMPTY WITH ERRORR\n");
