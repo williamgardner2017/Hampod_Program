@@ -245,15 +245,15 @@ int main(){
         pthread_mutex_lock(&queue_available);
         pthread_mutex_lock(&queue_lock);
 
-        FIRMWARE_PRINTF("Queue is open\n");
 
         Inst_packet* received_packet = dequeue(instruction_queue);
         pthread_mutex_unlock(&queue_lock);
         pthread_mutex_unlock(&queue_available);
-
-        FIRMWARE_PRINTF("Packet is %p\n", received_packet);
-        FIRMWARE_PRINTF("Processing received packet\n");
-
+        if(received_packet != NULL) {
+            FIRMWARE_PRINTF("Queue is open\n");
+            FIRMWARE_PRINTF("Packet is %p\n", received_packet);
+            FIRMWARE_PRINTF("Processing received packet\n");
+        }
         if(received_packet == NULL) {
             continue;
         }
