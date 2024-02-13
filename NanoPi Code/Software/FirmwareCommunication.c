@@ -208,7 +208,7 @@ void* firmwareOPipeWatcher(void* arg){
                 close(fd);
                 return 1;
             }
-            PRINTFLEVEL2("Attempt %d/1000\r", readTries); 
+            PRINTFLEVEL2("Attempt %d\r", readTries); 
             readTries++;
         }
         read(input_pipe, &packet_type, 4);
@@ -216,14 +216,14 @@ void* firmwareOPipeWatcher(void* arg){
         //read packet Length from the pipe
         bytes_available = -1;
         readTries = 0;
-        while(bytes_available < 4 && readTries < 1000){
+        while(bytes_available < 4 && readTries < 1000000){
             if (ioctl(fd, FIONREAD, &bytes_available) == -1) {
                 PRINTFLEVEL2("PIPE IS EMPTY WITH ERRORR\n");
                 perror("PIPE IS EMPTY WITH ERRORR\n");
                 close(fd);
                 return 1;
             }
-            PRINTFLEVEL2("Attempt %d/1000\r", readTries); 
+            PRINTFLEVEL2("Attempt %d/1000000\r", readTries); 
             readTries++;
         }
         PRINTFLEVEL2("\n");
@@ -238,14 +238,14 @@ void* firmwareOPipeWatcher(void* arg){
         read(input_pipe, &tag, 2);
         bytes_available = -1;
         readTries = 0;
-        while(bytes_available < size && readTries < 1000){
+        while(bytes_available < size && readTries < 1000000){
             if (ioctl(fd, FIONREAD, &bytes_available) == -1) {
                 PRINTFLEVEL2("PIPE IS EMPTY WITH ERRORR\n");
                 perror("PIPE IS EMPTY WITH ERRORR\n");
                 close(fd);
                 return 1;
             }
-            PRINTFLEVEL2("Attempt %d/1000\r", readTries); 
+            PRINTFLEVEL2("Attempt %d/1000000\r", readTries); 
             readTries++;
         }
         if (ioctl(fd, FIONREAD, &bytes_available) == -1) {
