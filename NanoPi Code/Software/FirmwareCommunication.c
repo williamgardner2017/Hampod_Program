@@ -190,6 +190,7 @@ void* firmwareOPipeWatcher(void* arg){
         perror("Error opening named pipe");
         return 1;
     }
+    int readTries = 0;
     while(running){
         unsigned char packet_type;
         unsigned short size;
@@ -201,11 +202,15 @@ void* firmwareOPipeWatcher(void* arg){
         read(input_pipe, &packet_type, 4);
         PRINTFLEVEL2("Software:I have something to read\n");
         //read packet Length from the pipe
-        if (ioctl(fd, FIONREAD, &bytes_available) == -1) {
-            PRINTFLEVEL2("PIPE IS EMPTY WITH ERRORR\n");
-            perror("PIPE IS EMPTY WITH ERRORR\n");
-            close(fd);
-            return 1;
+        bytes_available = -1;
+        readTries = 0;
+        while(bytes_available < 4 && readTries < 1000){
+            if (ioctl(fd, FIONREAD, &bytes_available) == -1) {
+                PRINTFLEVEL2("PIPE IS EMPTY WITH ERRORR\n");
+                perror("PIPE IS EMPTY WITH ERRORR\n");
+                close(fd);
+                return 1;
+            }
         }
         PRINTFLEVEL2("SOFTWARE: THere is %zd bytes in the pipe\n",bytes_available);
         if(bytes_available < 4){
@@ -216,6 +221,16 @@ void* firmwareOPipeWatcher(void* arg){
         read(input_pipe, &size, 2);
         //read the ID from the pipe
         read(input_pipe, &tag, 2);
+        bytes_available = -1;
+        readTries = 0;
+        while(bytes_available < size && readTries < 1000){
+            if (ioctl(fd, FIONREAD, &bytes_available) == -1) {
+                PRINTFLEVEL2("PIPE IS EMPTY WITH ERRORR\n");
+                perror("PIPE IS EMPTY WITH ERRORR\n");
+                close(fd);
+                return 1;
+            }
+        }
         if (ioctl(fd, FIONREAD, &bytes_available) == -1) {
             PRINTFLEVEL2("PIPE IS EMPTY WITH ERRORR\n");
             perror("PIPE IS EMPTY WITH ERRORR\n");
