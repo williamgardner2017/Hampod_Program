@@ -6,7 +6,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include <sys/wait.h>
-
+#include <pthread.h>
 #include "StateMachine.h"
 #include "FirmwareCommunication.h"
 #include "Radio.h"
@@ -126,8 +126,11 @@ void fullStart(){
     sendSpeakerOutput("zero Select Save. One select company. Hash to read out extra controls");
     keyWatcher(NULL);
     printf("software: Startin Keywatcher complete\n");
+    pthread_t keyThread;
     while(true){
-
+        // pthread_cancel(ThreadDequeue(threadQueue)); 
+        pthread_create(&keyThread, NULL, keyWatcher, NULL);
+        usleep(16000);
     }
 }
 void sigint_handler(int signum) {
