@@ -211,6 +211,7 @@ void* firmwareOPipeWatcher(void* arg){
                 close(fd);
                 return 1;
             }
+            PRINTFLEVEL2("Attempt %d/1000\r", readTries); 
         }
         PRINTFLEVEL2("SOFTWARE: THere is %zd bytes in the pipe\n",bytes_available);
         if(bytes_available < 4){
@@ -230,6 +231,7 @@ void* firmwareOPipeWatcher(void* arg){
                 close(fd);
                 return 1;
             }
+            PRINTFLEVEL2("Attempt %d/1000\r", readTries); 
         }
         if (ioctl(fd, FIONREAD, &bytes_available) == -1) {
             PRINTFLEVEL2("PIPE IS EMPTY WITH ERRORR\n");
