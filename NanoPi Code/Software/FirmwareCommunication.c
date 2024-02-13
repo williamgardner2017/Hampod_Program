@@ -199,6 +199,18 @@ void* firmwareOPipeWatcher(void* arg){
         //TODO add the id pipe size thing to this
         //Read packet ID from the pipe
         PRINTFLEVEL2("Software:Waiting for something to read\n");
+        readTries = 0;
+        bytes_available = -1;
+        while(bytes_available < 4){
+            if (ioctl(fd, FIONREAD, &bytes_available) == -1) {
+                PRINTFLEVEL2("PIPE IS EMPTY WITH ERRORR\n");
+                perror("PIPE IS EMPTY WITH ERRORR\n");
+                close(fd);
+                return 1;
+            }
+            PRINTFLEVEL2("Attempt %d/1000\r", readTries); 
+            readTries++;
+        }
         read(input_pipe, &packet_type, 4);
         PRINTFLEVEL2("Software:I have something to read\n");
         //read packet Length from the pipe
@@ -214,6 +226,7 @@ void* firmwareOPipeWatcher(void* arg){
             PRINTFLEVEL2("Attempt %d/1000\r", readTries); 
             readTries++;
         }
+        PRINTFLEVEL2("\n");
         PRINTFLEVEL2("SOFTWARE: THere is %zd bytes in the pipe\n",bytes_available);
         if(bytes_available < 4){
             PRINTFLEVEL2("SOFTWARE: Not enought data in the pipe to make a full packet so ababndoning packet\n");
@@ -241,6 +254,7 @@ void* firmwareOPipeWatcher(void* arg){
             close(fd);
             return 1;
         }
+        PRINTFLEVEL2("\n");
         PRINTFLEVEL2("SOFTWARE: THere is %zd bytes in the pipe and looking for %i bytes to read\n",bytes_available,size);
         if(bytes_available < size){
             PRINTFLEVEL2("SOFTWARE: Not enought data in the packet inorder to read the data. reading remaining data and just sending it\n");
