@@ -13,7 +13,8 @@
 #include <stdbool.h>
 #include <string.h>
 #include <dirent.h> 
-
+#include <sys/ioctl.h>
+#include <asm/termbits.h>
 
 #include "GeneralFunctions.h"
 #include "IDQueue.h"

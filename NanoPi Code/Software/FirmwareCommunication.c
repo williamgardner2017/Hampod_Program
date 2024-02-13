@@ -181,6 +181,15 @@ void firmwareStartOPipeWatcher(){
 
 //TODO make sure this is set up properly
 void* firmwareOPipeWatcher(void* arg){
+    int fd;
+    ssize_t bytes_available;
+
+    // Open the named pipe for reading
+    fd = open("./Firmware_o", O_RDONLY);
+    if (fd == -1) {
+        perror("Error opening named pipe");
+        return 1;
+    }
     while(running){
         unsigned char packet_type;
         unsigned short size;
@@ -192,9 +201,23 @@ void* firmwareOPipeWatcher(void* arg){
         read(input_pipe, &packet_type, 4);
         PRINTFLEVEL2("Software:I have something to read\n");
         //read packet Length from the pipe
+        if (ioctl(fd, FIONREAD, &bytes_available) == -1) {
+            PRINTFLEVEL2("PIPE IS EMPTY WITH ERRORR\n");
+            perror("PIPE IS EMPTY WITH ERRORR\n");
+            close(fd);
+            return 1;
+        }
+        PRINTFLEVEL2("SOFTWARE: THere is %zd bytes in the pipe\n",bytes_available);
         read(input_pipe, &size, 2);
         //read the ID from the pipe
         read(input_pipe, &tag, 2);
+        if (ioctl(fd, FIONREAD, &bytes_available) == -1) {
+            PRINTFLEVEL2("PIPE IS EMPTY WITH ERRORR\n");
+            perror("PIPE IS EMPTY WITH ERRORR\n");
+            close(fd);
+            return 1;
+        }
+        PRINTFLEVEL2("SOFTWARE: THere is %zd bytes in the pipe and looking for %i bytes to read\n",bytes_available,tag);
         //read packet Data from pipe as a char string
         read(input_pipe, buffer, size);
         //create the data to put into the queue
