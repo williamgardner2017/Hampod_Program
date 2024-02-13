@@ -211,6 +211,7 @@ void* firmwareOPipeWatcher(void* arg){
             PRINTFLEVEL2("Bytes to read %i:Attempt %d\r", bytes_available,readTries); 
             readTries++;
         }
+        PRINTFLEVEL2("Bytes to read %i:Attempt %d\n", bytes_available,readTries); 
         read(input_pipe, &packet_type, 4);
         PRINTFLEVEL2("Software:I have something to read\n");
         //read packet Length from the pipe
