@@ -2,7 +2,7 @@ int keyRequestFrequency =  16000;//was 16000
 bool running2 = true;
 void* keyWatcher(void* args){
     //TODO properly setup the packet to be sent
-    // while(running2){
+    while(running2){
         unsigned char *rr = (unsigned char*) "r";
         Inst_packet* keyPressedRequest = create_inst_packet(KEYPAD,strlen((char*) rr)+1,rr, 0);
 
@@ -19,8 +19,8 @@ void* keyWatcher(void* args){
         // }
         free(temp);
         free(interpretedKey);
-        // usleep(keyRequestFrequency);
-    // }
+        usleep(keyRequestFrequency);
+    }
     return NULL;
 }
 

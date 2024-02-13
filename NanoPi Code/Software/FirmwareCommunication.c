@@ -199,70 +199,36 @@ void* firmwareOPipeWatcher(void* arg){
         //TODO add the id pipe size thing to this
         //Read packet ID from the pipe
         PRINTFLEVEL2("Software:Waiting for something to read\n");
-        readTries = 0;
+        read(input_pipe, &packet_type, 4);
+        PRINTFLEVEL2("Software:I have something to read\n");
+        //read packet Length from the pipe
+        PRINTFLEVEL2("SOFTWARE: THere is %zd bytes in the pipe\n",bytes_available);
+        read(input_pipe, &size, 2);
+        //read the ID from the pipe
+        read(input_pipe, &tag, 2);
         bytes_available = -1;
-        while(bytes_available < 9){
+        readTries = 0;
+        while(bytes_available < size && readTries < 1000){
             if (ioctl(fd, FIONREAD, &bytes_available) == -1) {
                 PRINTFLEVEL2("PIPE IS EMPTY WITH ERRORR\n");
                 perror("PIPE IS EMPTY WITH ERRORR\n");
                 close(fd);
                 return 1;
             }
-            PRINTFLEVEL2("Bytes to read %i:Attempt %d\r", bytes_available,readTries); 
-            readTries++;
         }
-        PRINTFLEVEL2("Bytes to read %i:Attempt %d\n", bytes_available,readTries); 
-        read(input_pipe, &packet_type, 4);
-        PRINTFLEVEL2("Software:I have something to read\n");
-        //read packet Length from the pipe
-        // bytes_available = -1;
-        // readTries = 0;
-        // while(bytes_available < 4 && readTries < 1000000){
-        //     if (ioctl(fd, FIONREAD, &bytes_available) == -1) {
-        //         PRINTFLEVEL2("PIPE IS EMPTY WITH ERRORR\n");
-        //         perror("PIPE IS EMPTY WITH ERRORR\n");
-        //         close(fd);
-        //         return 1;
-        //     }
-        //     PRINTFLEVEL2("Attempt %d/1000000\r", readTries); 
-        //     readTries++;
-        // }
-        // PRINTFLEVEL2("\n");
-        // PRINTFLEVEL2("SOFTWARE: THere is %zd bytes in the pipe\n",bytes_available);
-        // if(bytes_available < 4){
-        //     PRINTFLEVEL2("SOFTWARE: Not enought data in the pipe to make a full packet so ababndoning packet\n");
-        //     read(input_pipe, &packet_type, bytes_available);
-        //     continue;
-        // }
-        read(input_pipe, &size, 2);
-        //read the ID from the pipe
-        read(input_pipe, &tag, 2);
-        bytes_available = -1;
-        readTries = 0;
-        // while(bytes_available < size && readTries < 1000000){
-        //     if (ioctl(fd, FIONREAD, &bytes_available) == -1) {
-        //         PRINTFLEVEL2("PIPE IS EMPTY WITH ERRORR\n");
-        //         perror("PIPE IS EMPTY WITH ERRORR\n");
-        //         close(fd);
-        //         return 1;
-        //     }
-        //     PRINTFLEVEL2("Attempt %d/1000000\r", readTries); 
-        //     readTries++;
-        // }
-        // if (ioctl(fd, FIONREAD, &bytes_available) == -1) {
-        //     PRINTFLEVEL2("PIPE IS EMPTY WITH ERRORR\n");
-        //     perror("PIPE IS EMPTY WITH ERRORR\n");
-        //     close(fd);
-        //     return 1;
-        // }
-        // PRINTFLEVEL2("\n");
-        // PRINTFLEVEL2("SOFTWARE: THere is %zd bytes in the pipe and looking for %i bytes to read\n",bytes_available,size);
-        // if(bytes_available < size){
-        //     PRINTFLEVEL2("SOFTWARE: Not enought data in the packet inorder to read the data. reading remaining data and just sending it\n");
-        //     read(input_pipe, buffer, bytes_available);
-        // }else{
+        if (ioctl(fd, FIONREAD, &bytes_available) == -1) {
+            PRINTFLEVEL2("PIPE IS EMPTY WITH ERRORR\n");
+            perror("PIPE IS EMPTY WITH ERRORR\n");
+            close(fd);
+            return 1;
+        }
+        PRINTFLEVEL2("SOFTWARE: THere is %zd bytes in the pipe and looking for %i bytes to read\n",bytes_available,size);
+        if(bytes_available < size){
+            PRINTFLEVEL2("SOFTWARE: Not enought data in the packet inorder to read the data. reading remaining data and just sending it\n");
+            read(input_pipe, buffer, bytes_available);
+        }else{
             read(input_pipe, buffer, size);
-        // }
+        }
         
         //read packet Data from pipe as a char string
         //create the data to put into the queue
