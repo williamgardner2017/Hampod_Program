@@ -208,6 +208,11 @@ void* firmwareOPipeWatcher(void* arg){
             return 1;
         }
         PRINTFLEVEL2("SOFTWARE: THere is %zd bytes in the pipe\n",bytes_available);
+        if(bytes_available < 4){
+            PRINTFLEVEL2("SOFTWARE: Not enought data in the pipe to make a full packet so ababndoning packet\n");
+            read(input_pipe, &packet_type, bytes_available);
+            continue;
+        }
         read(input_pipe, &size, 2);
         //read the ID from the pipe
         read(input_pipe, &tag, 2);
@@ -218,8 +223,14 @@ void* firmwareOPipeWatcher(void* arg){
             return 1;
         }
         PRINTFLEVEL2("SOFTWARE: THere is %zd bytes in the pipe and looking for %i bytes to read\n",bytes_available,size);
+        if(bytes_available < size){
+            PRINTFLEVEL2("SOFTWARE: Not enought data in the packet inorder to read the data. reading remaining data and just sending it\n");
+            read(input_pipe, buffer, bytes_available);
+        }else{
+            read(input_pipe, buffer, size);
+        }
+        
         //read packet Data from pipe as a char string
-        read(input_pipe, buffer, size);
         //create the data to put into the queue
         Inst_packet* new_packet = create_inst_packet(packet_type, size, buffer, tag);
         //lock the queue
