@@ -57,12 +57,18 @@ BootUpStates BootupFlow(KeyPress* keyInput){
                 sendSpeakerOutput("Select company of the radio to load up");
                 bootUpState = chooseCompany;
                 break;
+            }else if(keyInput->keyPressed == '#'){
+                sendSpeakerOutput("zero Select Save. One select company. Hash to read out extra controls");
+                break;
             }
             break;
         case chooseCompany:
             if (keyInput->keyPressed == '0') {
-                sendSpeakerOutput("zero Select Save. One select company");
+                sendSpeakerOutput("zero Select Save. One select company. Hash to read out extra controls");
                 bootUpState = selectNewOrSave;
+                break;
+            }else if(keyInput->keyPressed == '#'){
+                sendSpeakerOutput("One through nine to select company. zero to go back. star then number to read out company of said number. Star hold to read out all companys. C and D to go to next and prior page");
                 break;
             }
             int index = selectEntryInList(keyInput,companiesList);
@@ -82,6 +88,9 @@ BootUpStates BootupFlow(KeyPress* keyInput){
             if (keyInput->keyPressed == '0') {
                 bootUpState = chooseCompany;
                 sendSpeakerOutput("Select company of the radio to load up");
+                break;
+            }else if(keyInput->keyPressed == '#'){
+                sendSpeakerOutput("One through nine to select model. zero to go back. star then number to read out model of said number. Star hold to read out all models. C and D to go to next and prior page");
                 break;
             }
             modelIndex = selectEntryInList(keyInput,modelList);
@@ -136,19 +145,30 @@ BootUpStates BootupFlow(KeyPress* keyInput){
             break;
         case selectSave:
             if(keyInput->keyPressed == '0')/*Back*/{
-                    bootUpState = selectNewOrSave;
-                    break;
-                }else{
-                    //TODO make sure that try catch works as intended
-                    /*
-                    if(loadUpSave(keyInput)){
-                        modeState = standard;
-                    }else{
-                        bootUpState = selectSave;
-                    }
-                    */
-                }
+                sendSpeakerOutput("zero Select Save. One select company. Hash to read out extra controls");
+                bootUpState = selectNewOrSave;
                 break;
+            }else{
+                switch (keyinput->keyPressed){
+                    case 'A':
+                    case 'B':
+                    case 'C':
+                    case 'D':
+                    case '*':
+                    case '#':
+                        PRINTFLEVEL1("Software: Invalid save file chosen\n");
+                        sendSpeakerOutput("Invalid key was pressed");
+                        break;
+                    default:
+                        if(loadUpFromSave(convertCharToKeyValue(keyinput->keyPressed))){
+                            modeState = standard;
+                        }else{
+                            sendSpeakerOutput("Something when wrong loading up the save file");
+                        }
+                        break;
+                }
+            }
+            break;
         default:
         //should not get here
         break;
@@ -164,9 +184,26 @@ int isReadingOut = 0; //TODO make this actualy cause a read out
 */
 int ModeSelectFlow(KeyPress* keyInput){
     if(isReadingOut){
-        if(modeSelectPage*9 + convertCharToKeyValue(keyInput)-1 < getModeCount()){
-            sendSpeakerOutput(modeNames[modeSelectPage*9 + convertCharToKeyValue(keyInput)-1]);
-        }
+         switch(keyInput->keyPressed){
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+                if(modeSelectPage*9 + convertCharToKeyValue(keyInput)-1 < getModeCount()){
+                    sendSpeakerOutput(modeNames[modeSelectPage*9 + convertCharToKeyValue(keyInput)-1]);
+                }else{
+                    sendSpeakerOutput("out of bounce");
+                }
+                break;
+            default:
+                sendSpeakerOutput("No number key selected. returning to selection mode");
+                break;
+         }
         isReadingOut = 0;
     }else{
         switch (keyInput->keyPressed){
@@ -174,25 +211,39 @@ int ModeSelectFlow(KeyPress* keyInput){
                 if(modeSelectPage*9 < getModeCount()){
                     modeSelectPage = modeSelectPage + 1;
                 }
-                sendSpeakerOutput("next mode page");
+                char* shortName = malloc(sizeof(char)*30);
+                sprintf(shortName, "Switching to page %i", modeSelectPage);
+                sendSpeakerOutput(shortName);
+                free(shortName);
                 break;
             case 'D':
                 if(modeSelectPage > 0){
                     modeSelectPage = modeSelectPage - 1;
-                    sendSpeakerOutput("Prior mode page");
                 }
+                char* shortName = malloc(sizeof(char)*30);
+                sprintf(shortName, "Switching to page %i", modeSelectPage);
+                sendSpeakerOutput(shortName);
+                free(shortName);
                 break;
             case '*':
                 if(keyInput->isHold){
-                    int i;
-                    for(i = modeSelectPage*9; i< (modeSelectPage+1)*9;i++){
-                        //TODO put a limit on this
-                        if(i > getModeCount()){
-                            readOutModeName(modeNames[i]);
+                    char* LongOutput = malloc(sizeof(char)*200);
+                    strcpy(LongOutput, "");
+                    for(int i = modeSelectPage*9; i < (modeSelectPage+ 1) * 9 ; i++){
+                        if(i <= getModeCount()){
+                            break;
+                        }else{
+                            char* shortName = malloc(sizeof(char)*30);
+                            sprintf(shortName, " %i %s ", i-charSelectPage*9 + 1 ,modeNames[i]);
+                            strcat(LongOutput,shortName);
+                            free(shortName);
                         }
                     }
+                    sendSpeakerOutput(LongOutput);
+                    free(LongOutput);
                 }else{
                     isReadingOut = 1;
+                    sendSpeakerOutput("Press number to read out its option");
                 }
                 break;
             case '1':
@@ -408,6 +459,8 @@ int selectEntryInList(KeyPress* keyInput, char** list){
                 listReadOut = false;
                 break;
             default:
+                listReadOut = false;
+                sendSpeakerOutput("No number key selected. returning to selection mode");
                 break;
             }
             return -1;
@@ -425,12 +478,20 @@ int selectEntryInList(KeyPress* keyInput, char** list){
                 if(flag){
                     charSelectPage = charSelectPage + 1;
                 }
+                char* shortName = malloc(sizeof(char)*30);
+                sprintf(shortName, "Switching to page %i", charSelectPage);
+                sendSpeakerOutput(shortName);
+                free(shortName);
                 break;
             case 'D':
                 charSelectPage = charSelectPage - 1;
                 if(charSelectPage > 0){ 
                     charSelectPage = 0;
                 }
+                char* shortName = malloc(sizeof(char)*30);
+                sprintf(shortName, "Switching to page %i", charSelectPage);
+                sendSpeakerOutput(shortName);
+                free(shortName);
                 break;
             case '*':
                 if(keyInput->isHold){
@@ -450,6 +511,7 @@ int selectEntryInList(KeyPress* keyInput, char** list){
                     free(LongOutput);
                 }else{
                     listReadOut = true;
+                    sendSpeakerOutput("Press number to read out its option");
                 }
                 break;
             case '1':

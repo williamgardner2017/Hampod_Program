@@ -206,11 +206,11 @@ void* firmwareOPipeWatcher(void* arg){
         int* tagPointer = malloc(sizeof(int));
         tagPointer[0] = tag;
         if(containsHashMap(IDHashSet,(void*) tagPointer)){
-            PRINTFLEVEL1("SOFTWARE: revived packet %i and adding to queue\n",tag);
+            PRINTFLEVEL2("SOFTWARE: revived packet %i and adding to queue\n",tag);
             enqueue(softwareQueue, new_packet);
             removeHashMap(IDHashSet,(void*) tagPointer);
         }else{
-            PRINTFLEVEL1("SOFTWARE: Bad packet with ID %i receved\n",tag);
+            PRINTFLEVEL2("SOFTWARE: Bad packet with ID %i receved\n",tag);
         }
         free(tagPointer);
         //unlock the queue
@@ -313,7 +313,7 @@ char* sendSpeakerOutput(char* text){
         strcat(outputText,text);
     }
 
-    PRINTFLEVEL1("SOFTWARE: Sending text %s to be outputed by speakers\n",outputText);
+    PRINTFLEVEL1("SOFTWARE: Sending text [%s] to be outputed by speakers\n",outputText);
     Inst_packet* speakerPacket = create_inst_packet(AUDIO,strlen(outputText)+1,(unsigned char*) outputText, 0);
     int result;
     PRINTFLEVEL2("SOFTWARE Locking up speakout output to send out %s\n", outputText);

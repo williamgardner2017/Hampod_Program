@@ -46,6 +46,8 @@
 #include "GeneralFunctions.h"
 #include "Radio.h"
 #include "Modes/Mode.h"
+#include "FirmwareCommunication.h"
+#include "ConfigSettings/ConfigLoad.h"
 typedef enum {
     bootUp,
     standard,
@@ -89,6 +91,5 @@ void setCompanyAndModel(char* comp, int mod);
 Radio** getRadios();
 int selectEntryInList(KeyPress* keyInput, char** list);
 
-#include "FirmwareCommunication.h"
 #include "StateMachine.c"
 #endif
