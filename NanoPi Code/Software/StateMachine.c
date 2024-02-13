@@ -149,7 +149,7 @@ BootUpStates BootupFlow(KeyPress* keyInput){
                 bootUpState = selectNewOrSave;
                 break;
             }else{
-                switch (keyinput->keyPressed){
+                switch (keyInput->keyPressed){
                     case 'A':
                     case 'B':
                     case 'C':
@@ -210,24 +210,21 @@ int ModeSelectFlow(KeyPress* keyInput){
          }
         isReadingOut = 0;
     }else{
+        char* shortName = malloc(sizeof(char)*30);
         switch (keyInput->keyPressed){
             case 'C':
                 if(modeSelectPage*9 < getModeCount()){
                     modeSelectPage = modeSelectPage + 1;
                 }
-                char* shortName = malloc(sizeof(char)*30);
                 sprintf(shortName, "Switching to page %i", modeSelectPage);
                 sendSpeakerOutput(shortName);
-                free(shortName);
                 break;
             case 'D':
                 if(modeSelectPage > 0){
                     modeSelectPage = modeSelectPage - 1;
                 }
-                char* shortName = malloc(sizeof(char)*30);
                 sprintf(shortName, "Switching to page %i", modeSelectPage);
                 sendSpeakerOutput(shortName);
-                free(shortName);
                 break;
             case '*':
                 if(keyInput->isHold){
@@ -237,10 +234,10 @@ int ModeSelectFlow(KeyPress* keyInput){
                         if(i <= getModeCount()){
                             break;
                         }else{
-                            char* shortName = malloc(sizeof(char)*30);
-                            sprintf(shortName, " %i %s ", i-charSelectPage*9 + 1 ,modeNames[i]);
-                            strcat(LongOutput,shortName);
-                            free(shortName);
+                            char* shortNameLocal = malloc(sizeof(char)*30);
+                            sprintf(shortNameLocal, " %i %s ", i-modeSelectPage*9 + 1 ,modeNames[i]);
+                            strcat(LongOutput,shortNameLocal);
+                            free(shortNameLocal);
                         }
                     }
                     sendSpeakerOutput(LongOutput);
@@ -266,6 +263,7 @@ int ModeSelectFlow(KeyPress* keyInput){
                 //Error should never get here
                 break;
         }
+        free(shortName);
     }
         return -1;
 }
@@ -476,6 +474,7 @@ int selectEntryInList(KeyPress* keyInput, char** list){
             return -1;
     }else{
         bool flag;
+        char* shortName = malloc(sizeof(char)*30);
         switch (keyInput->keyPressed){
             case 'C':
                 flag = true;
@@ -488,20 +487,16 @@ int selectEntryInList(KeyPress* keyInput, char** list){
                 if(flag){
                     charSelectPage = charSelectPage + 1;
                 }
-                char* shortName = malloc(sizeof(char)*30);
                 sprintf(shortName, "Switching to page %i", charSelectPage);
                 sendSpeakerOutput(shortName);
-                free(shortName);
                 break;
             case 'D':
                 charSelectPage = charSelectPage - 1;
                 if(charSelectPage > 0){ 
                     charSelectPage = 0;
                 }
-                char* shortName = malloc(sizeof(char)*30);
                 sprintf(shortName, "Switching to page %i", charSelectPage);
                 sendSpeakerOutput(shortName);
-                free(shortName);
                 break;
             case '*':
                 if(keyInput->isHold){
@@ -511,10 +506,10 @@ int selectEntryInList(KeyPress* keyInput, char** list){
                         if(strcmp(list[i], "END OF ARRAY") == 0){
                             break;
                         }else{
-                            char* shortName = malloc(sizeof(char)*30);
-                            sprintf(shortName, " %i %s ", i-charSelectPage*9 + 1 ,list[i] );
-                            strcat(LongOutput,shortName);
-                            free(shortName);
+                            char* shortNameLocal = malloc(sizeof(char)*30);
+                            sprintf(shortNameLocal, " %i %s ", i-charSelectPage*9 + 1 ,list[i] );
+                            strcat(LongOutput,shortNameLocal);
+                            free(shortNameLocal);
                         }
                     }
                     sendSpeakerOutput(LongOutput);
@@ -552,6 +547,7 @@ int selectEntryInList(KeyPress* keyInput, char** list){
                 //Error should never get here
                 break;
         }
+        free(shortName);
     }
     return -1;
 }
