@@ -160,7 +160,7 @@ BootUpStates BootupFlow(KeyPress* keyInput){
                         sendSpeakerOutput("Invalid key was pressed");
                         break;
                     default:
-                        if(loadUpFromSave(convertCharToKeyValue(keyinput->keyPressed))){
+                        if(loadUpFromSave(convertCharToKeyValue(keyInput->keyPressed))){
                             modeState = standard;
                         }else{
                             sendSpeakerOutput("Something when wrong loading up the save file");
