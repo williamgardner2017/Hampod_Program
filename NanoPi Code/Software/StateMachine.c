@@ -183,6 +183,10 @@ int isReadingOut = 0; //TODO make this actualy cause a read out
  * this handles the select mode state
 */
 int ModeSelectFlow(KeyPress* keyInput){
+    if(keyInput->keyPressed == '#'){
+        sendSpeakerOutput("One through nine to select mode. zero to go back. star then number to read out mode of said number. Star hold to read out all modes on page. C and D to go to next and prior page");
+        return;
+    }
     if(isReadingOut){
          switch(keyInput->keyPressed){
             case '1':
@@ -266,6 +270,7 @@ int ModeSelectFlow(KeyPress* keyInput){
         return -1;
 }
 
+//TODO fill this out 
 int StandardModeFlow(KeyPress* keyInput){ //TODO be able to toggle the letter keys
     PRINTFLEVEL1("Standard flow for modes with key input of %c, shift of %i, and hold of %i\n",keyInput->keyPressed,keyInput->shiftAmount,keyInput->isHold);
     switch (keyInput->keyPressed)
@@ -305,14 +310,15 @@ int StandardModeFlow(KeyPress* keyInput){ //TODO be able to toggle the letter ke
             if(keyInput->isHold){
                 //Volume down
             }else{
-                //switchToRadioMode(-3);//mode select
+                modeState = modeSelect;
+                sendSpeakerOutput("Mode Select. press # to learn key presses");
             }
             break;
         case 1:
             if(keyInput->isHold){
 
             }else{
-                //switchToRadioMode(0);//Normal mode
+                // switchToRadioMode("Normal");
             }
             break;
         case 2:
@@ -354,6 +360,7 @@ int StandardModeFlow(KeyPress* keyInput){ //TODO be able to toggle the letter ke
 /**
  * Reads out the name of the asked for mode
  * TODO make this use firmware output
+ * OUTDATED
 */
 int readOutModeName(char* modeName){
     //DEBUG
@@ -371,6 +378,9 @@ int readOutModeName(char* modeName){
 int switchToRadioMode(char* modeName){ //TODO redue this to be better sueted, all this needs to do is to set what the letter toggles are when swiching to said mode
     modeState = standard;
     PRINTFLEVEL1("Switching to radio mode%s\n",modeName);
+    char* modeSwitchText[50];
+    sprintf(modeSwitchText, "Switching to radio mode%s", modeName);
+    sendSpeakerOutput(modeSwitchText);
     setRadioMode(radios[currentRadio], getModeByName(modeName));
     return -1;
 }

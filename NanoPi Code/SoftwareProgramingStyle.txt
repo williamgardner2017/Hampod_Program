@@ -1,0 +1,12 @@
+When dealing with keypresses, the tipical is
+# reads out what the current options are (can have single be one thing and hold be everything)
+Use a syle of
+    1) find what key was pressed
+    2) Make radio/system update/changes
+    3) Set path for next key press
+    4) output to user about what new path is
+
+With modes
+Have a function with a common name of {Mode* [fileName]Loader()}
+The enter and exit function are null unless populated
+Only relise on General* (TODO make this a posibility)
