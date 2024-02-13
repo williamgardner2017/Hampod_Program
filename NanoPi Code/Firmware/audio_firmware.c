@@ -84,7 +84,7 @@ void audio_process() {
             system_result = system(buffer);
             system_result = system("aplay output.wav");
             chdir(default_directory);
-        } if(audio_type_byte == 's') {
+        } else if(audio_type_byte == 's') {
             AUDIO_PRINTF("Festival tts %s with saving file\n", remaining_string);
 	    chdir("../Firmware/pregen_audio");
             sprintf(buffer, "echo '%s' | text2wave -o '%s.wav'", remaining_string, remaining_string);
