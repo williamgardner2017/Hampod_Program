@@ -208,14 +208,14 @@ void* firmwareOPipeWatcher(void* arg){
                 close(fd);
                 return 1;
             }
-            PRINTFLEVEL2("Attempt %d\r", readTries); 
+            PRINTFLEVEL2("Bytes to read %i:Attempt %d\r", bytes_available,readTries); 
             readTries++;
         }
         read(input_pipe, &packet_type, 4);
         PRINTFLEVEL2("Software:I have something to read\n");
         //read packet Length from the pipe
-        bytes_available = -1;
-        readTries = 0;
+        // bytes_available = -1;
+        // readTries = 0;
         // while(bytes_available < 4 && readTries < 1000000){
         //     if (ioctl(fd, FIONREAD, &bytes_available) == -1) {
         //         PRINTFLEVEL2("PIPE IS EMPTY WITH ERRORR\n");
@@ -226,8 +226,8 @@ void* firmwareOPipeWatcher(void* arg){
         //     PRINTFLEVEL2("Attempt %d/1000000\r", readTries); 
         //     readTries++;
         // }
-        PRINTFLEVEL2("\n");
-        PRINTFLEVEL2("SOFTWARE: THere is %zd bytes in the pipe\n",bytes_available);
+        // PRINTFLEVEL2("\n");
+        // PRINTFLEVEL2("SOFTWARE: THere is %zd bytes in the pipe\n",bytes_available);
         // if(bytes_available < 4){
         //     PRINTFLEVEL2("SOFTWARE: Not enought data in the pipe to make a full packet so ababndoning packet\n");
         //     read(input_pipe, &packet_type, bytes_available);
@@ -254,8 +254,8 @@ void* firmwareOPipeWatcher(void* arg){
         //     close(fd);
         //     return 1;
         // }
-        PRINTFLEVEL2("\n");
-        PRINTFLEVEL2("SOFTWARE: THere is %zd bytes in the pipe and looking for %i bytes to read\n",bytes_available,size);
+        // PRINTFLEVEL2("\n");
+        // PRINTFLEVEL2("SOFTWARE: THere is %zd bytes in the pipe and looking for %i bytes to read\n",bytes_available,size);
         // if(bytes_available < size){
         //     PRINTFLEVEL2("SOFTWARE: Not enought data in the packet inorder to read the data. reading remaining data and just sending it\n");
         //     read(input_pipe, buffer, bytes_available);
