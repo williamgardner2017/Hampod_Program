@@ -80,7 +80,7 @@ void firmwareCommunicationStartup(){
     softwareQueue = create_packet_queue();
     IDHashSet = createHashMap(IntHash,IntHashCompare);
     threadQueue = createThreadQueue();
-    firmwareStartOPipeWatcher();
+    // firmwareStartOPipeWatcher();
     startOutputThreadManager();
     setupAudioHashMap();
 }
