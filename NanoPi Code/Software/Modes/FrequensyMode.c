@@ -19,8 +19,8 @@ void* frequencyCommandRelay(KeyPress* keyInput, RIG* my_rig){
             }
             currentFrequency = currentFrequency*10 + convertCharToKeyValue(keyInput);
             //read out the number
-            char putoutmessage[3] = "sq";
-            putoutmessage[1] = keyInput->keyPressed;          
+            char putoutmessage[2] = "a";
+            putoutmessage[0] = keyInput->keyPressed;          
             sendSpeakerOutput(putoutmessage);
             break;
         case '#':
