@@ -348,12 +348,11 @@ char* sendSpeakerOutput(char* text){
     }
 
     PRINTFLEVEL1("SOFTWARE: Sending text [%s] to be outputed by speakers\n",outputText);
-    Inst_packet* speakerPacket = create_inst_packet(AUDIO,strlen(outputText)+1,(unsigned char*) outputText, 0);
     int result;
     PRINTFLEVEL2("SOFTWARE Locking up speakout output to send out %s\n", outputText);
     pthread_mutex_lock(&thread_lock);
     PRINTFLEVEL2("SOFTWARE Creating the thread\n");
-    result = pthread_create(&speakerThread, NULL, firmwareCommandQueue, (void*) speakerPacket);
+    result = pthread_create(&speakerThread, NULL, firmwarePlayAudio, (void*) outputText);
     PRINTFLEVEL2("SOFTWARE sing if the result was good\n");
     if (result) {
         fprintf(stderr, "Error creating thread: %d\n", result);

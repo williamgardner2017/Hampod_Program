@@ -22,6 +22,7 @@
 #include "../Firmware/hampod_queue.h"
 #include "../Firmware/hampod_firm_packet.h"
 #include "ConfigSettings/HashMap.h"
+#include "../Firmware/audio_firmware.h"
 
 
 #define INPUT_PIPE "Firmware_i"

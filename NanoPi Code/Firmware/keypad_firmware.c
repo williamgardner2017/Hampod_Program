@@ -197,3 +197,19 @@ void *keypad_io_thread(void* arg) {
     return NULL;
 }
 
+void keypadTurnon(){
+    wiringPiSetup();
+	pinMode(7, OUTPUT);//LED for Testing, on Pin GPIOG11
+	pinMode(R1, OUTPUT);
+	pinMode(R2, OUTPUT);
+	pinMode(R3, OUTPUT);
+	pinMode(R4, OUTPUT);
+	pinMode(C1, INPUT);
+	pinMode(C2, INPUT);
+	pinMode(C3, INPUT);
+	pinMode(C4, INPUT);
+	pullUpDnControl(C1, PUD_UP);//Set pull-up resistors
+	pullUpDnControl(C2, PUD_UP);
+	pullUpDnControl(C3, PUD_UP);
+	pullUpDnControl(C4, PUD_UP);
+}

@@ -64,6 +64,14 @@ typedef struct keypad_io_packet {
     Packet_queue* queue;
 } keypad_io_packet;
 
+void keypadTurnon();
+void *keypad_io_thread(void* arg);
+int readNumPad();
+void keypad_process();
+
+
+
+
 #include "keypad_firmware.c"
 
 #endif
