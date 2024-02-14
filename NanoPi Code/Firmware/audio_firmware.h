@@ -55,7 +55,8 @@ typedef struct audio_io_packet {
     int pipe_fd;
     Packet_queue* queue;
 } audio_io_packet;
-
+void audio_process();
+void *audio_io_thread(void* arg);
 void firmwareStartAudio();
 void* firmwarePlayAudio(void* text);
 #include "audio_firmware.c"

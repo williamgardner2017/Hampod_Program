@@ -5,8 +5,6 @@ pthread_mutex_t audio_queue_lock;
 pthread_mutex_t audio_queue_available;
 pthread_mutex_t audio_lock;
 
-void *audio_io_thread(void* arg);
-
 void audio_process() {
     char buffer[MAXSTRINGSIZE];
 
