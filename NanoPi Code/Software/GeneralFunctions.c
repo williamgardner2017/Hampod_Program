@@ -118,3 +118,18 @@ double keypadInput(KeyPress* keyInput){
     }
     return tempkeyPadNumeber* -1.0 ;
 }
+
+bool ABState = true;
+bool CDState = true;
+bool getABState(){
+    return ABState;
+}
+bool getCDState(){
+    return CDState;
+}
+void setABstate(bool state){
+    ABState = state;
+}
+void setCDstate(bool state){
+    CDState = state;
+}

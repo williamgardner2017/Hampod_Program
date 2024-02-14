@@ -475,7 +475,7 @@ KeyPress* interperateKeyPresses(char keyPress){
     returnValue->shiftAmount = 0;
     if(keyPress == '-'){
         if(oldKey != '-' && !holdKeySent && holdWaitCount < holdWaitTime){
-            if(oldKey == 'A' && shiftEnabled){
+            if(oldKey == 'A' && getABState()){
                 shiftState ++;
                 if(shiftState >= maxShifts){
                     shiftState = 0;

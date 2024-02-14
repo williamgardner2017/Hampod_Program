@@ -15,6 +15,7 @@
 #include <dirent.h> 
 #include <sys/ioctl.h>
 #include <asm/termbits.h>
+#include <stdarg.h>
 
 #include "GeneralFunctions.h"
 #include "IDQueue.h"

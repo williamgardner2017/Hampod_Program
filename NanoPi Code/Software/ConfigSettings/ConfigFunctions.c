@@ -2,8 +2,8 @@
 
 void populateConfigFunctions(){
     ConfigParam* OtherFlagged;
-    // OtherFlagged = getConfigByName("save");
-    // OtherFlagged->configFuntion = SaveData;
+    OtherFlagged = getConfigByName("save");
+    OtherFlagged->configFuntion = SaveData;
     OtherFlagged = getConfigByName("HotKey");
     OtherFlagged->configFuntion = setHotkeys;
 }

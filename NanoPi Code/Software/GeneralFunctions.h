@@ -43,6 +43,11 @@ void freeFileArray(char** list);
 char* customSubString(char* original, int start, int length);
 
 double keypadInput(KeyPress* keyInput);
+
+bool getABState();
+bool getCDState();
+void setABstate(bool state);
+void setCDstate(bool state);
 #include "GeneralFunctions.c"
 
 #endif

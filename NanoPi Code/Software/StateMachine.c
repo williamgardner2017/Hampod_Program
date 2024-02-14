@@ -231,7 +231,7 @@ int ModeSelectFlow(KeyPress* keyInput){
                     char* LongOutput = malloc(sizeof(char)*200);
                     strcpy(LongOutput, "");
                     for(int i = modeSelectPage*9; i < (modeSelectPage+ 1) * 9 ; i++){
-                        if(i <= getModeCount()){
+                        if(i >= getModeCount()){
                             break;
                         }else{
                             char* shortNameLocal = malloc(sizeof(char)*30);
@@ -257,6 +257,8 @@ int ModeSelectFlow(KeyPress* keyInput){
             case '8':
             case '9':
                 switchToRadioMode(modeNames[(modeSelectPage*9) + convertCharToKeyValue(keyInput) - 1]);
+                modeSelectPage = 0;
+                isReadingOut = 0;   
                 break;
         
             default:
@@ -307,9 +309,10 @@ int StandardModeFlow(KeyPress* keyInput){ //TODO be able to toggle the letter ke
         case 0:
             if(keyInput->isHold){
                 //Volume down
-            }else{
                 modeState = modeSelect;
                 sendSpeakerOutput("Mode Select. press # to learn key presses");
+            }else{
+                runRadioCommand(radios[currentRadio],keyInput);
             }
             break;
         case 1:
@@ -331,17 +334,15 @@ int StandardModeFlow(KeyPress* keyInput){ //TODO be able to toggle the letter ke
         }
         break;
     case 'C': // C
-        if(programableKeysOn){
-            //getModesOfProgramableKeys
-            //setRadioToMode
+        if(getCDState()){
+            switchToRadioMode(getModeViaProgramableKey(keyInput)->modeDetails->modeName);
         }else{
             runRadioCommand(radios[currentRadio],keyInput);
         }
         break;
     case 'D': // D
-        if(programableKeysOn){
-            //getModesOfProgramableKeys
-            //setRadioToMode
+        if(getCDState()){
+            switchToRadioMode(getModeViaProgramableKey(keyInput)->modeDetails->modeName);
         }else{
             runRadioCommand(radios[currentRadio],keyInput);
         }
