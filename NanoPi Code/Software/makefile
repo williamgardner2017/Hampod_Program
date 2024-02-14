@@ -1,6 +1,6 @@
 # CC = gcc
 CFLAGS = -Wall -g -lm
-LDFLAGS = -lhamlib
+LDFLAGS = -lhamlib -lwiringPi
 Level0: Software.elf
 Level1: Software1.elf
 Level2: Software2.elf
