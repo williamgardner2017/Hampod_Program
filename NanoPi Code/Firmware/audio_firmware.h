@@ -1,4 +1,4 @@
-#ifndef ADUIO_FIRMWARE
+#ifndef AUDIO_FIRMWARE
 #define AUDIO_FIRMWARE
 
 #include <stdio.h>
