@@ -14,6 +14,7 @@
 #include "../Firmware/hampod_firm_packet.h"
 #include "RigListCreator.h"
 #include "../Firmware/keypad_firmware.h"
+#include "../Firmware/audio_firmware.h"
 #include "ConfigSettings/ConfigParams.h"
 #include "ConfigSettings/ConfigFunctions.h"
 #ifdef OUTPUTLEVEL1
