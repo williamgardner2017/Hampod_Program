@@ -181,7 +181,7 @@ void firmwareStartAudio(){
 
 void* firmwarePlayAudio(void* text){
     char* incomingText = (char*) text;
-    char buffer[MAXSTRINGSIZE];
+    char* buffer = malloc(strlen(incomingText)+100);
     char audio_type_byte = incomingText[0];
     char* remaining_string = incomingText + 1;
     int system_result;
@@ -214,5 +214,6 @@ void* firmwarePlayAudio(void* text){
             system_result = -1;
         }
         pthread_mutex_unlock(&audio_lock);
+        free(buffer);
         return system_result;
 }

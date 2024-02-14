@@ -16,7 +16,7 @@
 
 #define HASHING_PRIME 183373
 #define PRIME2 17
-#define MAXSTRINGSIZE 256
+#define MAXSTRINGSIZE 512
 #define STRING_COUNT 16
 #define TABLE_SIZE 0x1000
 #define AUDIO_O "Speaker_o"
