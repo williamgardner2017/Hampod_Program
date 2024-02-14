@@ -13,14 +13,14 @@ void audio_process() {
     int input_pipe_fd = open(AUDIO_I, O_RDONLY);
     if(input_pipe_fd == -1) {
         perror("open");
-        kill(controller_pid, SIGINT);
+        // kill(controller_pid, SIGINT);
         exit(0);
     }
 
     int output_pipe_fd = open(AUDIO_O, O_WRONLY);
     if(output_pipe_fd == -1) {
         perror("open");
-        kill(controller_pid, SIGINT);
+        // kill(controller_pid, SIGINT);
         exit(0);
     }
 
@@ -32,14 +32,14 @@ void audio_process() {
 
     if(pthread_mutex_init(&audio_queue_lock, NULL) != 0) {
         perror("pthread_mutex_init");
-        kill(controller_pid, SIGINT);
+        // kill(controller_pid, SIGINT);
         exit(1);
     }
     AUDIO_PRINTF("Initializing queue availibility mutex lock\n");
 
     if(pthread_mutex_init(&audio_queue_available, NULL) != 0) {
         perror("pthread_mutex_init");
-        kill(controller_pid, SIGINT);
+        // kill(controller_pid, SIGINT);
         exit(1);
     }
 
@@ -51,7 +51,7 @@ void audio_process() {
     AUDIO_PRINTF("Launching IO thread\n");
     if(pthread_create(&audio_io_buffer, NULL, audio_io_thread, (void*)&thread_input) != 0){
         perror("Keypad IO thread failed");
-        kill(controller_pid, SIGINT);
+        // kill(controller_pid, SIGINT);
         exit(1);
     }
     usleep(500000); //Half sec sleep to let child thread take control
@@ -132,7 +132,7 @@ void *audio_io_thread(void* arg) {
         int queue_empty = is_empty(queue);
         pthread_mutex_unlock(&audio_queue_lock);
         if(queue_empty) {
-        KEYPAD_IO_PRINTF("Making queue inaccessible\n");
+        // KEYPAD_IO_PRINTF("Making queue inaccessible\n");
         pthread_mutex_lock(&audio_queue_available);
         }
 
@@ -174,7 +174,7 @@ void firmwareStartAudio(){
       AUDIO_PRINTF("Initializing audio mutex lock\n");
      if(pthread_mutex_init(&audio_lock, NULL) != 0) {
         perror("pthread_mutex_init");
-        kill(controller_pid, SIGINT);
+        // kill(controller_pid, SIGINT);
         exit(1);
     }
 }
