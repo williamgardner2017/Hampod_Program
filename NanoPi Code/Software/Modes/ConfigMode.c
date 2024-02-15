@@ -15,6 +15,10 @@ void configNavigation(KeyPress* keyInput){
             currentConfig = getLengthOfConfigs();
         }
         PRINTFLEVEL1("SOFTWARE: switched configs to %s\n", configNames[currentConfig]);
+        output = malloc(sizeof(char)*100);
+        sprintf(output, "%s",configNames[currentConfig]);
+        sendSpeakerOutput(output);
+        free(output);
         //say the name
         break;
     
@@ -24,22 +28,10 @@ void configNavigation(KeyPress* keyInput){
             currentConfig = 0;
         }
         PRINTFLEVEL1("SOFTWARE: switched configs to %s\n", configNames[currentConfig]);
+        sprintf(output, "%s",configNames[currentConfig]);
+        sendSpeakerOutput(output);
+        free(output);
         //say the name
-        break;
-    case '2':
-        switch (getConfigByName(configNames[currentConfig])->configType)
-        {
-        case ONOFF:
-        case NUMERIC:
-        case ONOFFNUMERIC:
-            output = incrementConfig(configNames[currentConfig], false);
-            PRINTFLEVEL1("SOFTWARE: Set config %s to %s\n", configNames[currentConfig], output);
-            free(output);
-            break;
-        
-        default:
-            break;
-        }
         break;
     case '8':
         switch (getConfigByName(configNames[currentConfig])->configType)
@@ -47,8 +39,25 @@ void configNavigation(KeyPress* keyInput){
         case ONOFF:
         case NUMERIC:
         case ONOFFNUMERIC:
+            output = incrementConfig(configNames[currentConfig], false);
+            PRINTFLEVEL1("SOFTWARE: Set config %s to %s\n", configNames[currentConfig], output);
+            sendSpeakerOutput(output);
+            free(output);
+            break;
+        
+        default:
+            break;
+        }
+        break;
+    case '2':
+        switch (getConfigByName(configNames[currentConfig])->configType)
+        {
+        case ONOFF:
+        case NUMERIC:
+        case ONOFFNUMERIC:
             output = incrementConfig(configNames[currentConfig], true);
             PRINTFLEVEL1("SOFTWARE: Set config %s to %s\n", configNames[currentConfig], output);
+            sendSpeakerOutput(output);
             free(output);
             break;
         default:
@@ -63,6 +72,8 @@ void configNavigation(KeyPress* keyInput){
                 clearing->keyPressed = '#';
                 keypadInput(clearing);
                 free(clearing);
+                selectingConfig = false;
+                sendSpeakerOutput("Input number to set value to");
                 break;
             case OTHER:
                 PRINTFLEVEL1("SOFTWARE: Running function related to config%s\n", configNames[currentConfig]);
@@ -98,9 +109,14 @@ void configOTHERFlow(KeyPress* keyInput){
 
 void configNUMPADFlow(KeyPress* keyInput){
     double value = keypadInput(keyInput);
+    char buffer[30];
     if(value <= 0){
+        sprintf(buffer, "%c", keyInput->keyPressed);
+        sendSpeakerOutput(buffer);
         //output the number
     }else{
+        sprintf(buffer, "%f", value);
+        sendSpeakerOutput(buffer);
         updateConfigs(configNames[currentConfig], value);
         selectingConfig = true;
         //output the number

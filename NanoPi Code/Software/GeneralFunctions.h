@@ -31,6 +31,7 @@ typedef struct ConfigParam{
     int (*configFuntion)(KeyPress*);
     ConfigType configType;
     double currentValue;
+    char* startingDescription;
 } ConfigParam;
 
 int convertCharToKeyValue(KeyPress* keyPressed);

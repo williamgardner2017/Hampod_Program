@@ -4,8 +4,14 @@ void populateConfigFunctions(){
     ConfigParam* OtherFlagged;
     OtherFlagged = getConfigByName("save");
     OtherFlagged->configFuntion = SaveData;
+    char* SaveDescription = "Press any number one through nine to save to that save file";
+    OtherFlagged->startingDescription = malloc(strlen(SaveDescription));
+    strcpy(OtherFlagged->startingDescription,SaveDescription);
     OtherFlagged = getConfigByName("HotKey");
     OtherFlagged->configFuntion = setHotkeys;
+    char* HotKeyDescription = "Press any number one through nine to select mode to be linked";
+    OtherFlagged->startingDescription = malloc(strlen(HotKeyDescription));
+    strcpy(OtherFlagged->startingDescription,HotKeyDescription);
 }
 
 void saveToFile(int fileNumber){
@@ -93,39 +99,48 @@ int pageNumber = 0;
 bool selectingMode = true;
 int setHotkeys(KeyPress* keyData){
     //1 turn of C,D supression
-    toggleCDHotkeys(false);
+    setCDstate(false);
     int chosenModeId;
     //2 get the mode that they want to use
     Mode** modes;
+    char buffer[200];
     if(selectingMode){
         switch (keyData->keyPressed)
         {
-            case '#':
+            case '*':
                 modes = getAllModes();
+                strcpy(buffer,"");
                 for(int i = 0;i<9;i++){
                     if(getModeCount() < pageNumber*9 +1){
                         break;
                     }
+                    char shortBuffer[30];
+                    sprintf(shortBuffer," %i %s ", i, modes[pageNumber*9 + i]->modeDetails->modeName);
+                    strcat(buffer,shortBuffer);
 
-                    sendSpeakerOutput(modes[pageNumber*9 + i]->modeDetails->modeName);
                 }
+                sendSpeakerOutput(buffer);
                 break;
             case 'C':
                 pageNumber ++;
                 if(pageNumber*9 > getModeCount()){
                     pageNumber = 0;
+                }else{
+                    sendSpeakerOutput("Next page");
                 }
                 break;
             case 'D':
                 pageNumber --;
                 if(pageNumber < 0){
                     pageNumber = getModeCount()/9;
+                }else{
+                    sendSpeakerOutput("Prior page");
                 }
                 break;
             case '0':
                 pageNumber = 0;
                 selectingMode = true;
-                toggleCDHotkeys(true);
+                setCDstate(true);
                 return 1;
             case '1':
             case '2':
@@ -136,10 +151,12 @@ int setHotkeys(KeyPress* keyData){
             case '7':
             case '8':
             case '9':
-                chosenModeId = pageNumber*9 + convertCharToKeyValue(keyData);
+                chosenModeId = pageNumber*9 + convertCharToKeyValue(keyData)-1;
                 if(chosenModeId > getModeCount()){
                     break;
                 }else{
+                    sendSpeakerOutput(getAllModeNames()[chosenModeId]);
+                    sendSpeakerOutput("Select state of C or D to link selected mode to");
                     selectingMode = false;
                 }
                 break;
@@ -147,12 +164,17 @@ int setHotkeys(KeyPress* keyData){
             break;
         }
     }else{
-        //3 get the hot key they want to set
-        setProgramibleKeys(keyData, getAllModes()[chosenModeId]->modeDetails->modeName);
-        pageNumber = 0;
-        selectingMode = true;
-        toggleCDHotkeys(true);
-        return 1;
+        if(keyData->keyPressed == 'C' || keyData->keyPressed == 'D'){
+            //3 get the hot key they want to set
+            char* name = getAllModeNames()[chosenModeId];
+            sprintf(buffer, "Linking mode %s to key %c with shift value %i and hold value %i",name,keyData->keyPressed,keyData->shiftAmount,keyData->isHold);
+            sendSpeakerOutput(buffer);
+            setProgramibleKeys(keyData,name);
+            pageNumber = 0;
+            selectingMode = true;
+            setCDstate(true);
+            return 1;
+        }
     }
     return 0;
 }
