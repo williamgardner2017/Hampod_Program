@@ -161,9 +161,10 @@ BootUpStates BootupFlow(KeyPress* keyInput){
                     case '7':
                     case '8':
                     case '9':
-                        sprintf(outputText,"Loading up save file %i\n",convertCharToKeyValue(keyInput->keyPressed));
+                        sprintf(outputText,"Loading up save file %i\n",convertCharToKeyValue(keyInput));
                         sendSpeakerOutput(outputText);
-                        returnedFromLoad = loadUpFromSave(convertCharToKeyValue(keyInput->keyPressed));
+
+                        returnedFromLoad = loadUpFromSave(convertCharToKeyValue(keyInput));
                         PRINTFLEVEL1("got back value of %i from the loading function\n",returnedFromLoad);
                         if(returnedFromLoad){
                             sendSpeakerOutput("Sarting normal operations");
