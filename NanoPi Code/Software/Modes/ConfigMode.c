@@ -73,9 +73,10 @@ void configNavigation(KeyPress* keyInput){
                 break;
             case OTHER:
                 PRINTFLEVEL1("SOFTWARE: Running function related to config%s\n", configNames[currentConfig]);
+                sendSpeakerOutput(getConfigByName(configNames[currentConfig])->startingDescription);
                 selectingConfig = false;
-                keyInput->keyPressed = '-';
-                configNavigation(keyInput);
+                // keyInput->keyPressed = '-';
+                // configNavigation(keyInput);
                 break;
             default:
                 break;
@@ -98,7 +99,9 @@ void configNavigation(KeyPress* keyInput){
 }
 
 void configOTHERFlow(KeyPress* keyInput){
-    if(getConfigByName(configNames[currentConfig])->configFuntion(keyInput) == 1){
+    int returnnedValue = getConfigByName(configNames[currentConfig])->configFuntion(keyInput);
+    PRINTFLEVEL1("SOFTWARE: Got value %i form config function\n",returnnedValue)
+    if(returnnedValue == 1){
          selectingConfig = true;
     }
 }
