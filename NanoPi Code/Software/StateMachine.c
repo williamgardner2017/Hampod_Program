@@ -210,7 +210,7 @@ int ModeSelectFlow(KeyPress* keyInput){
          }
         isReadingOut = 0;
     }else{
-        char* shortName = malloc(sizeof(char)*30);
+        char shortName[40];
         switch (keyInput->keyPressed){
             case 'C':
                 if(modeSelectPage*9 < getModeCount()){
@@ -239,7 +239,7 @@ int ModeSelectFlow(KeyPress* keyInput){
                             strcat(LongOutput,shortNameLocal);
                             free(shortNameLocal);
                         }
-                    }
+                    }   
                     sendSpeakerOutput(LongOutput);
                     free(LongOutput);
                 }else{
@@ -265,7 +265,6 @@ int ModeSelectFlow(KeyPress* keyInput){
                 //Error should never get here
                 break;
         }
-        free(shortName);
     }
         return -1;
 }
