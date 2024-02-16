@@ -100,7 +100,7 @@ void configNavigation(KeyPress* keyInput){
 
 void configOTHERFlow(KeyPress* keyInput){
     int returnnedValue = getConfigByName(configNames[currentConfig])->configFuntion(keyInput);
-    PRINTFLEVEL1("SOFTWARE: Got value %i form config function\n",returnnedValue)
+    PRINTFLEVEL1("SOFTWARE: Got value %i form config function\n",returnnedValue);
     if(returnnedValue == 1){
          selectingConfig = true;
     }
