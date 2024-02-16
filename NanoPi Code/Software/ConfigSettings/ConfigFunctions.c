@@ -23,7 +23,7 @@ if (getcwd(cwd, sizeof(cwd)) != NULL) {
     return 1;
 }
     char fileName[100];
-    sprintf(fileName, "/ConfigSettings/SaveFiles/saveNumber%i.txt",fileNumber);
+    sprintf(fileName, "ConfigSettings/SaveFiles/saveNumber%i.txt",fileNumber);
     FILE *fp = fopen(fileName, "w+");
     printf("File Path: %s\n", fileName);
     if (fp == NULL)
