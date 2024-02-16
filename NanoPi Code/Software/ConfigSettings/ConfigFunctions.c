@@ -44,24 +44,25 @@ if (getcwd(cwd, sizeof(cwd)) != NULL) {
     //save the hotkeys
     fprintf(fp,"Start of Hotkeys\n");
     Mode** modesToSave = getHotKeyList();
-    PRINTFLEVEL2("got the modesToSave with address of %i\n",(int)modesToSave);
+    PRINTFLEVEL1("got the modesToSave with address of %i\n",(int)modesToSave);
     for(int i = 0; i<12;i++){
-    PRINTFLEVEL2("Mode at index %i has the address of %i\n",i, (int) modesToSave[i]);
+    PRINTFLEVEL1("Mode at index %i has the address of %i\n",i, (int) modesToSave[i]);
         if(modesToSave[i] == 0){ //TODO make it so that you can get the mode id's
             fprintf(fp,"%i:%s\n",i,"NULL");
-            PRINTFLEVEL2("NO Mode in save%i\n", i);
+            PRINTFLEVEL1("NO Mode in save%i\n", i);
         }else{
             fprintf(fp,"%i:%s\n",i,modesToSave[i]->modeDetails->modeName);
-            PRINTFLEVEL2("Mode %s found at index %i\n",modesToSave[i]->modeDetails->modeName, i);
+            PRINTFLEVEL1("Mode %s found at index %i\n",modesToSave[i]->modeDetails->modeName, i);
         }
     }
     //save the hamlib
     fprintf(fp,"Start of radios\n");
     Radio** radiosToSave = getRadios();
     for(int j = 0; j<2;j++){
-        //TODO, add in the moade, model, port, and rigmodel
-        PRINTFLEVEL2("Saving radio with port %i and model %i\n", radiosToSave[j]->port, radiosToSave[j]->model);
-        fprintf(fp,"%s:%i:%i:%i\n", radiosToSave[j]->make, radiosToSave[j]->model, radiosToSave[j]->port, (int) radiosToSave[j]->myrig_model); //TODO update this to be correct
+        if(radiosToSave[i] != 0){
+            PRINTFLEVEL1("Saving radio with port %i and model %i\n", radiosToSave[j]->port, radiosToSave[j]->model);
+            fprintf(fp,"%s:%i:%i:%i\n", radiosToSave[j]->make, radiosToSave[j]->model, radiosToSave[j]->port, (int) radiosToSave[j]->myrig_model); 
+        }
     }
     // close the file
     fclose(fp);
