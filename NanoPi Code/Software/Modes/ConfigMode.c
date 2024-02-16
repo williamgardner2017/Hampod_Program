@@ -5,7 +5,7 @@ double* oldValues;
 bool selectingConfig = true;
 
 void configNavigation(KeyPress* keyInput){
-    char* output;
+    char output[100];
     KeyPress* clearing;
     switch (keyInput->keyPressed)
     {
@@ -15,10 +15,8 @@ void configNavigation(KeyPress* keyInput){
             currentConfig = getLengthOfConfigs();
         }
         PRINTFLEVEL1("SOFTWARE: switched configs to %s\n", configNames[currentConfig]);
-        output = malloc(sizeof(char)*100);
         sprintf(output, "%s",configNames[currentConfig]);
         sendSpeakerOutput(output);
-        free(output);
         //say the name
         break;
     
@@ -30,7 +28,6 @@ void configNavigation(KeyPress* keyInput){
         PRINTFLEVEL1("SOFTWARE: switched configs to %s\n", configNames[currentConfig]);
         sprintf(output, "%s",configNames[currentConfig]);
         sendSpeakerOutput(output);
-        free(output);
         //say the name
         break;
     case '8':
@@ -42,7 +39,6 @@ void configNavigation(KeyPress* keyInput){
             output = incrementConfig(configNames[currentConfig], false);
             PRINTFLEVEL1("SOFTWARE: Set config %s to %s\n", configNames[currentConfig], output);
             sendSpeakerOutput(output);
-            free(output);
             break;
         
         default:
@@ -58,7 +54,6 @@ void configNavigation(KeyPress* keyInput){
             output = incrementConfig(configNames[currentConfig], true);
             PRINTFLEVEL1("SOFTWARE: Set config %s to %s\n", configNames[currentConfig], output);
             sendSpeakerOutput(output);
-            free(output);
             break;
         default:
             break;

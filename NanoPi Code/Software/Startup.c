@@ -62,7 +62,7 @@ void fullStart(){
 
 
     printf("software: Starting keywatcher\n");
-    sendSpeakerOutput("zero Select Save. One select company. Hash to output a selected key. Hold hash to output all");
+    sendSpeakerOutput("zero Select Save. One select company. Hash to read out extra controls");
     keyWatcher(NULL);
     printf("software: Startin Keywatcher complete\n");
     while(true){
