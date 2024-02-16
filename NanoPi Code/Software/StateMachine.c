@@ -565,7 +565,7 @@ int selectEntryInList(KeyPress* keyInput, char** list){
 bool loadUpFromSave(int saveFileNumber){
     //get the file to load
     char fileName[100];
-    sprintf(fileName, "ConfigSettings/SaveFiles/saveNumber%i.txt",saveFileNumber);
+    sprintf(fileName, "/ConfigSettings/SaveFiles/saveNumber%i.txt",saveFileNumber);
     PRINTFLEVEL1("SOFTWARE: loading up save file %s\n",fileName);
     char** saveFile = textFileToArray(fileName);
 
