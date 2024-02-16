@@ -161,6 +161,7 @@ BootUpStates BootupFlow(KeyPress* keyInput){
                         break;
                     default:
                         if(loadUpFromSave(convertCharToKeyValue(keyInput->keyPressed))){
+                            sendSpeakerOutput("Sarting normal operations");
                             modeState = standard;
                         }else{
                             sendSpeakerOutput("Something when wrong loading up the save file");

@@ -4,7 +4,9 @@ bool loadUpFromSave(int saveFileNumber){
     sprintf(fileName, "ConfigSettings/SaveFiles/saveNumber%i.txt",saveFileNumber);
 
     char** saveFile = textFileToArray(fileName);
+
     if( (int) saveFile == -1){
+        PRINTFLEVEL1("SOFTWARE: Failed to load up save file %s\n",fileName);
         return false;
     }
     PRINTFLEVEL1("SOFTWARE: loaded up the file %s\n", fileName);
@@ -81,6 +83,7 @@ bool loadUpFromSave(int saveFileNumber){
         j++;
         i++;
     }
+    free(saveFile);
     return true;
 }
 
