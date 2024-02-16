@@ -162,7 +162,7 @@ BootUpStates BootupFlow(KeyPress* keyInput){
                     case '8':
                     case '9':
                         sprintf(outputText,"Loading up save file %i\n",convertCharToKeyValue(keyInput));
-                        sendSpeakerOutput(outputText);
+                        // sendSpeakerOutput(outputText);
 
                         returnedFromLoad = loadUpFromSave(convertCharToKeyValue(keyInput));
                         PRINTFLEVEL1("got back value of %i from the loading function\n",returnedFromLoad);
@@ -565,7 +565,6 @@ int selectEntryInList(KeyPress* keyInput, char** list){
 bool loadUpFromSave(int saveFileNumber){
     //get the file to load
     char fileName[100];
-    system("pwd");
     sprintf(fileName, "ConfigSettings/SaveFiles/saveNumber%i.txt",saveFileNumber);
     PRINTFLEVEL1("SOFTWARE: loading up save file %s\n",fileName);
     char** saveFile = textFileToArray(fileName);
