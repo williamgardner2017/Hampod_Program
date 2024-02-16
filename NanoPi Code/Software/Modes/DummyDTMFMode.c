@@ -12,17 +12,20 @@ void* DTMFCommandRelay(KeyPress* keyInput, RIG* radioDetails){
         case '8':
         case '9':
             PRINTFLEVEL1("Software: would be sending the dtmf digits here");
-            char dtmfValue[6] = {"DTMF", keyInput->keyPressed,'\0'}; 
+            char dtmfValue[6]; 
+            snprintf(dtmfValue, sizeof(dtmfValue), "DTMF%c", keyInput->keyPressed);
             sendSpeakerOutput(dtmfValue); 
             break;
         case '#':
             PRINTFLEVEL1("Software: would be sending the dtmf digits here");
-            char dtmfValue[10] = {"DTMFPOUND\0"}; 
+            char dtmfValue[10]; 
+            snprintf(dtmfValue, sizeof(dtmfValue), "DTMFPOUND");
             sendSpeakerOutput(dtmfValue); 
             break;
         case '*':
             PRINTFLEVEL1("Software: would be sending the dtmf digits here");
-            char dtmfValue[13] = {"DTMFASTERISK\0"}; 
+            char dtmfValue[13]; 
+            snprintf(dtmfValue, sizeof(dtmfValue), "DTMFASTERISK");
             sendSpeakerOutput(dtmfValue); 
             // char digit[2] = { keyInput->keyPressed, '\0' };
             // int result = rig_send_dtmf(my_rig, RIG_VFO_CURR, digit);
