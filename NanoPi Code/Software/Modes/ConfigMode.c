@@ -6,6 +6,7 @@ bool selectingConfig = true;
 
 void configNavigation(KeyPress* keyInput){
     char output[100];
+    char* output2;
     KeyPress* clearing;
     switch (keyInput->keyPressed)
     {
@@ -36,9 +37,9 @@ void configNavigation(KeyPress* keyInput){
         case ONOFF:
         case NUMERIC:
         case ONOFFNUMERIC:
-            output = incrementConfig(configNames[currentConfig], false);
-            PRINTFLEVEL1("SOFTWARE: Set config %s to %s\n", configNames[currentConfig], output);
-            sendSpeakerOutput(output);
+            output2 = incrementConfig(configNames[currentConfig], false);
+            PRINTFLEVEL1("SOFTWARE: Set config %s to %s\n", configNames[currentConfig], output2);
+            sendSpeakerOutput(output2);
             break;
         
         default:
@@ -51,9 +52,9 @@ void configNavigation(KeyPress* keyInput){
         case ONOFF:
         case NUMERIC:
         case ONOFFNUMERIC:
-            output = incrementConfig(configNames[currentConfig], true);
-            PRINTFLEVEL1("SOFTWARE: Set config %s to %s\n", configNames[currentConfig], output);
-            sendSpeakerOutput(output);
+            output2 = incrementConfig(configNames[currentConfig], true);
+            PRINTFLEVEL1("SOFTWARE: Set config %s to %s\n", configNames[currentConfig], output2);
+            sendSpeakerOutput(output2);
             break;
         default:
             break;
