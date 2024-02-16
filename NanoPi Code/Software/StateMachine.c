@@ -228,20 +228,18 @@ int ModeSelectFlow(KeyPress* keyInput){
                 break;
             case '*':
                 if(keyInput->isHold){
-                    char* LongOutput = malloc(sizeof(char)*200);
+                    char LongOutput[200];
                     strcpy(LongOutput, "");
                     for(int i = modeSelectPage*9; i < (modeSelectPage+ 1) * 9 ; i++){
                         if(i >= getModeCount()){
                             break;
                         }else{
-                            char* shortNameLocal = malloc(sizeof(char)*30);
+                            char shortNameLocal[30];
                             sprintf(shortNameLocal, " %i %s ", i-modeSelectPage*9 + 1 ,modeNames[i]);
                             strcat(LongOutput,shortNameLocal);
-                            free(shortNameLocal);
                         }
                     }   
                     sendSpeakerOutput(LongOutput);
-                    free(LongOutput);
                 }else{
                     isReadingOut = 1;
                     sendSpeakerOutput("Press number to read out its option");
