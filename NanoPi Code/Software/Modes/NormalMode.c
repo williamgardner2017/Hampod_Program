@@ -11,13 +11,11 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
     case '1':
         if (!keyInput->isHold) {
             rig_get_freq(radioDetails, RIG_VFO_A, &freq); 
-            sprintf(vfoFreqValue, "VFO A Frequency %d", *freq);
-            printf(vfoFreqValue); 
+            sprintf(vfoFreqValue, "VFO A Frequency %.6f", freq);
             sendSpeakerOutput(vfoFreqValue); 
         } else {
             rig_get_freq(radioDetails, RIG_VFO_B, &freq); 
-            sprintf(vfoFreqValue, "VFO B Frequency %d", *freq);
-            printf(vfoFreqValue); 
+            sprintf(vfoFreqValue, "VFO B Frequency %.6f", freq);
             sendSpeakerOutput(vfoFreqValue); 
         }
         break;
