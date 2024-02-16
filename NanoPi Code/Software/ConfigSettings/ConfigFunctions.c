@@ -22,7 +22,7 @@ if (getcwd(cwd, sizeof(cwd)) != NULL) {
     perror("getcwd() error");
     return 1;
 }
-    char fileName[40];
+    char fileName[100];
     sprintf(fileName, "ConfigSettings/SaveFiles/saveNumber%i.txt",fileNumber);
     FILE *fp = fopen(fileName, "w+");
     printf("File Path: %s\n", fileName);
@@ -76,6 +76,7 @@ int SaveData(KeyPress* keyData){
         {
             case '#':
                 return 1;
+                break;
             case '0':
             case '1':
             case '2':
@@ -87,7 +88,9 @@ int SaveData(KeyPress* keyData){
             case '8':
             case '9':
                 saveToFile(convertCharToKeyValue(keyData));
+                PRINTFLEVEL1("SOFTWARE: Succsessfully save to a file\n");
                 return 1;
+                break;
             default:
             break;
         }
