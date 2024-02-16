@@ -1,5 +1,6 @@
 
 void* DTMFCommandRelay(KeyPress* keyInput, RIG* radioDetails){
+    char dtmfValue[13];
     switch(keyInput->keyPressed){
         case '0':
         case '1':
@@ -12,19 +13,16 @@ void* DTMFCommandRelay(KeyPress* keyInput, RIG* radioDetails){
         case '8':
         case '9':
             PRINTFLEVEL1("Software: would be sending the dtmf digits here");
-            char dtmfValue[6]; 
             snprintf(dtmfValue, sizeof(dtmfValue), "DTMF%c", keyInput->keyPressed);
             sendSpeakerOutput(dtmfValue); 
             break;
         case '#':
             PRINTFLEVEL1("Software: would be sending the dtmf digits here");
-            char dtmfValue[10]; 
             snprintf(dtmfValue, sizeof(dtmfValue), "DTMFPOUND");
             sendSpeakerOutput(dtmfValue); 
             break;
         case '*':
             PRINTFLEVEL1("Software: would be sending the dtmf digits here");
-            char dtmfValue[13]; 
             snprintf(dtmfValue, sizeof(dtmfValue), "DTMFASTERISK");
             sendSpeakerOutput(dtmfValue); 
             // char digit[2] = { keyInput->keyPressed, '\0' };
