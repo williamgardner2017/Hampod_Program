@@ -1,6 +1,6 @@
 bool loadUpFromSave(int saveFileNumber){
     //get the file to load
-    char fileName[40];
+    char fileName[100];
     sprintf(fileName, "ConfigSettings/SaveFiles/saveNumber%i.txt",saveFileNumber);
 
     char** saveFile = textFileToArray(fileName);
