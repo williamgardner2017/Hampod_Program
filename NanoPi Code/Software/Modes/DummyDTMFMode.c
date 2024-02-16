@@ -56,6 +56,8 @@ Mode* DTMFDummyLoad(){
     }
     newMode->modeInput = DTMFCommandRelay;
     newMode->freeMode = freeDummyDTMFMode;
+    newMode->enterMode = NULL;
+    newMode->exitMode = NULL;
 
     ModeData* newData = (ModeData*)malloc(sizeof(ModeData));
 

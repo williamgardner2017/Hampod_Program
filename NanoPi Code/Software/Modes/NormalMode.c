@@ -30,6 +30,8 @@ Mode* NormalLoad(){
     }
     newMode->modeInput = normalCommandRelay;
     newMode->freeMode = freeNormalMode;
+    newMode->enterMode = NULL;
+    newMode->exitMode = NULL;
 
     ModeData* newData = (ModeData*)malloc(sizeof(ModeData));
 

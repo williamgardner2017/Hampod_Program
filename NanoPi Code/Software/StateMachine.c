@@ -216,14 +216,14 @@ int ModeSelectFlow(KeyPress* keyInput){
                 if(modeSelectPage*9 < getModeCount()){
                     modeSelectPage = modeSelectPage + 1;
                 }
-                sprintf(shortName, "Switching to page %i", modeSelectPage);
+                sprintf(shortName, "Switching to next page");
                 sendSpeakerOutput(shortName);
                 break;
             case 'D':
                 if(modeSelectPage > 0){
                     modeSelectPage = modeSelectPage - 1;
                 }
-                sprintf(shortName, "Switching to page %i", modeSelectPage);
+                sprintf(shortName, "Switching to prior page");
                 sendSpeakerOutput(shortName);
                 break;
             case '*':
@@ -485,7 +485,7 @@ int selectEntryInList(KeyPress* keyInput, char** list){
                 if(flag){
                     charSelectPage = charSelectPage + 1;
                 }
-                sprintf(shortName, "Switching to page %i", charSelectPage);
+                sprintf(shortName, "Switching to Next page");
                 sendSpeakerOutput(shortName);
                 break;
             case 'D':
@@ -493,7 +493,7 @@ int selectEntryInList(KeyPress* keyInput, char** list){
                 if(charSelectPage > 0){ 
                     charSelectPage = 0;
                 }
-                sprintf(shortName, "Switching to page %i", charSelectPage);
+                sprintf(shortName, "Switching to Prior page");
                 sendSpeakerOutput(shortName);
                 break;
             case '*':
