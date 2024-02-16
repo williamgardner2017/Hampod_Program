@@ -59,7 +59,7 @@ if (getcwd(cwd, sizeof(cwd)) != NULL) {
     fprintf(fp,"Start of radios\n");
     Radio** radiosToSave = getRadios();
     for(int j = 0; j<2;j++){
-        if(radiosToSave[i] != 0){
+        if(radiosToSave[j] != 0){
             PRINTFLEVEL1("Saving radio with port %i and model %i\n", radiosToSave[j]->port, radiosToSave[j]->model);
             fprintf(fp,"%s:%i:%i:%i\n", radiosToSave[j]->make, radiosToSave[j]->model, radiosToSave[j]->port, (int) radiosToSave[j]->myrig_model); 
         }
