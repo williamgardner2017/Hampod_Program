@@ -15,6 +15,7 @@
 #include <dirent.h> 
 #include <sys/ioctl.h>
 #include <asm/termbits.h>
+#include <stdarg.h>
 
 #include "GeneralFunctions.h"
 #include "IDQueue.h"
@@ -22,6 +23,7 @@
 #include "../Firmware/hampod_queue.h"
 #include "../Firmware/hampod_firm_packet.h"
 #include "ConfigSettings/HashMap.h"
+#include "../Firmware/audio_firmware.h"
 
 
 #define INPUT_PIPE "Firmware_i"

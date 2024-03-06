@@ -1,4 +1,4 @@
-#ifndef ADUIO_FIRMWARE
+#ifndef AUDIO_FIRMWARE
 #define AUDIO_FIRMWARE
 
 #include <stdio.h>
@@ -16,7 +16,7 @@
 
 #define HASHING_PRIME 183373
 #define PRIME2 17
-#define MAXSTRINGSIZE 256
+#define MAXSTRINGSIZE 512
 #define STRING_COUNT 16
 #define TABLE_SIZE 0x1000
 #define AUDIO_O "Speaker_o"
@@ -55,6 +55,9 @@ typedef struct audio_io_packet {
     int pipe_fd;
     Packet_queue* queue;
 } audio_io_packet;
-
+void audio_process();
+void *audio_io_thread(void* arg);
+void firmwareStartAudio();
+void* firmwarePlayAudio(void* text);
 #include "audio_firmware.c"
 #endif

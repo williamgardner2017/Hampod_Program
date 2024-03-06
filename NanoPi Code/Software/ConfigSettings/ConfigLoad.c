@@ -1,10 +1,12 @@
-bool loadUpFromSave(int saveFileNumber){
+bool loadUpFromSaveOLD(int saveFileNumber){
     //get the file to load
-    char fileName[40];
+    char fileName[100];
     sprintf(fileName, "ConfigSettings/SaveFiles/saveNumber%i.txt",saveFileNumber);
-
+    PRINTFLEVEL1("SOFTWARE: loading up save file %s\n",fileName);
     char** saveFile = textFileToArray(fileName);
+
     if( (int) saveFile == -1){
+        PRINTFLEVEL1("SOFTWARE: Failed to load up save file %s\n",fileName);
         return false;
     }
     PRINTFLEVEL1("SOFTWARE: loaded up the file %s\n", fileName);
@@ -81,6 +83,7 @@ bool loadUpFromSave(int saveFileNumber){
         j++;
         i++;
     }
+    free(saveFile);
     return true;
 }
 
@@ -102,7 +105,7 @@ int loadSaveBootup(KeyPress* keyinput){
         return false;
         break;
     default:
-        if(loadUpFromSave(convertCharToKeyValue(keyinput->keyPressed))){
+        if(loadUpFromSaveOLD(convertCharToKeyValue(keyinput->keyPressed))){
             return 1;
         }else{
             return 0;

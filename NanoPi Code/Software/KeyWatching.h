@@ -13,6 +13,7 @@
 #include "../Firmware/hampod_firm_packet.h"
 #include "FirmwareCommunication.h"
 #include "StateMachine.h"
+#include "../Firmware/keypad_firmware.h"
 
 #ifdef OUTPUTLEVEL1
 #define PRINTFLEVEL1(...) \

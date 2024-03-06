@@ -1,4 +1,6 @@
 
+freq_t* freq; 
+char vfoFreqValue[40];
 
 void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
     switch (keyInput->keyPressed)
@@ -7,6 +9,15 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
         break;
     
     case '1':
+        if (!keyInput->isHold) {
+            rig_get_freq(radioDetails, RIG_VFO_A, &freq); 
+            sprintf(vfoFreqValue, "VFO A Frequency %.6f", freq);
+            sendSpeakerOutput(vfoFreqValue); 
+        } else {
+            rig_get_freq(radioDetails, RIG_VFO_B, &freq); 
+            sprintf(vfoFreqValue, "VFO B Frequency %.6f", freq);
+            sendSpeakerOutput(vfoFreqValue); 
+        }
         break;
  
     default:
@@ -30,6 +41,8 @@ Mode* NormalLoad(){
     }
     newMode->modeInput = normalCommandRelay;
     newMode->freeMode = freeNormalMode;
+    newMode->enterMode = NULL;
+    newMode->exitMode = NULL;
 
     ModeData* newData = (ModeData*)malloc(sizeof(ModeData));
 

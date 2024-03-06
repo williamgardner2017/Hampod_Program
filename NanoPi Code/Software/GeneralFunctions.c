@@ -8,17 +8,18 @@ char** textFileToArray(char* filePath){
     //read through the file once to find out how many items are in it
     int currentSize = 0;
     FILE *fp;
-    char temp[60];
+    char temp[100];
+    printf("Software: Creating a char** object for text file %s\n",filePath);
     fp = fopen(filePath , "r");
     if(fp == NULL) {
       perror("Error opening file");
       return (char**) -1;
    }
-    while(fgets(temp, 60, fp)!=NULL){
+    while(fgets(temp, 100, fp)!=NULL){
         currentSize ++;
     }
     rewind(fp);
-    int readSize = 60;
+    int readSize = 100;
     char** lines = malloc(sizeof(char*) * (currentSize+1));
     for(int i = 0; i<currentSize;i++){
         lines[i] = malloc(sizeof(char)*readSize);
@@ -117,4 +118,19 @@ double keypadInput(KeyPress* keyInput){
         tempkeyPadNumeber = tempkeyPadNumeber / 10;
     }
     return tempkeyPadNumeber* -1.0 ;
+}
+
+bool ABState = true;
+bool CDState = true;
+bool getABState(){
+    return ABState;
+}
+bool getCDState(){
+    return CDState;
+}
+void setABstate(bool state){
+    ABState = state;
+}
+void setCDstate(bool state){
+    CDState = state;
 }

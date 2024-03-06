@@ -3,8 +3,7 @@ extern pid_t controller_pid;
 unsigned char audio_running = 1;
 pthread_mutex_t audio_queue_lock;
 pthread_mutex_t audio_queue_available;
-
-void *audio_io_thread(void* arg);
+pthread_mutex_t audio_lock;
 
 void audio_process() {
     char buffer[MAXSTRINGSIZE];
@@ -14,14 +13,14 @@ void audio_process() {
     int input_pipe_fd = open(AUDIO_I, O_RDONLY);
     if(input_pipe_fd == -1) {
         perror("open");
-        kill(controller_pid, SIGINT);
+        // kill(controller_pid, SIGINT);
         exit(0);
     }
 
     int output_pipe_fd = open(AUDIO_O, O_WRONLY);
     if(output_pipe_fd == -1) {
         perror("open");
-        kill(controller_pid, SIGINT);
+        // kill(controller_pid, SIGINT);
         exit(0);
     }
 
@@ -33,14 +32,14 @@ void audio_process() {
 
     if(pthread_mutex_init(&audio_queue_lock, NULL) != 0) {
         perror("pthread_mutex_init");
-        kill(controller_pid, SIGINT);
+        // kill(controller_pid, SIGINT);
         exit(1);
     }
     AUDIO_PRINTF("Initializing queue availibility mutex lock\n");
 
     if(pthread_mutex_init(&audio_queue_available, NULL) != 0) {
         perror("pthread_mutex_init");
-        kill(controller_pid, SIGINT);
+        // kill(controller_pid, SIGINT);
         exit(1);
     }
 
@@ -52,7 +51,7 @@ void audio_process() {
     AUDIO_PRINTF("Launching IO thread\n");
     if(pthread_create(&audio_io_buffer, NULL, audio_io_thread, (void*)&thread_input) != 0){
         perror("Keypad IO thread failed");
-        kill(controller_pid, SIGINT);
+        // kill(controller_pid, SIGINT);
         exit(1);
     }
     usleep(500000); //Half sec sleep to let child thread take control
@@ -104,8 +103,8 @@ void audio_process() {
         }
         Inst_packet* packet_to_send = create_inst_packet(AUDIO, sizeof(int), (unsigned char*)&system_result, packet_tag);
         AUDIO_PRINTF("Sending back value of %x\n", system_result);
-        write(output_pipe_fd, packet_to_send, 8);
-        write(output_pipe_fd, packet_to_send->data, sizeof(int));
+        write(output_pipe_fd, packet_to_send, 8); //Packet_to_send is a pointer, so would this not just be sending back the address of it.
+        write(output_pipe_fd, packet_to_send->data, sizeof(int)); //while earlier you did have this be sizeof(int) would it not be safer to just use the size value of packet_to_send 
         free(requested_string);
         destroy_inst_packet(&packet_to_send);
         usleep(1000000);
@@ -133,7 +132,7 @@ void *audio_io_thread(void* arg) {
         int queue_empty = is_empty(queue);
         pthread_mutex_unlock(&audio_queue_lock);
         if(queue_empty) {
-        KEYPAD_IO_PRINTF("Making queue inaccessible\n");
+        // KEYPAD_IO_PRINTF("Making queue inaccessible\n");
         pthread_mutex_lock(&audio_queue_available);
         }
 
@@ -169,4 +168,52 @@ void *audio_io_thread(void* arg) {
         usleep(100);
     }
     return NULL;
+}
+
+void firmwareStartAudio(){
+      AUDIO_PRINTF("Initializing audio mutex lock\n");
+     if(pthread_mutex_init(&audio_lock, NULL) != 0) {
+        perror("pthread_mutex_init");
+        // kill(controller_pid, SIGINT);
+        exit(1);
+    }
+}
+
+void* firmwarePlayAudio(void* text){
+    char* incomingText = (char*) text;
+    char* buffer = malloc(strlen(incomingText)+100);
+    char audio_type_byte = incomingText[0];
+    char* remaining_string = incomingText + 1;
+    int system_result;
+	char default_directory[0x100];
+    pthread_mutex_lock(&audio_lock);
+	getcwd(default_directory, sizeof(default_directory));
+        if(audio_type_byte == 'd') {
+            AUDIO_PRINTF("Festival tts without saving file");
+            chdir("/tmp");
+            sprintf(buffer, "echo '%s' | text2wave -o output.wav", remaining_string);
+            system_result = system(buffer);
+            system_result = system("aplay output.wav");
+            chdir(default_directory);
+        } else if(audio_type_byte == 's') {
+            AUDIO_PRINTF("Festival tts %s with saving file\n", remaining_string);
+	    chdir("../Firmware/pregen_audio");
+            sprintf(buffer, "echo '%s' | text2wave -o '%s.wav'", remaining_string, remaining_string);
+            system_result = system(buffer);
+            sprintf(buffer, "aplay '%s.wav'", remaining_string);
+            system(buffer);
+            chdir(default_directory);
+        } else if(audio_type_byte == 'p') {
+            strcpy(buffer, "aplay '");
+            strcat(remaining_string, ".wav'");
+            strcat(buffer, remaining_string);
+            AUDIO_PRINTF("Now playing %s with aplay\n", remaining_string);
+            system_result = system(buffer);
+        } else {
+            AUDIO_PRINTF("Audio error. Unrecognized packet data %s\n", incomingText);
+            system_result = -1;
+        }
+        pthread_mutex_unlock(&audio_lock);
+        free(buffer);
+        return system_result;
 }

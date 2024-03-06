@@ -66,14 +66,14 @@ void keypad_process(){
     int input_pipe_fd = open(KEYPAD_I, O_RDONLY);
     if(input_pipe_fd == -1) {
         perror("open");
-        kill(controller_pid, SIGINT);
+        // kill(controller_pid, SIGINT);
         exit(0);
     }
 
     int output_pipe_fd = open(KEYPAD_O, O_WRONLY);
     if(output_pipe_fd == -1) {
         perror("open");
-        kill(controller_pid, SIGINT);
+        // kill(controller_pid, SIGINT);
         exit(0);
     }
     
@@ -86,14 +86,14 @@ void keypad_process(){
 
     if(pthread_mutex_init(&keypad_queue_lock, NULL) != 0) {
         perror("pthread_mutex_init");
-        kill(controller_pid, SIGINT);
+        // kill(controller_pid, SIGINT);
         exit(1);
     }
     KEYPAD_PRINTF("Creating queue availibility mutex lock\n");
 
     if(pthread_mutex_init(&keypad_queue_available, NULL) != 0) {
         perror("pthread_mutex_init");
-        kill(controller_pid, SIGINT);
+        // kill(controller_pid, SIGINT);
         exit(1);
     }
     
@@ -107,7 +107,7 @@ void keypad_process(){
 
     if(pthread_create(&keypad_io_buffer, NULL, keypad_io_thread, (void*)&thread_input) != 0){
         perror("Keypad IO thread failed");
-        kill(controller_pid, SIGINT);
+        // kill(controller_pid, SIGINT);
         exit(1);
     }
     usleep(500000); //Half sec sleep to let child thread take control
@@ -197,3 +197,19 @@ void *keypad_io_thread(void* arg) {
     return NULL;
 }
 
+void keypadTurnon(){
+    wiringPiSetup();
+	pinMode(7, OUTPUT);//LED for Testing, on Pin GPIOG11
+	pinMode(R1, OUTPUT);
+	pinMode(R2, OUTPUT);
+	pinMode(R3, OUTPUT);
+	pinMode(R4, OUTPUT);
+	pinMode(C1, INPUT);
+	pinMode(C2, INPUT);
+	pinMode(C3, INPUT);
+	pinMode(C4, INPUT);
+	pullUpDnControl(C1, PUD_UP);//Set pull-up resistors
+	pullUpDnControl(C2, PUD_UP);
+	pullUpDnControl(C3, PUD_UP);
+	pullUpDnControl(C4, PUD_UP);
+}

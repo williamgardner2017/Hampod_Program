@@ -149,22 +149,33 @@ BootUpStates BootupFlow(KeyPress* keyInput){
                 bootUpState = selectNewOrSave;
                 break;
             }else{
+                bool returnedFromLoad = false;
+                char outputText[100];
                 switch (keyInput->keyPressed){
-                    case 'A':
-                    case 'B':
-                    case 'C':
-                    case 'D':
-                    case '*':
-                    case '#':
-                        PRINTFLEVEL1("Software: Invalid save file chosen\n");
-                        sendSpeakerOutput("Invalid key was pressed");
-                        break;
-                    default:
-                        if(loadUpFromSave(convertCharToKeyValue(keyInput->keyPressed))){
+                    case '1':
+                    case '2':
+                    case '3':
+                    case '4':
+                    case '5':
+                    case '6':
+                    case '7':
+                    case '8':
+                    case '9':
+                        sprintf(outputText,"Loading up save file %i\n",convertCharToKeyValue(keyInput));
+                        // sendSpeakerOutput(outputText);
+
+                        returnedFromLoad = loadUpFromSave(convertCharToKeyValue(keyInput));
+                        PRINTFLEVEL1("got back value of %i from the loading function\n",returnedFromLoad);
+                        if(returnedFromLoad){
+                            sendSpeakerOutput("Sarting normal operations");
                             modeState = standard;
                         }else{
                             sendSpeakerOutput("Something when wrong loading up the save file");
                         }
+                        break;
+                    default:
+                        PRINTFLEVEL1("Software: Invalid save file chosen\n");
+                        sendSpeakerOutput("Invalid key was pressed");
                         break;
                 }
             }
@@ -210,38 +221,36 @@ int ModeSelectFlow(KeyPress* keyInput){
          }
         isReadingOut = 0;
     }else{
-        char* shortName = malloc(sizeof(char)*30);
+        char shortName[40];
         switch (keyInput->keyPressed){
             case 'C':
                 if(modeSelectPage*9 < getModeCount()){
                     modeSelectPage = modeSelectPage + 1;
                 }
-                sprintf(shortName, "Switching to page %i", modeSelectPage);
+                sprintf(shortName, "Switching to next page");
                 sendSpeakerOutput(shortName);
                 break;
             case 'D':
                 if(modeSelectPage > 0){
                     modeSelectPage = modeSelectPage - 1;
                 }
-                sprintf(shortName, "Switching to page %i", modeSelectPage);
+                sprintf(shortName, "Switching to prior page");
                 sendSpeakerOutput(shortName);
                 break;
             case '*':
                 if(keyInput->isHold){
-                    char* LongOutput = malloc(sizeof(char)*200);
+                    char LongOutput[200];
                     strcpy(LongOutput, "");
                     for(int i = modeSelectPage*9; i < (modeSelectPage+ 1) * 9 ; i++){
-                        if(i <= getModeCount()){
+                        if(i >= getModeCount()){
                             break;
                         }else{
-                            char* shortNameLocal = malloc(sizeof(char)*30);
+                            char shortNameLocal[30];
                             sprintf(shortNameLocal, " %i %s ", i-modeSelectPage*9 + 1 ,modeNames[i]);
                             strcat(LongOutput,shortNameLocal);
-                            free(shortNameLocal);
                         }
-                    }
+                    }   
                     sendSpeakerOutput(LongOutput);
-                    free(LongOutput);
                 }else{
                     isReadingOut = 1;
                     sendSpeakerOutput("Press number to read out its option");
@@ -257,13 +266,14 @@ int ModeSelectFlow(KeyPress* keyInput){
             case '8':
             case '9':
                 switchToRadioMode(modeNames[(modeSelectPage*9) + convertCharToKeyValue(keyInput) - 1]);
+                modeSelectPage = 0;
+                isReadingOut = 0;   
                 break;
         
             default:
                 //Error should never get here
                 break;
         }
-        free(shortName);
     }
         return -1;
 }
@@ -307,9 +317,10 @@ int StandardModeFlow(KeyPress* keyInput){ //TODO be able to toggle the letter ke
         case 0:
             if(keyInput->isHold){
                 //Volume down
-            }else{
                 modeState = modeSelect;
                 sendSpeakerOutput("Mode Select. press # to learn key presses");
+            }else{
+                runRadioCommand(radios[currentRadio],keyInput);
             }
             break;
         case 1:
@@ -331,17 +342,15 @@ int StandardModeFlow(KeyPress* keyInput){ //TODO be able to toggle the letter ke
         }
         break;
     case 'C': // C
-        if(programableKeysOn){
-            //getModesOfProgramableKeys
-            //setRadioToMode
+        if(getCDState()){
+            switchToRadioMode(getModeViaProgramableKey(keyInput)->modeDetails->modeName);
         }else{
             runRadioCommand(radios[currentRadio],keyInput);
         }
         break;
     case 'D': // D
-        if(programableKeysOn){
-            //getModesOfProgramableKeys
-            //setRadioToMode
+        if(getCDState()){
+            switchToRadioMode(getModeViaProgramableKey(keyInput)->modeDetails->modeName);
         }else{
             runRadioCommand(radios[currentRadio],keyInput);
         }
@@ -487,7 +496,7 @@ int selectEntryInList(KeyPress* keyInput, char** list){
                 if(flag){
                     charSelectPage = charSelectPage + 1;
                 }
-                sprintf(shortName, "Switching to page %i", charSelectPage);
+                sprintf(shortName, "Switching to Next page");
                 sendSpeakerOutput(shortName);
                 break;
             case 'D':
@@ -495,7 +504,7 @@ int selectEntryInList(KeyPress* keyInput, char** list){
                 if(charSelectPage > 0){ 
                     charSelectPage = 0;
                 }
-                sprintf(shortName, "Switching to page %i", charSelectPage);
+                sprintf(shortName, "Switching to Prior page");
                 sendSpeakerOutput(shortName);
                 break;
             case '*':
@@ -550,4 +559,94 @@ int selectEntryInList(KeyPress* keyInput, char** list){
         free(shortName);
     }
     return -1;
+}
+
+
+bool loadUpFromSave(int saveFileNumber){
+    //get the file to load
+    char fileName[100];
+    sprintf(fileName, "ConfigSettings/SaveFiles/saveNumber%i.txt",saveFileNumber);
+    PRINTFLEVEL1("SOFTWARE: loading up save file %s\n",fileName);
+    char** saveFile = textFileToArray(fileName);
+
+    if( (int) saveFile == -1){
+        PRINTFLEVEL1("SOFTWARE: Failed to load up save file %s\n",fileName);
+        return false;
+    }
+    PRINTFLEVEL1("SOFTWARE: loaded up the file %s\n", fileName);
+    int i = 0;
+    printf("%s\n",saveFile[i]);
+    i++;
+    while(strcmp(saveFile[i], "Start of Hotkeys") != 0){
+        /*
+        1) substring to get the components
+        2) convert the 2nd part to a double
+        3) grab the config object
+        4) set the value to the found double
+        */
+        // 1
+        char* doubleString = strchr(saveFile[i], ':');
+        int index = (int)(doubleString - saveFile[i]);
+        char* Name = customSubString(saveFile[i],0, index);
+        // 2
+        double value = atof(doubleString+1);
+        //3 4 
+
+        PRINTFLEVEL1("SOFTWARE: loading value %f for config %s\n",value,Name);
+        updateConfigs(Name, value);
+        i++;
+    }
+    printf("%s\n",saveFile[i]);
+    i++;
+    while(strcmp(saveFile[i], "Start of radios") != 0){
+        /*
+        1) Convert substring into index and Name
+        2) See if the name not null
+        3) set the hotkey via getting the mode by name
+        */
+       //TODO set this up
+        char* nameString = strchr(saveFile[i], ':') + 1;
+        int seporatorIndex = (int)(nameString - saveFile[i]);
+        int index = atoi(customSubString(saveFile[i],0, seporatorIndex));
+        //2
+        if(strcmp("NULL", nameString) != 0){
+            PRINTFLEVEL1("Loading up mode %s into index %i\n",nameString,index);
+            setProgramibleKeysByIndex(index,nameString);
+        }
+        i++;
+    }
+    printf("%s\n",saveFile[i]);
+    i++;
+    int j = 0;
+    while(strcmp(saveFile[i], "END OF ARRAY") != 0){
+        /*
+        1) substring to get the components
+        2) get the hampod ID and the port name
+        3) link them together
+        4) save it to the thing
+        */
+        char* point0 = strchr(saveFile[i], ':');
+        char* point1 = strchr(point0+1, ':');
+        char* point2 = strchr(point1+1, ':');
+        PRINTFLEVEL2("SOFTWARE: Points found are %s,%s,%s\n",point0,point1,point2);
+        int dis0 = (int) (point0 - saveFile[i]);
+        int dis1 = (int) (point1 - point0);
+        int dis2 = (int) (point2 - point1);
+        int dis3 =  strlen(point2);
+        PRINTFLEVEL2("SOFTWAR: the lengths are %i,%i,%i,%i\n",dis0,dis1,dis2,dis3);
+        char* sMake = customSubString(saveFile[i],0,dis0);
+        char* sModel = customSubString(saveFile[i],point0 - saveFile[i]+1,dis1);
+        char* sPort = customSubString(saveFile[i],point1 - saveFile[i]+1,dis2);
+        char* sRigModel =customSubString(saveFile[i],point2 - saveFile[i]+1,dis3);
+        PRINTFLEVEL2("SOFTWARE: Created filtered strings %s, %s, %s, %s to load in\n",sMake,sModel,sPort,sRigModel);
+        int iModel = atoi(sModel);
+        int iPort = atoi(sPort);
+        int iRigModel = atoi(sRigModel);
+        PRINTFLEVEL1("Loading up radio id %i\n",iRigModel);
+        setRadios(loadUpRadioUsingData(sMake,iModel,iPort,getModeByName("Normal"),iRigModel),j);
+        j++;
+        i++;
+    }
+    free(saveFile);
+    return true;
 }
