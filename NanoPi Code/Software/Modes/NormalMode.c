@@ -20,7 +20,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                 fprintf(stderr, "Error getting frequency.\n");
             }
         case 1:
-            rig_get_freq(radioDetails, RIG_VFO_B, &freq); 
+            // rig_get_freq(radioDetails, RIG_VFO_B, &freq); 
             if (rig_get_freq(radioDetails, RIG_VFO_B, &freq) == RIG_OK) {
                 sprintf(vfoFreqValue, "VFO B Frequency %.6f", freq);
                 sendSpeakerOutput(vfoFreqValue); 
