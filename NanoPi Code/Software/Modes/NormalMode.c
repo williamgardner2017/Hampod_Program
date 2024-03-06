@@ -19,6 +19,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
             } else {
                 fprintf(stderr, "Error getting frequency.\n");
             }
+            break; 
         case 1:
             // rig_get_freq(radioDetails, RIG_VFO_B, &freq); 
             if (rig_get_freq(radioDetails, RIG_VFO_B, &freq) == RIG_OK) {
@@ -27,6 +28,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
             } else {
                 fprintf(stderr, "Error getting frequency.\n");
             }
+            break; 
         }
         break;
  
