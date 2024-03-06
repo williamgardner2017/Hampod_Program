@@ -19,20 +19,70 @@ void* keyWatcher(void* args){
     return NULL;
 }
 
-//this will be a manual thing
-pthread_t timerId;
-void startKeyWatcher(){
-    int result;
-    result = pthread_create(&timerId, NULL, keyWatcher, NULL);
-    if (result) {
-        fprintf(stderr, "Error creating thread: %d\n", result);
-        exit(0);
+//These are variables to control the keyPress interperater
+bool shiftEnabled = true;
+char oldKey = -1;
+bool holdKeySent = 0;
+int shiftState = 0;
+int holdWaitCount = 0;
+
+int maxShifts = 3;
+#define keyRequestFrequency2 16000
+#define holdSeconds 1
+#define holdWaitTime (holdSeconds*1000000) / keyRequestFrequency2
+
+/**
+ * Processes the output of the key presses to properly interperate when 
+ * a press is shifted or when a press is held down
+ * Inputs: key pressed
+ * output: a KeyPress struct that holds the data for what key was pressed, this will need to be freed
+*/
+KeyPress* interperateKeyPresses(char keyPress){
+    KeyPress *returnValue = malloc(sizeof(KeyPress));
+    returnValue->isHold = false;
+    returnValue->keyPressed = '-';
+    returnValue->shiftAmount = 0;
+    if(keyPress == '-'){
+        if(oldKey != '-' && !holdKeySent && holdWaitCount < holdWaitTime){
+            if(oldKey == 'A' && getABState()){
+                shiftState ++;
+                if(shiftState >= maxShifts){
+                    shiftState = 0;
+                }
+            }else{
+                returnValue->keyPressed = oldKey;
+                returnValue->shiftAmount = shiftState;
+                shiftState = 0;
+            }//end inner null
+        }//end outer if
+        holdKeySent = false;
+        oldKey = '-';
+        holdWaitCount = 0;
+    }else if(keyPress == oldKey && keyPress != '-'){
+        if(holdWaitCount < holdWaitTime){
+            holdWaitCount++;
+        }else if(!holdKeySent){
+            holdKeySent = true;
+            returnValue->keyPressed = oldKey;
+            returnValue->shiftAmount = shiftState;
+            returnValue->isHold = true;
+            shiftState = 0;
+        }
+    }else{
+        oldKey = keyPress;
     }
+
+    if(returnValue->keyPressed == -1){
+        returnValue->keyPressed = '-';
+    }
+    return returnValue;
 }
 
-
-void freeKeyWatcher(){
-    printf("Software:Freeing the KEy Watcher internals\n");
-    running2 = false;
-    pthread_join(timerId,NULL);
+void resetKeyInputVars(){
+    shiftEnabled = 1;
+    oldKey = -1;
+    holdKeySent = false;
+    shiftState = 0;
+    maxShifts = 3;
+    holdWaitCount = 0;
 }

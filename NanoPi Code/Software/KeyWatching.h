@@ -43,9 +43,9 @@
 
 #endif
 
-void startKeyWatcher();
 void* keyWatcher(void* args);
-void freeKeyWatcher();
 
+KeyPress* interperateKeyPresses(char keyPress);
+void resetKeyInputVars();
 #include "KeyWatching.c"
 #endif
