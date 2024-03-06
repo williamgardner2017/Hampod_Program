@@ -9,19 +9,24 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
         break;
     
     case '1':
-        if (!keyInput->isHold) {
-            // rig_get_freq(radioDetails, RIG_VFO_CURR, &freq); 
+        switch (keyInput->isHold)
+        {
+        case 0:
+            // rig_get_freq(radioDetails, RIG_VFO_A, &freq); 
             if (rig_get_freq(radioDetails, RIG_VFO_A, &freq) == RIG_OK) {
-                printf("Current frequency: %lf Hz\n", freq);
+                sprintf(vfoFreqValue, "VFO A frequency: %lf Hz\n", freq);
+                sendSpeakerOutput(vfoFreqValue); 
             } else {
                 fprintf(stderr, "Error getting frequency.\n");
             }
-            sprintf(vfoFreqValue, "VFO A frequency: %lf Hz\n", freq);
-            sendSpeakerOutput(vfoFreqValue); 
-        } else {
-            // rig_get_freq(radioDetails, RIG_VFO_CURR, &freq); 
-            // sprintf(vfoFreqValue, "VFO B Frequency %.6f", freq);
-            // sendSpeakerOutput(vfoFreqValue); 
+        case 1:
+            rig_get_freq(radioDetails, RIG_VFO_B, &freq); 
+            if (rig_get_freq(radioDetails, RIG_VFO_B, &freq) == RIG_OK) {
+                sprintf(vfoFreqValue, "VFO B Frequency %.6f", freq);
+                sendSpeakerOutput(vfoFreqValue); 
+            } else {
+                fprintf(stderr, "Error getting frequency.\n");
+            }
         }
         break;
  
