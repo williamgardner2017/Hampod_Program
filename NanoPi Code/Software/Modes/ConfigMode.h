@@ -41,12 +41,14 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <hamlib/rig.h>
+#include <hamlib/riglist.h>
 #include "../FirmwareCommunication.h"
 #include "Mode.h"
 #include "../GeneralFunctions.h"
 #include"../ConfigSettings/ConfigParams.h"
 
-void* configCommandRelay(KeyPress* keyInput, int radioDetails);
+void* configCommandRelay(KeyPress* keyInput, RIG* radioDetails);
 Mode* ConfigLoad();
 #include "ConfigMode.c"
 #endif

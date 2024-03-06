@@ -3,20 +3,16 @@ bool running2 = true;
 void* keyWatcher(void* args){
     //TODO properly setup the packet to be sent
     while(running2){
-        unsigned char *rr = (unsigned char*) "r";
-        Inst_packet* keyPressedRequest = create_inst_packet(KEYPAD,strlen((char*) rr)+1,rr, 0);
-
-        char* temp = firmwareCommandQueue(keyPressedRequest);
-        char pressedKey = temp[0];
+        char pressedKey = readNumPad();
         KeyPress *interpretedKey = interperateKeyPresses(pressedKey);
         //only run the modeFlow iff a key was actualy pressed
         if(interpretedKey->keyPressed != '-'){
             PRINTFLEVEL1("Software: key prKessed %c, shift value %i, was held %i\n", interpretedKey->keyPressed, interpretedKey->shiftAmount,interpretedKey->isHold);
             modeFlow(interpretedKey);
-        }else{
-            PRINTFLEVEL2("Software: key prKessed %c, shift value %i, was held %i\n", interpretedKey->keyPressed, interpretedKey->shiftAmount,interpretedKey->isHold);
         }
-        free(temp);
+        // else{
+        //     // PRINTFLEVEL2("Software: key prKessed %c, shift value %i, was held %i\n", interpretedKey->keyPressed, interpretedKey->shiftAmount,interpretedKey->isHold);
+        // }
         free(interpretedKey);
         usleep(keyRequestFrequency);
     }

@@ -5,7 +5,7 @@ bool running = true;
 int input_pipe;
 int output_pipe;
 int countOfPackets = 0;
-char* audioFolderPath = "/home/pi/Hampod_Program/NanoPi Code/Firmware/pregen_audio/";
+char* audioFolderPath = "../Firmware/pregen_audio/";
 //this is here the pipes will be set up
 void setupPipes(){
     printf("Connecting to Firmware_o\n");
@@ -44,7 +44,7 @@ Actual communication section
 */
 //creating the queue
 Packet_queue* softwareQueue;
-ID_queue* IDQueue;
+HashMap* IDHashSet;
 Thread_queue* threadQueue;
 // creating the locks
 pthread_mutex_t queue_lock;
@@ -78,9 +78,9 @@ void firmwareCommunicationStartup(){
         exit(1);
     }
     softwareQueue = create_packet_queue();
-    IDQueue = create_IDqueue();
+    IDHashSet = createHashMap(IntHash,IntHashCompare);
     threadQueue = createThreadQueue();
-    firmwareStartOPipeWatcher();
+    // firmwareStartOPipeWatcher();
     startOutputThreadManager();
     setupAudioHashMap();
 }
@@ -106,17 +106,19 @@ int CurrentID = 0;
 */
 
 void* firmwareCommandQueue(void* command){
-    int myId = 0;
+    int* myId = malloc(sizeof(int));
     Inst_packet* myCommand = (Inst_packet*) command;
     pthread_mutex_lock(&pipe_lock);
-    myId = CurrentID;
-    myCommand->tag = myId;
+    myId[0] = CurrentID;
+    myCommand->tag = *myId;
     send_packet(myCommand);
+    PRINTFLEVEL2("SOFTWARE: Adding id %i to the hashset\n", *myId);
+    insertHashMap(IDHashSet,(void*) myId, (void*) myId);
     CurrentID++;
     if(CurrentID > 1000){
         CurrentID = 0;
     }
-    while(IDcontains(IDQueue,CurrentID)){
+    while(containsHashMap(IDHashSet,(void*) &CurrentID)){
         CurrentID++;
         if(CurrentID > 1000){
             CurrentID = 0;
@@ -126,20 +128,27 @@ void* firmwareCommandQueue(void* command){
     //do the priority locking
     pthread_mutex_lock(&queue_lock);
     countOfPackets ++;
-    PRINTFLEVEL2("software: waiting for packet with tag %d to finish\n",myId);
-    while(IDpeek(IDQueue) != myId && running){
-        PRINTFLEVEL2("Software: packet with tag %d is still waiting\n",myId);
+    PRINTFLEVEL2("software: waiting for packet with tag %d to finish\n",myId[0]);
+    while(running){
+        if(softwareQueue->head == NULL){
+            PRINTFLEVEL2("Software: packet with tag %d is still waiting\n",myId[0]);
+            pthread_cond_wait(&queue_cond, &queue_lock);
+            continue;
+        }else if(softwareQueue->head->packet->tag == myId[0]){
+            break;
+        }
+        PRINTFLEVEL2("Software: packet with tag %d is still waiting\n",myId[0]);
         pthread_cond_wait(&queue_cond, &queue_lock);
         if(!running){
             //keep on ignaling till it clears up
-            PRINTFLEVEL2("Software: Clearing packet backlog. Current packet tag %d\n",myId);
+            PRINTFLEVEL2("Software: Clearing packet backlog. Current packet tag %d\n",myId[0]);
             countOfPackets --;
             pthread_mutex_unlock(&queue_lock);
             pthread_cond_broadcast(&queue_cond);
             return NULL;
         }
     }
-    PRINTFLEVEL2("Software: packet with tag %d is being processed\n",myId);
+    // PRINTFLEVEL2("Software: packet with tag %d is being processed\n",myId);
     countOfPackets --;
     if(!running){
         pthread_cond_broadcast(&queue_cond);
@@ -148,15 +157,14 @@ void* firmwareCommandQueue(void* command){
     }
     //grab the data from the queue
     Inst_packet *data = dequeue(softwareQueue);
-    IDdequeue(IDQueue);
     pthread_cond_broadcast(&queue_cond);
     pthread_mutex_unlock(&queue_lock);
     char* interpertedData = malloc(sizeof(data->data)+1);
 
     //temp for now
-    PRINTFLEVEL2("Software:Saveing over the data\n");
+    // PRINTFLEVEL2("Software:Saveing over the data\n");
     memccpy(interpertedData,data->data, '\0',sizeof(data->data));
-    PRINTFLEVEL2("Software:data saved\n");
+    // PRINTFLEVEL2("Software:data saved\n");
     destroy_inst_packet(&data);
     return interpertedData;
 }  
@@ -173,6 +181,16 @@ void firmwareStartOPipeWatcher(){
 
 //TODO make sure this is set up properly
 void* firmwareOPipeWatcher(void* arg){
+    int fd;
+    ssize_t bytes_available;
+
+    // Open the named pipe for reading
+    fd = open("./Firmware_o", O_RDONLY);
+    if (fd == -1) {
+        perror("Error opening named pipe");
+        return 1;
+    }
+    int readTries = 0;
     while(running){
         unsigned char packet_type;
         unsigned short size;
@@ -184,18 +202,51 @@ void* firmwareOPipeWatcher(void* arg){
         read(input_pipe, &packet_type, 4);
         PRINTFLEVEL2("Software:I have something to read\n");
         //read packet Length from the pipe
+        PRINTFLEVEL2("SOFTWARE: THere is %zd bytes in the pipe\n",bytes_available);
         read(input_pipe, &size, 2);
         //read the ID from the pipe
         read(input_pipe, &tag, 2);
+        bytes_available = -1;
+        readTries = 0;
+        while(bytes_available < size && readTries < 1000){
+            if (ioctl(fd, FIONREAD, &bytes_available) == -1) {
+                PRINTFLEVEL2("PIPE IS EMPTY WITH ERRORR\n");
+                perror("PIPE IS EMPTY WITH ERRORR\n");
+                close(fd);
+                return 1;
+            }
+        }
+        if (ioctl(fd, FIONREAD, &bytes_available) == -1) {
+            PRINTFLEVEL2("PIPE IS EMPTY WITH ERRORR\n");
+            perror("PIPE IS EMPTY WITH ERRORR\n");
+            close(fd);
+            return 1;
+        }
+        PRINTFLEVEL2("SOFTWARE: THere is %zd bytes in the pipe and looking for %i bytes to read\n",bytes_available,size);
+        if(bytes_available < size){
+            PRINTFLEVEL2("SOFTWARE: Not enought data in the packet inorder to read the data. reading remaining data and just sending it\n");
+            read(input_pipe, buffer, bytes_available);
+        }else{
+            read(input_pipe, buffer, size);
+        }
+        
         //read packet Data from pipe as a char string
-        read(input_pipe, buffer, size);
         //create the data to put into the queue
         Inst_packet* new_packet = create_inst_packet(packet_type, size, buffer, tag);
         //lock the queue
+        PRINTFLEVEL2("Got a packet with the data of %s and tag of %i\n",new_packet->data,new_packet->tag);
         pthread_mutex_lock(&queue_lock);
         //add the data to the queue
-        enqueue(softwareQueue, new_packet);
-        IDenqueue(IDQueue,tag);
+        int* tagPointer = malloc(sizeof(int));
+        tagPointer[0] = tag;
+        if(containsHashMap(IDHashSet,(void*) tagPointer)){
+            PRINTFLEVEL2("SOFTWARE: revived packet %i and adding to queue\n",tag);
+            enqueue(softwareQueue, new_packet);
+            removeHashMap(IDHashSet,(void*) tagPointer);
+        }else{
+            PRINTFLEVEL2("SOFTWARE: Bad packet with ID %i receved\n",tag);
+        }
+        free(tagPointer);
         //unlock the queue
         PRINTFLEVEL2("Software: Got a packet with the tag of %d\n", tag);
         pthread_mutex_unlock(&queue_lock);
@@ -272,12 +323,15 @@ char* sendSpeakerOutput(char* text){
     }
     //TODO add the stuff for checking if it exits
     bool hasAudioFile = getHashMap(audioHashMap, text) != NULL;
-    char* outputText = malloc((strlen(text)+2)*sizeof(char));
+    PRINTFLEVEL2("SOFTWARE: Gotted %i from the audioHashmap\n",hasAudioFile);
+    char* outputText = malloc((strlen(text)+100)*sizeof(char));
+    PRINTFLEVEL2("SOFTWARE: Malloced a new array\n");
     if(hasAudioFile){
-        strcat(outputText,"p");
+        strcpy(outputText,"p");
         strcat(outputText,getHashMap(audioHashMap, text));
     }else if(shouldCreateAudioFile(text)){
-        strcat(outputText,"s");
+         PRINTFLEVEL2("SOFTWARE:Creating new audio hashmap entrie for this\n");
+        strcpy(outputText,"s");
         strcat(outputText,text);
         //TODO add it to the hashmap
         char* nameAndPath = malloc(sizeof(char)*(strlen(text)+strlen(audioFolderPath)));
@@ -289,17 +343,16 @@ char* sendSpeakerOutput(char* text){
         PRINTFLEVEL2("SOFTWARE: adding the data %s with the key of %s\n",nameAndPath,nameOnly);
         insertHashMap(audioHashMap,nameAndPath,nameOnly);
     }else{
-        strcat(outputText,"d");
+        strcpy(outputText,"d");
         strcat(outputText,text);
     }
 
-    
-    Inst_packet* speakerPacket = create_inst_packet(AUDIO,strlen(outputText)+1,(unsigned char*) outputText, 0);
+    PRINTFLEVEL1("SOFTWARE: Sending text [%s] to be outputed by speakers\n",outputText);
     int result;
-    PRINTFLEVEL2("SOFTWARE Locking up speakout output\n");
+    PRINTFLEVEL2("SOFTWARE Locking up speakout output to send out %s\n", outputText);
     pthread_mutex_lock(&thread_lock);
     PRINTFLEVEL2("SOFTWARE Creating the thread\n");
-    result = pthread_create(&speakerThread, NULL, firmwareCommandQueue, (void*) speakerPacket);
+    result = pthread_create(&speakerThread, NULL, firmwarePlayAudio, (void*) outputText);
     PRINTFLEVEL2("SOFTWARE sing if the result was good\n");
     if (result) {
         fprintf(stderr, "Error creating thread: %d\n", result);
@@ -326,7 +379,7 @@ void setupAudioHashMap(){
     if (dr == NULL)  // opendir returns NULL if couldn't open directory 
     { 
         printf("Could not open current directory" ); 
-        return 0; 
+        return; 
     }
     while ((de = readdir(dr)) != NULL){
         printf("%s\n", de->d_name);
@@ -422,7 +475,7 @@ KeyPress* interperateKeyPresses(char keyPress){
     returnValue->shiftAmount = 0;
     if(keyPress == '-'){
         if(oldKey != '-' && !holdKeySent && holdWaitCount < holdWaitTime){
-            if(oldKey == 'A' && shiftEnabled){
+            if(oldKey == 'A' && getABState()){
                 shiftState ++;
                 if(shiftState >= maxShifts){
                     shiftState = 0;
@@ -489,7 +542,7 @@ void freeFirmwareComunication(){
     printf("Software:destroying packet queue\n");
     destroy_queue(softwareQueue);
     printf("Software:destroying ID queue\n");
-    destroy_IDqueue(IDQueue);
+    destroyHashMap(IDHashSet,IntHashFree, IntHashFree);
     printf("Software: things in call mannager cond %d\n", countOfPackets);
     printf("Software:clearing conditions\n");
     pthread_cond_broadcast(&thread_cond);
@@ -520,5 +573,5 @@ void freeFirmwareComunication(){
     close(input_pipe);
     printf("Software:closing output pipe\n");
     close(output_pipe);
-    destroyHashMap(audioHashMap,audioFree);
+    destroyHashMap(audioHashMap,audioFree,audioFree);
 }

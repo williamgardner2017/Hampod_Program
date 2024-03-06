@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include "Mode.h"
 #include "../GeneralFunctions.h"
+#include "../ConfigSettings/HashMap.h"
 #include "ConfigMode.h"
 #include "NormalMode.h"
 #include "DummyDTMFMode.h"
@@ -39,15 +40,20 @@
 
 #endif
 
-Mode* getModeById(int modeID);
-Mode** modeRoutingStart();
+
+// Mode* getModeById(int modeID); //goal is to make this outdated Done
+void modeRoutingStart(); //change to this return type Done
+void freeModesLambda(void* data);
 void freeModes();
 
+Mode* getModeByName(char* name);//new
+Mode** getAllModes();//new
+char** getAllModeNames();
 int getModeCount();
 
-void setProgramibleKeys(KeyPress* key, int modeID);
+void setProgramibleKeys(KeyPress* key, char* name); //make this use the name and not the ID
 Mode* getModeViaProgramableKey(KeyPress* key);
-
-
+void setProgramibleKeysByIndex(int index, char* name);
+Mode** getHotKeyList();
 #include "ModeRouting.c"
 #endif

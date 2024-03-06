@@ -4,12 +4,14 @@
 #define SERIAL_PORT_USB1 "/dev/ttyUSB1"
 
 Radio* loadUpRadioUsingData(char* make, int model, int port, Mode* defaultMode, rig_model_t myrig_model){
-    rig_load_all_backends(); 
+    if(SIMULATEOUTPUT == 0){
+        rig_load_all_backends(); 
+    }
     Radio* newRadio = malloc(sizeof(Radio));
     newRadio->make = make;
     newRadio->model = model;
     newRadio->port = port;
-    newRadio->currentMode = defaultMode;
+    newRadio->currentMode = defaultMode; //THIS NEEDS TO BE SET TO SOMETHING
     newRadio->myrig_model = myrig_model; 
     newRadio->my_rig = rig_init(myrig_model);
 
@@ -36,8 +38,10 @@ Radio* loadUpRadioUsingData(char* make, int model, int port, Mode* defaultMode, 
 }
 
 void freeRadio(Radio* thisRadio){
-    rig_close(thisRadio->my_rig);
-    rig_cleanup(thisRadio->my_rig);
+    if(SIMULATEOUTPUT == 0){
+        rig_close(thisRadio->my_rig);
+        rig_cleanup(thisRadio->my_rig);
+    }
     free(thisRadio);
 }
 
@@ -51,7 +55,7 @@ ModeData* getModeDetails(Radio* thisRadio){
 
 //TODO make sure each mode has this, even if it is set to null
 void setRadioMode(Radio* thisRadio, Mode* modeToSetTo){
-    if(thisRadio->currentMode->exitMode != NULL){
+    if(thisRadio->currentMode != NULL && thisRadio->currentMode->exitMode != NULL){
         thisRadio->currentMode->exitMode();
     }
     thisRadio->currentMode = modeToSetTo;
@@ -65,8 +69,4 @@ void* runRadioCommand(Radio* thisRadio, KeyPress* keyInput){
     void* results;
     results = thisRadio->currentMode->modeInput(keyInput,thisRadio->my_rig);
     return results;
-}
-
-void* getRadioDetailsInSavableFormat(Radio* thisRadio){
-    return NULL;
 }

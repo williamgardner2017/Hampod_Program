@@ -1,12 +1,23 @@
 
+freq_t* freq; 
+char vfoFreqValue[40];
 
-void* normalCommandRelay(KeyPress* keyInput, int radioDetails){
+void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
     switch (keyInput->keyPressed)
     {
     case '0':
         break;
     
     case '1':
+        if (!keyInput->isHold) {
+            rig_get_freq(radioDetails, RIG_VFO_A, &freq); 
+            sprintf(vfoFreqValue, "VFO A Frequency %.6f", freq);
+            sendSpeakerOutput(vfoFreqValue); 
+        } else {
+            rig_get_freq(radioDetails, RIG_VFO_B, &freq); 
+            sprintf(vfoFreqValue, "VFO B Frequency %.6f", freq);
+            sendSpeakerOutput(vfoFreqValue); 
+        }
         break;
  
     default:
@@ -16,12 +27,10 @@ void* normalCommandRelay(KeyPress* keyInput, int radioDetails){
 }
 
 
-void freeNormalMode(Mode** modeToFree){
-    Mode* temp = *modeToFree;
-    free(temp->modeDetails->modeName);
-    free(temp->modeDetails);
-    free(*modeToFree);
-    *modeToFree = 0;
+void freeNormalMode(Mode* modeToFree){
+    free(modeToFree->modeDetails->modeName);
+    free(modeToFree->modeDetails);
+    free(modeToFree);
 }
 
 Mode* NormalLoad(){
@@ -32,6 +41,8 @@ Mode* NormalLoad(){
     }
     newMode->modeInput = normalCommandRelay;
     newMode->freeMode = freeNormalMode;
+    newMode->enterMode = NULL;
+    newMode->exitMode = NULL;
 
     ModeData* newData = (ModeData*)malloc(sizeof(ModeData));
 
@@ -39,7 +50,7 @@ Mode* NormalLoad(){
         free(newMode);
         return NULL;
     }
-    newData->modeName = strdup("ExampleMake");
+    newData->modeName = strdup("Normal");
     newData->radioModel = 42;
 
     newMode->modeDetails = newData;

@@ -1,23 +1,11 @@
 bool testCreateModeRoutingFunction(){
-    Mode** testObject = modeRoutingStart();
-    int modeCount = getModeCount();
-    if(testObject == NULL){
-        freeModes();
-        return false;
-    }
-    int i;
-    for(i = 0; i<modeCount; i++){
-        if(testObject[i] != 0){
-            freeModes();
-            return false;
-        }
-    }
+    modeRoutingStart();
     freeModes();
     return true;
 }
 bool testGettingOneMode(){
     modeRoutingStart();
-    Mode* testMode = getModeById(0);
+    Mode* testMode = getModeByName("Normal");
     if(testMode==0){
         freeModes();
         return false;
@@ -27,12 +15,12 @@ bool testGettingOneMode(){
 }
 bool testGettingManyModes(){
     modeRoutingStart();
-    Mode* testMode = getModeById(0);
+    Mode* testMode = getModeByName("Config");
     if(testMode == 0){
         freeModes();
         return false;
     }
-    testMode = getModeById(2);
+    testMode = getModeByName("Normal");
     if(testMode == 0){
         freeModes();
         return false;
@@ -42,8 +30,8 @@ bool testGettingManyModes(){
 }
 bool testGettingSameMode(){
     modeRoutingStart();
-    Mode* testMode1 = getModeById(0);
-    Mode* testMode2 = getModeById(0);
+    Mode* testMode1 = getModeByName("Normal");
+    Mode* testMode2 = getModeByName("Normal");
 
     if(testMode1 == testMode2){
         freeModes();
@@ -59,10 +47,10 @@ bool testFreeModes(){
 
 bool testGrabEachMode(){
     modeRoutingStart();
-     getModeById(0);
-     getModeById(1);
-     getModeById(2);
-     getModeById(3);
+     getModeByName("Normal");
+     getModeByName("Config");
+     getModeByName("DTMF");
+     getModeByName("frequency mode");
      freeModes();
      return true;
 }

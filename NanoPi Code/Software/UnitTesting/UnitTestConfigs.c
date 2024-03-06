@@ -24,7 +24,7 @@ void TestFreeHash(void* a){
 }
 bool TestCreateDestroyHash(){
     HashMap* h = createHashMap(TestHash,TestCompare);
-    destroyHashMap(h,TestFreeHash);
+    destroyHashMap(h,TestFreeHash, TestFreeHash);
     return true;
 }
 HashMap* TestingHash;

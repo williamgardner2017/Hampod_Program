@@ -60,7 +60,7 @@ typedef struct Audio_thread_input {
 
 pthread_mutex_t queue_lock;
 pthread_mutex_t queue_available;
-
+pthread_mutex_t pipe_lock;
 char running = 1;
 
 pid_t controller_pid;
@@ -223,6 +223,11 @@ int main(){
         perror("pthread_mutex_init");
         exit(1);
     }
+
+    if(pthread_mutex_init(&pipe_lock, NULL) != 0) {
+        perror("pthread_mutex_init");
+        exit(1);
+    }
     
     FIRMWARE_PRINTF("Queue lock initialized\n");
 
@@ -245,15 +250,15 @@ int main(){
         pthread_mutex_lock(&queue_available);
         pthread_mutex_lock(&queue_lock);
 
-        FIRMWARE_PRINTF("Queue is open\n");
 
         Inst_packet* received_packet = dequeue(instruction_queue);
         pthread_mutex_unlock(&queue_lock);
         pthread_mutex_unlock(&queue_available);
-
-        FIRMWARE_PRINTF("Packet is %p\n", received_packet);
-        FIRMWARE_PRINTF("Processing received packet\n");
-
+        if(received_packet != NULL) {
+            FIRMWARE_PRINTF("Queue is open\n");
+            FIRMWARE_PRINTF("Packet is %p\n", received_packet);
+            FIRMWARE_PRINTF("Processing received packet\n");
+        }
         if(received_packet == NULL) {
             continue;
         }
@@ -276,11 +281,13 @@ int main(){
             read(keypad_out_pipe_fd, &keypad_back_tag, sizeof(unsigned short));
             read(keypad_out_pipe_fd, &read_key, sizeof(char));
             FIRMWARE_PRINTF("Keypad sent back %x\n", read_key);
+            pthread_mutex_lock(&pipe_lock);
             write(output_pipe_fd, &type, sizeof(Packet_type));
             unsigned short return_size = 1;
             write(output_pipe_fd, &return_size, sizeof(unsigned short));
             write(output_pipe_fd, &keypad_back_tag, sizeof(unsigned short));
             write(output_pipe_fd, &read_key, sizeof(char));
+            pthread_mutex_unlock(&pipe_lock);
         }
         if(type == AUDIO) {
             FIRMWARE_PRINTF("Got a audio packet\n");
@@ -375,10 +382,14 @@ void *audio_waiter(void* arg) {
     read(audio_out_pipe_fd, &audio_back_tag, sizeof(unsigned short));
     read(audio_out_pipe_fd, &return_code, sizeof(int));
     FIRMWARE_PRINTF("audio sent back %x\n", return_code);
+    //lock
+    pthread_mutex_lock(&pipe_lock);
     write(output_pipe_fd, &audio_back, sizeof(Packet_type));
     write(output_pipe_fd, &audio_back_size, sizeof(unsigned short));
     write(output_pipe_fd, &audio_back_tag, sizeof(unsigned short));
     write(output_pipe_fd, &return_code, sizeof(int));
+    //unlock
+    pthread_mutex_unlock(&pipe_lock);
     FIRMWARE_PRINTF("Returning packet %d\n", audio_back_tag);
     pthread_exit(0);
 }

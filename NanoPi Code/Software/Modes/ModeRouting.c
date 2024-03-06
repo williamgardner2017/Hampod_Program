@@ -1,92 +1,101 @@
-
+HashMap* ModeHashMap;
+Mode** keyBinds;
 
 /*
-*The idea of this that users only need to edit this one place inorder to add in their new modes.
+* Creaes both the hashmap of the modes and creates the array of the keybinds
 */
-
-const int modeCount = 4;
-Mode** modes;
-
-/**
-*This is where all of the modes will converge so that this is one of the few files that will need to be eddited inorder to add in a new modeCount
-* Mode structs will only be created when initialy requested. This is to make sure users only have to edit one place to add in new modes 
-*/
-Mode* getModeById(int modeID){
-
-    switch(modeID){
-        case 0: //NORMAL Mode
-            if(modes[0] == 0){
-                modes[0] = NormalLoad();
-            }
-            return modes[0];
-            break;
-        case 1: //DTMF mode so that things run smoothly
-            if(modes[1] == 0){
-                modes[1] = DTMFDummyLoad();
-            }
-            return modes[1];
-            break;
-        case 2: //ConfigMode since this is already done
-            if(modes[2] == 0){
-                modes[2] = ConfigLoad();
-            }
-            return modes[2];
-            break;
-        case 3: //ConfigMode since this is already done
-            if(modes[3] == 0){
-                modes[3] = frequencyLoad();
-            }
-            return modes[3];
-            break;
-        default:
-            return NULL;
-            break;
+void modeRoutingStart(){
+    ModeHashMap = createHashMap(StringHash,StringHashCompare);
+    Mode* tempMode;
+    tempMode = NormalLoad();
+    if(tempMode == NULL){
+        printf("Creation of mode failed\n");
+        exit(-1);
     }
-    
+    insertHashMap(ModeHashMap, tempMode, tempMode->modeDetails->modeName);
+    PRINTFLEVEL1("SOFTWARE: Adding Normal compleate\n");
+    tempMode = DTMFDummyLoad();
+    if(tempMode == NULL){
+        printf("Creation of mode failed\n");
+        exit(-1);
+    }
+    insertHashMap(ModeHashMap, tempMode, tempMode->modeDetails->modeName);
+    PRINTFLEVEL1("SOFTWARE: Adding DRML compleate\n");
+    tempMode = ConfigLoad();
+    if(tempMode == NULL){
+        printf("Creation of mode failed\n");
+        exit(-1);
+    }
+    PRINTFLEVEL2("SOFTWARE: Config mode has been loaded up\n");
+    insertHashMap(ModeHashMap, tempMode, tempMode->modeDetails->modeName);
+    PRINTFLEVEL1("SOFTWARE: Adding config compleate\n");
+    tempMode = frequencyLoad();
+    if(tempMode == NULL){
+        printf("Creation of mode failed\n");
+        exit(-1);
+    }
+    insertHashMap(ModeHashMap, tempMode, tempMode->modeDetails->modeName);
+    PRINTFLEVEL1("SOFTWARE: Adding frequency compleate\n");
+    keyBinds = calloc(12, sizeof(Mode*));
+    if(keyBinds == NULL){
+        printf("Mallocing the keybings failded\n");
+        exit(-1);
+    }
+    PRINTFLEVEL1("SOFTWARE: keybings object created\n");
 }
 
+Mode* getModeByName(char* name){
+    return (Mode*) getHashMap(ModeHashMap, name);
+}
+Mode** getAllModes(){
+    return (Mode**) getAllEntriesHashMap(ModeHashMap);
+}
 
+char** getAllModeNames(){
+    char** names = malloc(sizeof(char*) * ModeHashMap->quantity);
+    Mode** modes = getAllModes();
+    PRINTFLEVEL2("SOFTWARE:Gotten all mode objects\n");
+    for(int i = 0;i<ModeHashMap->quantity;i++){
+        Mode* tempMode = modes[i];
+        PRINTFLEVEL2("SOFTWARE: Got temp mode\n");
+         if(tempMode == NULL){
+            printf("Something went wrong the mode is NULL in getAllModeNames\n");
+            continue;
+        }
+        ModeData* tempMetaData = tempMode->modeDetails;
+        PRINTFLEVEL2("SOFTWRE: Got the metadata\n");
+        if(tempMetaData == NULL){
+            printf("Something went wrong in getAllModeNames with getting the metadata\n");
+            continue;
+        }
+        char* modeName = tempMetaData->modeName;
+        PRINTFLEVEL2("SOFTWARE; got mode name of %s\n",modeName);
+        names[i] = modeName;
+        PRINTFLEVEL2("SOFTWARE:Added name %s to the list at index %i\n",modes[i]->modeDetails->modeName,i);
+    }
+    return names;
+}
 //Used later on;
-Mode** keyBinds;
 //[C, C shift 1, C shift 2, C hold, C hold Shift 1, C hold shift 2, D , ...]
 
 
-/*
-* Creates the array to hold all of the modes
-//TODO make sure that this way of initilizin a 2d array
-*/
-Mode** modeRoutingStart(){
-    modes = calloc(modeCount, sizeof(Mode));
-    keyBinds = calloc(12, sizeof(Mode));
-    return modes;
-}
 
+void freeModesLambda(void* data){
+    Mode* tempMode = (Mode*) data;
+    tempMode->freeMode(tempMode);
+    tempMode = 0;
+}
 /*
 * Frees all of the mode structts and the array
 */
 void freeModes(){
-    int i;
-    for(i = 0; i< modeCount;i++){
-        if(modes[i] != 0){
-            modes[i]->freeMode(&(modes[i]));
-        }else{
-            free(modes[i]);
-        }
-        modes[i] = 0;
-    }
-    free(modes);
-    for(i = 0; i<12;i++){
-        if(keyBinds[i] != 0){
-            keyBinds[i]->freeMode(&keyBinds[i]);
-        }else{
-            free(keyBinds[i]);
-        }
-    }
+    destroyHashMap(ModeHashMap, freeModesLambda, NullHashFree);
+    ModeHashMap = 0;
     free(keyBinds);
 }
 
 int getModeCount(){
-    return modeCount;
+    return ModeHashMap->quantity;
 }
 
 
@@ -117,7 +126,7 @@ static int keyPressToBindValue(KeyPress* key){
 /**
  * binds the programable keys
 */
-void setProgramibleKeys(KeyPress* key, int modeID){
+void setProgramibleKeys(KeyPress* key,char* name){
     
     int value = keyPressToBindValue(key);
     if(value == -1){
@@ -126,7 +135,7 @@ void setProgramibleKeys(KeyPress* key, int modeID){
     }
     //value has not been translated
 
-    keyBinds[value] = getModeById(modeID);
+    keyBinds[value] = getModeByName(name);
 }
 
 /**
@@ -143,3 +152,13 @@ Mode* getModeViaProgramableKey(KeyPress* key){
     return keyBinds[value];
 }
 
+Mode** getHotKeyList(){
+    Mode** tempKeyBinds = malloc(sizeof(Mode*)*12);
+    for(int i = 0; i<12;i++){
+        tempKeyBinds[i] = keyBinds[i];
+    }
+    return tempKeyBinds;
+}
+void setProgramibleKeysByIndex(int index, char* name){
+    keyBinds[index] = getModeByName(name);
+}

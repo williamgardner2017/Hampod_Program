@@ -12,7 +12,9 @@
 #include "Radio.h"
 #include "KeyWatching.h"
 #include "../Firmware/hampod_firm_packet.h"
-
+#include "RigListCreator.h"
+#include "../Firmware/keypad_firmware.h"
+#include "../Firmware/audio_firmware.h"
 #include "ConfigSettings/ConfigParams.h"
 #include "ConfigSettings/ConfigFunctions.h"
 #ifdef OUTPUTLEVEL1
@@ -49,77 +51,23 @@ void sigsegv_handler(int signum);
 
 pid_t p;
 void fullStart(){
-    //destroy name pipes
-    printf("software: removing pipes\n");
-    system("../Firmware/pipe_remover.sh");
-    printf("software: removing pipes compleated\n");
-    //TODO add the destroy pipes thing
-    //fork
-    printf("software: Starting Firmware\n");
-    p = fork();
-    if(p<0){
-        perror("fork fail");
-        exit(1);
-    }else if(p == 0){
-        //start firmware
-        system("../Firmware/firmware.elf&");
-        printf("software: FirmwareStarted\n");
-        exit(0);
-    }else{
-    //connect the pipes
-        int status;
-        pid_t terminated_child_pid = waitpid(p, &status, 0);
-
-        if (terminated_child_pid == -1) {
-            perror("Waitpid failed");
-            exit(1);
-        }
-
-        if (WIFEXITED(status)) {
-            printf("Child process %d exited with status %d\n", terminated_child_pid, WEXITSTATUS(status));
-        } else {
-            printf("Child process %d did not exit normally\n", terminated_child_pid);
-        }
-
-    }
-
-    usleep(500000);
-    printf("software: Connecting pipes\n");
-    setupPipes();
-    printf("software: Connecting pipes compleated\n");
-    //send pid over to the software
-    //TODO make this so that it is a one way send may just add this to the pipe creation
-    //send_packet(create_inst_packet(CONFIG,sizeof(p),(unsigned char*) p));
-
-    //create my stuff
-    printf("software: Starting Firmware communication\n");
+    firmwareStartAudio();
+    keypadTurnon();
     firmwareCommunicationStartup();
-    printf("software: Starting Firmware Compunication compleat\n");
+    createRigLists();
     stateMachineStart();
-
-    //SETTING UP THE SIMULATION DEMO
-    printf("software: Setting up demo\n");
-    setModeState(standard);
-    Radio* radios = loadUpRadioUsingData("ICOM", 7300, 0, NULL, 3073);
-    setRadios(radios,0);
-    switchToRadioMode(3);
-    printf("software: Demo setup complete\n");
-    //send that I am ready
-    printf("software: Sending I am Ready packet to firmware\n");
-    unsigned char* okMessage = (unsigned char*) "ok";
-    Inst_packet* iAmReady = create_inst_packet(CONFIG, strlen((char*) okMessage)+1,okMessage, 0);
-    firmwareCommandQueue(iAmReady);
-    //start key loop after getting the responce
-
-
-    //initiate
+    setModeState(bootUp);
     loadConfigParams();
     populateConfigFunctions();
 
 
     printf("software: Starting keywatcher\n");
+    sendSpeakerOutput("zero Select Save. One select company. Hash to read out extra controls");
     keyWatcher(NULL);
     printf("software: Startin Keywatcher complete\n");
+    while(true){
+
+    }
 }
 void sigint_handler(int signum) {
     printf("\033[0;31mTERMINATING FIRMWARE\n");

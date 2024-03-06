@@ -15,12 +15,10 @@ void* demoCommandRelay(KeyPress* keyInput, RIG* my_rig){
 }
 
 
-void freeDemoMode(Mode** modeToFree){
-    Mode* temp = *modeToFree;
-    free(temp->modeDetails->modeName);
-    free(temp->modeDetails);
-    free(*modeToFree);
-    *modeToFree = 0;
+void freeDemoMode(Mode* modeToFree){
+    free(modeToFree->modeDetails->modeName);
+    free(modeToFree->modeDetails);
+    free(modeToFree);
 }
 
 Mode* createMode(){

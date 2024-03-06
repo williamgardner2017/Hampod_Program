@@ -8,7 +8,7 @@ bool TestStateMachingBadInputSetFrequ(){
     printf("setting radio\n");
     setRadios(radios,0);
     printf("settin mode\n");
-    switchToRadioMode(3);
+    switchToRadioMode("frequency mode");
     printf("Testing with key input P shift 0 hold 0\n");
     KeyPress* testInput = malloc(sizeof(KeyPress));
     testInput->keyPressed = 'P';
@@ -41,7 +41,7 @@ bool TestStateMachingGoodInputSetFrequ(){
     printf("setting radio\n");
     setRadios(radios,0);
     printf("settin mode\n");
-    switchToRadioMode(3);
+    switchToRadioMode("frequency mode");
     printf("Testing with key input 1 shift 0 hold 0\n");
     KeyPress* testInput = malloc(sizeof(KeyPress));
     testInput->keyPressed = '1';

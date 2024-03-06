@@ -29,3 +29,7 @@ Default: 1
 Name: HotKey
 Type: Other
 Default: 1
+
+Name: save
+Type: Other
+Default: 1
