@@ -1,4 +1,6 @@
-
+int retcode; 
+int rit; 
+int xit; 
 freq_t freq; 
 char vfoFreqValue[40];
 
@@ -13,7 +15,8 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                     switch (keyInput->shiftEnabled) {
                         case 0:
                             // Get frequency from VFO A
-                            if (rig_get_freq(radioDetails, RIG_VFO_A, &freq) == RIG_OK) {
+                            retcode = rig_get_freq(radioDetails, RIG_VFO_A, &freq); 
+                            if (retcode == RIG_OK) {
                                 sprintf(vfoFreqValue, "VFO A frequency: %lf Hz\n", freq);
                                 sendSpeakerOutput(vfoFreqValue); 
                             } else {
@@ -22,7 +25,8 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 1:
                             // Get frequency from VFO B
-                            if (rig_get_freq(radioDetails, RIG_VFO_B, &freq) == RIG_OK) {
+                            retcode = rig_get_freq(radioDetails, RIG_VFO_B, &freq); 
+                            if (retcode == RIG_OK) {
                                 sprintf(vfoFreqValue, "VFO B Frequency %.6f", freq);
                                 sendSpeakerOutput(vfoFreqValue); 
                             } else {
@@ -31,7 +35,8 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 2:
                             // Get frequency from VFO C
-                            if (rig_get_freq(radioDetails, RIG_VFO_C, &freq) == RIG_OK) {
+                            retcode = rig_get_freq(radioDetails, RIG_VFO_C, &freq); 
+                            if (retcode == RIG_OK) {
                                 sprintf(vfoFreqValue, "VFO C Frequency %.6f", freq);
                                 sendSpeakerOutput(vfoFreqValue); 
                             } else {
@@ -57,8 +62,23 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                 case 0:
                     switch (keyInput->shiftEnabled) {
                         case 0:
+                            if (rig_has_set_func(my_rig, RIG_FUNC_RIT)) {
+                                retcode = rig_set_func(my_rig, RIG_VFO_CURR, RIG_FUNC_RIT, 1)
+                                if (retcode == RIG_OK) {
+                                    printf("rig_set_func: Setting RIT ON\n");
+                                } else {
+                                    printf("rig_set_func RIT error: %s\n", rigerror(retcode));
+                                }
+                            }
                             break; 
                         case 1:
+                            if (rig_has_set_func(my_rig, RIG_FUNC_XIT)) {
+                                retcode = rig_set_func(my_rig, RIG_VFO_CURR, RIG_FUNC_XIT, 1);
+                                if (retcode != RIG_OK) {
+                                    printf("rig_set_func XIT error: %s\n", rigerror(retcode));
+                                }
+                                printf("rig_set_func: Setting XIT ON\n");
+                            }
                             break; 
                         case 2:
                             break; 
@@ -67,8 +87,22 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                 case 1:
                     switch (keyInput->shiftEnabled) {
                         case 0:
+                            if (rig_has_get_func(my_rig, RIG_FUNC_RIT)) {
+                                retcode = rig_get_func(my_rig, RIG_VFO_CURR, RIG_FUNC_RIT, &rit);
+                                if (retcode != RIG_OK) {
+                                    printf("rig_get_func RIT error: %s\n", rigerror(retcode));
+                                }
+                                printf("rig_get_func: RIT: %d\n", rit);
+                            }
                             break; 
                         case 1:
+                            if (rig_has_get_func(my_rig, RIG_FUNC_XIT)) {
+                                retcode = rig_get_func(my_rig, RIG_VFO_CURR, RIG_FUNC_XIT, &xit);
+                                if (retcode != RIG_OK) {
+                                    printf("rig_get_func XIT error: %s\n", rigerror(retcode));
+                                }
+                                printf("rig_get_func: XIT: %d\n", xit);
+                            }
                             break; 
                         case 2:
                             break; 
