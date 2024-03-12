@@ -3,37 +3,241 @@ freq_t freq;
 char vfoFreqValue[40];
 
 void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
-    switch (keyInput->keyPressed)
-    {
-    case '0':
-        break;
-    
-    case '1':
-        switch (keyInput->isHold)
-        {
-        case 0:
-            // rig_get_freq(radioDetails, RIG_VFO_A, &freq); 
-            if (rig_get_freq(radioDetails, RIG_VFO_A, &freq) == RIG_OK) {
-                sprintf(vfoFreqValue, "VFO A frequency: %lf Hz\n", freq);
-                sendSpeakerOutput(vfoFreqValue); 
-            } else {
-                fprintf(stderr, "Error getting frequency.\n");
+    switch (keyInput->keyPressed) {
+        case '0':
+            break;
+        
+        case '1':
+            switch (keyInput->isHold) {
+                case 0:
+                    switch (keyInput->shiftEnabled) {
+                        case 0:
+                            if (rig_get_freq(radioDetails, RIG_VFO_A, &freq) == RIG_OK) {
+                                sprintf(vfoFreqValue, "VFO A frequency: %lf Hz\n", freq);
+                                sendSpeakerOutput(vfoFreqValue); 
+                            } else {
+                                fprintf(stderr, "Error getting frequency.\n");
+                            }
+                            break; 
+                        case 1:
+                            break; 
+                        case 2:
+                            break; 
+                    }
+                    break; 
+                case 1:
+                    switch (keyInput->shiftEnabled) {
+                        case 0:
+                            if (rig_get_freq(radioDetails, RIG_VFO_B, &freq) == RIG_OK) {
+                                sprintf(vfoFreqValue, "VFO B Frequency %.6f", freq);
+                                sendSpeakerOutput(vfoFreqValue); 
+                            } else {
+                                fprintf(stderr, "Error getting frequency.\n");
+                            }
+                            break; 
+                        case 1:
+                            break; 
+                        case 2:
+                            break; 
+                    }
+                    break; 
             }
-            break; 
-        case 1:
-            // rig_get_freq(radioDetails, RIG_VFO_B, &freq); 
-            if (rig_get_freq(radioDetails, RIG_VFO_B, &freq) == RIG_OK) {
-                sprintf(vfoFreqValue, "VFO B Frequency %.6f", freq);
-                sendSpeakerOutput(vfoFreqValue); 
-            } else {
-                fprintf(stderr, "Error getting frequency.\n");
+            break;
+        case '2':
+            switch (keyInput->isHold) {
+                case 0:
+                    switch (keyInput->shiftEnabled) {
+                        case 0:
+                            break; 
+                        case 1:
+                            break; 
+                        case 2:
+                            break; 
+                    }
+                    break; 
+                case 1:
+                    switch (keyInput->shiftEnabled) {
+                        case 0:
+                            break; 
+                        case 1:
+                            break; 
+                        case 2:
+                            break; 
+                    }
+                    break; 
             }
-            break; 
-        }
-        break;
- 
-    default:
-        break;
+            break;
+        case '3':
+            switch (keyInput->isHold) {
+                case 0:
+                    switch (keyInput->shiftEnabled) {
+                        case 0:
+                            break; 
+                        case 1:
+                            break; 
+                        case 2:
+                            break; 
+                    }
+                    break; 
+                case 1:
+                    switch (keyInput->shiftEnabled) {
+                        case 0:
+                            break; 
+                        case 1:
+                            break; 
+                        case 2:
+                            break; 
+                    }
+                    break; 
+            }
+            break;
+        case '4':
+            switch (keyInput->isHold) {
+                case 0:
+                    switch (keyInput->shiftEnabled) {
+                        case 0:
+                            break; 
+                        case 1:
+                            break; 
+                        case 2:
+                            break; 
+                    }
+                    break; 
+                case 1:
+                    switch (keyInput->shiftEnabled) {
+                        case 0:
+                            break; 
+                        case 1:
+                            break; 
+                        case 2:
+                            break; 
+                    }
+                    break; 
+            }
+            break;
+        case '5':
+            switch (keyInput->isHold) {
+                case 0:
+                    switch (keyInput->shiftEnabled) {
+                        case 0:
+                            break; 
+                        case 1:
+                            break; 
+                        case 2:
+                            break; 
+                    }
+                    break; 
+                case 1:
+                    switch (keyInput->shiftEnabled) {
+                        case 0:
+                            break; 
+                        case 1:
+                            break; 
+                        case 2:
+                            break; 
+                    }
+                    break; 
+            }
+            break;
+        case '6':
+            switch (keyInput->isHold) {
+                case 0:
+                    switch (keyInput->shiftEnabled) {
+                        case 0:
+                            break; 
+                        case 1:
+                            break; 
+                        case 2:
+                            break; 
+                    }
+                    break; 
+                case 1:
+                    switch (keyInput->shiftEnabled) {
+                        case 0:
+                            break; 
+                        case 1:
+                            break; 
+                        case 2:
+                            break; 
+                    }
+                    break; 
+            }
+            break;
+        case '7':
+            switch (keyInput->isHold) {
+                case 0:
+                    switch (keyInput->shiftEnabled) {
+                        case 0:
+                            break; 
+                        case 1:
+                            break; 
+                        case 2:
+                            break; 
+                    }
+                    break; 
+                case 1:
+                    switch (keyInput->shiftEnabled) {
+                        case 0:
+                            break; 
+                        case 1:
+                            break; 
+                        case 2:
+                            break; 
+                    }
+                    break; 
+            }
+            break;
+        case '8':
+            switch (keyInput->isHold) {
+                case 0:
+                    switch (keyInput->shiftEnabled) {
+                        case 0:
+                            break; 
+                        case 1:
+                            break; 
+                        case 2:
+                            break; 
+                    }
+                    break; 
+                case 1:
+                    switch (keyInput->shiftEnabled) {
+                        case 0:
+                            break; 
+                        case 1:
+                            break; 
+                        case 2:
+                            break; 
+                    }
+                    break; 
+            }
+            break;
+        case '9':
+            switch (keyInput->isHold) {
+                case 0:
+                    switch (keyInput->shiftEnabled) {
+                        case 0:
+                            break; 
+                        case 1:
+                            break; 
+                        case 2:
+                            break; 
+                    }
+                    break; 
+                case 1:
+                    switch (keyInput->shiftEnabled) {
+                        case 0:
+                            break; 
+                        case 1:
+                            break; 
+                        case 2:
+                            break; 
+                    }
+                    break; 
+            }
+            break;
+
+        default:
+            break;
     }
     return NULL;
 }
