@@ -12,6 +12,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                 case 0:
                     switch (keyInput->shiftEnabled) {
                         case 0:
+                            // Get frequency from VFO A
                             if (rig_get_freq(radioDetails, RIG_VFO_A, &freq) == RIG_OK) {
                                 sprintf(vfoFreqValue, "VFO A frequency: %lf Hz\n", freq);
                                 sendSpeakerOutput(vfoFreqValue); 
@@ -20,20 +21,28 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             }
                             break; 
                         case 1:
-                            break; 
-                        case 2:
-                            break; 
-                    }
-                    break; 
-                case 1:
-                    switch (keyInput->shiftEnabled) {
-                        case 0:
+                            // Get frequency from VFO B
                             if (rig_get_freq(radioDetails, RIG_VFO_B, &freq) == RIG_OK) {
                                 sprintf(vfoFreqValue, "VFO B Frequency %.6f", freq);
                                 sendSpeakerOutput(vfoFreqValue); 
                             } else {
                                 fprintf(stderr, "Error getting frequency.\n");
                             }
+                            break; 
+                        case 2:
+                            // Get frequency from VFO C
+                            if (rig_get_freq(radioDetails, RIG_VFO_C, &freq) == RIG_OK) {
+                                sprintf(vfoFreqValue, "VFO C Frequency %.6f", freq);
+                                sendSpeakerOutput(vfoFreqValue); 
+                            } else {
+                                fprintf(stderr, "Error getting frequency.\n");
+                            }
+                            break; 
+                    }
+                    break; 
+                case 1:
+                    switch (keyInput->shiftEnabled) {
+                        case 0:
                             break; 
                         case 1:
                             break; 
