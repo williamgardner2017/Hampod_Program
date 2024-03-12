@@ -61,8 +61,10 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
             switch (keyInput->isHold) {
                 case 0:
                     switch (keyInput->shiftEnabled) {
+                        // NOTE THAT I DO NOT PLAN OF HAVING THESE FEATURES HERE. I JUST WANTED TO BEGIN THE IMPLEMENTATION PROCESS. 
                         case 0:
                             if (rig_has_set_func(my_rig, RIG_FUNC_RIT)) {
+                                // NEED TO SET THIS SO PRESSING IT AGAIN WOULD AUTO CHANGE IT. 
                                 retcode = rig_set_func(my_rig, RIG_VFO_CURR, RIG_FUNC_RIT, 1)
                                 if (retcode == RIG_OK) {
                                     printf("rig_set_func: Setting RIT ON\n");
@@ -73,6 +75,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 1:
                             if (rig_has_set_func(my_rig, RIG_FUNC_XIT)) {
+                                // NEED TO SET THIS SO PRESSING IT AGAIN WOULD AUTO CHANGE IT. 
                                 retcode = rig_set_func(my_rig, RIG_VFO_CURR, RIG_FUNC_XIT, 1);
                                 if (retcode != RIG_OK) {
                                     printf("rig_set_func XIT error: %s\n", rigerror(retcode));
