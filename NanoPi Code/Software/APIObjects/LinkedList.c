@@ -36,7 +36,7 @@ void llAddTail(LinkedList* lList,void* ldata){
         ListNode* newTail = createListNode(ldata);
         oldTail->next = newTail;
         newTail->prior = oldTail;
-        lList->tail = newTail;
+        lList->tail = newTail;s
     }
 }
 
@@ -48,6 +48,8 @@ void llAddAfterNode(LinkedList* lList, ListNode* node, void* ldata){
     node->next = newNode;
     if(newNode->next == NULL){
         lList->tail = newNode;
+    }else{
+        newNode->next->prior = newNode;
     }
 }
 
@@ -76,7 +78,7 @@ void* llRemoveTail(LinkedList* lList){
         lList->tail->next = NULL;
         oldNode->prior->next = NULL;
     }
-    PRINTFLEVEL2("removed stufs memory location%p\n",oldNode);
+    PRINTFLEVEL2("removed stufs memory location%s\n",oldNode);
     return destroyListNode(oldNode);
 }
 //assumes that this is part of a linked list
