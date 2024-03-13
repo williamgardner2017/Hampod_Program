@@ -1,5 +1,5 @@
 LinkedList* createLinkedList(){
-    LinkedList* lList = malloc(sizeof(LinkedList*));
+    LinkedList* lList = malloc(sizeof(LinkedList));
     lList->head = NULL;
     lList->tail = NULL;
     return lList;
@@ -111,7 +111,7 @@ bool llIsEmpty(LinkedList* lList){
 }
 
 ListNode* createListNode(void* ldata){
-    ListNode* node = malloc(sizeof(ListNode*));
+    ListNode* node = malloc(sizeof(ListNode));
     node->data = ldata;
     node->next = NULL;
     node->prior = NULL;
