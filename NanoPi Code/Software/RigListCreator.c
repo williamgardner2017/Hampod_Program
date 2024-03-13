@@ -1,18 +1,3 @@
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <sys/time.h>
-#include <dirent.h>
-
-#include <hamlib/rig.h>
-
-// #include "misc.h"
-
-#include <hamlib/config.h>
-
-#define SERIAL_PORT "/dev/ttyUSB0"
-
 // Might move to GeneralFunctions later. 
 void replaceSlashWithDash(char *str, size_t size) {
     while (*str && size > 1) {
