@@ -7,7 +7,7 @@ void printOutFullLinkedList(LinkedList* llist){
     }
     printf("\n");
 
-    ListNode* current = llist->tail;
+    current = llist->tail;
     while(current != NULL){
         void* outputThis = current->data;
         printf(" %s,",(char*) outputThis);
