@@ -9,6 +9,7 @@
 bool testCreateDestroyLList();
 bool testAddToLList();
 bool testRemoveFromLList();
+bool testDestroyFilledList();
 void destroyDataLList(void* data);
 
 #include "UnitTestLinkedList.c"

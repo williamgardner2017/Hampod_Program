@@ -227,6 +227,13 @@ bool LinkedListTesting(){
         printf("Fail\n");
         return false;
     }
+    printf("Testing destroyed Filled list:");
+    if(testDestroyFilledList()){
+        printf("Pass\n");
+    }else{
+        printf("Fail\n");
+        return false;
+    }
     printf("Ending Linked List Testing\n");
     return true;
 }

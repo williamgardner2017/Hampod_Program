@@ -71,13 +71,18 @@ bool testRemoveFromLList(){
         return false;
     }
     free(removedStuff);
-    a = malloc(sizeof(char*)*30);
+    destroyLinkedList(testingList,destroyDataLList);
+    return true;
+}
+bool testDestroyFilledList(){
+    LinkedList* testingList = createLinkedList();
+    char* a = malloc(sizeof(char*)*30);
     strcpy(a,"test1");
-    b = malloc(sizeof(char*)*30);
+    char* b = malloc(sizeof(char*)*30);
     strcpy(b,"test2");
-    c = malloc(sizeof(char*)*30);
+    char* c = malloc(sizeof(char*)*30);
     strcpy(c,"test3");
-    d = malloc(sizeof(char*)*30);
+    char* d = malloc(sizeof(char*)*30);
     strcpy(d,"test4");
     llAddHead(testingList, (void*) a);
     llAddHead(testingList, (void*) b);
@@ -86,7 +91,6 @@ bool testRemoveFromLList(){
     destroyLinkedList(testingList,destroyDataLList);
     return true;
 }
-
 void destroyDataLList(void* data){
     free((char*) data);
 }
