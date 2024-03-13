@@ -64,9 +64,9 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                     switch (keyInput->shiftAmount) {
                         // NOTE THAT I DO NOT PLAN OF HAVING THESE FEATURES HERE. I JUST WANTED TO BEGIN THE IMPLEMENTATION PROCESS. 
                         case 0:
-                            if (rig_has_set_func(my_rig, RIG_FUNC_RIT)) {
+                            if (rig_has_set_func(radioDetails, RIG_FUNC_RIT)) {
                                 // NEED TO SET THIS SO PRESSING IT AGAIN WOULD AUTO CHANGE IT. 
-                                retcode = rig_set_func(my_rig, RIG_VFO_CURR, RIG_FUNC_RIT, 1); 
+                                retcode = rig_set_func(radioDetails, RIG_VFO_CURR, RIG_FUNC_RIT, 1); 
                                 if (retcode == RIG_OK) {
                                     sprintf(stringForOutput, "Setting RIT ON\n");
                                     sendSpeakerOutput(stringForOutput); 
@@ -77,9 +77,9 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             }
                             break; 
                         case 1:
-                            if (rig_has_set_func(my_rig, RIG_FUNC_XIT)) {
+                            if (rig_has_set_func(radioDetails, RIG_FUNC_XIT)) {
                                 // NEED TO SET THIS SO PRESSING IT AGAIN WOULD AUTO CHANGE IT. 
-                                retcode = rig_set_func(my_rig, RIG_VFO_CURR, RIG_FUNC_XIT, 1);
+                                retcode = rig_set_func(radioDetails, RIG_VFO_CURR, RIG_FUNC_XIT, 1);
                                 if (retcode == RIG_OK) {
                                     sprintf(stringForOutput, "Setting XIT ON\n");
                                     sendSpeakerOutput(stringForOutput); 
@@ -90,11 +90,11 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             }
                             break; 
                         case 2:
-                            if (rig_has_set_func(my_rig, RIG_FUNC_LOCK)) {
-                                retcode = rig_get_func(my_rig, RIG_VFO_CURR, RIG_FUNC_LOCK, &lock);
+                            if (rig_has_set_func(radioDetails, RIG_FUNC_LOCK)) {
+                                retcode = rig_get_func(radioDetails, RIG_VFO_CURR, RIG_FUNC_LOCK, &lock);
                                 if (retcode == RIG_OK) {
                                     if (lock) {
-                                        retcode = rig_set_func(my_rig, RIG_VFO_CURR, RIG_FUNC_LOCK, 0);
+                                        retcode = rig_set_func(radioDetails, RIG_VFO_CURR, RIG_FUNC_LOCK, 0);
                                         if (retcode == RIG_OK) {
                                             sprintf(stringForOutput, "Setting VFO lock on\n");
                                             sendSpeakerOutput(stringForOutput); 
@@ -102,7 +102,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                             printf("rig_set_func: Error setting VFO lock - %s\n", rigerror(retcode));
                                         }
                                     } else {
-                                        retcode = rig_set_func(my_rig, RIG_VFO_CURR, RIG_FUNC_LOCK, 1); 
+                                        retcode = rig_set_func(radioDetails, RIG_VFO_CURR, RIG_FUNC_LOCK, 1); 
                                         if (retcode == RIG_OK) {
                                             sprintf(stringForOutput, "Setting VFO lock off\n");
                                             sendSpeakerOutput(stringForOutput); 
@@ -118,8 +118,8 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                 case 1:
                     switch (keyInput->shiftAmount) {
                         case 0:
-                            if (rig_has_get_func(my_rig, RIG_FUNC_RIT)) {
-                                retcode = rig_get_func(my_rig, RIG_VFO_CURR, RIG_FUNC_RIT, &rit);
+                            if (rig_has_get_func(radioDetails, RIG_FUNC_RIT)) {
+                                retcode = rig_get_func(radioDetails, RIG_VFO_CURR, RIG_FUNC_RIT, &rit);
                                 if (retcode == RIG_OK) {
                                     printf("rig_get_func: RIT - %d\n", rit);
                                 } else {
@@ -128,8 +128,8 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             }
                             break; 
                         case 1:
-                            if (rig_has_get_func(my_rig, RIG_FUNC_XIT)) {
-                                retcode = rig_get_func(my_rig, RIG_VFO_CURR, RIG_FUNC_XIT, &xit);
+                            if (rig_has_get_func(radioDetails, RIG_FUNC_XIT)) {
+                                retcode = rig_get_func(radioDetails, RIG_VFO_CURR, RIG_FUNC_XIT, &xit);
                                 if (retcode == RIG_OK) {
                                     printf("rig_get_func: XIT - %d\n", xit);
                                 } else {
@@ -148,7 +148,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                 case 0:
                     switch (keyInput->shiftAmount) {
                         case 0:
-                            retcode = rig_set_ptt(my_rig, RIG_VFO_A, RIG_PTT_ON);  /* stand back ! */
+                            retcode = rig_set_ptt(radioDetails, RIG_VFO_A, RIG_PTT_ON);  /* stand back ! */
  
                             if (retcode != RIG_OK)
                             {
