@@ -68,8 +68,11 @@ bool testRemoveFromLList(){
     char* d = malloc(sizeof(char*)*30);
     strcpy(d,"test4");
     llAddHead(testingList, (void*) a);
+     printOutFullLinkedList(testingList);
     llAddHead(testingList, (void*) b);
+     printOutFullLinkedList(testingList);
     llAddTail(testingList, (void*) c);
+     printOutFullLinkedList(testingList);
     llAddAfterNode(testingList, testingList->head->next ,(void*) d);
       printOutFullLinkedList(testingList);
     PRINTFLEVEL1("Starting first remove\n");
