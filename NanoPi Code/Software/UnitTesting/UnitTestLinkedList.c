@@ -52,22 +52,22 @@ bool testRemoveFromLList(){
     llAddTail(testingList, (void*) c);
     llAddAfterNode(testingList, testingList->head->next ,(void*) d);
     char* removedStuff = llRemoveNode(testingList,testingList->head->next);
-    if(strcmp(current->data,"test1")!= 0){
+    if(strcmp(removedStuff,"test1")!= 0){
         return false;
     }
     free(removedStuff);
     removedStuff = llRemoveHead(testingList);
-    if(strcmp(current->data,"test2")!= 0){
+    if(strcmp(removedStuff,"test2")!= 0){
         return false;
     }
     free(removedStuff);
     removedStuff = llRemoveTail(testingList);
-    if(strcmp(current->data,"test3")!= 0){
+    if(strcmp(removedStuff,"test3")!= 0){
         return false;
     }
     free(removedStuff);
     removedStuff = llRemoveHead(testingList);
-    if(strcmp(current->data,"test4")!= 0){
+    if(strcmp(removedStuff,"test4")!= 0){
         return false;
     }
     free(removedStuff);
