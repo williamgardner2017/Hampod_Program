@@ -59,6 +59,8 @@ void* llRemoveHead(LinkedList* lList){
     lList->head = lList->head->next;
     if(lList->head == NULL){
         lList->tail = NULL;
+    }else{
+        lList->head->prior = NULL;
     }
     return destroyListNode(oldNode);
 }
@@ -70,6 +72,8 @@ void* llRemoveTail(LinkedList* lList){
     lList->tail = lList->tail->prior;
     if(lList->tail == NULL){
         lList->head = NULL;
+    }else{
+        lList->tail->next = NULL;
     }
     return destroyListNode(oldNode);
 }
