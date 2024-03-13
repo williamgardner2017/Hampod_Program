@@ -36,7 +36,7 @@ void llAddTail(LinkedList* lList,void* ldata){
         ListNode* newTail = createListNode(ldata);
         oldTail->next = newTail;
         newTail->prior = oldTail;
-        lList->tail = newTail;s
+        lList->tail = newTail;
     }
 }
 
