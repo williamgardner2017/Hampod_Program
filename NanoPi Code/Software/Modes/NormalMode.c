@@ -13,7 +13,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
         case '1':
             switch (keyInput->isHold) {
                 case 0:
-                    switch (keyInput->shiftEnabled) {
+                    switch (keyInput->shiftAmount) {
                         case 0:
                             // Get frequency from VFO A
                             retcode = rig_get_freq(radioDetails, RIG_VFO_A, &freq); 
@@ -47,7 +47,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                     }
                     break; 
                 case 1:
-                    switch (keyInput->shiftEnabled) {
+                    switch (keyInput->shiftAmount) {
                         case 0:
                             break; 
                         case 1:
