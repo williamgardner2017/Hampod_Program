@@ -1,7 +1,8 @@
 void printOutFullLinkedList(LinkedList* llist){
     ListNode* current = llist->head;
     while(current != NULL){
-        printf(" %s,"current->data);
+        void* outputThis = current->data;
+        printf(" %s,",(char*) outputThis);
         current = current->next;
     }
     printf("\n");
