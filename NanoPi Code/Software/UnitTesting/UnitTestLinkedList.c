@@ -51,26 +51,32 @@ bool testRemoveFromLList(){
     llAddHead(testingList, (void*) b);
     llAddTail(testingList, (void*) c);
     llAddAfterNode(testingList, testingList->head->next ,(void*) d);
+    PRINTFLEVEL1("Starting first remove\n");
     char* removedStuff = llRemoveNode(testingList,testingList->head->next);
     if(strcmp(removedStuff,"test1")!= 0){
+        PRINTFLEVEL1("Failed on first remove\n");
         return false;
     }
     free(removedStuff);
     removedStuff = llRemoveHead(testingList);
     if(strcmp(removedStuff,"test2")!= 0){
+        PRINTFLEVEL1("Failed on second remove\n");
         return false;
     }
     free(removedStuff);
     removedStuff = llRemoveTail(testingList);
     if(strcmp(removedStuff,"test3")!= 0){
+        PRINTFLEVEL1("Failed on third remove\n");
         return false;
     }
     free(removedStuff);
     removedStuff = llRemoveHead(testingList);
     if(strcmp(removedStuff,"test4")!= 0){
+        PRINTFLEVEL1("Failed on forth remove\n");
         return false;
     }
     free(removedStuff);
+    PRINTFLEVEL1("removed everythign and now destroying it\n");
     destroyLinkedList(testingList,destroyDataLList);
     return true;
 }
