@@ -71,6 +71,7 @@ bool testRemoveFromLList(){
     llAddHead(testingList, (void*) b);
     llAddTail(testingList, (void*) c);
     llAddAfterNode(testingList, testingList->head->next ,(void*) d);
+      printOutFullLinkedList(testingList);
     PRINTFLEVEL1("Starting first remove\n");
     char* removedStuff = llRemoveNode(testingList,testingList->head->next);
     if(strcmp(removedStuff,"test1")!= 0){
