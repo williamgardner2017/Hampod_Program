@@ -1,3 +1,12 @@
+void printOutFullLinkedList(LinkedList* llist){
+    ListNode* current = llist->head;
+    while(current != NULL){
+        printf(" %s,"current->data);
+        current = current->next;
+    }
+    printf("\n");
+}
+
 bool testCreateDestroyLList(){
     LinkedList* testingList = createLinkedList();
     PRINTFLEVEL1("Is it empty, %i",llIsEmpty(testingList));
@@ -60,6 +69,7 @@ bool testRemoveFromLList(){
         return false;
     }
     PRINTFLEVEL1("removed %s\n",removedStuff);
+    printOutFullLinkedList(testingList);
     // free(removedStuff);
     removedStuff = llRemoveHead(testingList);
     if(strcmp(removedStuff,"test2")!= 0){
@@ -67,6 +77,7 @@ bool testRemoveFromLList(){
         return false;
     }
     PRINTFLEVEL1("removed %s\n",removedStuff);
+    printOutFullLinkedList(testingList);
     // free(removedStuff);
     removedStuff = llRemoveTail(testingList);
     if(strcmp(removedStuff,"test3")!= 0){
@@ -74,6 +85,7 @@ bool testRemoveFromLList(){
         return false;
     }
     PRINTFLEVEL1("removed %s\n",removedStuff);
+    printOutFullLinkedList(testingList);
     // free(removedStuff);
     removedStuff = llRemoveHead(testingList);
     if(strcmp(removedStuff,"test4")!= 0){
@@ -81,6 +93,7 @@ bool testRemoveFromLList(){
         return false;
     }
     PRINTFLEVEL1("removed %s\n",removedStuff);
+    printOutFullLinkedList(testingList);
     // free(removedStuff);
     PRINTFLEVEL1("removed everythign and now destroying it, the list if %i free\n",llIsEmpty(testingList));
     destroyLinkedList(testingList,destroyDataLList);
