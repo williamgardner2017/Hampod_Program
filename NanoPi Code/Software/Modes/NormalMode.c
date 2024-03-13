@@ -61,7 +61,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
         case '2':
             switch (keyInput->isHold) {
                 case 0:
-                    switch (keyInput->shiftEnabled) {
+                    switch (keyInput->shiftAmount) {
                         // NOTE THAT I DO NOT PLAN OF HAVING THESE FEATURES HERE. I JUST WANTED TO BEGIN THE IMPLEMENTATION PROCESS. 
                         case 0:
                             if (rig_has_set_func(my_rig, RIG_FUNC_RIT)) {
@@ -116,7 +116,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             }
                     break; 
                 case 1:
-                    switch (keyInput->shiftEnabled) {
+                    switch (keyInput->shiftAmount) {
                         case 0:
                             if (rig_has_get_func(my_rig, RIG_FUNC_RIT)) {
                                 retcode = rig_get_func(my_rig, RIG_VFO_CURR, RIG_FUNC_RIT, &rit);
@@ -146,8 +146,14 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
         case '3':
             switch (keyInput->isHold) {
                 case 0:
-                    switch (keyInput->shiftEnabled) {
+                    switch (keyInput->shiftAmount) {
                         case 0:
+                            retcode = rig_set_ptt(my_rig, RIG_VFO_A, RIG_PTT_ON);  /* stand back ! */
+ 
+                            if (retcode != RIG_OK)
+                            {
+                                printf("rig_set_ptt: error = %s \n", rigerror(retcode));
+                            }
                             break; 
                         case 1:
                             break; 
@@ -156,7 +162,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                     }
                     break; 
                 case 1:
-                    switch (keyInput->shiftEnabled) {
+                    switch (keyInput->shiftAmount) {
                         case 0:
                             break; 
                         case 1:
@@ -170,7 +176,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
         case '4':
             switch (keyInput->isHold) {
                 case 0:
-                    switch (keyInput->shiftEnabled) {
+                    switch (keyInput->shiftAmount) {
                         case 0:
                             break; 
                         case 1:
@@ -180,7 +186,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                     }
                     break; 
                 case 1:
-                    switch (keyInput->shiftEnabled) {
+                    switch (keyInput->shiftAmount) {
                         case 0:
                             break; 
                         case 1:
@@ -194,7 +200,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
         case '5':
             switch (keyInput->isHold) {
                 case 0:
-                    switch (keyInput->shiftEnabled) {
+                    switch (keyInput->shiftAmount) {
                         case 0:
                             break; 
                         case 1:
@@ -204,7 +210,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                     }
                     break; 
                 case 1:
-                    switch (keyInput->shiftEnabled) {
+                    switch (keyInput->shiftAmount) {
                         case 0:
                             break; 
                         case 1:
@@ -218,7 +224,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
         case '6':
             switch (keyInput->isHold) {
                 case 0:
-                    switch (keyInput->shiftEnabled) {
+                    switch (keyInput->shiftAmount) {
                         case 0:
                             break; 
                         case 1:
@@ -228,7 +234,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                     }
                     break; 
                 case 1:
-                    switch (keyInput->shiftEnabled) {
+                    switch (keyInput->shiftAmount) {
                         case 0:
                             break; 
                         case 1:
@@ -242,7 +248,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
         case '7':
             switch (keyInput->isHold) {
                 case 0:
-                    switch (keyInput->shiftEnabled) {
+                    switch (keyInput->shiftAmount) {
                         case 0:
                             break; 
                         case 1:
@@ -252,7 +258,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                     }
                     break; 
                 case 1:
-                    switch (keyInput->shiftEnabled) {
+                    switch (keyInput->shiftAmount) {
                         case 0:
                             break; 
                         case 1:
@@ -266,7 +272,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
         case '8':
             switch (keyInput->isHold) {
                 case 0:
-                    switch (keyInput->shiftEnabled) {
+                    switch (keyInput->shiftAmount) {
                         case 0:
                             break; 
                         case 1:
@@ -276,7 +282,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                     }
                     break; 
                 case 1:
-                    switch (keyInput->shiftEnabled) {
+                    switch (keyInput->shiftAmount) {
                         case 0:
                             break; 
                         case 1:
@@ -290,7 +296,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
         case '9':
             switch (keyInput->isHold) {
                 case 0:
-                    switch (keyInput->shiftEnabled) {
+                    switch (keyInput->shiftAmount) {
                         case 0:
                             break; 
                         case 1:
@@ -300,7 +306,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                     }
                     break; 
                 case 1:
-                    switch (keyInput->shiftEnabled) {
+                    switch (keyInput->shiftAmount) {
                         case 0:
                             break; 
                         case 1:
