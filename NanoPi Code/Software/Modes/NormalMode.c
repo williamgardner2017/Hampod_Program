@@ -44,6 +44,8 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 fprintf(stderr, "Error getting frequency.\n");
                             }
                             break; 
+                        default:
+                            break;
                     }
                     break; 
                 case 1:
@@ -54,8 +56,12 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 2:
                             break; 
+                        default:
+                            break;
                     }
                     break; 
+                default:
+                    break;
             }
             break;
         case '2':
@@ -114,6 +120,8 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                     printf("rig_get_func: Error getting current VFO lock for setting it - %s\n", rigerror(retcode)); 
                                 }
                             }
+                        default:
+                            break;
                     break; 
                 case 1:
                     switch (keyInput->shiftAmount) {
@@ -139,8 +147,12 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 2:
                             break; 
+                        default:
+                            break;
                     }
                     break; 
+                default:
+                    break;
             }
             break;
         case '3':
@@ -159,6 +171,8 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 2:
                             break; 
+                        default:
+                            break;
                     }
                     break; 
                 case 1:
@@ -169,8 +183,12 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 2:
                             break; 
+                        default:
+                            break;
                     }
                     break; 
+                default:
+                    break;
             }
             break;
         case '4':
@@ -183,6 +201,8 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 2:
                             break; 
+                        default:
+                            break;
                     }
                     break; 
                 case 1:
@@ -193,8 +213,12 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 2:
                             break; 
+                        default:
+                            break;
                     }
                     break; 
+                default:
+                    break;
             }
             break;
         case '5':
@@ -207,6 +231,8 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 2:
                             break; 
+                        default:
+                            break;
                     }
                     break; 
                 case 1:
@@ -217,8 +243,12 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 2:
                             break; 
+                        default:
+                            break;
                     }
                     break; 
+                default:
+                    break;
             }
             break;
         case '6':
@@ -231,6 +261,8 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 2:
                             break; 
+                        default:
+                            break;
                     }
                     break; 
                 case 1:
@@ -241,8 +273,12 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 2:
                             break; 
+                        default:
+                            break;
                     }
                     break; 
+                default:
+                    break;
             }
             break;
         case '7':
@@ -255,6 +291,8 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 2:
                             break; 
+                        default:
+                            break;
                     }
                     break; 
                 case 1:
@@ -265,8 +303,12 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 2:
                             break; 
+                        default:
+                            break;
                     }
                     break; 
+                default:
+                    break;
             }
             break;
         case '8':
@@ -279,6 +321,8 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 2:
                             break; 
+                        default:
+                            break;
                     }
                     break; 
                 case 1:
@@ -289,8 +333,12 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 2:
                             break; 
+                        default:
+                            break;
                     }
                     break; 
+                default:
+                    break;
             }
             break;
         case '9':
@@ -303,6 +351,8 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 2:
                             break; 
+                        default:
+                            break;
                     }
                     break; 
                 case 1:
@@ -313,8 +363,12 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 2:
                             break; 
+                        default:
+                            break;
                     }
                     break; 
+                default:
+                    break;
             }
             break;
 
