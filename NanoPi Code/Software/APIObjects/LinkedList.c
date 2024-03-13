@@ -76,6 +76,7 @@ void* llRemoveTail(LinkedList* lList){
         lList->tail->next = NULL;
         oldNode->prior->next = NULL;
     }
+    PRINTFLEVEL2("removed stufs memory location%p\n",oldNode);
     return destroyListNode(oldNode);
 }
 //assumes that this is part of a linked list
