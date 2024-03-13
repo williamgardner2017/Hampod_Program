@@ -6,7 +6,7 @@ LinkedList* createLinkedList(){
 }
 void destroyLinkedList(LinkedList* lList, void (*destroyFunction)(void*)){
     while(!llIsEmpty(lList)){
-        PRINTFLEVEL2("removing item from list while destroying\n");
+        PRINTFLEVEL2("removing item from list while destroying: String value is %s\n",lList->head->data);
         destroyFunction(llRemoveHead(lList));
     }
     free(lList);
