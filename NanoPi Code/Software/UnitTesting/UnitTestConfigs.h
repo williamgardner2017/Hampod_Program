@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include "../GeneralFunctions.h"
 #include "../ConfigSettings/ConfigParams.h"
-#include "../ConfigSettings/HashMap.h"
+#include "../APIObjects/HashMap.h"
 
 //I also will need to make a simple hashing function
 int TestHash(void* input);

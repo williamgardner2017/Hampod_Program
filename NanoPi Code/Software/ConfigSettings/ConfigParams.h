@@ -35,7 +35,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include "../GeneralFunctions.h"
-#include "HashMap.h"
+#include "../APIObjects/HashMap.h"
 
 
 

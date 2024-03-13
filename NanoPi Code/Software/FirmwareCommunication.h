@@ -22,7 +22,7 @@
 #include "ThreadQueue.h"
 #include "../Firmware/hampod_queue.h"
 #include "../Firmware/hampod_firm_packet.h"
-#include "ConfigSettings/HashMap.h"
+#include "APIObjects/HashMap.h"
 #include "../Firmware/audio_firmware.h"
 
 
