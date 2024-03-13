@@ -58,24 +58,28 @@ bool testRemoveFromLList(){
         PRINTFLEVEL1("Failed on first remove\n");
         return false;
     }
+    PRINTFLEVEL1("removed %s\n",removedStuff);
     // free(removedStuff);
     removedStuff = llRemoveHead(testingList);
     if(strcmp(removedStuff,"test2")!= 0){
         PRINTFLEVEL1("Failed on second remove\n");
         return false;
     }
+    PRINTFLEVEL1("removed %s\n",removedStuff);
     // free(removedStuff);
     removedStuff = llRemoveTail(testingList);
     if(strcmp(removedStuff,"test3")!= 0){
         PRINTFLEVEL1("Failed on third remove\n");
         return false;
     }
+    PRINTFLEVEL1("removed %s\n",removedStuff);
     // free(removedStuff);
     removedStuff = llRemoveHead(testingList);
     if(strcmp(removedStuff,"test4")!= 0){
         PRINTFLEVEL1("Failed on forth remove\n");
         return false;
     }
+    PRINTFLEVEL1("removed %s\n",removedStuff);
     // free(removedStuff);
     PRINTFLEVEL1("removed everythign and now destroying it, the list if %i free\n",llIsEmpty(testingList));
     destroyLinkedList(testingList,destroyDataLList);
