@@ -77,7 +77,7 @@ bool testRemoveFromLList(){
         return false;
     }
     free(removedStuff);
-    PRINTFLEVEL1("removed everythign and now destroying it\n");
+    PRINTFLEVEL1("removed everythign and now destroying it, the list if %i free\n",llIsEmpty(testingList));
     destroyLinkedList(testingList,destroyDataLList);
     return true;
 }
