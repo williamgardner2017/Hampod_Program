@@ -74,6 +74,7 @@ void* llRemoveTail(LinkedList* lList){
         lList->head = NULL;
     }else{
         lList->tail->next = NULL;
+        oldNode->prior->next = NULL;
     }
     return destroyListNode(oldNode);
 }
