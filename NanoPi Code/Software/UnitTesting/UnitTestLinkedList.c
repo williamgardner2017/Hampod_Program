@@ -1,5 +1,6 @@
 bool testCreateDestroyLList(){
     LinkedList* testingList = createLinkedList();
+    PRINTFLEVEL1("Is it empty, %i",llIsEmpty(testingList));
     destroyLinkedList(testingList,destroyDataLList);
     return true;
 }
