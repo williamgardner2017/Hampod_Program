@@ -90,8 +90,6 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             }
                             break; 
                         case 2:
-                            
-                            
                             if (rig_has_set_func(my_rig, RIG_FUNC_LOCK)) {
                                 retcode = rig_get_func(my_rig, RIG_VFO_CURR, RIG_FUNC_LOCK, &lock);
                                 if (retcode == RIG_OK) {
@@ -112,8 +110,6 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                             printf("rig_set_func: Error setting VFO lock - %s\n", rigerror(retcode));
                                         }
                                     }
-                                    
-                                    
                                 } else {
                                     printf("rig_get_func: Error getting current VFO lock for setting it - %s\n", rigerror(retcode)); 
                                 }
@@ -124,19 +120,21 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 0:
                             if (rig_has_get_func(my_rig, RIG_FUNC_RIT)) {
                                 retcode = rig_get_func(my_rig, RIG_VFO_CURR, RIG_FUNC_RIT, &rit);
-                                if (retcode != RIG_OK) {
+                                if (retcode == RIG_OK) {
+                                    printf("rig_get_func: RIT - %d\n", rit);
+                                } else {
                                     printf("rig_get_func: Error getting RIT - %s\n", rigerror(retcode));
                                 }
-                                printf("rig_get_func: RIT - %d\n", rit);
                             }
                             break; 
                         case 1:
                             if (rig_has_get_func(my_rig, RIG_FUNC_XIT)) {
                                 retcode = rig_get_func(my_rig, RIG_VFO_CURR, RIG_FUNC_XIT, &xit);
-                                if (retcode != RIG_OK) {
+                                if (retcode == RIG_OK) {
+                                    printf("rig_get_func: XIT - %d\n", xit);
+                                } else {
                                     printf("rig_get_func: Error getting XIT - %s\n", rigerror(retcode));
                                 }
-                                printf("rig_get_func: XIT - %d\n", xit);
                             }
                             break; 
                         case 2:
