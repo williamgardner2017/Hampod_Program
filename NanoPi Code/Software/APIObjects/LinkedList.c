@@ -69,7 +69,7 @@ void* llRemoveTail(LinkedList* lList){
         return (ListNode*) NULL;
     }
     ListNode* oldNode = lList->tail;
-    lList->tail = lList->tail->prior;
+    lList->tail = oldNode->prior;
     if(lList->tail == NULL){
         lList->head = NULL;
     }else{

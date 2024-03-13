@@ -72,16 +72,16 @@ bool testRemoveFromLList(){
     PRINTFLEVEL1("removed %s\n",removedStuff);
     printOutFullLinkedList(testingList);
     // free(removedStuff);
-    removedStuff = llRemoveHead(testingList);
-    if(strcmp(removedStuff,"test2")!= 0){
+    removedStuff = llRemoveTail(testingList);
+    if(strcmp(removedStuff,"test3")!= 0){
         PRINTFLEVEL1("Failed on second remove\n");
         return false;
     }
     PRINTFLEVEL1("removed %s\n",removedStuff);
     printOutFullLinkedList(testingList);
     // free(removedStuff);
-    removedStuff = llRemoveTail(testingList);
-    if(strcmp(removedStuff,"test3")!= 0){
+    removedStuff = llRemoveHead(testingList);
+    if(strcmp(removedStuff,"test2")!= 0){
         PRINTFLEVEL1("Failed on third remove\n");
         return false;
     }
