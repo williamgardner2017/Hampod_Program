@@ -33,11 +33,12 @@ bool testAddToLList(){
     if(strcmp(current->data,"test3")!= 0){
         return false;
     }
-    current = current->next;
+    current = NULL;
     destroyLinkedList(testingList,destroyDataLList);
     return true;
 }
 bool testRemoveFromLList(){
+    PRINTFLEVEL1("Creating setup\n");
     LinkedList* testingList = createLinkedList();
     char* a = malloc(sizeof(char*)*30);
     strcpy(a,"test1");
