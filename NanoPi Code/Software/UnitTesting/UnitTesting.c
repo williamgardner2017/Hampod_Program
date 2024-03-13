@@ -15,6 +15,7 @@
 #include "UnitTestConfigs.h"
 #include "UnitTestAudio.h"
 #include "UnitTestSaveLoad.h"
+#include "UnitTestLinkedList.h"
 
 void sigsegv_handler(int signum);
 
@@ -218,6 +219,34 @@ bool SaveLoadTesting(){
     printf("Ending testing save load\n");
     return true;
 }
+
+bool LinkedListTesting(){
+    printf("Starting testing LinkedList\n");
+    printf("Testing Create Destroy:");
+    if(testCreateDestroyLList()){
+        printf("Pass\n");
+    }else{
+        printf("Fail\n");
+        return false;
+    }
+    printf("Testing Add stuff:");
+    if(testAddToLList()){
+        printf("Pass\n");
+    }else{
+        printf("Fail\n");
+        return false;
+    }
+    printf("Testing remove stuff:");
+    if(testRemoveFromLList()){
+        printf("Pass\n");
+    }else{
+        printf("Fail\n");
+        return false;
+    }
+    printf("Ending Linked List Testing\n");
+    return true;
+}
+
 int main(){
 
     if(signal(SIGSEGV, sigsegv_handler) == SIG_ERR) {
@@ -231,6 +260,7 @@ int main(){
     // HashMapTest();
     // ConfigParamTest();
     // AudioTesting();
-    SaveLoadTesting();
+    // SaveLoadTesting();
+    LinkedListTesting();
     return -1;
 }

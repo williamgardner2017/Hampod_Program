@@ -1,5 +1,5 @@
-#ifndef HAMPOD_SOFT_STRINGMAPPING
-#define HAMPOD_SOFT_STRINGMAPPING
+#ifndef HAMPOD_SOFT_LLIST
+#define HAMPOD_SOFT_LLIST
 
 #ifdef OUTPUTLEVEL1
 #define PRINTFLEVEL1(...) \
@@ -44,18 +44,19 @@ typedef struct ListNode{
 typedef struct LinkedList {
     ListNode* head;
     ListNode* tail;
-    void 
 } LinkedList;
 
 LinkedList* createLinkedList();
 void destroyLinkedList(LinkedList* lList,void (*destroyFunction)(void*));
-void llAddHead(LinkedList* lList,void* data);
-void llAddTail(LinkedList* lList,void* data);
-void llAddAfterNode(ListNode* node, void* data);
-ListNode* llRemoveHead(LinkedList* lList);
-ListNode* llRemoveTail(LinkedList* lList);
-ListNode* llRemoveNode(ListNode* node);
+void llAddHead(LinkedList* lList,void* ldata);
+void llAddTail(LinkedList* lList,void* ldata);
+void llAddAfterNode(LinkedList* lList, ListNode* node, void* ldata);
+void* llRemoveHead(LinkedList* lList);
+void* llRemoveTail(LinkedList* lList);
+void* llRemoveNode(LinkedList* lList, ListNode* node);
 bool llIsEmpty(LinkedList* lList);
 
+ListNode* createListNode(void* ldata);
+void* destroyListNode(ListNode* node);
 #include "LinkedList.c"
 #endif
