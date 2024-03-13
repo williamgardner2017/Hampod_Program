@@ -6,6 +6,14 @@ void printOutFullLinkedList(LinkedList* llist){
         current = current->next;
     }
     printf("\n");
+
+    ListNode* current = llist->tail;
+    while(current != NULL){
+        void* outputThis = current->data;
+        printf(" %s,",(char*) outputThis);
+        current = current->prior;
+    }
+    printf("\n");
 }
 
 bool testCreateDestroyLList(){
