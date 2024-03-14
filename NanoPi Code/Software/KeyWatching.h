@@ -25,7 +25,7 @@
 #else
 
 #define PRINTFLEVEL1(...) \
-    while(0)
+do{}while(0)
 
 #endif
 
@@ -39,7 +39,7 @@
 #else
 
 #define PRINTFLEVEL2(...) \
-    while(0)
+do{}while(0)
 
 #endif
 

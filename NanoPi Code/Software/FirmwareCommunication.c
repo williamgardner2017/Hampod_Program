@@ -79,6 +79,73 @@ char* sendSpeakerOutput(char* text){
    return text;
 }
 
+/**
+ * filterBypass: if true will bypass the save generted file
+ * verbosityBypass: is true will play even if verbosity is turned off
+ * linearCall: if true will not do threading and will lock up until the audio is played
+*/
+char* sendSpeakerOutputWithConditions(char* text, bool filterBypass, bool verbosityBypass, bool linearCall){
+     if(SIMULATEOUTPUT){
+        PRINTFLEVEL1("TESTING SPEAKER OUTPUT: %s\n", text);
+         bool hasAudioFile = getHashMap(audioHashMap, text) != NULL;
+         if(hasAudioFile){
+            PRINTFLEVEL1("SOFTWARE: Audio file was found\n");
+         }else if(shouldCreateAudioFile(text)){
+            PRINTFLEVEL1("SOFTWARE:No audio file found but saving new file\n");
+         }else{
+            PRINTFLEVEL1("SOFTWARE:No audio file found and NOT creating a new file\n");
+         }
+        return text;
+    }
+    //TODO add the stuff for checking if it exits
+    bool hasAudioFile = getHashMap(audioHashMap, text) != NULL;
+    PRINTFLEVEL2("SOFTWARE: Gotted %i from the audioHashmap\n",hasAudioFile);
+    char* outputText = malloc((strlen(text)+100)*sizeof(char));
+    PRINTFLEVEL2("SOFTWARE: Malloced a new array\n");
+    if(hasAudioFile){
+        strcpy(outputText,"p");
+        strcat(outputText,getHashMap(audioHashMap, text));
+    }else if(shouldCreateAudioFile(text) && !filterBypass){
+         PRINTFLEVEL2("SOFTWARE:Creating new audio hashmap entrie for this\n");
+        strcpy(outputText,"s");
+        strcat(outputText,text);
+        //TODO add it to the hashmap
+        char* nameAndPath = malloc(sizeof(char)*(strlen(text)+strlen(audioFolderPath)));
+        char* nameOnly = malloc(sizeof(char)*(strlen(text)+10));
+        strcpy(nameAndPath,audioFolderPath);
+        strcpy(nameOnly,text);
+        strcat(nameAndPath,nameOnly);
+        //TODO insert into the hash with (path/name, name)
+        PRINTFLEVEL2("SOFTWARE: adding the data %s with the key of %s\n",nameAndPath,nameOnly);
+        insertHashMap(audioHashMap,nameAndPath,nameOnly);
+    }else{
+        strcpy(outputText,"d");
+        strcat(outputText,text);
+    }
+
+    PRINTFLEVEL1("SOFTWARE: Sending text [%s] to be outputed by speakers\n",outputText);
+    int result;
+    PRINTFLEVEL2("SOFTWARE Locking up speakout output to send out %s\n", outputText);
+    pthread_mutex_lock(&thread_lock);
+    PRINTFLEVEL2("SOFTWARE Creating the thread\n");
+    if(linearCall){
+        firmwarePlayAudio((void*)outputText);
+        result = 0;
+    }else{
+        result = pthread_create(&speakerThread, NULL, firmwarePlayAudio, (void*) outputText);
+    }
+    PRINTFLEVEL2("SOFTWARE sing if the result was good\n");
+    if (result) {
+        fprintf(stderr, "Error creating thread: %d\n", result);
+        exit(0);
+    }
+    PRINTFLEVEL2("SOFTWARE unlockiing the speaker lock\n");
+    pthread_mutex_unlock(&thread_lock);
+    // return firmwareCommandQueue(speakerPacket);
+    PRINTFLEVEL2("SOFTWARE Returning the speaker output value\n");
+   return text;
+}
+
 
 void setupAudioHashMap(){
     char* softwarePath = audioFolderPath;

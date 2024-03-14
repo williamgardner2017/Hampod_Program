@@ -45,7 +45,7 @@
 #else
 
 #define PRINTFLEVEL1(...) \
-    while(0)
+do{}while(0)
 
 #endif
 
@@ -59,13 +59,14 @@
 #else
 
 #define PRINTFLEVEL2(...) \
-    while(0)
+do{}while(0)
 
 #endif
 
 
 
 char* sendSpeakerOutput(char* text);
+char* sendSpeakerOutputWithConditions(char* text, bool filterBypass, bool verbosityBypass, bool linearCall);
 void setupAudioHashMap();
 int audioHash(void* key);
 bool audioCompare(void* key1, void* key2);
