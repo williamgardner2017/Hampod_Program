@@ -112,7 +112,7 @@ BootUpStates BootupFlow(KeyPress* keyInput){
                             
                             sprintf(outputText, "Linking radio make %s of model %s to port %i", company, modelList[modelIndex], convertCharToKeyValue(keyInput));
                             sendSpeakerOutput(outputText);
-                            loadUpRadioUsingData(company,modelList[modelIndex], convertCharToKeyValue(keyInput), getModeByName("frequency mode"), atoi(hamlibIDList[modelIndex]));
+                            loadUpRadioUsingData(company,(int) modelList[modelIndex], convertCharToKeyValue(keyInput), getModeByName("frequency mode"), atoi(hamlibIDList[modelIndex]));
                             if(getCurrentRadioID() == 1){
                                 modeState = standard;
                                 sendSpeakerOutput("Starting normal operations");
@@ -192,7 +192,7 @@ int isReadingOut = 0; //TODO make this actualy cause a read out
 int ModeSelectFlow(KeyPress* keyInput){
     if(keyInput->keyPressed == '#'){
         sendSpeakerOutput("One through nine to select mode. zero to go back. star then number to read out mode of said number. Star hold to read out all modes on page. C and D to go to next and prior page");
-        return;
+        return 1;
     }
     if(isReadingOut){
          switch(keyInput->keyPressed){
@@ -381,7 +381,7 @@ int readOutModeName(char* modeName){
 int switchToRadioMode(char* modeName){ //TODO redue this to be better sueted, all this needs to do is to set what the letter toggles are when swiching to said mode
     modeState = standard;
     PRINTFLEVEL1("Switching to radio mode%s\n",modeName);
-    char* modeSwitchText[50];
+    char modeSwitchText[50];
     sprintf(modeSwitchText, "Switching to radio mode%s", modeName);
     sendSpeakerOutput(modeSwitchText);
     setRadioMode(getModeByName(modeName));
@@ -409,8 +409,6 @@ void toggleCDHotkeys(bool state){
     programableKeysOn = state;
 }
 void freeStateMachine(){
-    int i;
-
     freeRadios();
     PRINTFLEVEL2("finished freeing radios\n");
     freeModes();

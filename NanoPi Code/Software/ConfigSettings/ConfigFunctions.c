@@ -20,7 +20,7 @@ if (getcwd(cwd, sizeof(cwd)) != NULL) {
     printf("Current working directory: %s\n", cwd);
 } else {
     perror("getcwd() error");
-    return 1;
+    return;
 }
     char fileName[100];
     sprintf(fileName, "ConfigSettings/SaveFiles/saveNumber%i.txt",fileNumber);
@@ -104,7 +104,6 @@ bool selectingMode = true;
 int setHotkeys(KeyPress* keyData){
     //1 turn of C,D supression
     setCDstate(false);
-    int chosenModeId;
     //2 get the mode that they want to use
     Mode** modes;
     char buffer[200];
