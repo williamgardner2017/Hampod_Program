@@ -1,34 +1,37 @@
+#ifndef HAMPOD_ERROROUTPUT
+#define HAMPOD_ERROROUTPUT
+
+    #ifdef OUTPUTLEVEL1
+    #define PRINTFLEVEL1(...) \
+        do { \
+            if(OUTPUTLEVEL1) { \
+                printf(__VA_ARGS__); \
+            } \
+        } while(0)
+    #else
+
+    #define PRINTFLEVEL1(...) \
+    do{}while(0)
+
+    #endif
+
+    #ifdef OUTPUTLEVEL2
+    #define PRINTFLEVEL2(...) \
+        do { \
+            if(OUTPUTLEVEL1) { \
+                printf(__VA_ARGS__); \
+            } \
+        } while(0)
+    #else
+
+    #define PRINTFLEVEL2(...) \
+    do{}while(0)
+
+    #endif
+#endif
+
 #ifndef HAMPOD_SOFT_CONFIGPARAMS
 #define HAMPOD_SOFT_CONFIGPARAMS
-
-
-#ifdef OUTPUTLEVEL1
-#define PRINTFLEVEL1(...) \
-    do { \
-        if(OUTPUTLEVEL1) { \
-            printf(__VA_ARGS__); \
-        } \
-    } while(0)
-#else
-
-#define PRINTFLEVEL1(...) \
-do{}while(0)
-
-#endif
-
-#ifdef OUTPUTLEVEL2
-#define PRINTFLEVEL2(...) \
-    do { \
-        if(OUTPUTLEVEL1) { \
-            printf(__VA_ARGS__); \
-        } \
-    } while(0)
-#else
-
-#define PRINTFLEVEL2(...) \
-do{}while(0)
-
-#endif
 
 #include <stdlib.h>
 #include <string.h>
