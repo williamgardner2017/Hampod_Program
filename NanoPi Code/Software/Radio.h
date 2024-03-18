@@ -68,7 +68,7 @@ void setRadioMode(Mode* modeToSetTo);
 void* runRadioCommand(KeyPress* keyInput);
 
 void setCurrentRadio(int radioID);
-int getCurrentRadio();
+int getCurrentRadioID();
 int getRadioAmount();
 Radio* getCurrentRadio();
 Radio** getAllRadios();

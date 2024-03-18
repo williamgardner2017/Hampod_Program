@@ -90,7 +90,7 @@ void setCurrentRadio(int radioID){
 int getRadioAmount(){
     return radioCount;
 }
-int getCurrentRadio(){
+int getCurrentRadioID(){
     return currentRadio;
 }
 Radio* getCurrentRadio(){
