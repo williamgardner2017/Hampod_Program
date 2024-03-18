@@ -93,9 +93,9 @@ int getRadioAmount(){
 int getCurrentRadio(){
     return currentRadio;
 }
-radio* getCurrentRadio(){
+Radio* getCurrentRadio(){
     return radios[currentRadio];
 }
-radio** getAllRadios(){
+Radio** getAllRadios(){
     return radios;
 }
