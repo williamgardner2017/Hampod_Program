@@ -7,9 +7,7 @@
 ModeStates modeState = bootUp;
 char** modeNames;
 bool programableKeysOn = true;
-Radio** radios;
-int maxRadios = 2;
-int currentRadio = 0;
+
 ModeStates modeFlow(KeyPress* keyInput){
     PRINTFLEVEL2("Mode flow step 1\n");
     //the inital switch is for the programable keys, thisis so hat things can be avoided and passed over
@@ -114,12 +112,11 @@ BootUpStates BootupFlow(KeyPress* keyInput){
                             
                             sprintf(outputText, "Linking radio make %s of model %s to port %i", company, modelList[modelIndex], convertCharToKeyValue(keyInput));
                             sendSpeakerOutput(outputText);
-                            radios[currentRadio] = loadUpRadioUsingData(company,modelList[modelIndex], convertCharToKeyValue(keyInput), getModeByName("frequency mode"), atoi(hamlibIDList[modelIndex]));
-                            if(currentRadio == 1){
+                            loadUpRadioUsingData(company,modelList[modelIndex], convertCharToKeyValue(keyInput), getModeByName("frequency mode"), atoi(hamlibIDList[modelIndex]));
+                            if(getCurrentRadio() == 1){
                                 modeState = standard;
                                 sendSpeakerOutput("Starting normal operations");
                             }else{
-                                currentRadio++;
                                 bootUpState = linkMore;
                                 sendSpeakerOutput("Do you have more radios to link up?");
                             }
@@ -138,7 +135,6 @@ BootUpStates BootupFlow(KeyPress* keyInput){
                 break;
             }else if(keyInput->keyPressed == '0')/*No*/{
                 modeState = standard;
-                currentRadio--;
                 sendSpeakerOutput("Starting normal operations");
                 break; 
             }
@@ -320,7 +316,7 @@ int StandardModeFlow(KeyPress* keyInput){ //TODO be able to toggle the letter ke
                 modeState = modeSelect;
                 sendSpeakerOutput("Mode Select. press # to learn key presses");
             }else{
-                runRadioCommand(radios[currentRadio],keyInput);
+                runRadioCommand(keyInput);
             }
             break;
         case 1:
@@ -345,19 +341,19 @@ int StandardModeFlow(KeyPress* keyInput){ //TODO be able to toggle the letter ke
         if(getCDState()){
             switchToRadioMode(getModeViaProgramableKey(keyInput)->modeDetails->modeName);
         }else{
-            runRadioCommand(radios[currentRadio],keyInput);
+            runRadioCommand(keyInput);
         }
         break;
     case 'D': // D
         if(getCDState()){
             switchToRadioMode(getModeViaProgramableKey(keyInput)->modeDetails->modeName);
         }else{
-            runRadioCommand(radios[currentRadio],keyInput);
+            runRadioCommand(keyInput);
         }
         break;
     default:
         PRINTFLEVEL1("No letter key was pressed so going to the mode\n");
-        runRadioCommand(radios[currentRadio],keyInput);
+        runRadioCommand(keyInput);
         break;
     }
         return -1;
@@ -388,14 +384,14 @@ int switchToRadioMode(char* modeName){ //TODO redue this to be better sueted, al
     char* modeSwitchText[50];
     sprintf(modeSwitchText, "Switching to radio mode%s", modeName);
     sendSpeakerOutput(modeSwitchText);
-    setRadioMode(radios[currentRadio], getModeByName(modeName));
+    setRadioMode(getModeByName(modeName));
     return -1;
 }
 
 
 
 void stateMachineStart(){
-    radios = calloc(2,sizeof(Radio*));
+    startRadios();
     modeRoutingStart();
     modeNames = getAllModeNames();
     PRINTFLEVEL1("SOFTWARE: mode names retreaved\n");
@@ -404,10 +400,6 @@ void stateMachineStart(){
 
 void setModeState(ModeStates state){
     modeState = state;
-}
-void setRadios(Radio* r, int cR){
-    radios[cR] = r;
-    currentRadio = cR;
 }
 void setBootUpState(BootUpStates state){
     bootUpState = state;
@@ -419,22 +411,13 @@ void toggleCDHotkeys(bool state){
 void freeStateMachine(){
     int i;
 
-    for(i = 0; i<maxRadios;i++){
-        if(radios[i] != 0){
-            freeRadio(radios[i]);
-        }
-    }
+    freeRadios();
     PRINTFLEVEL2("finished freeing radios\n");
-    free(radios);
-    PRINTFLEVEL2("Freed the radios object\n");
     freeModes();
     PRINTFLEVEL2("freed the modes\n");
         free(companiesList);
 }
 
-Radio** getRadios(){
-    return radios;
-}
 
 
 int charIndex = 0;
@@ -643,7 +626,7 @@ bool loadUpFromSave(int saveFileNumber){
         int iPort = atoi(sPort);
         int iRigModel = atoi(sRigModel);
         PRINTFLEVEL1("Loading up radio id %i\n",iRigModel);
-        setRadios(loadUpRadioUsingData(sMake,iModel,iPort,getModeByName("Normal"),iRigModel),j);
+        loadUpRadioUsingData(sMake,iModel,iPort,getModeByName("Normal"),iRigModel);
         j++;
         i++;
     }

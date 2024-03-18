@@ -48,6 +48,7 @@
 #include "../StateMachine.h"
 #include "../FirmwareCommunication.h"
 #include "../Modes/Mode.h"
+#include "../Radio.h"
 
 void populateConfigFunctions();
 

@@ -57,7 +57,7 @@ if (getcwd(cwd, sizeof(cwd)) != NULL) {
     }
     //save the hamlib
     fprintf(fp,"Start of radios\n");
-    Radio** radiosToSave = getRadios();
+    Radio** radiosToSave = getAllRadios();
     for(int j = 0; j<2;j++){
         if(radiosToSave[j] != 0){
             PRINTFLEVEL1("Saving radio with port %i and model %i\n", radiosToSave[j]->port, radiosToSave[j]->model);
