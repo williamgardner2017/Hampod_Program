@@ -1,7 +1,7 @@
 int retcode; 
-int rit; 
-int xit; 
-int lock; 
+int xit_status; 
+int xit_status; 
+int vfo_lock_status; 
 freq_t freq; 
 char stringForOutput[40];
 
@@ -92,9 +92,9 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         break; 
                     case 2:
                         if (rig_has_set_func(radioDetails, RIG_FUNC_LOCK)) {
-                            retcode = rig_get_func(radioDetails, RIG_VFO_CURR, RIG_FUNC_LOCK, &lock);
+                            retcode = rig_get_func(radioDetails, RIG_VFO_CURR, RIG_FUNC_LOCK, &vfo_lock_status);
                             if (retcode == RIG_OK) {
-                                if (lock) {
+                                if (vfo_lock_status) {
                                     retcode = rig_set_func(radioDetails, RIG_VFO_CURR, RIG_FUNC_LOCK, 0);
                                     if (retcode == RIG_OK) {
                                         sprintf(stringForOutput, "Setting VFO lock on\n");
@@ -122,9 +122,9 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                 switch (keyInput->shiftAmount) {
                     case 0:
                         if (rig_has_get_func(radioDetails, RIG_FUNC_RIT)) {
-                            retcode = rig_get_func(radioDetails, RIG_VFO_CURR, RIG_FUNC_RIT, &rit);
+                            retcode = rig_get_func(radioDetails, RIG_VFO_CURR, RIG_FUNC_RIT, &rit_status);
                             if (retcode == RIG_OK) {
-                                printf("rig_get_func: RIT - %d\n", rit);
+                                printf("rig_get_func: RIT - %d\n", rit_status);
                             } else {
                                 printf("rig_get_func: Error getting RIT - %s\n", rigerror(retcode));
                             }
@@ -132,9 +132,9 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         break; 
                     case 1:
                         if (rig_has_get_func(radioDetails, RIG_FUNC_XIT)) {
-                            retcode = rig_get_func(radioDetails, RIG_VFO_CURR, RIG_FUNC_XIT, &xit);
+                            retcode = rig_get_func(radioDetails, RIG_VFO_CURR, RIG_FUNC_XIT, &xit_status);
                             if (retcode == RIG_OK) {
-                                printf("rig_get_func: XIT - %d\n", xit);
+                                printf("rig_get_func: XIT - %d\n", xit_status);
                             } else {
                                 printf("rig_get_func: Error getting XIT - %s\n", rigerror(retcode));
                             }
