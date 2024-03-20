@@ -6,6 +6,7 @@ char* audioFolderPath = "../Firmware/pregen_audio/";
 pthread_mutex_t thread_lock;
 
 HashMap* audioHashMap;
+HashMap* stringDictinary;
 //this starts up the communication of the firmware
 void firmwareCommunicationStartup(){
     if(pthread_mutex_init(&thread_lock, NULL) != 0) {
@@ -13,6 +14,7 @@ void firmwareCommunicationStartup(){
         exit(1);
     }
     setupAudioHashMap();
+    setupDictinaryHashMap();
 }
 
 /**
@@ -21,7 +23,8 @@ void firmwareCommunicationStartup(){
  * //TODO make it check if the file exists first
  * //TODO set up the text based upon that for sending out
 */
-char* sendSpeakerOutput(char* text){
+char* sendSpeakerOutput(char* textIn){
+    char* text = applyDictionary(textIn);
     //
     if(SIMULATEOUTPUT){
         PRINTFLEVEL1("TESTING SPEAKER OUTPUT: %s\n", text);
@@ -84,8 +87,9 @@ char* sendSpeakerOutput(char* text){
  * verbosityBypass: is true will play even if verbosity is turned off
  * linearCall: if true will not do threading and will lock up until the audio is played
 */
-char* sendSpeakerOutputWithConditions(char* text, bool filterBypass, bool verbosityBypass, bool linearCall){
-     if(SIMULATEOUTPUT){
+char* sendSpeakerOutputWithConditions(char* textIn, bool filterBypass, bool verbosityBypass, bool linearCall){
+    char* text = applyDictionary(textIn);
+    if(SIMULATEOUTPUT){
         PRINTFLEVEL1("TESTING SPEAKER OUTPUT: %s\n", text);
          bool hasAudioFile = getHashMap(audioHashMap, text) != NULL;
          if(hasAudioFile){
@@ -222,9 +226,58 @@ bool shouldCreateAudioFile(char* text){
     return true;
 }
 
+
+
+void setupDictinaryHashMap(){
+    stringDictinary = createHashMap(StringHash,StringHashCompare);
+    char** dictinary = textFileToArray("ConfigSettings/dictionary.txt");
+    char* remain = malloc(sizeof(char)*100);
+    char* start;
+    for(int i = 0; strcmp(dictinary[i], "END OF ARRAY") != 0;i++){
+        start = strtok_r(dictinary[i], " ", &remain);
+
+        insertHashMap(stringDictinary,(void*) start, (void*) remain);
+    }
+    freeFileArray(dictinary);
+    free(remain);
+}
+
+char* applyDictionary(char* s){
+    //apply the dictonary to this
+    char* stringBuild = malloc(sizeof(char)*strlen(s)*3);
+    char* token;
+    char* rest = s;
+    strcpy(stringBuild,"");
+    while((token = strtok_r(rest, " ", &rest))){
+        if(containsHashMap(stringDictinary,(void*) token)){
+            strcat(stringBuild,(char*)getHashMap(stringDictinary,(void*) token));
+        }else{
+            strcat(stringBuild,token);
+        }
+    }
+
+    //apply the numeric updates to this
+
+    for(int i = 0; i<strlen(stringBuild);i++){
+        //check for if it is equal to a number
+        //
+        if(stringBuild[i] - '0' >= 0 && stringBuild[i] - '0' <= 9){
+            char num = stringBuild[i];
+            strcpy(stringBuild+i+2,stringBuild+i);
+            stringBuild[i] = ' ';
+            stringBuild[i+1] = num;
+            stringBuild[i+2] =' ';
+            i+= 2;
+        }
+    }
+    return stringBuild;
+}
+
+
 void freeFirmwareComunication(){
     running = false;
     printf("Software:destroying thread uqueue mutexes\n");
     pthread_mutex_destroy(&thread_lock);
     destroyHashMap(audioHashMap,audioFree,audioFree);
+    destroyHashMap(stringDictinary,StringHashFree,StringHashFree);
 }

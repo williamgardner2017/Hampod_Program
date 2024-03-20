@@ -70,16 +70,19 @@
 
 
 char* sendSpeakerOutput(char* text);
-char* sendSpeakerOutputWithConditions(char* text, bool filterBypass, bool verbosityBypass, bool linearCall);
+char* sendSpeakerOutputWithConditions(char* textIn, bool filterBypass, bool verbosityBypass, bool linearCall);
 void setupAudioHashMap();
 int audioHash(void* key);
 bool audioCompare(void* key1, void* key2);
 void audioFree(void* data);
-bool shouldCreateAudioFile(char* text);
+bool shouldCreateAudioFile(char* textIn);
 
 void firmwareCommunicationStartup();
 
 void freeFirmwareComunication();
+
+void setupDictinaryHashMap();
+char* applyDictionary(char* s);
 #include "FirmwareCommunication.c"
 #endif
 
