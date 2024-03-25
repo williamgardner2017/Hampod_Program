@@ -1,0 +1,129 @@
+char* get_current_transceive_mode(RIG* rig) {
+    int value; 
+    int retcode = rig_get_trn(rig, &value); 
+    if (retcode == RIG_OK) {
+        char* output = malloc(40); 
+        snprintf(output, 40, "%i\n", value);
+        return output; 
+    } else {
+        printf("rig_get_trn: error = %s\n", rigerror(retcode));
+        return "-1"; 
+    }
+    
+}
+
+char* get_frequency(RIG* rig, vfo_t vfo) {
+    freq_t value; 
+    int retcode = rig_get_freq(rig, vfo, &value); 
+    if (retcode == RIG_OK) {
+        char* output = malloc(40); 
+        snprintf(output, 40, "%.3f\n", value);
+        return output; 
+    } else {
+        printf("rig_get_freq: error = %s\n", rigerror(retcode));
+        return "-1"; 
+    }
+}
+
+// char* get_frequency(RIG* rig, vfo_t vfo) {
+//     freq_t value; 
+//     rig_get_frequency(rig, vfo, &freq); 
+//     char* output = malloc(40); 
+//     snprintf(output, 40, "%.3f\n", value);
+//     return output; 
+// }
+
+char* get_current_vfo(RIG* rig) {
+    vfo_t value; 
+    int retcode = rig_get_vfo(rig, &value); 
+    if (retcode == RIG_OK) {
+        char* output = malloc(40); 
+        snprintf(output, 40, "%s\n", rig_strvfo(value));
+        return output; 
+    } else {
+        printf("rig_get_vfo: error = %s\n", rigerror(retcode));
+        return "-1"; 
+    }
+}
+
+char* get_ptt(RIG* rig, vfo_t vfo) {
+    ptt_t value; 
+    int retcode = rig_get_ptt(rig, vfo, &value); 
+    if (retcode == RIG_OK) {
+        char* output = malloc(40); 
+        snprintf(output, 40, "On\n", push_to_talk_converter(value));
+        return output; 
+    } else {
+        printf("rig_get_ptt: error = %s\n", rigerror(retcode));
+        return "-1"; 
+    }
+}
+
+char* push_to_talk_converter (ptt_t* input) {
+    switch (input) {
+        case RIG_PTT_ON: 
+            return "PTT_ON"; 
+        case RIG_PTT_OFF: 
+            return "PTT_OFF"; 
+        default: 
+            return "-1";
+
+    }
+}
+
+// char* get_dcd(RIG* rig, vfo_t vfo) {
+//     dcd_t value; 
+//     int retcode = rig_get_dcd(rig, vfo, &value)
+//     if (retcode == RIG_OK) {
+//         char* output = malloc(40); 
+//         if (value == RIG_PTT_ON) {
+//             snprintf(output, 40, "On\n", value);
+//         } else {
+//             snprintf(output, 40, "Off\n", value);
+//         }
+//         return output; 
+//     } else {
+//         printf("rig_get_dcd: error = %s\n", rigerror(retcode));
+//         return "-1"; 
+//     }
+// }
+
+char* get_current_repeater_shift (RIG* rig, vfo_t vfo) {
+    rptr_shift_t value; 
+    int retcode = rig_get_rptr_shift(rig, vfo, &value); 
+    if (retcode == RIG_OK) {
+        char* output = malloc(40); 
+        snprintf(output, 40, "s\n", repeater_shift_converter(value));
+        return output; 
+    } else {
+        printf("rig_get_ptt: error = %s\n", rigerror(retcode));
+        return "-1"; 
+    }
+}
+
+char* repeater_shift_converter (rptr_shift_t* input) {
+    switch (input) {
+        case RIG_RPT_SHIFT_NONE: 
+            return "0"; 
+        case RIG_RPT_SHIFT_MINUS: 
+            return "-"; 
+        case RIG_RPT_SHIFT_PLUS: 
+            return "+"; 
+        default: 
+            return "-1";
+
+    }
+}
+
+char* get_current_repeater_offset (RIG* rig, vfo_t vfo) {
+    shortfreq_t value; 
+    int retcode = rig_get_rptr_offs (rig, vfo, &value); 
+    if (retcode == RIG_OK) {
+        char* output = malloc(40); 
+        snprintf(output, 40, "s\n", repeater_shift_converter(value));
+        return output; 
+    } else {
+        printf("rig_get_ptt: error = %f\n", rigerror(retcode));
+        return "-1"; 
+    }
+}
