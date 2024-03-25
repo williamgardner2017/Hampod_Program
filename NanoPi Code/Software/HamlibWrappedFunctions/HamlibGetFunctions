@@ -51,7 +51,7 @@ char* get_ptt(RIG* rig, vfo_t vfo) {
     int retcode = rig_get_ptt(rig, vfo, &value); 
     if (retcode == RIG_OK) {
         char* output = malloc(40); 
-        snprintf(output, 40, "On\n", push_to_talk_converter(value));
+        snprintf(output, 40, "%s\n", push_to_talk_converter(value));
         return output; 
     } else {
         printf("rig_get_ptt: error = %s\n", rigerror(retcode));
@@ -93,10 +93,10 @@ char* get_current_repeater_shift (RIG* rig, vfo_t vfo) {
     int retcode = rig_get_rptr_shift(rig, vfo, &value); 
     if (retcode == RIG_OK) {
         char* output = malloc(40); 
-        snprintf(output, 40, "s\n", repeater_shift_converter(value));
+        snprintf(output, 40, "%s\n", repeater_shift_converter(value));
         return output; 
     } else {
-        printf("rig_get_ptt: error = %s\n", rigerror(retcode));
+        printf("rig_get_rptr_shift: error = %s\n", rigerror(retcode));
         return "-1"; 
     }
 }
@@ -117,13 +117,34 @@ char* repeater_shift_converter (rptr_shift_t* input) {
 
 char* get_current_repeater_offset (RIG* rig, vfo_t vfo) {
     shortfreq_t value; 
-    int retcode = rig_get_rptr_offs (rig, vfo, &value); 
+    int retcode = rig_get_rptr_offs(rig, vfo, &value); 
     if (retcode == RIG_OK) {
         char* output = malloc(40); 
-        snprintf(output, 40, "s\n", repeater_shift_converter(value));
+        snprintf(output, 40, "%f\n", repeater_shift_converter(value));
         return output; 
     } else {
-        printf("rig_get_ptt: error = %f\n", rigerror(retcode));
+        printf("rig_get_rptr_offs: error = %s\n", rigerror(retcode));
         return "-1"; 
     }
+}
+
+// This is for both the LEVEL and FUNC features. Pretty genius if you ask me. :)
+// Hamlib is very thoughtful for giving a common interest between rig_get_level and rig_get_func. 
+char* get_level_or_func_wrapper(RIG *rig, vfo_t vfo, char* setting) {
+	
+	char* output = malloc(40); 
+	if (strstr("LEVEL", setting)) {
+		value_t* value; 
+		rig_get_level (rig, vfo, rig_parse_func(setting), &value); 
+		snprintf(output, "%d", value); 
+        return output; 
+	} else if (strstr("FUNC", setting)) {
+		int status; 
+		rig_get_func (rig, vfo, rig_parse_func(setting), &status); 	
+		snprintf(output, "%d", status); 
+        return output; 
+	} else {
+        return "-1"; 
+    }
+	
 }
