@@ -1,5 +1,5 @@
-#ifndef HAMPOD_TESTING_SAVELOAD
-#define HAMPOD_TESTING_SAVELOAD
+#ifndef HAMPOD_TESTING_SHAREDLIB
+#define HAMPOD_TESTING_SHAREDLIB
 
 #include <stdlib.h>
 #include <string.h>

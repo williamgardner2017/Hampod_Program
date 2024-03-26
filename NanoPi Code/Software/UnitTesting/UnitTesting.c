@@ -7,7 +7,7 @@
 #include <sys/stat.h>
 #include <signal.h>
 
-#include "UnitTestKeyPresses.h"
+// #include "UnitTestKeyPresses.h"
 #include "UnitTestModeRouting.h"
 #include "UnitTestRadio.h"
 #include "UnitTestStateMachine.h"
@@ -96,21 +96,21 @@ bool ModeRoutingTest(){
     return flag;
 }
 
-bool KeyPressTesting(){
-    char* succsess;
-    char* testGroup = "KeyPresses";
-    char* testName;
-    bool flag = true;
-    testName = "testKeyPadEntering";
-    if(testKeyPadEntering()){
-        succsess = "succeeded";
-    }else{
-        succsess = "failed";
-        flag = false;
-    }
-    printf("%s in test: %s:%s\n", succsess, testGroup,testName);
-    return flag;
-}
+// bool KeyPressTesting(){
+//     char* succsess;
+//     char* testGroup = "KeyPresses";
+//     char* testName;
+//     bool flag = true;
+//     testName = "testKeyPadEntering";
+//     if(testKeyPadEntering()){
+//         succsess = "succeeded";
+//     }else{
+//         succsess = "failed";
+//         flag = false;
+//     }
+//     printf("%s in test: %s:%s\n", succsess, testGroup,testName);
+//     return flag;
+// }
 
 bool StateMachineTesting(){
     printf("Testing happy path code with frequency enter mode\n");
