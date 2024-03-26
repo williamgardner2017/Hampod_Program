@@ -215,5 +215,5 @@ void* firmwarePlayAudio(void* text){
         }
         pthread_mutex_unlock(&audio_lock);
         free(buffer);
-        return system_result;
+        return (void*) system_result;
 }
