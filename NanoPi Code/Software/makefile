@@ -28,7 +28,7 @@ $(LIB_NAME): $(LIB_SRC) $(HEADER)
 
 # Build executable
 $(EXEC_NAME): $(EXEC_SRC) $(LIB_NAME)
-	$(CC) $(CFLAGS) -o $(EXEC_NAME) $(EXEC_SRC) -I. -L. -l:$(LIB_NAME) -ldl $(LDFLAGS) Wl,-rpath,'$$ORIGIN'
+	$(CC) $(CFLAGS) -o $(EXEC_NAME) $(EXEC_SRC) -I. -L. -l:$(LIB_NAME) -ldl $(LDFLAGS) -Wl,-rpath,'$$ORIGIN'
 
 # Clean
 clean:
