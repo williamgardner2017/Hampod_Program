@@ -7,7 +7,7 @@ CC := gcc
 
 # Compiler flags
 CFLAGS := -Wall -Wextra -pedantic -std=c11 -g -lm -DTESTING -DOUTPUTLEVEL2 -DOUTPUTLEVEL1
-
+LDFLAGS := -lpthread -lhamlib -lwiringPi
 # Files
 HEADER := Modes/TestDMode.h
 LIB_SRC := Modes/TestDMode.c
@@ -24,11 +24,11 @@ all: $(EXEC_NAME)
 
 # Build shared library
 $(LIB_NAME): $(LIB_SRC) $(HEADER)
-	$(CC) $(CFLAGS) -DSHAREDLIB -fPIC -shared -o $@ $< -lhamlib -lwiringPi -lpthread
+	$(CC) $(CFLAGS) -DSHAREDLIB -fPIC -shared -o $@ $< $(LDFLAGS)
 
 # Build executable
 $(EXEC_NAME): $(EXEC_SRC) $(LIB_NAME)
-	$(CC) $(CFLAGS) -o $@ $< -lhamlib -lwiringPi -lpthread -I. -L. -l:$(LIB_NAME)
+	$(CC) $(CFLAGS) -o $@ $< -I. -L. -l:$(LIB_NAME) $(LDFLAGS)
 
 # Clean
 clean:
