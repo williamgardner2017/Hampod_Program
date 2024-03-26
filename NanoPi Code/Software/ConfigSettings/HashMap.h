@@ -62,5 +62,8 @@ void NullHashFree(void* s);
 int IntHash(void* key);
 bool IntHashCompare(void* a, void* b);
 void IntHashFree(void* i);
+
+#ifndef SHAREDLIB
 #include "HashMap.c"
+#endif
 #endif

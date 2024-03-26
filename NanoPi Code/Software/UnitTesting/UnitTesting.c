@@ -15,7 +15,7 @@
 #include "UnitTestConfigs.h"
 #include "UnitTestAudio.h"
 #include "UnitTestSaveLoad.h"
-
+#include "UnitTestSharedLib.h"
 void sigsegv_handler(int signum);
 
 void sigsegv_handler(int signum) {
@@ -25,7 +25,14 @@ void sigsegv_handler(int signum) {
 }
 
 
-
+bool SharedLiberaryTest(){
+    printf("Starting testing of shared liberray\n");
+    printf("testing setup\n");
+    testLoadingInWithShared();
+    printf("testing passed\n testing calling the speakerOut\n");
+    testRunningMode();
+    printf("testing passed\n end testing\n");
+}
 
 bool ModeRoutingTest(){
     char* succsess;
@@ -231,6 +238,7 @@ int main(){
     // HashMapTest();
     // ConfigParamTest();
     // AudioTesting();
-    SaveLoadTesting();
+    // SaveLoadTesting();
+    SharedLiberaryTest();
     return -1;
 }

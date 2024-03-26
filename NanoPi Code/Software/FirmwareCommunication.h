@@ -18,16 +18,16 @@
 #include <stdarg.h>
 
 #include "GeneralFunctions.h"
-#include "IDQueue.h"
-#include "ThreadQueue.h"
-#include "../Firmware/hampod_queue.h"
-#include "../Firmware/hampod_firm_packet.h"
+// #include "IDQueue.h"
+// #include "ThreadQueue.h"
+// #include "../Firmware/hampod_queue.h"
+// #include "../Firmware/hampod_firm_packet.h"
 #include "ConfigSettings/HashMap.h"
 #include "../Firmware/audio_firmware.h"
 
 
-#define INPUT_PIPE "Firmware_i"
-#define OUTPUT_PIPE "Firmware_o"
+// #define INPUT_PIPE "Firmware_i"
+// #define OUTPUT_PIPE "Firmware_o"
 
 #ifdef TESTING
     #define SIMULATEOUTPUT 1
@@ -75,6 +75,10 @@ bool shouldCreateAudioFile(char* text);
 void firmwareCommunicationStartup();
 
 void freeFirmwareComunication();
+#ifndef SHAREDLIB
 #include "FirmwareCommunication.c"
 #endif
+
+#endif
+
 
