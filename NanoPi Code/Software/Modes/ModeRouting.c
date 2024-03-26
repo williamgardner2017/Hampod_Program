@@ -5,43 +5,36 @@ Mode** keyBinds;
 * Creaes both the hashmap of the modes and creates the array of the keybinds
 */
 void modeRoutingStart(){
+    //set up for loop to look through the stuff
+    void *lib_handle;
+    CreateModePointer modeCreateFunction;;
+    const char *error;
+
+    // Open the shared library at runtime
+    lib_handle = dlopen("./libexample.so", RTLD_LAZY);
+    if (!lib_handle) {
+        fprintf(stderr, "Error: %s\n", dlerror());
+        return 1;
+    }
+
+    // Get a pointer to the function we want to call
+    modeCreateFunction = (CreateModePointer)dlsym(lib_handle, "TestDModeLoad");
+    if ((error = dlerror()) != NULL)  {
+        fprintf(stderr, "Error: %s\n", error);
+        dlclose(lib_handle);
+        return 1;
+    }
+
+    // Call the function dynamically
+    Mode* result = modeCreateFunction();
+    //make sure to edit the sendSpeakerOutput to number its outputs to make sure that each are calling the corect part
+    printf("I got a mode with the name of %s\n",result->modeDetails->modeName);
     ModeHashMap = createHashMap(StringHash,StringHashCompare);
-    Mode* tempMode;
-    tempMode = NormalLoad();
-    if(tempMode == NULL){
-        printf("Creation of mode failed\n");
-        exit(-1);
-    }
-    insertHashMap(ModeHashMap, tempMode, tempMode->modeDetails->modeName);
-    PRINTFLEVEL1("SOFTWARE: Adding Normal compleate\n");
-    tempMode = DTMFDummyLoad();
-    if(tempMode == NULL){
-        printf("Creation of mode failed\n");
-        exit(-1);
-    }
-    insertHashMap(ModeHashMap, tempMode, tempMode->modeDetails->modeName);
-    PRINTFLEVEL1("SOFTWARE: Adding DRML compleate\n");
-    tempMode = ConfigLoad();
-    if(tempMode == NULL){
-        printf("Creation of mode failed\n");
-        exit(-1);
-    }
-    PRINTFLEVEL2("SOFTWARE: Config mode has been loaded up\n");
-    insertHashMap(ModeHashMap, tempMode, tempMode->modeDetails->modeName);
-    PRINTFLEVEL1("SOFTWARE: Adding config compleate\n");
-    tempMode = frequencyLoad();
-    if(tempMode == NULL){
-        printf("Creation of mode failed\n");
-        exit(-1);
-    }
-    insertHashMap(ModeHashMap, tempMode, tempMode->modeDetails->modeName);
-    PRINTFLEVEL1("SOFTWARE: Adding frequency compleate\n");
-    keyBinds = calloc(12, sizeof(Mode*));
-    if(keyBinds == NULL){
-        printf("Mallocing the keybings failded\n");
-        exit(-1);
-    }
-    PRINTFLEVEL1("SOFTWARE: keybings object created\n");
+    insertHashMap(ModeHashMap, result, result->modeDetails->modeName);
+
+    dlclose(lib_handle);
+
+    return 0;
 }
 
 Mode* getModeByName(char* name){

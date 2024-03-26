@@ -4,14 +4,10 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <dlfcn.h> // For dynamic linking
 #include "Mode.h"
 #include "../GeneralFunctions.h"
 #include "../ConfigSettings/HashMap.h"
-#include "ConfigMode.h"
-#include "NormalMode.h"
-#include "DummyDTMFMode.h"
-#include "FrequensyMode.h"
-
 #ifdef OUTPUTLEVEL1
 #define PRINTFLEVEL1(...) \
     do { \
@@ -39,6 +35,7 @@
     while(0)
 
 #endif
+
 
 
 // Mode* getModeById(int modeID); //goal is to make this outdated Done
