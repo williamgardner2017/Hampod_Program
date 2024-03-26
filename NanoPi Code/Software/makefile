@@ -6,7 +6,7 @@
 CC := gcc
 
 # Compiler flags
-CFLAGS := -Wall -g -lm -DTESTING -DOUTPUTLEVEL2 -DOUTPUTLEVEL1
+CFLAGS := -Wall -g -lm -DTESTING -DOUTPUTLEVEL1
 LDFLAGS := -lpthread -lhamlib -lwiringPi
 # Files
 HEADER := Modes/TestDMode.h
