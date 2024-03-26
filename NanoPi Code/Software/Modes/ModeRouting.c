@@ -11,7 +11,7 @@ void modeRoutingStart(){
     const char *error;
 
     // Open the shared library at runtime
-    lib_handle = dlopen("./libexample.so", RTLD_LAZY);
+    lib_handle = dlopen("./libyourlibrary.so", RTLD_LAZY);
     if (!lib_handle) {
         fprintf(stderr, "Error: %s\n", dlerror());
         return 1;

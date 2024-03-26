@@ -29,7 +29,7 @@ bool SharedLiberaryTest(){
     printf("Starting testing of shared liberray\n");
     printf("testing setup\n");
     testLoadingInWithShared();
-    printf("testing passed\n testing calling the speakerOut\n");
+    printf("testing passed\ntesting calling the speakerOut\n");
     testRunningMode();
     printf("testing passed\n end testing\n");
 }
