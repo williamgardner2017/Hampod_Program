@@ -4,7 +4,7 @@
 #include <string.h>
 #include <stdbool.h>
 // #include <hamlib/rig.h>
-#include <hamlib/riglist.h>
+// #include <hamlib/riglist.h>
 #include "Mode.h"
 #include "../GeneralFunctions.h"
 #include "../FirmwareCommunication.h"
