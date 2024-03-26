@@ -24,7 +24,7 @@ all: $(EXEC_NAME)
 
 # Build shared library
 $(LIB_NAME): $(LIB_SRC) $(HEADER)
-	$(CC) $(CFLAGS) -SHAREDLIB -fPIC -shared -o $@ $< -lhamlib -lwiringPi -lpthread
+	$(CC) $(CFLAGS) -DSHAREDLIB -fPIC -shared -o $@ $< -lhamlib -lwiringPi -lpthread
 
 # Build executable
 $(EXEC_NAME): $(EXEC_SRC) $(LIB_NAME)
