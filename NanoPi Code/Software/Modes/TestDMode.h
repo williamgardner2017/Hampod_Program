@@ -11,5 +11,4 @@
 
 Mode* TestDModeLoad();
 
-#include "TestDMode.c"
 #endif

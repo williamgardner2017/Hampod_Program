@@ -1,3 +1,5 @@
+#include "TestDMode.h"
+
 void* testDRelay(KeyPress* keyInput, RIG* my_rig){
     sendSpeakerOutput("This got called");
     return NULL;
