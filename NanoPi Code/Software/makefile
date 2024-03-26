@@ -28,7 +28,7 @@ $(LIB_NAME): $(LIB_SRC) $(HEADER)
 
 # Build executable
 $(EXEC_NAME): $(EXEC_SRC) $(LIB_NAME)
-	$(CC) $(CFLAGS) -o $@ $< -I. -L. -l:$(LIB_NAME) -lhamlib -lwiringPi -lpthread
+	$(CC) $(CFLAGS) -o $@ $< -lhamlib -lwiringPi -lpthread -I. -L. -l:$(LIB_NAME)
 
 # Clean
 clean:
