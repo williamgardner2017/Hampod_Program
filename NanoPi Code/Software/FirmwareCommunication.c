@@ -243,18 +243,72 @@ void setupDictinaryHashMap(){
     // free(remain); removing this temporarily
 }
 
-char** splitString(char* s, char* splitter){
-    char* token =  strtok(s, splitter);
-    char** toReturn = malloc(sizeof(char*)*(strlen(s)/3));
-    int i = 0;
-    while (token != NULL) {
-        PRINTFLEVEL2(" %s\n", token);
-        token = strtok(NULL, splitter);
-        toReturn[i] = token;
-        i++;
+char** split(const char *str, char delimiter, int *numTokens) {
+    // Count the number of tokens
+    int count = 1; // At least one token (empty string or non-existent string)
+    const char *ptr = str;
+    while (*ptr != '\0') {
+        if (*ptr == delimiter) {
+            count++;
+        }
+        ptr++;
     }
-    strcpy(toReturn[i],"ENDOFSTRING");
-    return toReturn;
+
+    // Allocate memory for the array of strings
+    char **tokens = (char **)malloc(count * sizeof(char *));
+    if (tokens == NULL) {
+        fprintf(stderr, "Memory allocation failed.\n");
+        return NULL;
+    }
+
+    // Copy tokens into the array
+    int tokenIndex = 0;
+    int startIndex = 0;
+    for (int i = 0; str[i] != '\0'; i++) {
+        if (str[i] == delimiter) {
+            int tokenLength = i - startIndex;
+            tokens[tokenIndex] = (char *)malloc((tokenLength + 1) * sizeof(char));
+            if (tokens[tokenIndex] == NULL) {
+                fprintf(stderr, "Memory allocation failed.\n");
+                // Free memory allocated so far
+                for (int j = 0; j < tokenIndex; j++) {
+                    free(tokens[j]);
+                }
+                free(tokens);
+                return NULL;
+            }
+            strncpy(tokens[tokenIndex], str + startIndex, tokenLength);
+            tokens[tokenIndex][tokenLength] = '\0'; // Null-terminate the string
+            startIndex = i + 1;
+            tokenIndex++;
+        }
+    }
+
+    // Copy the last token
+    int lastTokenLength = strlen(str) - startIndex;
+    tokens[tokenIndex] = (char *)malloc((lastTokenLength + 1) * sizeof(char));
+    if (tokens[tokenIndex] == NULL) {
+        fprintf(stderr, "Memory allocation failed.\n");
+        // Free memory allocated so far
+        for (int j = 0; j <= tokenIndex; j++) {
+            free(tokens[j]);
+        }
+        free(tokens);
+        return NULL;
+    }
+    strncpy(tokens[tokenIndex], str + startIndex, lastTokenLength);
+    tokens[tokenIndex][lastTokenLength] = '\0'; // Null-terminate the string
+
+    *numTokens = count;
+    return tokens;
+}
+
+void freeTokens(char **tokens, int numTokens) {
+    if (tokens == NULL) return;
+    for (int i = 0; i < numTokens; i++) {
+        free(tokens[i]);
+    }
+    free(tokens);
 }
 
 char* applyDictionary(char* s){
@@ -266,9 +320,10 @@ char* applyDictionary(char* s){
         return NULL; // Return NULL to indicate failure
     }
     stringBuild[0] = '\0';
-    char** splitStuff = splitString(s," ");
+    int count;
+    char** splitStuff = split(s,' ',&count);
     PRINTFLEVEL2("All setup before creating the token\n");
-    for(int i = 0; strcmp(splitStuff[i],"ENDOFSTRING") != 0;i++){
+    for(int i = 0;i<count;i++){
         PRINTFLEVEL2("testing if: %s: is in the hash\n",splitStuff[i]);
         if(containsHashMap(stringDictinary,(void*) splitStuff[i])){
             PRINTFLEVEL2("It was in it\n");
@@ -278,6 +333,7 @@ char* applyDictionary(char* s){
             strcat(stringBuild,splitStuff[i]);
         }
     }
+    freeTokens(splitStuff,count);
     PRINTFLEVEL1("Applying number spacing to to %s\n",stringBuild);
     //apply the numeric updates to this
 
