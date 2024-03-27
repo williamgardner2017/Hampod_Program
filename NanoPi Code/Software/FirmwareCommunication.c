@@ -338,18 +338,18 @@ char* applyDictionary(char* s){
     PRINTFLEVEL1("Applying number spacing to to %s\n",stringBuild);
     //apply the numeric updates to this
 
-    for(int i = 0; i<strlen(stringBuild);i++){
-        //check for if it is equal to a number
-        //
-        if(stringBuild[i] - '0' >= 0 && stringBuild[i] - '0' <= 9){
-            char num = stringBuild[i];
-            strcpy(stringBuild+i+2,stringBuild+i);
-            stringBuild[i] = ' ';
-            stringBuild[i+1] = num;
-            stringBuild[i+2] =' ';
-            i+= 2;
-        }
-    }
+    // for(int i = 0; i<strlen(stringBuild);i++){
+    //     //check for if it is equal to a number
+    //     //
+    //     if(stringBuild[i] - '0' >= 0 && stringBuild[i] - '0' <= 9){
+    //         char num = stringBuild[i];
+    //         strcpy(stringBuild+i+2,stringBuild+i);
+    //         stringBuild[i] = ' ';
+    //         stringBuild[i+1] = num;
+    //         stringBuild[i+2] =' ';
+    //         i+= 2;
+    //     }
+    // }
     PRINTFLEVEL1("finished creation and got %s\n",stringBuild);
     return stringBuild;
 }
