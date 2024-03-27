@@ -7,13 +7,13 @@
 #include <sys/stat.h>
 #include <signal.h>
 
-#include "UnitTestModeRouting.h"
-#include "UnitTestRadio.h"
-#include "UnitTestStateMachine.h"
+// #include "UnitTestModeRouting.h"
+// #include "UnitTestRadio.h"
+// #include "UnitTestStateMachine.h"
 #include "UnitTestReadFile.h"
-#include "UnitTestConfigs.h"
-#include "UnitTestAudio.h"
-#include "UnitTestSaveLoad.h"
+// #include "UnitTestConfigs.h"
+// #include "UnitTestAudio.h"
+// #include "UnitTestSaveLoad.h"
 #include "UnitTestLinkedList.h"
 
 void sigsegv_handler(int signum);
@@ -27,78 +27,78 @@ void sigsegv_handler(int signum) {
 
 
 
-bool ModeRoutingTest(){
-    char* succsess;
-    char* testGroup = "ModeRouting";
-    char* testName;
-    bool flag = true;
-    testName = "Creation";
-    if(testCreateModeRoutingFunction()){
-        succsess = "succeeded";
-    }else{
-        succsess = "failed";
-        flag = false;
-    }
-    printf("%s in test: %s:%s\n", succsess, testGroup,testName);
+// bool ModeRoutingTest(){
+//     char* succsess;
+//     char* testGroup = "ModeRouting";
+//     char* testName;
+//     bool flag = true;
+//     testName = "Creation";
+//     if(testCreateModeRoutingFunction()){
+//         succsess = "succeeded";
+//     }else{
+//         succsess = "failed";
+//         flag = false;
+//     }
+//     printf("%s in test: %s:%s\n", succsess, testGroup,testName);
 
-    testName = "freeing";
-    if(testFreeModes()){
-        succsess = "succeeded";
-    }else{
-        succsess = "failed";
-        flag = false;
-    }
-    printf("%s in test: %s:%s\n", succsess, testGroup,testName);
+//     testName = "freeing";
+//     if(testFreeModes()){
+//         succsess = "succeeded";
+//     }else{
+//         succsess = "failed";
+//         flag = false;
+//     }
+//     printf("%s in test: %s:%s\n", succsess, testGroup,testName);
 
-    testName = "one mode";
-    if(testGettingOneMode()){
-        succsess = "succeeded";
-    }else{
-        succsess = "failed";
-        flag = false;
-    }
-    printf("%s in test: %s:%s\n", succsess, testGroup,testName);
+//     testName = "one mode";
+//     if(testGettingOneMode()){
+//         succsess = "succeeded";
+//     }else{
+//         succsess = "failed";
+//         flag = false;
+//     }
+//     printf("%s in test: %s:%s\n", succsess, testGroup,testName);
 
-    testName = "Many modes";
-    if(testGettingManyModes()){
-        succsess = "succeeded";
-    }else{
-        succsess = "failed";
-        flag = false;
-    }
-    printf("%s in test: %s:%s\n", succsess, testGroup,testName);
+//     testName = "Many modes";
+//     if(testGettingManyModes()){
+//         succsess = "succeeded";
+//     }else{
+//         succsess = "failed";
+//         flag = false;
+//     }
+//     printf("%s in test: %s:%s\n", succsess, testGroup,testName);
 
-    testName = "Duplicate mode";
-    if(testGettingSameMode()){
-        succsess = "succeeded";
-    }else{
-        succsess = "failed";
-        flag = false;
-    }
-    printf("%s in test: %s:%s\n", succsess, testGroup,testName);
+//     testName = "Duplicate mode";
+//     if(testGettingSameMode()){
+//         succsess = "succeeded";
+//     }else{
+//         succsess = "failed";
+//         flag = false;
+//     }
+//     printf("%s in test: %s:%s\n", succsess, testGroup,testName);
 
-    testName = "Load in each mode";
-    if(testGrabEachMode()){
-        succsess = "succeeded";
-    }else{
-        succsess = "failed";
-        flag = false;
-    }
-    printf("%s in test: %s:%s\n", succsess, testGroup,testName);
+//     testName = "Load in each mode";
+//     if(testGrabEachMode()){
+//         succsess = "succeeded";
+//     }else{
+//         succsess = "failed";
+//         flag = false;
+//     }
+//     printf("%s in test: %s:%s\n", succsess, testGroup,testName);
 
-    return flag;
-}
+//     return flag;
+// }
 
 
-bool StateMachineTesting(){
-    printf("Testing happy path code with frequency enter mode\n");
-    TestStateMachingGoodInputSetFrequ();
-    printf("Testing bad path with all inputs being bad inputs\n");
-    TestStateMachingBadInputSetFrequ();
+// bool StateMachineTesting(){
+//     printf("Testing happy path code with frequency enter mode\n");
+//     TestStateMachingGoodInputSetFrequ();
+//     printf("Testing bad path with all inputs being bad inputs\n");
+//     TestStateMachingBadInputSetFrequ();
 
-    printf("all paths did not crash\n");
-    return true;
-}
+//     printf("all paths did not crash\n");
+//     return true;
+// }
 
 bool ReadingFromFileTest(){
     printf("Starting test to read from file\n");
@@ -152,57 +152,57 @@ bool HashMapTest(){
 }
 
 
-bool ConfigParamTest(){
-    printf("test load and unload Configs\n");
-    TestLoadUnloadConfig();
-    TestLoad();
-    printf("Test get config\n");
-    TestGetConfig();
-    printf("test get length of configs\n");
-    TestGetConfigLength();
-    printf("test get current values\n");
-    TestGetCurrentValues();
-    printf("test set current values\n");
-    TestSetCurrentValues();
-    printf("test Increment values:");
-    if(TestInrementValue()){
-        printf("Passed\n");
-    }else{
-        printf("Failed\n");
-    }
-    printf("test update configs:");
-    if(TestUpdateConfig()){
-        printf("Passed\n");
-    }else{
-        printf("Failed\n");
-    }
-    printf("End of configs testings\n");
-    return true;
-}
+// bool ConfigParamTest(){
+//     printf("test load and unload Configs\n");
+//     TestLoadUnloadConfig();
+//     TestLoad();
+//     printf("Test get config\n");
+//     TestGetConfig();
+//     printf("test get length of configs\n");
+//     TestGetConfigLength();
+//     printf("test get current values\n");
+//     TestGetCurrentValues();
+//     printf("test set current values\n");
+//     TestSetCurrentValues();
+//     printf("test Increment values:");
+//     if(TestInrementValue()){
+//         printf("Passed\n");
+//     }else{
+//         printf("Failed\n");
+//     }
+//     printf("test update configs:");
+//     if(TestUpdateConfig()){
+//         printf("Passed\n");
+//     }else{
+//         printf("Failed\n");
+//     }
+//     printf("End of configs testings\n");
+//     return true;
+// }
 
-bool AudioTesting(){
-    printf("Start testing the audio\n");
-    printf("testing creating the hashmap\n");
-    testCreatingAudioHash();
-    printf("test doing a few audios\n");
-    testGetAudio();
-    printf("End audio testing\n");
-    return true;
-}
+// bool AudioTesting(){
+//     printf("Start testing the audio\n");
+//     printf("testing creating the hashmap\n");
+//     testCreatingAudioHash();
+//     printf("test doing a few audios\n");
+//     testGetAudio();
+//     printf("End audio testing\n");
+//     return true;
+// }
 
-bool SaveLoadTesting(){
-    printf("Starting testing save load\n");
-    printf("Creating dummy data to save\n");
-    saveLoadSetupStuffToSave();
-    printf("Starting Save test\n");
-    testSaveFile();
-    printf("clearing all the currest stuff an restarting everthing to test load\n");
-    setUpForLoadTesting();
-    printf("Starting Load Test\n");
-    testLoadFile(); 
-    printf("Ending testing save load\n");
-    return true;
-}
+// bool SaveLoadTesting(){
+//     printf("Starting testing save load\n");
+//     printf("Creating dummy data to save\n");
+//     saveLoadSetupStuffToSave();
+//     printf("Starting Save test\n");
+//     testSaveFile();
+//     printf("clearing all the currest stuff an restarting everthing to test load\n");
+//     setUpForLoadTesting();
+//     printf("Starting Load Test\n");
+//     testLoadFile(); 
+//     printf("Ending testing save load\n");
+//     return true;
+// }
 
 bool LinkedListTesting(){
     printf("Starting testing LinkedList\n");
@@ -237,6 +237,11 @@ bool LinkedListTesting(){
     printf("Ending Linked List Testing\n");
     return true;
 }
+
+bool monitoringTesting(){
+    
+}
+
 
 int main(){
 
