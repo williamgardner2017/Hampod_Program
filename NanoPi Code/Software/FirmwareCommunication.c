@@ -245,12 +245,18 @@ void setupDictinaryHashMap(){
 
 char* applyDictionary(char* s){
     //apply the dictonary to this
-    PRINTFLEVEL1("Applying dictionay changes to %s\n",s);
-    char* stringBuild = malloc(sizeof(char)*strlen(s)*3);
+    PRINTFLEVEL1("Applying dictionay changes to %s\n",s); 
+    char* stringBuild = malloc(sizeof(char)*strlen(s)*3 + 1);
+    if (stringBuild == NULL) {
+        fprintf(stderr, "Memory allocation failed.\n");
+        return NULL; // Return NULL to indicate failure
+    }
     char* token;
     char* rest = s;
-    strcpy(stringBuild,"");
-    while((token = strtok_r(rest, " ", &rest))){
+    stringBuild[0] = '\0';
+    PRINTFLEVEL2("All setup before creating the token\n");
+    token = strtok_r(rest, " ", &rest);
+    while(token != NULL){
         PRINTFLEVEL2("testing if: %s: is in the hash\n",token);
         if(containsHashMap(stringDictinary,(void*) token)){
             PRINTFLEVEL2("It was in it\n");
@@ -259,6 +265,7 @@ char* applyDictionary(char* s){
             strcat(stringBuild,token);
             PRINTFLEVEL2("It was NOT in it\n");
         }
+        token = strtok_r(rest, " ", &rest);
     }
     PRINTFLEVEL1("Applying number spacing to to %s\n",stringBuild);
     //apply the numeric updates to this
