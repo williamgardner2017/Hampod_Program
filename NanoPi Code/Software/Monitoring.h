@@ -60,7 +60,8 @@
 
 
 typedef struct MonitoringLink{
-    char* (*getData)();
+    char* (*getData)(void*);
+    void* callData;
     char* oldData;
     bool flaggedForDeletion;
 } MonitoringLink;
@@ -70,7 +71,7 @@ void startMonitoringLoop();
 void* monitoringLoop(void* d);
 void endMonitoringLoop();
 
-void addMonitoringLink(char* (*getData)());
-void removeMonitoringLink(char* (*getData)());
+void addMonitoringLink(char* (*getData)(void*), void* callData);
+void* removeMonitoringLink(char* (*getData)(void*));
 
 #endif
