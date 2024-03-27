@@ -245,6 +245,7 @@ void setupDictinaryHashMap(){
 
 char* applyDictionary(char* s){
     //apply the dictonary to this
+    PRINTFLEVEL1("Applying dictionay changes to %s\n",s);
     char* stringBuild = malloc(sizeof(char)*strlen(s)*3);
     char* token;
     char* rest = s;
@@ -256,7 +257,7 @@ char* applyDictionary(char* s){
             strcat(stringBuild,token);
         }
     }
-
+    PRINTFLEVEL1("Applying number spacing to to %s\n",stringBuild);
     //apply the numeric updates to this
 
     for(int i = 0; i<strlen(stringBuild);i++){
@@ -271,6 +272,7 @@ char* applyDictionary(char* s){
             i+= 2;
         }
     }
+    PRINTFLEVEL1("finished creation and got %s\n",stringBuild);
     return stringBuild;
 }
 
