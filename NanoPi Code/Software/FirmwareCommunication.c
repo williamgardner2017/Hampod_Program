@@ -267,7 +267,7 @@ char* applyDictionary(char* s){
     stringBuild[0] = '\0';
     char** splitStuff = splitString(s," ");
     PRINTFLEVEL2("All setup before creating the token\n");
-    for(int i = 0; strcmp(splitStuff[i],"ENDOFSTRING") != 0,i++){
+    for(int i = 0; strcmp(splitStuff[i],"ENDOFSTRING") != 0;i++){
         PRINTFLEVEL2("testing if: %s: is in the hash\n",splitStuff[i]);
         if(containsHashMap(stringDictinary,(void*) splitStuff[i])){
             PRINTFLEVEL2("It was in it\n");
