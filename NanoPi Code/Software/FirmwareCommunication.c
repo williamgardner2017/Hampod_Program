@@ -231,12 +231,16 @@ bool shouldCreateAudioFile(char* text){
 void setupDictinaryHashMap(){
     stringDictinary = createHashMap(StringHash,StringHashCompare);
     char** dictinary = textFileToArray("ConfigSettings/dictionary.txt");
-    char* remain = malloc(sizeof(char)*100);
+    char* remain;
     char* start;
     PRINTFLEVEL1("Got the dictionay, starting to load up the dictionary\n");
     for(int i = 0; strcmp(dictinary[i], "END OF ARRAY") != 0;i++){
-        start = strtok_r(dictinary[i], " ", &remain);
-
+        start = malloc(sizeof(char)*40);
+        strcpy(start,dictinary[i]);
+        remain = start;
+        remain = strchr(remain, ' ');
+        remain[0] = '\0';
+        remain = remain+1;
         insertHashMap(stringDictinary,(void*) start, (void*) remain);
     }
     freeFileArray(dictinary);
