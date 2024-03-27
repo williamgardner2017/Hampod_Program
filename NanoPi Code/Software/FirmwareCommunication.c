@@ -253,7 +253,7 @@ char* splitOnce(char* s, char splitter){
     }
     s[index] = '\0';
     char* toReturn = s;
-    s = s+index;
+    s = s+index+1;
     return toReturn;
 }
 
