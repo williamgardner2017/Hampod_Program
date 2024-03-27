@@ -251,10 +251,13 @@ char* applyDictionary(char* s){
     char* rest = s;
     strcpy(stringBuild,"");
     while((token = strtok_r(rest, " ", &rest))){
+        PRINTFLEVEL2("testing if: %s: is in the hash\n",token);
         if(containsHashMap(stringDictinary,(void*) token)){
+            PRINTFLEVEL2("It was in it\n");
             strcat(stringBuild,(char*)getHashMap(stringDictinary,(void*) token));
         }else{
             strcat(stringBuild,token);
+            PRINTFLEVEL2("It was NOT in it\n");
         }
     }
     PRINTFLEVEL1("Applying number spacing to to %s\n",stringBuild);
