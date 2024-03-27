@@ -243,17 +243,16 @@ void setupDictinaryHashMap(){
     // free(remain); removing this temporarily
 }
 
-char* splitOnce(char* s, char splitter){
-    int index;
-    const char *ptr = strchr(s, splitter);
-    if (ptr != NULL) {
-        index = (int) (ptr - s); 
-    } else {
-        return NULL;
+char** splitString(char* s, char* splitter){
+    char* token;
+    char* rest = s;
+    char** toReturn = malloc(sizeof(char*)*(strlen(s)/3));
+    int i = 0;
+    while ((token = strtok_r(rest, splitter, &rest))){
+        toReturn[i] = token;
+        i++;
     }
-    s[index] = '\0';
-    char* toReturn = s;
-    s = s+index+1;
+    strcpy(toReturn[i],"ENDOFSTRING");
     return toReturn;
 }
 
@@ -266,20 +265,17 @@ char* applyDictionary(char* s){
         return NULL; // Return NULL to indicate failure
     }
     stringBuild[0] = '\0';
-    char* rest = malloc(sizeof(char)*(strlen(s)+1));
-    strcpy(rest,s);
-    char* token = splitOnce(rest,' ');
+    char** splitStuff = splitString(s," ");
     PRINTFLEVEL2("All setup before creating the token\n");
-    while (token != NULL){
-        PRINTFLEVEL2("testing if: %s: is in the hash\n",token);
-        if(containsHashMap(stringDictinary,(void*) token)){
+    for(int i = 0; strcmp(splitStuff[i],"ENDOFSTRING") != 0,i++){
+        PRINTFLEVEL2("testing if: %s: is in the hash\n",splitStuff[i]);
+        if(containsHashMap(stringDictinary,(void*) splitStuff[i])){
             PRINTFLEVEL2("It was in it\n");
-            strcat(stringBuild,(char*)getHashMap(stringDictinary,(void*) token));
+            strcat(stringBuild,(char*)getHashMap(stringDictinary,(void*) splitStuff[i]));
         }else{
             PRINTFLEVEL2("It was NOT in it\n");
-            strcat(stringBuild,token);
+            strcat(stringBuild,splitStuff[i]);
         }
-        token = splitOnce(rest,' ');
     }
     PRINTFLEVEL1("Applying number spacing to to %s\n",stringBuild);
     //apply the numeric updates to this
