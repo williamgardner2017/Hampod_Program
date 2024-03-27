@@ -244,11 +244,12 @@ void setupDictinaryHashMap(){
 }
 
 char** splitString(char* s, char* splitter){
-    char* token;
-    char* rest = s;
+    char* token =  strtok(s, splitter);
     char** toReturn = malloc(sizeof(char*)*(strlen(s)/3));
     int i = 0;
-    while ((token = strtok_r(rest, splitter, &rest))){
+    while (token != NULL) {
+        PRINTFLEVEL2(" %s\n", token);
+        token = strtok(NULL, splitter);
         toReturn[i] = token;
         i++;
     }
