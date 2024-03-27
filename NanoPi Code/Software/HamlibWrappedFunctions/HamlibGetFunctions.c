@@ -174,19 +174,6 @@ char* get_current_tuning_step(RIG* rig, vfo_t vfo) {
     }
 }
 
-char* get_current_tuning_step(RIG* rig, vfo_t vfo) {
-    shortfreq_t value; 
-    int retcode = rig_get_ts(rig, vfo, &value); 
-    if (retcode == RIG_OK) {
-        char* output = malloc(40); 
-        snprintf(output, 40, "%.3f\n", value);
-        return output; 
-    } else {
-        printf("rig_get_ts: error = %s\n", rigerror(retcode));
-        return "-1"; 
-    }
-}
-
 char* get_current_CTCSS_sub_audible_tone(RIG* rig, vfo_t vfo) {
     tone_t value; 
     int retcode = rig_get_ctcss_tone(rig, vfo, &value); 
