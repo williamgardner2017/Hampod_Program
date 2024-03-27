@@ -241,7 +241,7 @@ void setupDictinaryHashMap(){
         remain = strchr(remain, ' ');
         remain[0] = '\0';
         remain = remain+1;
-        insertHashMap(stringDictinary,(void*) start, (void*) remain);
+        insertHashMap(stringDictinary,(void*) remain, (void*) start);
     }
     freeFileArray(dictinary);
     // free(remain); removing this temporarily
