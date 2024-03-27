@@ -223,14 +223,14 @@ int ModeSelectFlow(KeyPress* keyInput){
                 if(modeSelectPage*9 < getModeCount()){
                     modeSelectPage = modeSelectPage + 1;
                 }
-                sprintf(shortName, "Switching to page %d",charSelectPage);
+                sprintf(shortName, "Switching to page %d",modeSelectPage);
                 sendSpeakerOutputWithConditions(shortName,true,false,false);
                 break;
             case 'D':
                 if(modeSelectPage > 0){
                     modeSelectPage = modeSelectPage - 1;
                 }
-                sprintf(shortName, "Switching to page %d",charSelectPage);
+                sprintf(shortName, "Switching to page %d",modeSelectPage);
                 sendSpeakerOutputWithConditions(shortName,true,false,false);
                 break;
             case '*':
