@@ -109,7 +109,7 @@ char* sendSpeakerOutputWithConditions(char* textIn, bool filterBypass, bool verb
     if(hasAudioFile){
         strcpy(outputText,"p");
         strcat(outputText,getHashMap(audioHashMap, text));
-    }else if(shouldCreateAudioFile(text) && !filterBypass){
+    }else if(shouldCreateAudioFile(text) || filterBypass){
          PRINTFLEVEL2("SOFTWARE:Creating new audio hashmap entrie for this\n");
         strcpy(outputText,"s");
         strcat(outputText,text);
