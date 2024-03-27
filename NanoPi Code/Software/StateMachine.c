@@ -482,7 +482,7 @@ int selectEntryInList(KeyPress* keyInput, char** list){
                 break;
             case 'D':
                 charSelectPage = charSelectPage - 1;
-                if(charSelectPage > 0){ 
+                if(charSelectPage < 0){ 
                     charSelectPage = 0;
                 }
                 sprintf(shortName, "Switching to page %d",charSelectPage);
