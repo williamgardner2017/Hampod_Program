@@ -233,13 +233,14 @@ void setupDictinaryHashMap(){
     char** dictinary = textFileToArray("ConfigSettings/dictionary.txt");
     char* remain = malloc(sizeof(char)*100);
     char* start;
+    PRINTFLEVEL1("Got the dictionay, starting to load up the dictionary\n");
     for(int i = 0; strcmp(dictinary[i], "END OF ARRAY") != 0;i++){
         start = strtok_r(dictinary[i], " ", &remain);
 
         insertHashMap(stringDictinary,(void*) start, (void*) remain);
     }
     freeFileArray(dictinary);
-    free(remain);
+    // free(remain); removing this temporarily
 }
 
 char* applyDictionary(char* s){
