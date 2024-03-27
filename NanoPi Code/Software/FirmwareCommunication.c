@@ -332,6 +332,7 @@ char* applyDictionary(char* s){
             PRINTFLEVEL2("It was NOT in it\n");
             strcat(stringBuild,splitStuff[i]);
         }
+        strcat(stringBuild," ");
     }
     freeTokens(splitStuff,count);
     PRINTFLEVEL1("Applying number spacing to to %s\n",stringBuild);
