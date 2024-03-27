@@ -259,3 +259,35 @@ char* get_level_or_func_wrapper(RIG *rig, vfo_t vfo, char* setting) {
     }
 	
 }
+
+// This switch case is for everything else that is not the LEVEL or FUNC features. This is the easiest way to get around all of the features not being the same. 
+char* get_radio_switcher(RIG* rig, vfo_t vfo, int num) {
+    switch(num) {
+        case 1:
+            return get_current_transceive_mode(rig);
+        case 2:
+            return get_current_frequency(rig, vfo);
+        case 3:
+            return get_current_mode(rig, vfo);
+        case 4:
+            return get_current_vfo(rig);
+        case 5:
+            return get_ptt(rig, vfo);
+        case 6:
+            return get_current_rit_offset(rig, vfo);
+        case 7:
+            return get_current_xit_offset(rig, vfo);
+        case 8:
+            return get_current_tuning_step(rig, vfo);
+        case 9:
+            return get_current_CTCSS_sub_audible_tone(rig, vfo);
+        case 10:
+            return get_current_encoding_digitally_coded_squelch_code(rig, vfo);
+        case 11:
+            return get_current_CTCSS_sub_audible_squelch_tone(rig, vfo);
+        case 12:
+            return get_current_continuous_tone_controlled_squelch_code(rig, vfo);
+        default:
+            return "-1";
+    }
+}
