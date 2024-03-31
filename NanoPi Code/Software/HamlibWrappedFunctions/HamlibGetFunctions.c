@@ -266,18 +266,18 @@ char* get_current_continuous_tone_controlled_squelch_code(void* input) {
 char* get_level_or_func_wrapper(void* input) {
     RIG* rig = (RIG*) input[0]; 
     vfo_t vfo = *(vfo_t*) input[1]; 
-    char* setting = *(int*) input[2]; 
+    char* setting_string = *(int*) input[2]; 
 
 	char* output = malloc(40); 
-	if (strstr("LEVEL", setting)) {
+	if (strstr("LEVEL", setting_string)) {
 		value_t* value; 
-		rig_get_level (rig, vfo, rig_parse_func(setting), &value); 
-		snprintf(output, "%d", value); 
+		rig_get_level (rig, vfo, rig_parse_func(setting_string), &value); 
+		snprintf(output, 40, "%d", value); 
         return output; 
-	} else if (strstr("FUNC", setting)) {
+	} else if (strstr("FUNC", setting_string)) {
 		int status; 
-		rig_get_func (rig, vfo, rig_parse_func(setting), &status); 	
-		snprintf(output, "%d", status); 
+		rig_get_func (rig, vfo, rig_parse_func(setting_string), &status); 	
+		snprintf(output, 40, "%d", status); 
         return output; 
 	} else {
         return "-1"; 
