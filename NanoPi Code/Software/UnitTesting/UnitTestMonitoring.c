@@ -8,7 +8,7 @@ char* dummyGetWraper1(void* input){
 }
 char* dummyGetWraper2(void* input){
     char* buffer = malloc(sizeof(char)*40);
-    sprintf(buffer,"Wraper 2 has value %d",wapper1Counter);
+    sprintf(buffer,"Wraper 2 has value %d",wapper2Counter);
     return buffer;
 }
 bool testCreateDestroyMonitoring(){
