@@ -25,7 +25,9 @@ void* monitoringLoop(void* d){
             pthread_mutex_unlock(&linkedListLock);
             continue;
         }
+        PRINTFLEVEL2("there is something to me monitored\n");
         MonitoringLink* linkData = (MonitoringLink*) current->data;
+        PRINTFLEVEL2("The old data is %s\n", linkData->oldData);
         if(linkData->flaggedForDeletion){
             //delete it
             pthread_mutex_lock(&linkedListLock);
