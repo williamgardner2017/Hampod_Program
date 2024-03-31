@@ -21,8 +21,10 @@ bool testCreateDestroyMonitoring(){
 bool testAddingMonitoringComponent(){
     startMonitoringLoop();
     usleep(100000);
+    PRINTFLEVEL1("Adding first wraper\n");
     addMonitoringLink(dummyGetWraper1,NULL);
     usleep(100000);
+    PRINTFLEVEL1("Adding second wraper\n");
     addMonitoringLink(dummyGetWraper2,NULL);
     usleep(100000);
     endMonitoringLoop();

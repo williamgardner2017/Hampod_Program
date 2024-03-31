@@ -70,10 +70,12 @@ void endMonitoringLoop(){
 */
 void addMonitoringLink(char* (*getData)(void*), void* callData){
     MonitoringLink* newLinkData = malloc(sizeof(MonitoringLink));
+    PRINTFLEVEL1("Populating the new link data with input paremiters\n");
     newLinkData->getData = getData;
     newLinkData->callData = callData;
     newLinkData->oldData = (char*) NULL;
     newLinkData->flaggedForDeletion = false;
+    PRINTFLEVEL1("adding the new link to the monitoring chain\n");
     llAddTail(monitoringList,(void*)newLinkData);
 
 }
