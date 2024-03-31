@@ -75,7 +75,8 @@ void addMonitoringLink(char* (*getData)(void*), void* callData){
     PRINTFLEVEL1("Populating the new link data with input paremiters\n");
     newLinkData->getData = getData;
     newLinkData->callData = callData;
-    newLinkData->oldData = (char*) NULL;
+    newLinkData->oldData = malloc(sizeof(char)*5);
+    sprintf(newLinkData->oldData,"");
     newLinkData->flaggedForDeletion = false;
     PRINTFLEVEL2("adding the new link to the monitoring chain\n");
     pthread_mutex_lock(&linkedListLock);
