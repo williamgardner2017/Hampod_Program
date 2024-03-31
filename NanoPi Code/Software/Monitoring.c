@@ -41,6 +41,7 @@ void* monitoringLoop(void* d){
                 sendSpeakerOutput(newData);
                 free(linkData->oldData);
                 linkData->oldData = newData;
+                PRINTFLEVEL2("Updating the old data to be new data");
             }
             pthread_mutex_lock(&linkedListLock);
             current = current->next;
