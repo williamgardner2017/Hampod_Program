@@ -33,9 +33,18 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include "../Monitoring.h"
 
+char* dummyGetWraper1(void* input);
+char* dummyGetWraper2(void* input);
 bool testCreateDestroyMonitoring();
 bool testAddingMonitoringComponent();
+//remove test
+bool testRemovingMonitoringComponent();
+//see if it will monitor changes and output them
+bool testMonitoringAfterChanges();
+
+void resetMonitoringWrappers();
 
 
 #include "UnitTestMonitoring.c"

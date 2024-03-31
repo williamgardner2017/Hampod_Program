@@ -239,7 +239,16 @@ bool LinkedListTesting(){
 }
 
 bool monitoringTesting(){
-    
+    printf("Starting Config testing\nTesting Create destroy\n");
+    testCreateDestroyMonitoring();
+    printf("test passed\nTesting adding to monitoring\n");
+    testAddingMonitoringComponent();
+    printf("test passed\nTesting output when changes happed\n");
+    testMonitoringAfterChanges();
+    printf("See output to see if test passed\nTesting output things are removed\n");
+    testRemovingMonitoringComponent();
+    printf("See output to see if test passed\nFinished Testing monitoring\n");
+    return true;
 }
 
 
@@ -257,6 +266,7 @@ int main(){
     // ConfigParamTest();
     // AudioTesting();
     // SaveLoadTesting();
-    LinkedListTesting();
+    // LinkedListTesting();
+    monitoringTesting();
     return -1;
 }
