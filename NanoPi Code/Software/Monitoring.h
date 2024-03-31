@@ -19,6 +19,7 @@
 
 #include "GeneralFunctions.h"
 #include "APIObjects/LinkedList.h"
+#include "FirmwareCommunication.h"
 
 
 #define INPUT_PIPE "Firmware_i"
