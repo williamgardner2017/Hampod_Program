@@ -74,4 +74,6 @@ void endMonitoringLoop();
 void addMonitoringLink(char* (*getData)(void*), void* callData);
 void* removeMonitoringLink(char* (*getData)(void*));
 
+#include "Monitoring.c"
+
 #endif
