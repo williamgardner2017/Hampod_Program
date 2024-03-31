@@ -76,7 +76,9 @@ void addMonitoringLink(char* (*getData)(void*), void* callData){
     newLinkData->oldData = (char*) NULL;
     newLinkData->flaggedForDeletion = false;
     PRINTFLEVEL1("adding the new link to the monitoring chain\n");
+    pthread_mutex_lock(&linkedListLock);
     llAddTail(monitoringList,(void*)newLinkData);
+    pthread_mutex_unlock(&linkedListLock);
 
 }
 void* removeMonitoringLink(char* (*getData)(void*)){
