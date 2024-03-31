@@ -39,9 +39,12 @@ void* monitoringLoop(void* d){
             char* newData = linkData->getData(linkData->callData);
             if(strcmp(newData,linkData->oldData) != 0){
                 sendSpeakerOutput(newData);
+                PRINTFLEVEL2("The new data is %s\n",newData);
                 free(linkData->oldData);
                 linkData->oldData = newData;
                 PRINTFLEVEL2("Updating the old data to be new data");
+            }else{
+                free(newData);
             }
             pthread_mutex_lock(&linkedListLock);
             current = current->next;
