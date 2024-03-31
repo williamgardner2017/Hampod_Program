@@ -23,11 +23,12 @@ void* monitoringLoop(void* d){
             pthread_mutex_lock(&linkedListLock);
             current = monitoringList->head;
             pthread_mutex_unlock(&linkedListLock);
+            usleep(10000);
             continue;
         }
-        PRINTFLEVEL2("there is something to me monitored\n");
+        // PRINTFLEVEL2("there is something to me monitored\n");
         MonitoringLink* linkData = (MonitoringLink*) current->data;
-        PRINTFLEVEL2("The old data is:%s\n", linkData->oldData);
+        // PRINTFLEVEL2("The old data is:%s\n", linkData->oldData);
         if(linkData->flaggedForDeletion){
             //delete it
             pthread_mutex_lock(&linkedListLock);
@@ -37,13 +38,14 @@ void* monitoringLoop(void* d){
             pthread_mutex_unlock(&linkedListLock);
         }else{
             char* newData = linkData->getData(linkData->callData);
+              PRINTFLEVEL2("Old:%s\nNew:%s\n",linkData->oldData,newData);
             if(strcmp(newData,linkData->oldData) != 0){
                 sendSpeakerOutput(newData);
-                PRINTFLEVEL2("The new data is:%s\n",newData);
                 free(linkData->oldData);
                 linkData->oldData = newData;
                 PRINTFLEVEL2("Updating the old data to be new data\n");
             }else{
+                PRINTFLEVEL2("Nothing changed to freeing new data\n");
                 free(newData);
             }
             pthread_mutex_lock(&linkedListLock);
