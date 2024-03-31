@@ -2,12 +2,12 @@ int wapper1Counter = 0;
 int wapper2Counter = 0;
 
 char* dummyGetWraper1(void* input){
-    char* buffer = malloc(sizeof(char)*20);
+    char* buffer = malloc(sizeof(char)*40);
     sprintf(buffer,"Wraper 1 has value %d",wapper1Counter);
     return buffer;
 }
 char* dummyGetWraper2(void* input){
-    char* buffer = malloc(sizeof(char)*20);
+    char* buffer = malloc(sizeof(char)*40);
     sprintf(buffer,"Wraper 2 has value %d",wapper1Counter);
     return buffer;
 }

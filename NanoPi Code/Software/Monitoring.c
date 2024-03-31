@@ -43,7 +43,7 @@ void* monitoringLoop(void* d){
                 sendSpeakerOutput(newData);
                 free(linkData->oldData);
                 linkData->oldData = newData;
-                PRINTFLEVEL2("Updating the old data to be new data\n");
+                PRINTFLEVEL1("Updating the old data to be new data\n");
             }else{
                 PRINTFLEVEL2("Nothing changed to freeing new data\n");
                 free(newData);
