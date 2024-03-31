@@ -25,14 +25,14 @@ char* sendSpeakerOutput(char* text){
     //
     if(SIMULATEOUTPUT){
         PRINTFLEVEL1("TESTING SPEAKER OUTPUT: %s\n", text);
-        bool hasAudioFile = getHashMap(audioHashMap, text) != NULL;
-         if(hasAudioFile){
-            PRINTFLEVEL1("SOFTWARE: Audio file was found\n");
-         }else if(shouldCreateAudioFile(text)){
-            PRINTFLEVEL1("SOFTWARE:No audio file found but saving new file\n");
-         }else{
-            PRINTFLEVEL1("SOFTWARE:No audio file found and NOT creating a new file\n");
-         }
+        // bool hasAudioFile = getHashMap(audioHashMap, text) != NULL;
+        //  if(hasAudioFile){
+        //     PRINTFLEVEL1("SOFTWARE: Audio file was found\n");
+        //  }else if(shouldCreateAudioFile(text)){
+        //     PRINTFLEVEL1("SOFTWARE:No audio file found but saving new file\n");
+        //  }else{
+        //     PRINTFLEVEL1("SOFTWARE:No audio file found and NOT creating a new file\n");
+        //  }
         return text;
     }
     //TODO add the stuff for checking if it exits

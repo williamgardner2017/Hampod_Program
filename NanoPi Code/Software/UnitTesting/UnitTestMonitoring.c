@@ -12,7 +12,6 @@ char* dummyGetWraper2(void* input){
     return buffer;
 }
 bool testCreateDestroyMonitoring(){
-    firmwareCommunicationStartup();
     startMonitoringLoop();
     usleep(100000);
     endMonitoringLoop();
