@@ -15,6 +15,7 @@
 // #include "UnitTestAudio.h"
 // #include "UnitTestSaveLoad.h"
 #include "UnitTestLinkedList.h"
+#include "UnitTestMonitoring.h"
 
 void sigsegv_handler(int signum);
 
