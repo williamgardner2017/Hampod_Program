@@ -23,6 +23,7 @@ bool testAddingMonitoringComponent(){
     usleep(100000);
     PRINTFLEVEL1("Adding first wraper\n");
     addMonitoringLink(dummyGetWraper1,NULL);
+    PRINTFLEVEL2("first wraper has been added\n");
     usleep(100000);
     PRINTFLEVEL1("Adding second wraper\n");
     addMonitoringLink(dummyGetWraper2,NULL);
