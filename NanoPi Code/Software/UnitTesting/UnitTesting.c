@@ -267,7 +267,7 @@ int main(){
     // ConfigParamTest();
     // AudioTesting();
     // SaveLoadTesting();
-    // LinkedListTesting();
+    LinkedListTesting();
     monitoringTesting();
     return -1;
 }
