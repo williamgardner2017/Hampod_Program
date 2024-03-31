@@ -30,9 +30,9 @@ void llAddTail(LinkedList* lList,void* ldata){
     //where it is empty
         PRINTFLEVEL1("the list is empty so adding new stuff to it\n");
         lList->head = createListNode(ldata);
-        PRINTFLEVEL2("head populated\n");
+        // PRINTFLEVEL2("head populated\n");
         lList->tail = lList->head;
-        PRINTFLEVEL2("tail populated\n");
+        // PRINTFLEVEL2("tail populated\n");
     }else{
     //where it is not empty
         ListNode* oldTail = lList->tail;
@@ -119,11 +119,11 @@ bool llIsEmpty(LinkedList* lList){
 
 ListNode* createListNode(void* ldata){
     ListNode* node = malloc(sizeof(ListNode));
-    PRINTFLEVEL2("populating new listNode with data\n");
+    // PRINTFLEVEL2("populating new listNode with data\n");
     node->data = ldata;
     node->next = NULL;
     node->prior = NULL;
-    PRINTFLEVEL2("retirning new listNode\n");
+    // PRINTFLEVEL2("retirning new listNode\n");
     return node;
 }
 void* destroyListNode(ListNode* node){

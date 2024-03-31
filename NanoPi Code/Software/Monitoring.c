@@ -27,7 +27,7 @@ void* monitoringLoop(void* d){
         }
         PRINTFLEVEL2("there is something to me monitored\n");
         MonitoringLink* linkData = (MonitoringLink*) current->data;
-        PRINTFLEVEL2("The old data is %s\n", linkData->oldData);
+        PRINTFLEVEL2("The old data is:%s\n", linkData->oldData);
         if(linkData->flaggedForDeletion){
             //delete it
             pthread_mutex_lock(&linkedListLock);
@@ -39,10 +39,10 @@ void* monitoringLoop(void* d){
             char* newData = linkData->getData(linkData->callData);
             if(strcmp(newData,linkData->oldData) != 0){
                 sendSpeakerOutput(newData);
-                PRINTFLEVEL2("The new data is %s\n",newData);
+                PRINTFLEVEL2("The new data is:%s\n",newData);
                 free(linkData->oldData);
                 linkData->oldData = newData;
-                PRINTFLEVEL2("Updating the old data to be new data");
+                PRINTFLEVEL2("Updating the old data to be new data\n");
             }else{
                 free(newData);
             }
@@ -76,17 +76,17 @@ void endMonitoringLoop(){
 */
 void addMonitoringLink(char* (*getData)(void*), void* callData){
     MonitoringLink* newLinkData = malloc(sizeof(MonitoringLink));
-    PRINTFLEVEL1("Populating the new link data with input paremiters\n");
+    // PRINTFLEVEL1("Populating the new link data with input paremiters\n");
     newLinkData->getData = getData;
     newLinkData->callData = callData;
     newLinkData->oldData = malloc(sizeof(char)*5);
     sprintf(newLinkData->oldData,"");
     newLinkData->flaggedForDeletion = false;
-    PRINTFLEVEL2("adding the new link to the monitoring chain\n");
+    // PRINTFLEVEL2("adding the new link to the monitoring chain\n");
     pthread_mutex_lock(&linkedListLock);
     llAddTail(monitoringList,(void*)newLinkData);
     pthread_mutex_unlock(&linkedListLock);
-    PRINTFLEVEL2("New has been added\n");
+    // PRINTFLEVEL2("New has been added\n");
 
 }
 void* removeMonitoringLink(char* (*getData)(void*)){
