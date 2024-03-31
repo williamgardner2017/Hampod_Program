@@ -30,7 +30,9 @@ void llAddTail(LinkedList* lList,void* ldata){
     //where it is empty
         PRINTFLEVEL1("the list is empty so adding new stuff to it\n");
         lList->head = createListNode(ldata);
+        PRINTFLEVEL2("head populated\n");
         lList->tail = lList->head;
+        PRINTFLEVEL2("tail populated\n");
     }else{
     //where it is not empty
         ListNode* oldTail = lList->tail;
