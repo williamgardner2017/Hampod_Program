@@ -3,7 +3,16 @@
 #define SERIAL_PORT_USB0 "/dev/ttyUSB0"
 #define SERIAL_PORT_USB1 "/dev/ttyUSB1"
 
-Radio* loadUpRadioUsingData(char* make, int model, int port, Mode* defaultMode, rig_model_t myrig_model){
+Radio** radios;
+int maxRadios = 2;
+int currentRadio = -1;
+int radioCount = 0;
+
+void startRadios(){
+     radios = calloc(2,sizeof(Radio*));
+}
+
+void loadUpRadioUsingData(char* make, int model, int port, Mode* defaultMode, rig_model_t myrig_model){
     if(SIMULATEOUTPUT == 0){
         rig_load_all_backends(); 
     }
@@ -33,40 +42,60 @@ Radio* loadUpRadioUsingData(char* make, int model, int port, Mode* defaultMode, 
             break;
     }
 
-    rig_open(newRadio->my_rig); 
-    return newRadio;
+    rig_open(newRadio->my_rig);
+    currentRadio = radioCount;
+    radioCount++;
+    radios[currentRadio] = newRadio;
 }
 
-void freeRadio(Radio* thisRadio){
-    if(SIMULATEOUTPUT == 0){
-        rig_close(thisRadio->my_rig);
-        rig_cleanup(thisRadio->my_rig);
+void freeRadios(){
+    for(int i = 0; i<radioCount;i++){
+        if(SIMULATEOUTPUT == 0){
+            rig_close(radios[i]->my_rig);
+            rig_cleanup(radios[i]->my_rig);
+        }
+        free(radios[i]);
     }
-    free(thisRadio);
 }
 
-Mode* getCurrentMode(Radio* thisRadio){
-    return thisRadio->currentMode;
+Mode* getCurrentMode(){
+    return radios[currentRadio]->currentMode;
 }
 
-ModeData* getModeDetails(Radio* thisRadio){
-    return thisRadio->currentMode->modeDetails;
+ModeData* getModeDetails(){
+    return radios[currentRadio]->currentMode->modeDetails;
     }
 
 //TODO make sure each mode has this, even if it is set to null
-void setRadioMode(Radio* thisRadio, Mode* modeToSetTo){
-    if(thisRadio->currentMode != NULL && thisRadio->currentMode->exitMode != NULL){
-        thisRadio->currentMode->exitMode();
+void setRadioMode( Mode* modeToSetTo){
+    if(radios[currentRadio]->currentMode != NULL && radios[currentRadio]->currentMode->exitMode != NULL){
+        radios[currentRadio]->currentMode->exitMode();
     }
-    thisRadio->currentMode = modeToSetTo;
+    radios[currentRadio]->currentMode = modeToSetTo;
     if(modeToSetTo->enterMode != NULL){
         modeToSetTo->enterMode();
     }
 }
 
-void* runRadioCommand(Radio* thisRadio, KeyPress* keyInput){
-    PRINTFLEVEL1("running mode of %s\n",thisRadio->currentMode->modeDetails->modeName);
+void* runRadioCommand(KeyPress* keyInput){
+    PRINTFLEVEL1("running mode of %s\n",radios[currentRadio]->currentMode->modeDetails->modeName);
     void* results;
-    results = thisRadio->currentMode->modeInput(keyInput,thisRadio->my_rig);
+    results = radios[currentRadio]->currentMode->modeInput(keyInput,radios[currentRadio]->my_rig);
     return results;
+}
+
+void setCurrentRadio(int radioID){
+    currentRadio = radioID;
+}
+int getRadioAmount(){
+    return radioCount;
+}
+int getCurrentRadioID(){
+    return currentRadio;
+}
+Radio* getCurrentRadio(){
+    return radios[currentRadio];
+}
+Radio** getAllRadios(){
+    return radios;
 }

@@ -1,3 +1,35 @@
+#ifndef HAMPOD_ERROROUTPUT
+#define HAMPOD_ERROROUTPUT
+
+    #ifdef OUTPUTLEVEL1
+    #define PRINTFLEVEL1(...) \
+        do { \
+            if(OUTPUTLEVEL1) { \
+                printf(__VA_ARGS__); \
+            } \
+        } while(0)
+    #else
+
+    #define PRINTFLEVEL1(...) \
+    do{}while(0)
+
+    #endif
+
+    #ifdef OUTPUTLEVEL2
+    #define PRINTFLEVEL2(...) \
+        do { \
+            if(OUTPUTLEVEL1) { \
+                printf(__VA_ARGS__); \
+            } \
+        } while(0)
+    #else
+
+    #define PRINTFLEVEL2(...) \
+    do{}while(0)
+
+    #endif
+#endif
+
 #ifndef HAMPOD_SOFT_RADIO
 #define HAMPOD_SOFT_RADIO
 
@@ -7,34 +39,6 @@
 #else
 #define SIMULATEOUTPUT 0
 #endif
-#endif
-
-#ifdef OUTPUTLEVEL1
-#define PRINTFLEVEL1(...) \
-    do { \
-        if(OUTPUTLEVEL1) { \
-            printf(__VA_ARGS__); \
-        } \
-    } while(0)
-#else
-
-#define PRINTFLEVEL1(...) \
-    while(0)
-
-#endif
-
-#ifdef OUTPUTLEVEL2
-#define PRINTFLEVEL2(...) \
-    do { \
-        if(OUTPUTLEVEL1) { \
-            printf(__VA_ARGS__); \
-        } \
-    } while(0)
-#else
-
-#define PRINTFLEVEL2(...) \
-    while(0)
-
 #endif
 
 #include <stdlib.h>
@@ -55,12 +59,19 @@ typedef struct Radio{
     RIG *my_rig; 
 } Radio;
 
-Radio* loadUpRadioUsingData(char* make, int model, int port, Mode* defaultMode, rig_model_t myrig_model);
-void freeRadio(Radio* thisRadio);
-Mode* getCurrentMode(Radio* thisRadio);
-ModeData* getModeDetails(Radio* thisRadio);
-void setRadioMode(Radio* thisRadio, Mode* modeToSetTo);
-void* runRadioCommand(Radio* thisRadio, KeyPress* keyInput);
+void startRadios();
+void loadUpRadioUsingData(char* make, int model, int port, Mode* defaultMode, rig_model_t myrig_model);
+void freeRadios();
+Mode* getCurrentMode();
+ModeData* getModeDetails();
+void setRadioMode(Mode* modeToSetTo);
+void* runRadioCommand(KeyPress* keyInput);
+
+void setCurrentRadio(int radioID);
+int getCurrentRadioID();
+int getRadioAmount();
+Radio* getCurrentRadio();
+Radio** getAllRadios();
 
 #include "Radio.c"
 #endif
