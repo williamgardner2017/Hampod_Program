@@ -47,7 +47,7 @@
 #include "Radio.h"
 #include "Modes/Mode.h"
 #include "FirmwareCommunication.h"
-#include "ConfigSettings/HashMap.h"
+#include "APIObjects/HashMap.h"
 #include "ConfigSettings/ConfigParams.h"
 typedef enum {
     bootUp,

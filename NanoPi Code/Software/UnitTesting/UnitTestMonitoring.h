@@ -1,13 +1,5 @@
-#ifndef HAMPOD_SOFT_CONFIGLOAD
-#define HAMPOD_SOFT_CONFIGLOAD
-
-#ifndef SIMULATEOUTPUT
-#ifdef TESTING
-#define SIMULATEOUTPUT 1
-#else
-#define SIMULATEOUTPUT 0
-#endif
-#endif
+#ifndef HAMPOD_TESTING_MONITORING
+#define HAMPOD_TESTING_MONITORING
 
 #ifdef OUTPUTLEVEL1
 #define PRINTFLEVEL1(...) \
@@ -41,15 +33,19 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include "../GeneralFunctions.h"
-#include "../APIObjects/HashMap.h"
-#include "ConfigParams.h"
-#include "../Modes/ModeRouting.h"
-#include "../StateMachine.h"
-#include "../Radio.h"
+#include "../Monitoring.h"
 
-bool loadUpFromSaveOLD(int saveFileNumber);
+char* dummyGetWraper1(void* input);
+char* dummyGetWraper2(void* input);
+bool testCreateDestroyMonitoring();
+bool testAddingMonitoringComponent();
+//remove test
+bool testRemovingMonitoringComponent();
+//see if it will monitor changes and output them
+bool testMonitoringAfterChanges();
+
+void resetMonitoringWrappers();
 
 
-#include "ConfigLoad.c"
+#include "UnitTestMonitoring.c"
 #endif

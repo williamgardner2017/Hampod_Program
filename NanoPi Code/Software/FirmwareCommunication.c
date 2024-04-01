@@ -25,7 +25,7 @@ char* sendSpeakerOutput(char* text){
     //
     if(SIMULATEOUTPUT){
         PRINTFLEVEL1("TESTING SPEAKER OUTPUT: %s\n", text);
-         bool hasAudioFile = getHashMap(audioHashMap, text) != NULL;
+        bool hasAudioFile = getHashMap(audioHashMap, text) != NULL;
          if(hasAudioFile){
             PRINTFLEVEL1("SOFTWARE: Audio file was found\n");
          }else if(shouldCreateAudioFile(text)){

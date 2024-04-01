@@ -1,13 +1,5 @@
-#ifndef HAMPOD_SOFT_CONFIGLOAD
-#define HAMPOD_SOFT_CONFIGLOAD
-
-#ifndef SIMULATEOUTPUT
-#ifdef TESTING
-#define SIMULATEOUTPUT 1
-#else
-#define SIMULATEOUTPUT 0
-#endif
-#endif
+#ifndef HAMPOD_TESTING_LINKEDLIST
+#define HAMPOD_TESTING_LINKEDLIST
 
 #ifdef OUTPUTLEVEL1
 #define PRINTFLEVEL1(...) \
@@ -41,15 +33,13 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include "../GeneralFunctions.h"
-#include "../APIObjects/HashMap.h"
-#include "ConfigParams.h"
-#include "../Modes/ModeRouting.h"
-#include "../StateMachine.h"
-#include "../Radio.h"
+#include "../APIObjects/LinkedList.h"
 
-bool loadUpFromSaveOLD(int saveFileNumber);
+bool testCreateDestroyLList();
+bool testAddToLList();
+bool testRemoveFromLList();
+bool testDestroyFilledList();
+void destroyDataLList(void* data);
 
-
-#include "ConfigLoad.c"
+#include "UnitTestLinkedList.c"
 #endif

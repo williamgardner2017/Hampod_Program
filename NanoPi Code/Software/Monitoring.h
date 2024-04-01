@@ -1,5 +1,5 @@
-#ifndef HAMPOD_SOFT_FIRMCOMMUN
-#define HAMPOD_SOFT_FIRMCOMMUN
+#ifndef HAMPOD_SOFT_MONITORING
+#define HAMPOD_SOFT_MONITORING
 
 
 #include <pthread.h>
@@ -18,12 +18,8 @@
 #include <stdarg.h>
 
 #include "GeneralFunctions.h"
-#include "IDQueue.h"
-#include "ThreadQueue.h"
-#include "../Firmware/hampod_queue.h"
-#include "../Firmware/hampod_firm_packet.h"
-#include "APIObjects/HashMap.h"
-#include "../Firmware/audio_firmware.h"
+#include "APIObjects/LinkedList.h"
+#include "FirmwareCommunication.h"
 
 
 #define INPUT_PIPE "Firmware_i"
@@ -64,17 +60,21 @@
 #endif
 
 
+typedef struct MonitoringLink{
+    char* (*getData)(void*);
+    void* callData;
+    char* oldData;
+    bool flaggedForDeletion;
+} MonitoringLink;
 
-char* sendSpeakerOutput(char* text);
-void setupAudioHashMap();
-int audioHash(void* key);
-bool audioCompare(void* key1, void* key2);
-void audioFree(void* data);
-bool shouldCreateAudioFile(char* text);
 
-void firmwareCommunicationStartup();
+void startMonitoringLoop();
+void* monitoringLoop(void* d);
+void endMonitoringLoop();
 
-void freeFirmwareComunication();
-#include "FirmwareCommunication.c"
+void addMonitoringLink(char* (*getData)(void*), void* callData);
+void* removeMonitoringLink(char* (*getData)(void*));
+
+#include "Monitoring.c"
+
 #endif
-

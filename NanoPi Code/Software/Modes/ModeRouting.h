@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include "Mode.h"
 #include "../GeneralFunctions.h"
-#include "../ConfigSettings/HashMap.h"
+#include "../APIObjects/HashMap.h"
 #include "ConfigMode.h"
 #include "NormalMode.h"
 #include "DummyDTMFMode.h"
