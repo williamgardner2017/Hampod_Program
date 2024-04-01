@@ -40,7 +40,7 @@ void* monitoringLoop(void* d){
             char* newData = linkData->getData(linkData->callData);
               PRINTFLEVEL2("Old:%s\nNew:%s\ncomparison value:%d\n",linkData->oldData,newData,strcmp(newData,linkData->oldData));
             if(strcmp(newData,linkData->oldData) != 0){
-                sendSpeakerOutput(newData);
+                sendSpeakerOutputWithConditions(newData, false, true, true);
                 free(linkData->oldData);
                 linkData->oldData = newData;
                 PRINTFLEVEL1("Updating the old data to be new data\n");

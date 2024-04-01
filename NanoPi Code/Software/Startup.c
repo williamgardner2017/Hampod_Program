@@ -17,6 +17,8 @@
 #include "../Firmware/audio_firmware.h"
 #include "ConfigSettings/ConfigParams.h"
 #include "ConfigSettings/ConfigFunctions.h"
+#include "Monitoring.h"
+
 #ifndef HAMPOD_ERROROUTPUT
 #define HAMPOD_ERROROUTPUT
 
@@ -63,6 +65,7 @@ void fullStart(){
     setModeState(bootUp);
     loadConfigParams();
     populateConfigFunctions();
+    startMonitoringLoop();
 
 
     printf("software: Starting keywatcher\n");
