@@ -315,6 +315,26 @@ void freeTokens(char **tokens, int numTokens) {
     free(tokens);
 }
 
+int is_digit(char c) {
+    return c >= '0' && c <= '9';
+}
+
+void insertSpaces(char *str) {
+    int len = strlen(str);
+    for(int i = 0; i<len;i++){
+        if(is_digit(str[i])){
+            for(int j = len+3;j>i+2;j--){
+                str[j] = str[j-2];
+            }
+            str[i+1] = str[i];
+            str[i] = ' ';
+            str[i+2] =' ';
+            i += 2;
+            len += 2;
+        }
+    }
+}
+
 char* applyDictionary(char* s){
     //apply the dictonary to this
     PRINTFLEVEL1("Applying dictionay changes to %s\n",s); 
@@ -341,19 +361,7 @@ char* applyDictionary(char* s){
     freeTokens(splitStuff,count);
     PRINTFLEVEL1("Applying number spacing to to %s\n",stringBuild);
     //apply the numeric updates to this
-
-    // for(int i = 0; i<strlen(stringBuild);i++){
-    //     //check for if it is equal to a number
-    //     //
-    //     if(stringBuild[i] - '0' >= 0 && stringBuild[i] - '0' <= 9){
-    //         char num = stringBuild[i];
-    //         strcpy(stringBuild+i+2,stringBuild+i);
-    //         stringBuild[i] = ' ';
-    //         stringBuild[i+1] = num;
-    //         stringBuild[i+2] =' ';
-    //         i+= 2;
-    //     }
-    // }
+    insertSpaces(stringBuild);
     PRINTFLEVEL1("finished creation and got %s\n",stringBuild);
     return stringBuild;
 }
