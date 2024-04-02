@@ -36,13 +36,9 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include "Mode.h"
-#include "../GeneralFunctions.h"
-#include "../APIObjects/HashMap.h"
-#include "ConfigMode.h"
-#include "NormalMode.h"
-#include "DummyDTMFMode.h"
-#include "FrequensyMode.h"
+#include "../Modes/Mode.h"
+#include "GeneralFunctions.h"
+#include "APIObjects/HashMap.h"
 
 
 // Mode* getModeById(int modeID); //goal is to make this outdated Done

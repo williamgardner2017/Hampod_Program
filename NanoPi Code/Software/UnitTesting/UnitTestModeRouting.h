@@ -4,7 +4,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include "../Modes/ModeRouting.h"
+#include "../ModeRouting.h"
 #include "../Modes/Mode.h"
 //TODO make the connected c file
 

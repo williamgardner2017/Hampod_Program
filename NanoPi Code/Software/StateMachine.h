@@ -46,7 +46,7 @@
 #include <stdbool.h>
 #include <hamlib/rig.h>
 #include <hamlib/riglist.h>
-#include "Modes/ModeRouting.h"
+#include "ModeRouting.h"
 #include "GeneralFunctions.h"
 #include "Radio.h"
 #include "Modes/Mode.h"

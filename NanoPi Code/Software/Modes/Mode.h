@@ -23,6 +23,4 @@ typedef struct Mode {
 
 Mode* createMode();
 
-#include "Mode.c"
-
 #endif

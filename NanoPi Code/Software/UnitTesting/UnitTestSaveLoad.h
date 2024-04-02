@@ -8,7 +8,7 @@
 #include "../GeneralFunctions.h"
 #include "../ConfigSettings/ConfigParams.h"
 #include "../ConfigSettings/ConfigFunctions.h"
-#include "../Modes/ModeRouting.h"
+#include "../ModeRouting.h"
 #include "../Radio.h"
 #include "../StateMachine.h"
 #include "../ConfigSettings/ConfigLoad.h"
