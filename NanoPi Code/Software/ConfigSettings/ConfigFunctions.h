@@ -62,5 +62,7 @@ int SaveData(KeyPress* keyData);
 
 int setHotkeys(KeyPress* keyData);
 
+#ifndef SHAREDLIB
 #include "ConfigFunctions.c"
+#endif
 #endif

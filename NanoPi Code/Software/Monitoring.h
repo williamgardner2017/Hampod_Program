@@ -74,7 +74,8 @@ void endMonitoringLoop();
 
 void addMonitoringLink(char* (*getData)(void*), void* callData);
 void* removeMonitoringLink(char* (*getData)(void*));
-
+#ifndef SHAREDLIB
 #include "Monitoring.c"
+#endif
 
 #endif

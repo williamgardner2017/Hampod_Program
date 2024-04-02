@@ -55,6 +55,7 @@
 
 bool loadUpFromSaveOLD(int saveFileNumber);
 
-
+#ifndef SHAREDLIB
 #include "ConfigLoad.c"
+#endif
 #endif

@@ -1,3 +1,4 @@
+#include "FrequensyMode.h"
 double currentFrequency = 0;
 int decimalPlace = 0;
 bool hasDecimal = false;

@@ -9,5 +9,4 @@
 #include "../GeneralFunctions.h"
 
 Mode* DTMFDummyLoad();
-#include "DummyDTMFMode.c"
 #endif

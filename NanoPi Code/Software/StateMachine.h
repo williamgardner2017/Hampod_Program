@@ -95,5 +95,8 @@ void setCompanyAndModel(char* comp, int mod);
 int selectEntryInList(KeyPress* keyInput, char** list);
 
 bool loadUpFromSave(int saveFileNumber);
+
+#ifndef SHAREDLIB
 #include "StateMachine.c"
+#endif
 #endif

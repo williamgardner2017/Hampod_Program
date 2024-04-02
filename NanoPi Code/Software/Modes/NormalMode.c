@@ -1,4 +1,4 @@
-
+#include "NormalMode.h"
 freq_t* freq; 
 char vfoFreqValue[40];
 

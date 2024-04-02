@@ -15,6 +15,8 @@ void removeTextFiles();
 int callback(struct rig_caps *caps, rig_ptr_t rigp); 
 int createRigLists(); 
 
+#ifndef SHAREDLIB
 #include "RigListCreator.c"
+#endif
 
 #endif

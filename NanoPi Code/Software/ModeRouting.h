@@ -60,6 +60,7 @@ Mode* getModeViaProgramableKey(KeyPress* key);
 void setProgramibleKeysByIndex(int index, char* name);
 Mode** getHotKeyList();
 
-
+#ifndef SHAREDLIB
 #include "ModeRouting.c"
+#endif
 #endif

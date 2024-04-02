@@ -83,6 +83,8 @@ void freeFirmwareComunication();
 
 void setupDictinaryHashMap();
 char* applyDictionary(char* s);
+#ifndef SHAREDLIB
 #include "FirmwareCommunication.c"
+#endif
 #endif
 

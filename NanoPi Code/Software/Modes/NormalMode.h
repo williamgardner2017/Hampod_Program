@@ -11,5 +11,5 @@
 
 Mode* NormalLoad();
 
-#include "NormalMode.c"
+
 #endif

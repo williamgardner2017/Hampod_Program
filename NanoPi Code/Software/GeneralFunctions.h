@@ -51,7 +51,9 @@ bool getABState();
 bool getCDState();
 void setABstate(bool state);
 void setCDstate(bool state);
+#ifndef SHAREDLIB
 #include "GeneralFunctions.c"
+#endif
 
 #endif
 

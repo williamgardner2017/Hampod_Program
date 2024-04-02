@@ -61,5 +61,8 @@ double* getListOfCurrentValues();
 void setListOfcurrentValues(double* values);
 char* incrementConfig(char* name, bool up);
 char* updateConfigs(char* name, double value);
+
+#ifndef SHAREDLIB
 #include "ConfigParams.c"
+#endif
 #endif

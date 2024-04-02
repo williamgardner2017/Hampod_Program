@@ -58,5 +58,7 @@ bool llIsEmpty(LinkedList* lList);
 
 ListNode* createListNode(void* ldata);
 void* destroyListNode(ListNode* node);
+#ifndef SHAREDLIB
 #include "LinkedList.c"
+#endif
 #endif

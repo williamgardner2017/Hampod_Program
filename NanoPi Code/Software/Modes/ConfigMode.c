@@ -1,3 +1,4 @@
+#include "ConfigMode.h"
 //Config mode is broken up into multiple parts, the idea is to have one section dedicated to navigation and simple selection of configs, the other is ment for more common but complicated stuff, like having the user input a number
 char** configNames;
 int currentConfig = 0;
