@@ -43,6 +43,8 @@ void freeFileArray(char** list);
 //TODO make simple testing code for this
 char* customSubString(char* original, int start, int length);
 
+char* replaceSubstring(char* original, char* old, char* new);
+
 double keypadInput(KeyPress* keyInput);
 
 bool getABState();

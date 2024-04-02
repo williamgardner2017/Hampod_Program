@@ -62,6 +62,21 @@ char* customSubString(char* original, int start, int length){
     return returnString;
 }
 
+
+char* replaceSubstring(char* original, char* old, char* new){
+     char* newStr = malloc(sizeof(char)* (strlen(original)+strlen(old)+strlen(new)+1));
+    strcpy(newStr,original);
+    
+    char *ret = strstr(newStr, old);
+    if(ret == NULL){
+        return newStr;
+    }
+    memcpy(ret+strlen(new),ret+strlen(old),strlen(ret)-strlen(new));
+    memcpy(ret,new,strlen(new));
+    return newStr;
+}
+
+
 int keyPadNumeber = 0;
 int decimalPlaces = 0;
 bool decimalPointPlaced = false;
@@ -134,3 +149,4 @@ void setABstate(bool state){
 void setCDstate(bool state){
     CDState = state;
 }
+
