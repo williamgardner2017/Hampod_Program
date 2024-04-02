@@ -41,6 +41,10 @@ $(EXEC_NAME): $(EXEC_SRC) $(LIB_NAME)
 # Clean
 clean:
 	rm -f $(LIB_NAME) $(EXEC_NAME)
+	@rm -f /s *.o   # Remove object files
+	@rm -f *.exe  # Remove the executable (replace 'my_program' with the actual name)
+	@rm -f *.elf
+	@rm -f *.wav
 
 # Phony targets
 .PHONY: all clean
