@@ -45,6 +45,7 @@ clean:
 	@rm -f *.exe  # Remove the executable (replace 'my_program' with the actual name)
 	@rm -f *.elf
 	@rm -f *.wav
+	@rm -f *.so
 
 # Phony targets
 .PHONY: all clean
