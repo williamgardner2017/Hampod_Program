@@ -1,7 +1,7 @@
 # Compiler flags
 CC = gcc
 CFLAGS = -Wall -g -lm
-LDFLAGS = -lpthread -lhamlib -lwiringPi -DTESTING
+LDFLAGS = -lpthread -lhamlib -lwiringPi 
 # Files
 HEADERS := $(wildcard Modes/*.h)
 LIB_SRCS := $(wildcard Modes/*.c)
