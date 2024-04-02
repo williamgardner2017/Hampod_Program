@@ -17,6 +17,7 @@ typedef struct Inst_packet {
 
 Inst_packet* create_inst_packet(Packet_type new_type, unsigned short new_len, unsigned char *new_data, unsigned short tag);
 void destroy_inst_packet(Inst_packet** packet);
-
+#ifndef SHAREDLIB
 #include "hampod_firm_packet.c"
+#endif
 #endif

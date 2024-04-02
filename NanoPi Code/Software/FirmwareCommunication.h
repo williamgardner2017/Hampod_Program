@@ -50,10 +50,6 @@
 #include <stdarg.h>
 
 #include "GeneralFunctions.h"
-#include "IDQueue.h"
-#include "ThreadQueue.h"
-#include "../Firmware/hampod_queue.h"
-#include "../Firmware/hampod_firm_packet.h"
 #include "APIObjects/HashMap.h"
 #include "../Firmware/audio_firmware.h"
 
