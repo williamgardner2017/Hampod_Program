@@ -45,5 +45,5 @@ do{}while(0)
 
 #endif
 
-Mode* DTMFDummyLoad();
+Mode* DummyDTMFLoad();
 #endif

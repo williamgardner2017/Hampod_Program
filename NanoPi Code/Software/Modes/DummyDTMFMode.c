@@ -48,7 +48,7 @@ void freeDummyDTMFMode(Mode* modeToFree){
     free(modeToFree);
 }
 
-Mode* DTMFDummyLoad(){
+Mode* DummyDTMFLoad(){
     Mode* newMode = (Mode*) malloc(sizeof(Mode));
 
     if(newMode == NULL){

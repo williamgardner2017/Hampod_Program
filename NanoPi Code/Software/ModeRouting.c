@@ -15,6 +15,7 @@ void modeRoutingStart(){
     //3) run the dynamic grab and save them to the hashmap
     int i = 0;
     while(strcmp(loadFunctionNames[i],"ENDOFNAMES") != 0){
+        PRINTFLEVEL1("Adding mode with load function %s\n",loadFunctionNames[i]);
         tempMode = dynamicalyLoadInModeByName(loadFunctionNames[i]);
         insertHashMap(ModeHashMap, tempMode, tempMode->modeDetails->modeName);
         free(loadFunctionNames[i]);
