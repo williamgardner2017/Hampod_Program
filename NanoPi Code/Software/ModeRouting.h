@@ -38,7 +38,7 @@
 #include <stdio.h>
 #include <dlfcn.h>
 #include <dirent.h>
-#include "../Modes/Mode.h"
+#include "Modes/Mode.h"
 #include "GeneralFunctions.h"
 #include "APIObjects/HashMap.h"
 
