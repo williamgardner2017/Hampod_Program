@@ -11,7 +11,7 @@ EXEC_SRC := Startup.c
 LIB_NAME := libModes.so
 
 # Executable name
-EXEC_NAME := Software
+EXEC_NAME := Software.elf
 
 ifeq ($(LEVEL),1)
     LDFLAGS += -DOUTPUTLEVEL1
