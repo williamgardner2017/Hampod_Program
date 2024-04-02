@@ -10,7 +10,7 @@ CFLAGS := -Wall -g -lm -DTESTING -DOUTPUTLEVEL1
 LDFLAGS := -lpthread -lhamlib -lwiringPi
 # Files
 HEADER := Modes/TestDMode.h
-LIB_SRC := Modes/TestDMode.c
+LIB_SRC := Modes/TestDMode.h
 EXEC_SRC := UnitTesting/UnitTesting.c
 
 # Shared library name
