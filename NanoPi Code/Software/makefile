@@ -2,7 +2,6 @@
 CC = gcc
 CFLAGS = -Wall -g -lm
 LDFLAGS = -lpthread -lhamlib -lwiringPi -DTESTING
-COND_FLAG
 # Files
 HEADERS := $(wildcard Modes/*.h)
 LIB_SRCS := $(wildcard Modes/*.c)
