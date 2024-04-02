@@ -52,6 +52,6 @@ do{}while(0)
 
 
 void* frequencyCommandRelay(KeyPress* keyInput, RIG* my_rig);
-Mode* frequencyLoad();
+Mode* FrequensyLoad();
 
 #endif

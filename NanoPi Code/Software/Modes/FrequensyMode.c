@@ -69,7 +69,7 @@ void freeFrequencyMode(Mode* modeToFree){
     free(modeToFree);
 }
 
-Mode* frequencyLoad(){
+Mode* FrequensyLoad(){
     Mode* newMode = (Mode*) malloc(sizeof(Mode));
 
     if(newMode == NULL){
