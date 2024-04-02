@@ -1,7 +1,7 @@
 HashMap* ModeHashMap;
 Mode** keyBinds;
-char* libraryName = "./libyourlibrary.so";
-char* path = "Modes"
+char* libraryName = "./libModes.so";
+char* path = "Modes";
 /*
 * Creaes both the hashmap of the modes and creates the array of the keybinds
 */
