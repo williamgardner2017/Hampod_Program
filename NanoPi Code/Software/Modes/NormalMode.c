@@ -1,8 +1,8 @@
 int retcode; 
-char stringForOutput[100];
 
 bool enteringValue = false;
 char inputValue[100] = ""; 
+SetValueFunction currentInputFunction;
 
 void enterValueMode(KeyPress* keyInput, RIG* radioDetails, SetValueFunction setValueFunction) {
     double enteredValue = keypadInput(keyInput);
@@ -112,6 +112,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 2:
                             // if (rig_has_set_func(radioDetails, RIG_FUNC_LOCK)) {
                             //     retcode = rig_get_func(radioDetails, RIG_VFO_CURR, RIG_FUNC_LOCK, &vfo_lock_status);
+                                
                             //     if (retcode == RIG_OK) {
                             //         if (vfo_lock_status) {
                             //             retcode = rig_set_func(radioDetails, RIG_VFO_CURR, RIG_FUNC_LOCK, 0);
@@ -190,7 +191,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             } else {
                                 fprintf(stderr, "PTT retrieval error\n");
                             }
-                            free(result); // Free the allocated memory
+                            free(result);
                             break; 
                         case 1:
                             break; 
@@ -231,12 +232,16 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                     switch (keyInput->shiftAmount) {
                         case 0:
                             enteringValue = true;
-                            memset(inputValue, 0, sizeof(inputValue)); // Clear the input value buffer
-                            sendSpeakerOutput("Enter value using keypad:");
-
-                            enterValueMode(keyInput, radioDetails, set_xit_offset);
+                            memset(inputValue, 0, sizeof(inputValue)); 
+                            sendSpeakerOutput("Enter value for XIT offset");
+                            // enterValueMode(keyInput, radioDetails, set_xit_offset);
+                            currentInputFunction = set_xit_offset;
                             break; 
                         case 1:
+                            enteringValue = true;
+                            memset(inputValue, 0, sizeof(inputValue)); 
+                            sendSpeakerOutput("Enter value for RIT offset");
+                            enterValueMode(keyInput, radioDetails, set_rit_offset);
                             break; 
                         case 2:
                             break; 
@@ -359,6 +364,8 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
             default:
                 break;
         }
+    }else{
+        enterValueMode(keyInput, radioDetails,currentInputFunction );
     }
     return NULL;
 }
