@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <hamlib/rig.h>
 #include <hamlib/riglist.h>
 #include "Mode.h"
