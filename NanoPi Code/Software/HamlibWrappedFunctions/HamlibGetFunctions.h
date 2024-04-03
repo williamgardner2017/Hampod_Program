@@ -1,3 +1,6 @@
+#ifndef HAMLIB_GET_FUNCTIONS_H
+#define HAMLIB_GET_FUNCTIONS_H
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
@@ -21,3 +24,6 @@ char* get_current_CTCSS_sub_audible_squelch_tone(RIG* rig, vfo_t vfo);
 char* get_current_continuous_tone_controlled_squelch_code(RIG* rig, vfo_t vfo);
 char* get_level_or_func_wrapper(RIG *rig, vfo_t vfo, char* setting);
 char* get_radio_switcher(RIG* rig, vfo_t vfo, int num);
+
+#include "HamlibGetFunctions.c"
+#endif
