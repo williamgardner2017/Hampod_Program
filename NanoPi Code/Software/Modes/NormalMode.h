@@ -9,6 +9,8 @@
 #include "../GeneralFunctions.h"
 #include "../FirmwareCommunication.h"
 
+#include "../HamlibWrappedFunctions/HamlibSetFunctions.h"
+
 Mode* NormalLoad();
 
 #include "NormalMode.c"

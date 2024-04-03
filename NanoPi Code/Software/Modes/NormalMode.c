@@ -1,11 +1,27 @@
 int retcode; 
-int xit_status; 
-int xit_status; 
-int vfo_lock_status; 
-freq_t freq; 
 char stringForOutput[100];
 
+bool enteringValue = false;
+char inputValue[100] = ""; 
+
+void enterValueMode(KeyPress* keyInput) {
+    double enteredValue = keypadInput(keyInput);
+    if (enteredValue >= 0) {
+        sprintf(inputValue, "Entered value: %.2f", enteredValue);
+        sendSpeakerOutput(inputValue);
+
+        enteringValue = false; 
+    } else {
+        
+    }
+}
+
 void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
+    if (enteringValue) {
+        enterValueMode(keyInput);
+        return NULL; // Return early from command relay if in value input mode
+    }
+    
     switch (keyInput->keyPressed) {
         case '0':
             break;
@@ -157,6 +173,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
             if (!keyInput->isHold) {
                 switch (keyInput->shiftAmount) {
                     case 0:
+                        // Set PTT
                         break;
                     case 1:
                         break; 
