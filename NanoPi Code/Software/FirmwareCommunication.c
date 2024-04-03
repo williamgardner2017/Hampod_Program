@@ -6,6 +6,7 @@ char* audioFolderPath = "../Firmware/pregen_audio/";
 pthread_mutex_t thread_lock;
 
 HashMap* audioHashMap;
+HashMap* stringDictinary;
 //this starts up the communication of the firmware
 void firmwareCommunicationStartup(){
     if(pthread_mutex_init(&thread_lock, NULL) != 0) {
@@ -13,6 +14,7 @@ void firmwareCommunicationStartup(){
         exit(1);
     }
     setupAudioHashMap();
+    setupDictinaryHashMap();
 }
 
 /**
@@ -21,11 +23,12 @@ void firmwareCommunicationStartup(){
  * //TODO make it check if the file exists first
  * //TODO set up the text based upon that for sending out
 */
-char* sendSpeakerOutput(char* text){
+char* sendSpeakerOutput(char* textIn){
+    char* text = applyDictionary(textIn);
     //
     if(SIMULATEOUTPUT){
         PRINTFLEVEL1("TESTING SPEAKER OUTPUT: %s\n", text);
-         bool hasAudioFile = getHashMap(audioHashMap, text) != NULL;
+        bool hasAudioFile = getHashMap(audioHashMap, text) != NULL;
          if(hasAudioFile){
             PRINTFLEVEL1("SOFTWARE: Audio file was found\n");
          }else if(shouldCreateAudioFile(text)){
@@ -67,6 +70,74 @@ char* sendSpeakerOutput(char* text){
     pthread_mutex_lock(&thread_lock);
     PRINTFLEVEL2("SOFTWARE Creating the thread\n");
     result = pthread_create(&speakerThread, NULL, firmwarePlayAudio, (void*) outputText);
+    PRINTFLEVEL2("SOFTWARE sing if the result was good\n");
+    if (result) {
+        fprintf(stderr, "Error creating thread: %d\n", result);
+        exit(0);
+    }
+    PRINTFLEVEL2("SOFTWARE unlockiing the speaker lock\n");
+    pthread_mutex_unlock(&thread_lock);
+    // return firmwareCommandQueue(speakerPacket);
+    PRINTFLEVEL2("SOFTWARE Returning the speaker output value\n");
+   return text;
+}
+
+/**
+ * filterBypass: if true will bypass the save generted file
+ * verbosityBypass: is true will play even if verbosity is turned off
+ * linearCall: if true will not do threading and will lock up until the audio is played
+*/
+char* sendSpeakerOutputWithConditions(char* textIn, bool filterBypass, bool verbosityBypass, bool linearCall){
+    char* text = applyDictionary(textIn);
+    if(SIMULATEOUTPUT){
+        PRINTFLEVEL1("TESTING SPEAKER OUTPUT: %s\n", text);
+         bool hasAudioFile = getHashMap(audioHashMap, text) != NULL;
+         if(hasAudioFile){
+            PRINTFLEVEL1("SOFTWARE: Audio file was found\n");
+         }else if(shouldCreateAudioFile(text)){
+            PRINTFLEVEL1("SOFTWARE:No audio file found but saving new file\n");
+         }else{
+            PRINTFLEVEL1("SOFTWARE:No audio file found and NOT creating a new file\n");
+         }
+        return text;
+    }
+    //TODO add the stuff for checking if it exits
+    bool hasAudioFile = getHashMap(audioHashMap, text) != NULL;
+    PRINTFLEVEL2("SOFTWARE: Gotted %i from the audioHashmap\n",hasAudioFile);
+    char* outputText = malloc((strlen(text)+100)*sizeof(char));
+    PRINTFLEVEL2("SOFTWARE: Malloced a new array\n");
+    if(hasAudioFile){
+        strcpy(outputText,"p");
+        strcat(outputText,getHashMap(audioHashMap, text));
+    }else if(shouldCreateAudioFile(text) || filterBypass){
+         PRINTFLEVEL2("SOFTWARE:Creating new audio hashmap entrie for this\n");
+        strcpy(outputText,"s");
+        strcat(outputText,text);
+        //TODO add it to the hashmap
+        char* nameAndPath = malloc(sizeof(char)*(strlen(text)+strlen(audioFolderPath)));
+        char* nameOnly = malloc(sizeof(char)*(strlen(text)+10));
+        strcpy(nameAndPath,audioFolderPath);
+        strcpy(nameOnly,text);
+        strcat(nameAndPath,nameOnly);
+        //TODO insert into the hash with (path/name, name)
+        PRINTFLEVEL2("SOFTWARE: adding the data %s with the key of %s\n",nameAndPath,nameOnly);
+        insertHashMap(audioHashMap,nameAndPath,nameOnly);
+    }else{
+        strcpy(outputText,"d");
+        strcat(outputText,text);
+    }
+
+    PRINTFLEVEL1("SOFTWARE: Sending text [%s] to be outputed by speakers\n",outputText);
+    int result;
+    PRINTFLEVEL2("SOFTWARE Locking up speakout output to send out %s\n", outputText);
+    pthread_mutex_lock(&thread_lock);
+    PRINTFLEVEL2("SOFTWARE Creating the thread\n");
+    if(linearCall){
+        firmwarePlayAudio((void*)outputText);
+        result = 0;
+    }else{
+        result = pthread_create(&speakerThread, NULL, firmwarePlayAudio, (void*) outputText);
+    }
     PRINTFLEVEL2("SOFTWARE sing if the result was good\n");
     if (result) {
         fprintf(stderr, "Error creating thread: %d\n", result);
@@ -155,9 +226,151 @@ bool shouldCreateAudioFile(char* text){
     return true;
 }
 
+
+
+void setupDictinaryHashMap(){
+    stringDictinary = createHashMap(StringHash,StringHashCompare);
+    char** dictinary = textFileToArray("ConfigSettings/dictionary.txt");
+    char* remain;
+    char* start;
+    PRINTFLEVEL1("Got the dictionay, starting to load up the dictionary\n");
+    for(int i = 0; strcmp(dictinary[i], "END OF ARRAY") != 0;i++){
+        start = malloc(sizeof(char)*40);
+        strcpy(start,dictinary[i]);
+        remain = start;
+        remain = strchr(remain, ' ');
+        remain[0] = '\0';
+        remain = remain+1;
+        insertHashMap(stringDictinary,(void*) remain, (void*) start);
+    }
+    freeFileArray(dictinary);
+    // free(remain); removing this temporarily
+}
+
+char** split(const char *str, char delimiter, int *numTokens) {
+    // Count the number of tokens
+    int count = 1; // At least one token (empty string or non-existent string)
+    const char *ptr = str;
+    while (*ptr != '\0') {
+        if (*ptr == delimiter) {
+            count++;
+        }
+        ptr++;
+    }
+
+    // Allocate memory for the array of strings
+    char **tokens = (char **)malloc(count * sizeof(char *));
+    if (tokens == NULL) {
+        fprintf(stderr, "Memory allocation failed.\n");
+        return NULL;
+    }
+
+    // Copy tokens into the array
+    int tokenIndex = 0;
+    int startIndex = 0;
+    for (int i = 0; str[i] != '\0'; i++) {
+        if (str[i] == delimiter) {
+            int tokenLength = i - startIndex;
+            tokens[tokenIndex] = (char *)malloc((tokenLength + 1) * sizeof(char));
+            if (tokens[tokenIndex] == NULL) {
+                fprintf(stderr, "Memory allocation failed.\n");
+                // Free memory allocated so far
+                for (int j = 0; j < tokenIndex; j++) {
+                    free(tokens[j]);
+                }
+                free(tokens);
+                return NULL;
+            }
+            strncpy(tokens[tokenIndex], str + startIndex, tokenLength);
+            tokens[tokenIndex][tokenLength] = '\0'; // Null-terminate the string
+            startIndex = i + 1;
+            tokenIndex++;
+        }
+    }
+
+    // Copy the last token
+    int lastTokenLength = strlen(str) - startIndex;
+    tokens[tokenIndex] = (char *)malloc((lastTokenLength + 1) * sizeof(char));
+    if (tokens[tokenIndex] == NULL) {
+        fprintf(stderr, "Memory allocation failed.\n");
+        // Free memory allocated so far
+        for (int j = 0; j <= tokenIndex; j++) {
+            free(tokens[j]);
+        }
+        free(tokens);
+        return NULL;
+    }
+    strncpy(tokens[tokenIndex], str + startIndex, lastTokenLength);
+    tokens[tokenIndex][lastTokenLength] = '\0'; // Null-terminate the string
+
+    *numTokens = count;
+    return tokens;
+}
+
+void freeTokens(char **tokens, int numTokens) {
+    if (tokens == NULL) return;
+    for (int i = 0; i < numTokens; i++) {
+        free(tokens[i]);
+    }
+    free(tokens);
+}
+
+int is_digit(char c) {
+    return c >= '0' && c <= '9';
+}
+
+void insertSpaces(char *str) {
+    int len = strlen(str);
+    for(int i = 0; i<len;i++){
+        if(is_digit(str[i])){
+            for(int j = len+3;j>i+2;j--){
+                str[j] = str[j-2];
+            }
+            str[i+1] = str[i];
+            str[i] = ' ';
+            str[i+2] =' ';
+            i += 2;
+            len += 2;
+        }
+    }
+}
+
+char* applyDictionary(char* s){
+    //apply the dictonary to this
+    PRINTFLEVEL1("Applying dictionay changes to %s\n",s); 
+    char* stringBuild = malloc(sizeof(char)*(strlen(s)*3 + 1));
+    if (stringBuild == NULL) {
+        fprintf(stderr, "Memory allocation failed.\n");
+        return NULL; // Return NULL to indicate failure
+    }
+    stringBuild[0] = '\0';
+    int count;
+    char** splitStuff = split(s,' ',&count);
+    PRINTFLEVEL2("All setup before creating the token\n");
+    for(int i = 0;i<count;i++){
+        PRINTFLEVEL2("testing if: %s: is in the hash\n",splitStuff[i]);
+        if(containsHashMap(stringDictinary,(void*) splitStuff[i])){
+            PRINTFLEVEL2("It was in it\n");
+            strcat(stringBuild,(char*)getHashMap(stringDictinary,(void*) splitStuff[i]));
+        }else{
+            PRINTFLEVEL2("It was NOT in it\n");
+            strcat(stringBuild,splitStuff[i]);
+        }
+        strcat(stringBuild," ");
+    }
+    freeTokens(splitStuff,count);
+    PRINTFLEVEL1("Applying number spacing to to %s\n",stringBuild);
+    //apply the numeric updates to this
+    insertSpaces(stringBuild);
+    PRINTFLEVEL1("finished creation and got %s\n",stringBuild);
+    return stringBuild;
+}
+
+
 void freeFirmwareComunication(){
     running = false;
     printf("Software:destroying thread uqueue mutexes\n");
     pthread_mutex_destroy(&thread_lock);
     destroyHashMap(audioHashMap,audioFree,audioFree);
+    destroyHashMap(stringDictinary,StringHashFree,StringHashFree);
 }

@@ -44,10 +44,10 @@
 #else
 
 #define AUDIO_PRINTF(...) \
-    while(0)
+    do{}while(0)
 
 #define AUDIO_IO_PRINTF(...) \
-    while(0)
+    do{}while(0)
 
 #endif
 
