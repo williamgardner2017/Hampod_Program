@@ -3,7 +3,7 @@ int xit_status;
 int xit_status; 
 int vfo_lock_status; 
 freq_t freq; 
-char stringForOutput[40];
+char stringForOutput[100];
 
 void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
     switch (keyInput->keyPressed) {
@@ -15,34 +15,40 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                 switch (keyInput->shiftAmount) {
                     case 0:
                         // Get frequency from VFO A
-                        retcode = rig_get_freq(radioDetails, RIG_VFO_A, &freq); 
-                        if (retcode == RIG_OK) {
-                            sprintf(stringForOutput, "VFO A frequency: %lf Hz\n", freq);
-                            sendSpeakerOutput(stringForOutput); 
+                        void* inputArray[] = {radioDetails, RIG_VFO_A};
+                        char* result = get_current_frequency(inputArray);
+                        if (strcmp(result, "-1") != 0) {
+                            sprintf(stringForOutput, "VFO A Frequency %s", result);
+                            sendSpeakerOutput(stringForOutput);
                         } else {
-                            fprintf(stderr, "Error getting frequency.\n");
+                            fprintf(stderr, "VFO A frequency error\n");
                         }
-                        break; 
+                        free(result); // Free the allocated memory
+                        break;
                     case 1:
                         // Get frequency from VFO B
-                        retcode = rig_get_freq(radioDetails, RIG_VFO_B, &freq); 
-                        if (retcode == RIG_OK) {
-                            sprintf(stringForOutput, "VFO B Frequency %.6f", freq);
-                            sendSpeakerOutput(stringForOutput); 
+                        void* inputArray[] = {radioDetails, RIG_VFO_B};
+                        char* result = get_current_frequency(inputArray);
+                        if (strcmp(result, "-1") != 0) {
+                            sprintf(stringForOutput, "VFO B Frequency %s", result);
+                            sendSpeakerOutput(stringForOutput);
                         } else {
-                            fprintf(stderr, "Error getting frequency.\n");
+                            fprintf(stderr, "VFO B frequency error\n");
                         }
-                        break; 
+                        free(result); // Free the allocated memory
+                        break;
                     case 2:
                         // Get frequency from VFO C
-                        retcode = rig_get_freq(radioDetails, RIG_VFO_C, &freq); 
-                        if (retcode == RIG_OK) {
-                            sprintf(stringForOutput, "VFO C Frequency %.6f", freq);
-                            sendSpeakerOutput(stringForOutput); 
+                        void* inputArray[] = {radioDetails, RIG_VFO_C};
+                        char* result = get_current_frequency(inputArray);
+                        if (strcmp(result, "-1") != 0) {
+                            sprintf(stringForOutput, "VFO C Frequency %s", result);
+                            sendSpeakerOutput(stringForOutput);
                         } else {
-                            fprintf(stderr, "Error getting frequency.\n");
+                            fprintf(stderr, "VFO C frequency error\n");
                         }
-                        break; 
+                        free(result); // Free the allocated memory
+                        break;
                     default:
                         break;
                 }
@@ -65,56 +71,56 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                 switch (keyInput->shiftAmount) {
                     // NOTE THAT I DO NOT PLAN OF HAVING THESE FEATURES HERE. I JUST WANTED TO BEGIN THE IMPLEMENTATION PROCESS. 
                     case 0:
-                        if (rig_has_set_func(radioDetails, RIG_FUNC_RIT)) {
-                            // NEED TO SET THIS SO PRESSING IT AGAIN WOULD AUTO CHANGE IT. 
-                            retcode = rig_set_func(radioDetails, RIG_VFO_CURR, RIG_FUNC_RIT, 1); 
-                            if (retcode == RIG_OK) {
-                                sprintf(stringForOutput, "Setting RIT ON\n");
-                                sendSpeakerOutput(stringForOutput); 
-                            } else {
-                                printf("rig_set_func: RIT error: %s\n", rigerror(retcode));
-                            }
+                        // if (rig_has_set_func(radioDetails, RIG_FUNC_RIT)) {
+                        //     // NEED TO SET THIS SO PRESSING IT AGAIN WOULD AUTO CHANGE IT. 
+                        //     retcode = rig_set_func(radioDetails, RIG_VFO_CURR, RIG_FUNC_RIT, 1); 
+                        //     if (retcode == RIG_OK) {
+                        //         sprintf(stringForOutput, "Setting RIT ON\n");
+                        //         sendSpeakerOutput(stringForOutput); 
+                        //     } else {
+                        //         printf("rig_set_func: RIT error: %s\n", rigerror(retcode));
+                        //     }
                             
-                        }
+                        // }
                         break; 
                     case 1:
-                        if (rig_has_set_func(radioDetails, RIG_FUNC_XIT)) {
-                            // NEED TO SET THIS SO PRESSING IT AGAIN WOULD AUTO CHANGE IT. 
-                            retcode = rig_set_func(radioDetails, RIG_VFO_CURR, RIG_FUNC_XIT, 1);
-                            if (retcode == RIG_OK) {
-                                sprintf(stringForOutput, "Setting XIT ON\n");
-                                sendSpeakerOutput(stringForOutput); 
-                            } else {
-                                printf("rig_set_func: Error setting XIT - %s\n", rigerror(retcode));
-                            }
+                        // if (rig_has_set_func(radioDetails, RIG_FUNC_XIT)) {
+                        //     // NEED TO SET THIS SO PRESSING IT AGAIN WOULD AUTO CHANGE IT. 
+                        //     retcode = rig_set_func(radioDetails, RIG_VFO_CURR, RIG_FUNC_XIT, 1);
+                        //     if (retcode == RIG_OK) {
+                        //         sprintf(stringForOutput, "Setting XIT ON\n");
+                        //         sendSpeakerOutput(stringForOutput); 
+                        //     } else {
+                        //         printf("rig_set_func: Error setting XIT - %s\n", rigerror(retcode));
+                        //     }
                             
-                        }
+                        // }
                         break; 
                     case 2:
-                        if (rig_has_set_func(radioDetails, RIG_FUNC_LOCK)) {
-                            retcode = rig_get_func(radioDetails, RIG_VFO_CURR, RIG_FUNC_LOCK, &vfo_lock_status);
-                            if (retcode == RIG_OK) {
-                                if (vfo_lock_status) {
-                                    retcode = rig_set_func(radioDetails, RIG_VFO_CURR, RIG_FUNC_LOCK, 0);
-                                    if (retcode == RIG_OK) {
-                                        sprintf(stringForOutput, "Setting VFO lock on\n");
-                                        sendSpeakerOutput(stringForOutput); 
-                                    } else {
-                                        printf("rig_set_func: Error setting VFO lock - %s\n", rigerror(retcode));
-                                    }
-                                } else {
-                                    retcode = rig_set_func(radioDetails, RIG_VFO_CURR, RIG_FUNC_LOCK, 1); 
-                                    if (retcode == RIG_OK) {
-                                        sprintf(stringForOutput, "Setting VFO lock off\n");
-                                        sendSpeakerOutput(stringForOutput); 
-                                    } else {
-                                        printf("rig_set_func: Error setting VFO lock - %s\n", rigerror(retcode));
-                                    }
-                                }
-                            } else {
-                                printf("rig_get_func: Error getting current VFO lock for setting it - %s\n", rigerror(retcode)); 
-                            }
-                        }
+                        // if (rig_has_set_func(radioDetails, RIG_FUNC_LOCK)) {
+                        //     retcode = rig_get_func(radioDetails, RIG_VFO_CURR, RIG_FUNC_LOCK, &vfo_lock_status);
+                        //     if (retcode == RIG_OK) {
+                        //         if (vfo_lock_status) {
+                        //             retcode = rig_set_func(radioDetails, RIG_VFO_CURR, RIG_FUNC_LOCK, 0);
+                        //             if (retcode == RIG_OK) {
+                        //                 sprintf(stringForOutput, "Setting VFO lock on\n");
+                        //                 sendSpeakerOutput(stringForOutput); 
+                        //             } else {
+                        //                 printf("rig_set_func: Error setting VFO lock - %s\n", rigerror(retcode));
+                        //             }
+                        //         } else {
+                        //             retcode = rig_set_func(radioDetails, RIG_VFO_CURR, RIG_FUNC_LOCK, 1); 
+                        //             if (retcode == RIG_OK) {
+                        //                 sprintf(stringForOutput, "Setting VFO lock off\n");
+                        //                 sendSpeakerOutput(stringForOutput); 
+                        //             } else {
+                        //                 printf("rig_set_func: Error setting VFO lock - %s\n", rigerror(retcode));
+                        //             }
+                        //         }
+                        //     } else {
+                        //         printf("rig_get_func: Error getting current VFO lock for setting it - %s\n", rigerror(retcode)); 
+                        //     }
+                        // }
                     default:
                         break;
                 }
@@ -151,7 +157,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
             if (!keyInput->isHold) {
                 switch (keyInput->shiftAmount) {
                     case 0:
-                        break; 
+                        break;
                     case 1:
                         break; 
                     case 2:
@@ -162,6 +168,15 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
             } else {
                 switch (keyInput->shiftAmount) {
                     case 0:
+                        void* inputArray[] = {radioDetails, RIG_VFO_A};
+                        char* result = get_ptt(inputArray);
+                        if (strcmp(result, "-1") != 0) {
+                            sprintf(stringForOutput, "PTT Status: %s", result);
+                            sendSpeakerOutput(stringForOutput);
+                        } else {
+                            fprintf(stderr, "PTT retrieval error\n");
+                        }
+                        free(result); // Free the allocated memory
                         break; 
                     case 1:
                         break; 
