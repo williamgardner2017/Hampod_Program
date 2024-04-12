@@ -36,17 +36,17 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include "Mode.h"
-#include "../GeneralFunctions.h"
-#include "../APIObjects/HashMap.h"
-#include "ConfigMode.h"
-#include "NormalMode.h"
-#include "DummyDTMFMode.h"
-#include "FrequensyMode.h"
+#include <dlfcn.h>
+#include <dirent.h>
+#include "Modes/Mode.h"
+#include "GeneralFunctions.h"
+#include "APIObjects/HashMap.h"
 
 
 // Mode* getModeById(int modeID); //goal is to make this outdated Done
 void modeRoutingStart(); //change to this return type Done
+Mode* dynamicalyLoadInModeByName(char* name);
+char** getNamesOfLoadFunctions();
 void freeModesLambda(void* data);
 void freeModes();
 
@@ -59,5 +59,8 @@ void setProgramibleKeys(KeyPress* key, char* name); //make this use the name and
 Mode* getModeViaProgramableKey(KeyPress* key);
 void setProgramibleKeysByIndex(int index, char* name);
 Mode** getHotKeyList();
+
+#ifndef SHAREDLIB
 #include "ModeRouting.c"
+#endif
 #endif

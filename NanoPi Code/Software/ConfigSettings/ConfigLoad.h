@@ -49,12 +49,13 @@
 #include "../GeneralFunctions.h"
 #include "../APIObjects/HashMap.h"
 #include "ConfigParams.h"
-#include "../Modes/ModeRouting.h"
+#include "../ModeRouting.h"
 #include "../StateMachine.h"
 #include "../Radio.h"
 
 bool loadUpFromSaveOLD(int saveFileNumber);
 
-
+#ifndef SHAREDLIB
 #include "ConfigLoad.c"
+#endif
 #endif

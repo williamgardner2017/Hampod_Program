@@ -46,7 +46,7 @@
 #include <stdbool.h>
 #include <hamlib/rig.h>
 #include <hamlib/riglist.h>
-#include "Modes/ModeRouting.h"
+#include "ModeRouting.h"
 #include "GeneralFunctions.h"
 #include "Radio.h"
 #include "Modes/Mode.h"
@@ -95,5 +95,8 @@ void setCompanyAndModel(char* comp, int mod);
 int selectEntryInList(KeyPress* keyInput, char** list);
 
 bool loadUpFromSave(int saveFileNumber);
+
+#ifndef SHAREDLIB
 #include "StateMachine.c"
+#endif
 #endif

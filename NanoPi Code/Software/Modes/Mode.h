@@ -21,8 +21,8 @@ typedef struct Mode {
     ModeData* modeDetails;
 } Mode;
 
-Mode* createMode();
+typedef Mode* (*CreateModePointer)();
 
-#include "Mode.c"
+Mode* createMode();
 
 #endif

@@ -72,6 +72,7 @@ int getCurrentRadioID();
 int getRadioAmount();
 Radio* getCurrentRadio();
 Radio** getAllRadios();
-
+#ifndef SHAREDLIB
 #include "Radio.c"
+#endif
 #endif

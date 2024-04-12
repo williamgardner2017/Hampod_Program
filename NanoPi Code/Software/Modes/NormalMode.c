@@ -1,3 +1,4 @@
+#include "NormalMode.h"
 int retcode; 
 
 bool enteringValue = false;
@@ -16,6 +17,9 @@ void enterValueMode(KeyPress* keyInput, RIG* radioDetails, SetValueFunction setV
 
     }
 }
+
+// freq_t* freq; 
+// char vfoFreqValue[40];
 
 void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
     if (enteringValue == false) {

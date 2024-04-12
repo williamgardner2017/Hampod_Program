@@ -49,7 +49,7 @@
 #include "../GeneralFunctions.h"
 #include "../APIObjects/HashMap.h"
 #include "ConfigParams.h"
-#include "../Modes/ModeRouting.h"
+#include "../ModeRouting.h"
 #include "../StateMachine.h"
 #include "../FirmwareCommunication.h"
 #include "../Modes/Mode.h"
@@ -62,5 +62,7 @@ int SaveData(KeyPress* keyData);
 
 int setHotkeys(KeyPress* keyData);
 
+#ifndef SHAREDLIB
 #include "ConfigFunctions.c"
+#endif
 #endif

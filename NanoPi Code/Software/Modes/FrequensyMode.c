@@ -1,3 +1,4 @@
+#include "FrequensyMode.h"
 double currentFrequency = 0;
 int decimalPlace = 0;
 bool hasDecimal = false;
@@ -68,7 +69,7 @@ void freeFrequencyMode(Mode* modeToFree){
     free(modeToFree);
 }
 
-Mode* frequencyLoad(){
+Mode* FrequensyLoad(){
     Mode* newMode = (Mode*) malloc(sizeof(Mode));
 
     if(newMode == NULL){

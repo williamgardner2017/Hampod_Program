@@ -1,41 +1,29 @@
 HashMap* ModeHashMap;
 Mode** keyBinds;
-
+char* libraryName = "./libModes.so";
+char* path = "Modes";
 /*
 * Creaes both the hashmap of the modes and creates the array of the keybinds
 */
 void modeRoutingStart(){
     ModeHashMap = createHashMap(StringHash,StringHashCompare);
     Mode* tempMode;
-    tempMode = NormalLoad();
-    if(tempMode == NULL){
-        printf("Creation of mode failed\n");
-        exit(-1);
+
+    //1) get the .c file name
+    //2) modify the string names to use the load format
+    char** loadFunctionNames = getNamesOfLoadFunctions();
+    //3) run the dynamic grab and save them to the hashmap
+    int i = 0;
+    while(strcmp(loadFunctionNames[i],"ENDOFNAMES") != 0){
+        PRINTFLEVEL1("Adding mode with load function %s\n",loadFunctionNames[i]);
+        tempMode = dynamicalyLoadInModeByName(loadFunctionNames[i]);
+        insertHashMap(ModeHashMap, tempMode, tempMode->modeDetails->modeName);
+        free(loadFunctionNames[i]);
+        i++;
     }
-    insertHashMap(ModeHashMap, tempMode, tempMode->modeDetails->modeName);
-    PRINTFLEVEL1("SOFTWARE: Adding Normal compleate\n");
-    tempMode = DTMFDummyLoad();
-    if(tempMode == NULL){
-        printf("Creation of mode failed\n");
-        exit(-1);
-    }
-    insertHashMap(ModeHashMap, tempMode, tempMode->modeDetails->modeName);
-    PRINTFLEVEL1("SOFTWARE: Adding DRML compleate\n");
-    tempMode = ConfigLoad();
-    if(tempMode == NULL){
-        printf("Creation of mode failed\n");
-        exit(-1);
-    }
-    PRINTFLEVEL2("SOFTWARE: Config mode has been loaded up\n");
-    insertHashMap(ModeHashMap, tempMode, tempMode->modeDetails->modeName);
-    PRINTFLEVEL1("SOFTWARE: Adding config compleate\n");
-    tempMode = frequencyLoad();
-    if(tempMode == NULL){
-        printf("Creation of mode failed\n");
-        exit(-1);
-    }
-    insertHashMap(ModeHashMap, tempMode, tempMode->modeDetails->modeName);
-    PRINTFLEVEL1("SOFTWARE: Adding frequency compleate\n");
+    free(loadFunctionNames[i]);
+    free(loadFunctionNames);
+    //This starts up the keybinds
     keyBinds = calloc(12, sizeof(Mode*));
     if(keyBinds == NULL){
         printf("Mallocing the keybings failded\n");
@@ -161,4 +149,72 @@ Mode** getHotKeyList(){
 }
 void setProgramibleKeysByIndex(int index, char* name){
     keyBinds[index] = getModeByName(name);
+}
+
+/**
+ * Givin the name of the load function, it will call and return that mode object
+*/
+Mode* dynamicalyLoadInModeByName(char* functionName){
+    void *lib_handle;
+    CreateModePointer modeCreateFunction;;
+    const char *error;
+
+    // Open the shared library at runtime
+    lib_handle = dlopen(libraryName, RTLD_LAZY);
+    if (!lib_handle) {
+        fprintf(stderr, "Error: %s\n", dlerror());
+        return 1;
+    }
+
+    // Get a pointer to the function we want to call
+    modeCreateFunction = (CreateModePointer)dlsym(lib_handle, functionName);
+    if ((error = dlerror()) != NULL)  {
+        fprintf(stderr, "Error: %s\n", error);
+        dlclose(lib_handle);
+        return 1;
+    }
+
+    // Call the function dynamically
+    Mode* result = modeCreateFunction();
+
+    dlclose(lib_handle);
+
+    return result;
+}
+
+char** getNamesOfLoadFunctions(){
+    int fileCount = 0;
+    //getting the number of modes to load in
+    DIR* directory = opendir(path);
+    if (directory == NULL) {
+        perror("Unable to open directory");
+        return 1;
+    }
+    struct dirent *entry;
+    while ((entry = readdir(directory)) != NULL) {
+        if (entry->d_type == DT_REG) {
+            fileCount++;
+        }
+    }
+    closedir(directory);
+
+    //get the .c names of each of the files
+    char** loadNames = malloc(sizeof(char*)*(fileCount+1));
+    directory = opendir(path);
+    if (directory == NULL) {
+        perror("Unable to open directory");
+        return 1;
+    }
+    int i = 0;
+    while((entry = readdir(directory)) != NULL) {
+        if (entry->d_type == DT_REG && strstr(entry->d_name, ".c") != NULL) {
+            loadNames[i] = replaceSubstring(entry->d_name,"Mode.c","Load");
+            PRINTFLEVEL2("%s : %s\n", entry->d_name,loadNames[i]);
+            i++;
+        }
+    }
+    closedir(directory);
+    loadNames[i] = malloc(sizeof(char)*100);
+    sprintf(loadNames[i],"ENDOFNAMES");
+    return loadNames;
 }

@@ -71,7 +71,8 @@ void keypad_process();
 
 
 
-
+#ifndef SHAREDLIB
 #include "keypad_firmware.c"
+#endif
 
 #endif

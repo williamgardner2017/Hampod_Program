@@ -52,5 +52,7 @@ void* keyWatcher(void* args);
 
 KeyPress* interperateKeyPresses(char keyPress);
 void resetKeyInputVars();
+#ifndef SHAREDLIB
 #include "KeyWatching.c"
+#endif
 #endif

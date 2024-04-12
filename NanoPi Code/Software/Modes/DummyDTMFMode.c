@@ -1,4 +1,4 @@
-
+#include "DummyDTMFMode.h"
 void* DTMFCommandRelay(KeyPress* keyInput, RIG* radioDetails){
     char dtmfValue[13];
     switch(keyInput->keyPressed){
@@ -48,7 +48,7 @@ void freeDummyDTMFMode(Mode* modeToFree){
     free(modeToFree);
 }
 
-Mode* DTMFDummyLoad(){
+Mode* DummyDTMFLoad(){
     Mode* newMode = (Mode*) malloc(sizeof(Mode));
 
     if(newMode == NULL){

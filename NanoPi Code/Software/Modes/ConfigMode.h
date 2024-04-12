@@ -50,5 +50,5 @@ do{}while(0)
 
 void* configCommandRelay(KeyPress* keyInput, RIG* radioDetails);
 Mode* ConfigLoad();
-#include "ConfigMode.c"
+
 #endif
