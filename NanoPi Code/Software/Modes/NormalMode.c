@@ -3,7 +3,10 @@ int retcode;
 
 bool enteringValue = false;
 char inputValue[100] = ""; 
-SetValueFunction currentInputFunction;
+int setFunctionType = 0; 
+SetValueFunctionTypeOne currentInputFunctionOne;
+SetValueFunctionTypeTwo currentInputFunctionTwo;
+SetValueFunctionTypeThree currentInputFunctionThree;
 
 void enterValueMode(KeyPress* keyInput, RIG* radioDetails, SetValueFunction setValueFunction) {
     double enteredValue = keypadInput(keyInput);
@@ -145,24 +148,12 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                 } else {
                     switch (keyInput->shiftAmount) {
                         case 0:
-                            if (rig_has_get_func(radioDetails, RIG_FUNC_RIT)) {
-                                retcode = rig_get_func(radioDetails, RIG_VFO_CURR, RIG_FUNC_RIT, &rit_status);
-                                if (retcode == RIG_OK) {
-                                    printf("rig_get_func: RIT - %d\n", rit_status);
-                                } else {
-                                    printf("rig_get_func: Error getting RIT - %s\n", rigerror(retcode));
-                                }
-                            }
+                            if (rig_has_set_func(radioDetails, RIG_FUNC_LOCK)) {
+                                void* inputArray[] = {radioDetails, RIG_VFO_CURR, RIG_FUNC_LOCK};
+                                if (rig_has_rig_set_func(my_rig, , RIG_FUNC_LOCK, 0)
                             break; 
                         case 1:
-                            if (rig_has_get_func(radioDetails, RIG_FUNC_XIT)) {
-                                retcode = rig_get_func(radioDetails, RIG_VFO_CURR, RIG_FUNC_XIT, &xit_status);
-                                if (retcode == RIG_OK) {
-                                    printf("rig_get_func: XIT - %d\n", xit_status);
-                                } else {
-                                    printf("rig_get_func: Error getting XIT - %s\n", rigerror(retcode));
-                                }
-                            }
+                            
                             break; 
                         case 2:
                             break; 
@@ -175,9 +166,24 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                 if (!keyInput->isHold) {
                     switch (keyInput->shiftAmount) {
                         case 0:
-                            // Set PTT
+                            if (rig_has_get_func(radioDetails, RIG_FUNC_RIT)) {
+                                retcode = rig_get_func(radioDetails, RIG_VFO_CURR, RIG_FUNC_RIT, &rit_status);
+                                if (retcode == RIG_OK) {
+                                    printf("rig_get_func: RIT - %d\n", rit_status);
+                                } else {
+                                    printf("rig_get_func: Error getting RIT - %s\n", rigerror(retcode));
+                                }
+                            }
                             break;
                         case 1:
+                            if (rig_has_get_func(radioDetails, RIG_FUNC_XIT)) {
+                                retcode = rig_get_func(radioDetails, RIG_VFO_CURR, RIG_FUNC_XIT, &xit_status);
+                                if (retcode == RIG_OK) {
+                                    printf("rig_get_func: XIT - %d\n", xit_status);
+                                } else {
+                                    printf("rig_get_func: Error getting XIT - %s\n", rigerror(retcode));
+                                }
+                            }
                             break; 
                         case 2:
                             break; 
@@ -381,6 +387,9 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                 break;
         }
     }else{
+        switch(currentInputType) {
+
+        }
         enterValueMode(keyInput, radioDetails, currentInputFunction);
     }
     return NULL;

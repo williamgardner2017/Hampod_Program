@@ -22,8 +22,9 @@ char* get_current_CTCSS_sub_audible_tone(RIG* rig, vfo_t vfo);
 char* get_current_encoding_digitally_coded_squelch_code(RIG* rig, vfo_t vfo);
 char* get_current_CTCSS_sub_audible_squelch_tone(RIG* rig, vfo_t vfo);
 char* get_current_continuous_tone_controlled_squelch_code(RIG* rig, vfo_t vfo);
-char* get_level_or_func_wrapper(RIG *rig, vfo_t vfo, char* setting);
-char* get_radio_switcher(RIG* rig, vfo_t vfo, int num);
+// char* get_level_or_func_wrapper(RIG *rig, vfo_t vfo, char* setting);
+char* get_level(RIG *rig, vfo_t vfo, char* setting);
+char* get_func(RIG *rig, vfo_t vfo, char* setting);
 
 #include "HamlibGetFunctions.c"
 #endif
