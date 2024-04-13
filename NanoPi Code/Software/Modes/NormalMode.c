@@ -165,7 +165,22 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             }
                             break; 
                         case 1:
-                            
+                            // Setting VOX (Voice Operated Relay)
+                            if (rig_has_set_func(radioDetails, RIG_FUNC_VOX)) {
+                                int setting = rig_get_level(radioDetails, RIG_CURR_VFO, RIG_FUNC_VOX); 
+                                if (setting) { // If VFO Lock set to 1
+                                    setting = 0; 
+                                } else { // If VFO Lock set to 0
+                                    setting = 1; 
+                                }
+                                char* stringForOutput = set_level(radioDetails, RIG_CURR_VFO, RIG_FUNC_VOX, setting); 
+                                sendSpeakerOutput(stringForOutput); 
+                                free(stringForOutput); 
+                                
+                            } else {
+                                printf("Cannot change Vox")
+                            }
+                            break; 
                             break; 
                         case 2:
                             break; 
