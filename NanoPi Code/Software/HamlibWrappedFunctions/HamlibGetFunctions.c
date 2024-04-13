@@ -263,33 +263,49 @@ char* get_current_continuous_tone_controlled_squelch_code(void* input) {
 
 // This is for both the LEVEL and FUNC features. Pretty genius if you ask me. :)
 // Hamlib is very thoughtful for giving a common interest between rig_get_level and rig_get_func. 
-char* get_level_or_func_wrapper(void* input) {
+// This would still work, however, I decided to separate the level and func retrieval systems since it was just creating a mess. 
+
+// char* get_level_or_func_wrapper(void* input) {
+//     RIG* rig = (RIG*) input[0]; 
+//     vfo_t vfo = *(vfo_t*) input[1]; 
+//     char* setting_string = rig_strfunc((setting_t*) input[2]); 
+
+// 	char* output = malloc(40); 
+// 	if (strstr("LEVEL", setting_string)) {
+//         value_t* value; 
+//         rig_get_level (rig, vfo, rig_parse_func(setting_string), &value); 
+//         snprintf(output, 40, "%d", value); 
+//         return output; 
+// 	} else if (strstr("FUNC", rig_strfunc(setting_string))) {
+//         int status; 
+//         rig_get_func (rig, vfo, rig_parse_func(setting_string), &status); 	
+//         snprintf(output, 40, "%d", status); 
+//         return output; 
+// 	} else {
+//         return "-1"; 
+//     }
+// }
+
+get_level(void* input) {
     RIG* rig = (RIG*) input[0]; 
     vfo_t vfo = *(vfo_t*) input[1]; 
-    char* setting_string = *(int*) input[2]; 
+    char* setting_string = rig_strlevel((setting_t*) input[2]); 
+    
+    char* output = malloc(40); 
+    value_t* value; 
+    rig_get_level (rig, vfo, rig_parse_func(setting_string), &value); 
+    snprintf(output, 40, "%d", value); 
+    return output; 
+}
 
-	char* output = malloc(40); 
-	if (strstr("LEVEL", setting_string)) {
-        if (rig_has_get_level(rig, rig_parse_func(setting_string)) {
-            value_t* value; 
-            rig_get_level (rig, vfo, rig_parse_func(setting_string), &value); 
-            snprintf(output, 40, "%d", value); 
-            return output; 
-        } else {
-            printf("Get Level Fail"); 
-            return "-1"; 
-        }
-	} else if (strstr("FUNC", setting_string)) {
-        if (rig_has_get_func(rig, rig_parse_func(setting_string)) {
-            int status; 
-            rig_get_func (rig, vfo, rig_parse_func(setting_string), &status); 	
-            snprintf(output, 40, "%d", status); 
-            return output; 
-        } else {
-            printf("Get Level Fail"); 
-            return "-1"; 
-        }
-	} else {
-        return "-1"; 
-    }
+get_func(void* input) {
+    RIG* rig = (RIG*) input[0]; 
+    vfo_t vfo = *(vfo_t*) input[1]; 
+    char* setting_string = rig_strfunc((setting_t*) input[2]); 
+
+    char* output = malloc(40); 
+    int status; 
+    rig_get_func (rig, vfo, rig_parse_func(setting_string), &status); 	
+    snprintf(output, 40, "%d", status); 
+    return output; 
 }
