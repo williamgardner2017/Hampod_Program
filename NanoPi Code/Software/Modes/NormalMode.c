@@ -148,9 +148,21 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                 } else {
                     switch (keyInput->shiftAmount) {
                         case 0:
+                            // Setting VFO Lock
                             if (rig_has_set_func(radioDetails, RIG_FUNC_LOCK)) {
-                                void* inputArray[] = {radioDetails, RIG_VFO_CURR, RIG_FUNC_LOCK};
-                                if (rig_has_rig_set_func(my_rig, , RIG_FUNC_LOCK, 0)
+                                int setting = rig_get_level(radioDetails, RIG_CURR_VFO, RIG_FUNC_LOCK); 
+                                if (setting) { // If VFO Lock set to 1
+                                    setting = 0; 
+                                } else { // If VFO Lock set to 0
+                                    setting = 1; 
+                                }
+                                char* stringForOutput = set_level(radioDetails, RIG_CURR_VFO, RIG_FUNC_LOCK, setting); 
+                                sendSpeakerOutput(stringForOutput); 
+                                free(stringForOutput); 
+                                
+                            } else {
+                                printf("Cannot change VFO Lock")
+                            }
                             break; 
                         case 1:
                             
