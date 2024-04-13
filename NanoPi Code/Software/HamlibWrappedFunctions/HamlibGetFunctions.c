@@ -270,17 +270,26 @@ char* get_level_or_func_wrapper(void* input) {
 
 	char* output = malloc(40); 
 	if (strstr("LEVEL", setting_string)) {
-		value_t* value; 
-		rig_get_level (rig, vfo, rig_parse_func(setting_string), &value); 
-		snprintf(output, 40, "%d", value); 
-        return output; 
+        if (rig_has_get_level(rig, rig_parse_func(setting_string)) {
+            value_t* value; 
+            rig_get_level (rig, vfo, rig_parse_func(setting_string), &value); 
+            snprintf(output, 40, "%d", value); 
+            return output; 
+        } else {
+            printf("Get Level Fail"); 
+            return "-1"; 
+        }
 	} else if (strstr("FUNC", setting_string)) {
-		int status; 
-		rig_get_func (rig, vfo, rig_parse_func(setting_string), &status); 	
-		snprintf(output, 40, "%d", status); 
-        return output; 
+        if (rig_has_get_func(rig, rig_parse_func(setting_string)) {
+            int status; 
+            rig_get_func (rig, vfo, rig_parse_func(setting_string), &status); 	
+            snprintf(output, 40, "%d", status); 
+            return output; 
+        } else {
+            printf("Get Level Fail"); 
+            return "-1"; 
+        }
 	} else {
         return "-1"; 
     }
-	
 }

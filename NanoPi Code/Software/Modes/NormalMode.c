@@ -238,14 +238,13 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             enteringValue = true;
                             memset(inputValue, 0, sizeof(inputValue)); 
                             sendSpeakerOutput("Enter value for XIT offset");
-                            // enterValueMode(keyInput, radioDetails, set_xit_offset);
                             currentInputFunction = set_xit_offset;
                             break; 
                         case 1:
                             enteringValue = true;
                             memset(inputValue, 0, sizeof(inputValue)); 
                             sendSpeakerOutput("Enter value for RIT offset");
-                            enterValueMode(keyInput, radioDetails, set_rit_offset);
+                            currentInputFunction = set_rit_offset;
                             break; 
                         case 2:
                             break; 
@@ -344,6 +343,15 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                 if (!keyInput->isHold) {
                     switch (keyInput->shiftAmount) {
                         case 0:
+                            void* inputArray[] = {radioDetails, RIG_VFO_CURR, (char*)RIG_LEVEL_IF};
+                            char* if_shift_result = get_level_or_func_wrapper(inputArray);
+                            if (strcmp(if_shift_result, "-1") != 0) {
+                                sprintf(stringForOutput, "IF Shift: %s Hz", if_shift_result);
+                                sendSpeakerOutput(stringForOutput);
+                            } else {
+                                fprintf(stderr, "Error retrieving IF shift value\n");
+                            }
+                            free(if_shift_result);
                             break; 
                         case 1:
                             break; 
@@ -355,7 +363,11 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                 } else {
                     switch (keyInput->shiftAmount) {
                         case 0:
-                            break; 
+                            enteringValue = true;
+                            memset(inputValue, 0, sizeof(inputValue)); 
+                            sendSpeakerOutput("Enter value for IF shift (Hz)");
+                            currentInputFunction = set_if_shift;
+                            break;
                         case 1:
                             break; 
                         case 2:
@@ -369,7 +381,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                 break;
         }
     }else{
-        enterValueMode(keyInput, radioDetails,currentInputFunction );
+        enterValueMode(keyInput, radioDetails, currentInputFunction);
     }
     return NULL;
 }
