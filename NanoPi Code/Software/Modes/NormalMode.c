@@ -262,6 +262,11 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 1:
                             // Get XIT Offset
+                            void* inputArray[] = {radioDetails, RIG_CURR_VFO};
+                            char* stringForOutput = get_current_xit_offset(inputArray); 
+                            printf("%s", stringForOutput); 
+                            sendSpeakerOutput(stringForOutput); 
+                            free(stringForOutput); 
                             break; 
                         case 2:
                             break; 
@@ -329,7 +334,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                 if (!keyInput->isHold) {
                     switch (keyInput->shiftAmount) {
                         case 0:
-                            // Get VOX Status (Voice Operated Relay)
+                            // Get VOX Status (Voice Operated Relay): RIG_FUNC_VOX
                             if (rig_has_get_func(radioDetails, RIG_FUNC_VOX)) {
                                 void* inputArray[] = {radioDetails, RIG_CURR_VFO, RIG_FUNC_VOX};
                                 char* stringForOutput = get_level(inputArray); 
@@ -351,7 +356,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                 } else {
                     switch (keyInput->shiftAmount) {
                         case 0:
-                            // Set VOX Status (Voice Operated Relay)
+                            // Set VOX Status (Voice Operated Relay): RIG_FUNC_VOX
                             if (rig_has_set_func(radioDetails, RIG_FUNC_VOX)) {
                                 int setting = rig_get_func(radioDetails, RIG_CURR_VFO, RIG_FUNC_VOX); 
                                 if (setting) { // If VFO Lock set to 1
