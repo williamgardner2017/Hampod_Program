@@ -4,15 +4,14 @@ int retcode;
 bool enteringValue = false;
 char inputValue[100] = ""; 
 int setFunctionType = 0; 
-SetValueFunctionTypeOne currentInputFunctionOne;
-SetValueFunctionTypeTwo currentInputFunctionTwo; // This is for the Set Level or Set Func functions
+HamlibSetFunction currentInputFunctionOne;
 setting_t settingToChange; // This goes with Type Two
-SetValueFunctionTypeThree currentInputFunctionThree;
 
 void enterValueModeTypeOne(KeyPress* keyInput, RIG* radioDetails, SetValueFunctionTypeOne setValueFunction) {
     double enteredValue = keypadInput(keyInput);
     if (enteredValue >= 0) {
-        char* result = SetValueFunctionTypeOne(radioDetails, RIG_VFO_CURR, enteredValue);
+        void* inputArray[] = {radioDetails, RIG_VFO_CURR, enteredValue};
+        char* result = HamlibSetFunction(inputArray);
         sendSpeakerOutput(result);
         free(result); 
 
@@ -22,10 +21,11 @@ void enterValueModeTypeOne(KeyPress* keyInput, RIG* radioDetails, SetValueFuncti
     }
 }
 
-void enterValueMode(KeyPress* keyInput, RIG* radioDetail; SetValueFunctionTypeTwo setValueFunction) {
+void enterValueModeTypeTwo(KeyPress* keyInput, RIG* radioDetail; SetValueFunctionTypeTwo setValueFunction) {
     double enteredValue = keypadInput(keyInput);
     if (enteredValue >= 0) {
-        char* result = SetValueFunctionTypeTwo(radioDetails, RIG_VFO_CURR, settingToChange, enteredValue);
+        void* inputArray[] = {radioDetails, RIG_VFO_CURR, settingToChange, enteredValue};
+        char* result = HamlibSetFunction(inputArray);
         sendSpeakerOutput(result);
         free(result); 
 
@@ -413,7 +413,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             memset(inputValue, 0, sizeof(inputValue)); 
                             sendSpeakerOutput("Enter value for vox gain");
                             settingToChange = RIG_LEVEL_VOXGAIN; 
-                            SetValueFunctionTypeTwo = set_if_shift;
+                            HamlibSetFunction = set_if_shift;
                             int setFunctionType = 2; 
                             break; 
                         case 1:
@@ -457,7 +457,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             memset(inputValue, 0, sizeof(inputValue)); 
                             sendSpeakerOutput("Enter value for vox delay");
                             settingToChange = RIG_LEVEL_VOXDELAY; 
-                            SetValueFunctionTypeTwo = set_if_shift;
+                            HamlibSetFunction = set_if_shift;
                             int setFunctionType = 2; 
                             break; 
                         case 1:

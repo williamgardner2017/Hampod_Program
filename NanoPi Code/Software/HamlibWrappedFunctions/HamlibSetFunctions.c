@@ -238,7 +238,11 @@ char* set_frequency(void* input) {
     }
 }
 
-char* set_mode(RIG* rig, vfo_t vfo, rmode_t mode_value, pbwidth_t width_value) {
+char* set_mode(void* input) {
+    RIG* rig = (RIG*) input[0]; 
+    vfo_t vfo = *(vfo_t*) input[1]; 
+    rmode_t mode_value = *(rmode_t*) input[2]; 
+    pbwidth_t width_value = *(pbwidth_t*) input[3]; 
 
     int retcode = rig_set_mode(rig, vfo, mode_value, width_value); 	
     if (retcode == RIG_OK) {
@@ -251,7 +255,10 @@ char* set_mode(RIG* rig, vfo_t vfo, rmode_t mode_value, pbwidth_t width_value) {
     }
 }
 
-char* set_vfo(RIG* rig, vfo_t value) {
+char* set_vfo(void* input) {
+    RIG* rig = (RIG*) input[0]; 
+    value_t value = *(value_t*) input[1]; 
+
     int retcode = rig_set_vfo(rig, value); 
     if (retcode == RIG_OK) {
         char* output = malloc(100); 
@@ -263,7 +270,11 @@ char* set_vfo(RIG* rig, vfo_t value) {
     }
 }
 
-char* set_ptt(RIG* rig, vfo_t vfo, ptt_t value) {
+char* set_ptt(void* input) {
+    RIG* rig = (RIG*) input[0]; 
+    vfo_t vfo = *(vfo_t*) input[1]; 
+    ptt_t value = *(ptt_t*) input[2]; 
+
     int retcode = rig_set_ptt(rig, vfo, value); 
     if (retcode == RIG_OK) {
         char* output = malloc(100); 
@@ -304,7 +315,11 @@ char* push_to_talk_converter (ptt_t input) {
 //     }
 // }
 
-char* set_rit_offset(RIG* rig, vfo_t vfo, shortfreq_t value) { 
+char* set_rit_offset(void* input) {
+`   RIG* rig = (RIG*) input[0]; 
+    vfo_t vfo = *(vfo_t*) input[1]; 
+    shortfreq_t value = *(shortfreq_t*) input[2]; 
+
     int retcode = rig_set_rit(rig, vfo, value); 
     if (retcode == RIG_OK) {
         char* output = malloc(100); 
@@ -316,7 +331,11 @@ char* set_rit_offset(RIG* rig, vfo_t vfo, shortfreq_t value) {
     }
 }
 
-char* set_xit_offset(RIG* rig, vfo_t vfo, shortfreq_t value) {
+char* set_xit_offset(void* input) {
+    RIG* rig = (RIG*) input[0]; 
+    vfo_t vfo = *(vfo_t*) input[1]; 
+    shortfreq_t value = *(shortfreq_t*) input[2]; 
+
     int retcode = rig_set_xit(rig, vfo, value); 
     if (retcode == RIG_OK) {
         char* output = malloc(100); 
@@ -328,7 +347,11 @@ char* set_xit_offset(RIG* rig, vfo_t vfo, shortfreq_t value) {
     }
 }
 
-char* set_tuning_step(RIG* rig, vfo_t vfo, shortfreq_t value) {
+char* set_tuning_step(void* input) {
+    RIG* rig = (RIG*) input[0]; 
+    vfo_t vfo = *(vfo_t*) input[1]; 
+    shortfreq_t value = *(shortfreq_t*) input[2]; 
+
     int retcode = rig_set_ts(rig, vfo, value); 
     if (retcode == RIG_OK) {
         char* output = malloc(100); 
@@ -340,7 +363,11 @@ char* set_tuning_step(RIG* rig, vfo_t vfo, shortfreq_t value) {
     }
 }
 
-char* set_CTCSS_sub_audible_tone(RIG* rig, vfo_t vfo, tone_t value) {
+char* set_CTCSS_sub_audible_tone(void* input) {
+    RIG* rig = (RIG*) input[0]; 
+    vfo_t vfo = *(vfo_t*) input[1]; 
+    tone_t value = *(tone_t*) input[2]; 
+
     int retcode = rig_set_ctcss_tone(rig, vfo, value); 
     if (retcode == RIG_OK) {
         char* output = malloc(100); 
@@ -352,7 +379,11 @@ char* set_CTCSS_sub_audible_tone(RIG* rig, vfo_t vfo, tone_t value) {
     }
 }
 
-char* set_current_encoding_digitally_coded_squelch_code(RIG* rig, vfo_t vfo, tone_t value) { 
+char* set_current_encoding_digitally_coded_squelch_code(void* input) {
+    RIG* rig = (RIG*) input[0]; 
+    vfo_t vfo = *(vfo_t*) input[1]; 
+    tone_t value = *(tone_t*) input[2]; 
+
     int retcode = rig_set_dcs_code(rig, vfo, value); 
     if (retcode == RIG_OK) {
         char* output = malloc(100); 
@@ -364,7 +395,11 @@ char* set_current_encoding_digitally_coded_squelch_code(RIG* rig, vfo_t vfo, ton
     }
 }
 
-char* set_current_CTCSS_sub_audible_squelch_tone(RIG* rig, vfo_t vfo, tone_t value) {
+char* set_current_CTCSS_sub_audible_squelch_tone(void* input) {
+    RIG* rig = (RIG*) input[0]; 
+    vfo_t vfo = *(vfo_t*) input[1]; 
+    tone_t value = *(tone_t*) input[2]; 
+
     int retcode = rig_set_ctcss_sql(rig, vfo, value); 
     if (retcode == RIG_OK) {
         char* output = malloc(100); 
@@ -376,7 +411,11 @@ char* set_current_CTCSS_sub_audible_squelch_tone(RIG* rig, vfo_t vfo, tone_t val
     }
 }
 
-char* set_current_continuous_tone_controlled_squelch_code(RIG* rig, vfo_t vfo, tone_t value) {
+char* set_current_continuous_tone_controlled_squelch_code(void* input) {
+    RIG* rig = (RIG*) input[0]; 
+    vfo_t vfo = *(vfo_t*) input[1]; 
+    tone_t value = *(tone_t*) input[2]; 
+
     int retcode = rig_set_dcs_sql(rig, vfo, value); 
     if (retcode == RIG_OK) {
         char* output = malloc(100); 
