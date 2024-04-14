@@ -205,6 +205,15 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 1:
                             // Get RIT Offset
+                            void* inputArray[] = {radioDetails, RIG_CURR_VFO};
+                            char* stringForOutput = get_current_rit_offset(inputArray); 
+                            if (strcmp(stringForOutput, "-1") != 0) {
+                                printf("%s", stringForOutput); 
+                                sendSpeakerOutput(stringForOutput); 
+                            } else {
+                                printf("Cannot get RIT offset")
+                            }
+                            free(stringForOutput); 
                             break; 
                         case 2:
                             break; 
@@ -264,8 +273,12 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             // Get XIT Offset
                             void* inputArray[] = {radioDetails, RIG_CURR_VFO};
                             char* stringForOutput = get_current_xit_offset(inputArray); 
-                            printf("%s", stringForOutput); 
-                            sendSpeakerOutput(stringForOutput); 
+                            if (strcmp(stringForOutput, "-1") != 0) {
+                                printf("%s", stringForOutput); 
+                                sendSpeakerOutput(stringForOutput); 
+                            } else {
+                                printf("Cannot get XIT offset")
+                            }
                             free(stringForOutput); 
                             break; 
                         case 2:
