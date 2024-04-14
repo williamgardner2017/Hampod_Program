@@ -106,8 +106,19 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
 
                             break; 
                         case 1:
+                            // Get Width
                             break; 
                         case 2:
+                            // Getting VFO Lock Status
+                            if (rig_has_get_func(radioDetails, RIG_FUNC_LOCK)) {
+                                void* inputArray[] = {radioDetails, RIG_CURR_VFO, RIG_FUNC_LOCK};
+                                char* stringForOutput = get_level(inputArray); 
+                                printf("%s", stringForOutput); 
+                                sendSpeakerOutput(stringForOutput); 
+                                free(stringForOutput); 
+                            } else {
+                                printf("Cannot get VFO lock status")
+                            }
                             break; 
                         default:
                             break;
@@ -135,7 +146,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 free(stringForOutput); 
                                 
                             } else {
-                                printf("Cannot set RIT status")
+                                printf("Cannot set VFO lock status")
                             }
                             break; 
                         default:
