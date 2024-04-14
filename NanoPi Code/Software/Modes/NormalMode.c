@@ -250,6 +250,15 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                     switch (keyInput->shiftAmount) {
                         case 0:
                             // Get XIT Status
+                            if (rig_has_get_func(radioDetails, RIG_FUNC_XIT)) {
+                                void* inputArray[] = {radioDetails, RIG_CURR_VFO, RIG_FUNC_XIT};
+                                char* stringForOutput = get_level(inputArray); 
+                                printf("%s", stringForOutput); 
+                                sendSpeakerOutput(stringForOutput); 
+                                free(stringForOutput); 
+                            } else {
+                                printf("Cannot get XIT status")
+                            }
                             break; 
                         case 1:
                             // Get XIT Offset
