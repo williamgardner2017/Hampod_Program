@@ -87,8 +87,10 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                 } else {
                     switch (keyInput->shiftAmount) {
                         case 0:
+                            // Get current VFO
                             break; 
                         case 1:
+                            // Set current VFO
                             break; 
                         case 2:
                             break; 
