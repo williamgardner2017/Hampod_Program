@@ -5,13 +5,14 @@ bool enteringValue = false;
 char inputValue[100] = ""; 
 int setFunctionType = 0; 
 SetValueFunctionTypeOne currentInputFunctionOne;
-SetValueFunctionTypeTwo currentInputFunctionTwo;
+SetValueFunctionTypeTwo currentInputFunctionTwo; // This is for the Set Level or Set Func functions
+setting_t settingToChange; // This goes with Type Two
 SetValueFunctionTypeThree currentInputFunctionThree;
 
-void enterValueMode(KeyPress* keyInput, RIG* radioDetails, SetValueFunction setValueFunction) {
+void enterValueModeTypeOne(KeyPress* keyInput, RIG* radioDetails, SetValueFunctionTypeOne setValueFunction) {
     double enteredValue = keypadInput(keyInput);
     if (enteredValue >= 0) {
-        char* result = setValueFunction(radioDetails, RIG_VFO_CURR, enteredValue);
+        char* result = SetValueFunctionTypeOne(radioDetails, RIG_VFO_CURR, enteredValue);
         sendSpeakerOutput(result);
         free(result); 
 
@@ -21,8 +22,18 @@ void enterValueMode(KeyPress* keyInput, RIG* radioDetails, SetValueFunction setV
     }
 }
 
-// freq_t* freq; 
-// char vfoFreqValue[40];
+void enterValueMode(KeyPress* keyInput, RIG* radioDetail; SetValueFunctionTypeTwo setValueFunction) {
+    double enteredValue = keypadInput(keyInput);
+    if (enteredValue >= 0) {
+        char* result = SetValueFunctionTypeTwo(radioDetails, RIG_VFO_CURR, settingToChange, enteredValue);
+        sendSpeakerOutput(result);
+        free(result); 
+
+        enteringValue = false; 
+    } else {
+
+    }
+}
 
 void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
     if (enteringValue == false) {
@@ -104,6 +115,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             // }
                             break; 
                         case 1:
+                            break; 
                             // if (rig_has_set_func(radioDetails, RIG_FUNC_XIT)) {
                             //     // NEED TO SET THIS SO PRESSING IT AGAIN WOULD AUTO CHANGE IT. 
                             //     retcode = rig_set_func(radioDetails, RIG_VFO_CURR, RIG_FUNC_XIT, 1);
@@ -115,7 +127,6 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             //     }
                                 
                             // }
-                            break; 
                         case 2:
                             // if (rig_has_set_func(radioDetails, RIG_FUNC_LOCK)) {
                             //     retcode = rig_get_func(radioDetails, RIG_VFO_CURR, RIG_FUNC_LOCK, &vfo_lock_status);
@@ -165,22 +176,6 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             }
                             break; 
                         case 1:
-                            // Setting VOX (Voice Operated Relay)
-                            if (rig_has_set_func(radioDetails, RIG_FUNC_VOX)) {
-                                int setting = rig_get_level(radioDetails, RIG_CURR_VFO, RIG_FUNC_VOX); 
-                                if (setting) { // If VFO Lock set to 1
-                                    setting = 0; 
-                                } else { // If VFO Lock set to 0
-                                    setting = 1; 
-                                }
-                                char* stringForOutput = set_level(radioDetails, RIG_CURR_VFO, RIG_FUNC_VOX, setting); 
-                                sendSpeakerOutput(stringForOutput); 
-                                free(stringForOutput); 
-                                
-                            } else {
-                                printf("Cannot change Vox")
-                            }
-                            break; 
                             break; 
                         case 2:
                             break; 
@@ -301,82 +296,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                 if (!keyInput->isHold) {
                     switch (keyInput->shiftAmount) {
                         case 0:
-                            break; 
-                        case 1:
-                            break; 
-                        case 2:
-                            break; 
-                        default:
-                            break;
-                    }
-                } else {
-                    switch (keyInput->shiftAmount) {
-                        case 0:
-                            break; 
-                        case 1:
-                            break; 
-                        case 2:
-                            break; 
-                        default:
-                            break;
-                    }
-                }
-                break;
-            case '7':
-                if (!keyInput->isHold) {
-                    switch (keyInput->shiftAmount) {
-                        case 0:
-                            break; 
-                        case 1:
-                            break; 
-                        case 2:
-                            break; 
-                        default:
-                            break;
-                    }
-                } else {
-                    switch (keyInput->shiftAmount) {
-                        case 0:
-                            break; 
-                        case 1:
-                            break; 
-                        case 2:
-                            break; 
-                        default:
-                            break;
-                    }
-                }
-                break;
-            case '8':
-                if (!keyInput->isHold) {
-                    switch (keyInput->shiftAmount) {
-                        case 0:
-                            break; 
-                        case 1:
-                            break; 
-                        case 2:
-                            break; 
-                        default:
-                            break;
-                    }
-                } else {
-                    switch (keyInput->shiftAmount) {
-                        case 0:
-                            break; 
-                        case 1:
-                            break; 
-                        case 2:
-                            break; 
-                        default:
-                            break;
-                    }
-                }
-                break;
-            case '9':
-                if (!keyInput->isHold) {
-                    switch (keyInput->shiftAmount) {
-                        case 0:
-                            void* inputArray[] = {radioDetails, RIG_VFO_CURR, (char*)RIG_LEVEL_IF};
+                            void* inputArray[] = {radioDetails, RIG_VFO_CURR, RIG_LEVEL_IF};
                             char* if_shift_result = get_level_or_func_wrapper(inputArray);
                             if (strcmp(if_shift_result, "-1") != 0) {
                                 sprintf(stringForOutput, "IF Shift: %s Hz", if_shift_result);
@@ -410,14 +330,162 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                     }
                 }
                 break;
+            case '7':
+                if (!keyInput->isHold) {
+                    switch (keyInput->shiftAmount) {
+                        case 0:
+                            // Get VOX Status (Voice Operated Relay)
+                            if (rig_has_get_func(radioDetails, RIG_FUNC_VOX)) {
+                                void* inputArray[] = {radioDetails, RIG_CURR_VFO, RIG_FUNC_VOX};
+                                char* stringForOutput = get_level(inputArray); 
+                                printf("%s", stringForOutput); 
+                                sendSpeakerOutput(stringForOutput); 
+                                free(stringForOutput); 
+                                
+                            } else {
+                                printf("Cannot get Vox")
+                            }
+                            break; 
+                        case 1:
+                            break; 
+                        case 2:
+                            break; 
+                        default:
+                            break;
+                    }
+                } else {
+                    switch (keyInput->shiftAmount) {
+                        case 0:
+                            // Set VOX Status (Voice Operated Relay)
+                            if (rig_has_set_func(radioDetails, RIG_FUNC_VOX)) {
+                                int setting = rig_get_func(radioDetails, RIG_CURR_VFO, RIG_FUNC_VOX); 
+                                if (setting) { // If VFO Lock set to 1
+                                    setting = 0; 
+                                } else { // If VFO Lock set to 0
+                                    setting = 1; 
+                                }
+                                char* stringForOutput = set_func(radioDetails, RIG_CURR_VFO, RIG_FUNC_VOX, setting); 
+                                sendSpeakerOutput(stringForOutput); 
+                                free(stringForOutput); 
+                                
+                            } else {
+                                printf("Cannot set Vox")
+                            }                       
+                            break; 
+                        case 1:
+                            break; 
+                        case 2:
+                            break; 
+                        default:
+                            break;
+                    }
+                }
+                break;
+            case '8':
+                if (!keyInput->isHold) {
+                    switch (keyInput->shiftAmount) {
+                        case 0:
+                            // Get VOX Gain: RIG_LEVEL_VOXGAIN
+                            if (rig_has_get_level(radioDetails, RIG_LEVEL_VOXGAIN)) {
+                                void* inputArray[] = {radioDetails, RIG_CURR_VFO, RIG_LEVEL_VOXGAIN};
+                                char* stringForOutput = get_level(inputArray); 
+                                printf("%s", stringForOutput); 
+                                sendSpeakerOutput(stringForOutput); 
+                                free(stringForOutput); 
+                                
+                            } else {
+                                printf("Cannot get vox gain")
+                            }
+                            break; 
+                        case 1:
+                            break; 
+                        case 2:
+                            break; 
+                        default:
+                            break;
+                    }
+                } else {
+                    switch (keyInput->shiftAmount) {
+                        case 0:
+                            // Set VOX Gain: RIG_LEVEL_VOXGAIN
+                            enteringValue = true;
+
+                            memset(inputValue, 0, sizeof(inputValue)); 
+                            sendSpeakerOutput("Enter value for vox gain");
+                            settingToChange = RIG_LEVEL_VOXGAIN; 
+                            SetValueFunctionTypeTwo = set_if_shift;
+                            int setFunctionType = 2; 
+                            break; 
+                        case 1:
+                            break; 
+                        case 2:
+                            break; 
+                        default:
+                            break;
+                    }
+                }
+                break;
+            case '9':
+                if (!keyInput->isHold) {
+                    switch (keyInput->shiftAmount) {
+                        case 0:
+                            // Get VOX Delay: RIG_LEVEL_VOXDELAY
+                            if (rig_has_get_level(radioDetails, RIG_LEVEL_VOXDELAY)) {
+                                void* inputArray[] = {radioDetails, RIG_CURR_VFO, RIG_LEVEL_VOXDELAY};
+                                char* stringForOutput = get_level(inputArray); 
+                                printf("%s", stringForOutput); 
+                                sendSpeakerOutput(stringForOutput); 
+                                free(stringForOutput); 
+                                
+                            } else {
+                                printf("Cannot get vox delay")
+                            }
+                            break; 
+                        case 1:
+                            break; 
+                        case 2:
+                            break; 
+                        default:
+                            break;
+                    }
+                } else {
+                    switch (keyInput->shiftAmount) {
+                        case 0:
+                            // Set VOX Delay: RIG_LEVEL_VOXDELAY
+                            enteringValue = true;
+
+                            memset(inputValue, 0, sizeof(inputValue)); 
+                            sendSpeakerOutput("Enter value for vox delay");
+                            settingToChange = RIG_LEVEL_VOXDELAY; 
+                            SetValueFunctionTypeTwo = set_if_shift;
+                            int setFunctionType = 2; 
+                            break; 
+                        case 1:
+                            break; 
+                        case 2:
+                            break; 
+                        default:
+                            break;
+                    }
+                }
+                break;
             default:
                 break;
         }
     }else{
         switch(currentInputType) {
-
+            case 1: 
+                enterValueModeTypeOne(keyInput, radioDetails, currentInputFunction);
+                break; 
+            case 2: 
+                enterValueModeTypeOneTwo(keyInput, radioDetails, currentInputFunction);
+                break; 
+            case 3: 
+                // enterValueMode(keyInput, radioDetails, currentInputFunctionTypeThree);
+                break; 
+            default: 
+                break; 
         }
-        enterValueMode(keyInput, radioDetails, currentInputFunction);
     }
     return NULL;
 }
