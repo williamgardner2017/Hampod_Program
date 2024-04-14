@@ -434,7 +434,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 free(stringForOutput); 
                                 
                             } else {
-                                printf("Cannot get vox delay")
+                                printf("Cannot get VOX delay")
                             }
                             break; 
                         case 1:
