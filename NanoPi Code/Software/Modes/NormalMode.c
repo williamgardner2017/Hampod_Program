@@ -162,6 +162,16 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 1:
                             break; 
                         case 2:
+                            // Get PTT Status
+                            void* inputArray[] = {radioDetails, RIG_CURR_VFO};
+                            char* stringForOutput = get_ptt(inputArray);
+                            if (strcmp(stringForOutput, "-1") != 0) {
+                                printf("%s", stringForOutput); 
+                                sendSpeakerOutput(stringForOutput);
+                            } else {
+                                printf("Cannot get PTT Status offset"); 
+                            }
+                            free(stringForOutput); 
                             break; 
                         default:
                             break;
@@ -169,19 +179,12 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                 } else {
                     switch (keyInput->shiftAmount) {
                         case 0:
-                            void* inputArray[] = {radioDetails, RIG_VFO_A};
-                            char* result = get_ptt(inputArray);
-                            if (strcmp(result, "-1") != 0) {
-                                sprintf(stringForOutput, "PTT Status: %s", result);
-                                sendSpeakerOutput(stringForOutput);
-                            } else {
-                                fprintf(stderr, "PTT retrieval error\n");
-                            }
-                            free(result);
+                            
                             break; 
                         case 1:
                             break; 
                         case 2:
+                            // Set PTT Status
                             break; 
                         default:
                             break;
@@ -200,7 +203,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 sendSpeakerOutput(stringForOutput); 
                                 free(stringForOutput); 
                             } else {
-                                printf("Cannot get RIT status")
+                                printf("Cannot get RIT status"); 
                             }
                             break; 
                         case 1:
@@ -211,7 +214,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 printf("%s", stringForOutput); 
                                 sendSpeakerOutput(stringForOutput); 
                             } else {
-                                printf("Cannot get RIT offset")
+                                printf("Cannot get RIT offset"); 
                             }
                             free(stringForOutput); 
                             break; 
@@ -237,7 +240,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 free(stringForOutput); 
                                 
                             } else {
-                                printf("Cannot set RIT status")
+                                printf("Cannot set RIT status"); 
                             }
                             break; 
                         case 1:
@@ -266,7 +269,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 sendSpeakerOutput(stringForOutput); 
                                 free(stringForOutput); 
                             } else {
-                                printf("Cannot get XIT status")
+                                printf("Cannot get XIT status"); 
                             }
                             break; 
                         case 1:
@@ -277,7 +280,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 printf("%s", stringForOutput); 
                                 sendSpeakerOutput(stringForOutput); 
                             } else {
-                                printf("Cannot get XIT offset")
+                                printf("Cannot get XIT offset"); 
                             }
                             free(stringForOutput); 
                             break; 
@@ -356,7 +359,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 free(stringForOutput); 
                                 
                             } else {
-                                printf("Cannot get Vox")
+                                printf("Cannot get Vox"); 
                             }
                             break; 
                         case 1:
@@ -383,7 +386,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 free(stringForOutput); 
                                 
                             } else {
-                                printf("Cannot set Vox")
+                                printf("Cannot set Vox"); 
                             }
                             break; 
                         case 1:
@@ -408,7 +411,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 free(stringForOutput); 
                                 
                             } else {
-                                printf("Cannot get vox gain")
+                                printf("Cannot get VOX gain"); 
                             }
                             break; 
                         case 1:
@@ -452,7 +455,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 free(stringForOutput); 
                                 
                             } else {
-                                printf("Cannot get VOX delay")
+                                printf("Cannot get VOX delay"); 
                             }
                             break; 
                         case 1:
