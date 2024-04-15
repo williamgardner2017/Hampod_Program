@@ -403,7 +403,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 free(stringForOutput); 
                                 
                             } else {
-                                printf("Cannot get Vox\n"); 
+                                printf("Cannot get vox\n"); 
                             }
                             break; 
                         case 1:
@@ -430,7 +430,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 free(stringForOutput); 
                                 
                             } else {
-                                printf("Cannot set Vox\n"); 
+                                printf("Cannot set vox\n"); 
                             }
                             break; 
                         case 1:
@@ -455,7 +455,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 free(stringForOutput); 
                                 
                             } else {
-                                printf("Cannot get VOX gain\n"); 
+                                printf("Cannot get vox gain\n"); 
                             }
                             break; 
                         case 1:
@@ -499,7 +499,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 free(stringForOutput); 
                                 
                             } else {
-                                printf("Cannot get VOX delay\n"); 
+                                printf("Cannot get vox delay\n"); 
                             }
                             break; 
                         case 1:
