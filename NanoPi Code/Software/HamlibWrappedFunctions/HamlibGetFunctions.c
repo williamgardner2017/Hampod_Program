@@ -47,7 +47,7 @@ char* get_current_mode(void* input) {
     }
 }
 
-char* get_current_vfo(RIG* rig) {
+char* get_current_vfo(void* input) {
     RIG* rig = (RIG*) input[0]; 
 
     vfo_t value; 

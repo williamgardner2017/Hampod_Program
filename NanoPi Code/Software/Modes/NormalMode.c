@@ -88,9 +88,53 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                     switch (keyInput->shiftAmount) {
                         case 0:
                             // Get current VFO
+                            void* inputArray[] = {radioDetails};
+                            char* current_vfo = get_current_vfo(inputArray); 
+                            printf("%s", current_vfo); 
+                            sendSpeakerOutput(current_vfo); 
+                            free(current_vfo);
+
                             break; 
                         case 1:
                             // Set current VFO
+                            void* inputArray[] = {radioDetails};
+                            char* current_vfo = get_current_vfo(inputArray);
+                            if (strcmp(current_vfo, "-1") != 0) {
+                                current_vfo[strcspn(current_vfo, "\n")] = 0; // Remove newline for proper comparison
+
+                                vfo_t current_vfo_enum = rig_parse_vfo(current_vfo);
+                                vfo_t next_vfo = current_vfo_enum;
+                                
+                                int attempts = 0; // Counter to avoid infinite loops
+                                char* result = NULL;
+                                do {
+                                    // Get next VFO in sequence
+                                    if (next_vfo == RIG_VFO_A) next_vfo = RIG_VFO_B;
+                                    else if (next_vfo == RIG_VFO_B) next_vfo = RIG_VFO_C;
+                                    else if (next_vfo == RIG_VFO_C) next_vfo = RIG_VFO_A;
+                                    
+                                    // Setting the VFO
+                                    if (result) {
+                                        free(result); // free the previous result
+                                        result = NULL;
+                                    }
+                                    inputArray = {radioDetails, &next_vfo};
+                                    result = set_vfo(inputArray);
+                                    attempts++;
+                                } while (strcmp(result, "-1") == 0 && attempts < 3); // Limit attempts to 3 (number of VFOs)
+
+                                if (strcmp(result, "-1") == 0) {
+                                    printf("Failed to set any VFO after 3 attempts.\n");
+                                } else {
+                                    printf("%s", current_vfo); 
+                                    sendSpeakerOutput(current_vfo); 
+                                }
+                                free(result);
+                            } else {
+                                printf("Error retrieving current VFO\n");
+                            }
+                            // Free the memory allocated for current VFO
+                            free(current_vfo);
                             break; 
                         case 2:
                             break; 
@@ -119,7 +163,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 sendSpeakerOutput(stringForOutput); 
                                 free(stringForOutput); 
                             } else {
-                                printf("Cannot get VFO lock status")
+                                printf("Cannot get VFO lock status\n")
                             }
                             break; 
                         default:
@@ -148,7 +192,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 free(stringForOutput); 
                                 
                             } else {
-                                printf("Cannot set VFO lock status")
+                                printf("Cannot set VFO lock status\n")
                             }
                             break; 
                         default:
@@ -171,7 +215,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 printf("%s", stringForOutput); 
                                 sendSpeakerOutput(stringForOutput);
                             } else {
-                                printf("Cannot get PTT Status offset"); 
+                                printf("Cannot get PTT Status offset\n"); 
                             }
                             free(stringForOutput); 
                             break; 
@@ -205,7 +249,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 sendSpeakerOutput(stringForOutput); 
                                 free(stringForOutput); 
                             } else {
-                                printf("Cannot get RIT status"); 
+                                printf("Cannot get RIT status\n"); 
                             }
                             break; 
                         case 1:
@@ -216,7 +260,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 printf("%s", stringForOutput); 
                                 sendSpeakerOutput(stringForOutput); 
                             } else {
-                                printf("Cannot get RIT offset"); 
+                                printf("Cannot get RIT offset\n"); 
                             }
                             free(stringForOutput); 
                             break; 
@@ -242,14 +286,14 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 free(stringForOutput); 
                                 
                             } else {
-                                printf("Cannot set RIT status"); 
+                                printf("Cannot set RIT status\n"); 
                             }
                             break; 
                         case 1:
                             // Set RIT Offset
                             enteringValue = true;
                             memset(inputValue, 0, sizeof(inputValue)); 
-                            sendSpeakerOutput("Enter value for RIT offset");
+                            sendSpeakerOutput("Enter value for RIT offset\n");
                             currentInputFunction = set_rit_offset;
                             break; 
                         case 2:
@@ -271,7 +315,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 sendSpeakerOutput(stringForOutput); 
                                 free(stringForOutput); 
                             } else {
-                                printf("Cannot get XIT status"); 
+                                printf("Cannot get XIT status\n"); 
                             }
                             break; 
                         case 1:
@@ -282,7 +326,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 printf("%s", stringForOutput); 
                                 sendSpeakerOutput(stringForOutput); 
                             } else {
-                                printf("Cannot get XIT offset"); 
+                                printf("Cannot get XIT offset\n"); 
                             }
                             free(stringForOutput); 
                             break; 
@@ -300,7 +344,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             // Set XIT Offset
                             enteringValue = true;
                             memset(inputValue, 0, sizeof(inputValue)); 
-                            sendSpeakerOutput("Enter value for XIT offset");
+                            sendSpeakerOutput("Enter value for XIT offset\n");
                             currentInputFunction = set_xit_offset;
                             break; 
                         case 2:
@@ -361,7 +405,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 free(stringForOutput); 
                                 
                             } else {
-                                printf("Cannot get Vox"); 
+                                printf("Cannot get Vox\n"); 
                             }
                             break; 
                         case 1:
@@ -388,7 +432,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 free(stringForOutput); 
                                 
                             } else {
-                                printf("Cannot set Vox"); 
+                                printf("Cannot set Vox\n"); 
                             }
                             break; 
                         case 1:
@@ -413,7 +457,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 free(stringForOutput); 
                                 
                             } else {
-                                printf("Cannot get VOX gain"); 
+                                printf("Cannot get VOX gain\n"); 
                             }
                             break; 
                         case 1:
@@ -430,7 +474,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             enteringValue = true;
 
                             memset(inputValue, 0, sizeof(inputValue)); 
-                            sendSpeakerOutput("Enter value for vox gain");
+                            sendSpeakerOutput("Enter value for vox gain\n");
                             settingToChange = RIG_LEVEL_VOXGAIN; 
                             HamlibSetFunction = set_if_shift;
                             int setFunctionType = 2; 
@@ -457,7 +501,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 free(stringForOutput); 
                                 
                             } else {
-                                printf("Cannot get VOX delay"); 
+                                printf("Cannot get VOX delay\n"); 
                             }
                             break; 
                         case 1:
@@ -474,7 +518,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             enteringValue = true;
 
                             memset(inputValue, 0, sizeof(inputValue)); 
-                            sendSpeakerOutput("Enter value for vox delay");
+                            sendSpeakerOutput("Enter value for vox delay\n");
                             settingToChange = RIG_LEVEL_VOXDELAY; 
                             HamlibSetFunction = set_if_shift;
                             int setFunctionType = 2; 
