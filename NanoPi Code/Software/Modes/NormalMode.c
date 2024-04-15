@@ -93,7 +93,6 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             printf("%s", current_vfo); 
                             sendSpeakerOutput(current_vfo); 
                             free(current_vfo);
-
                             break; 
                         case 1:
                             // Set current VFO
@@ -121,7 +120,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                     inputArray = {radioDetails, &next_vfo};
                                     result = set_vfo(inputArray);
                                     attempts++;
-                                } while (strcmp(result, "-1") == 0 && attempts < 3); // Limit attempts to 3 (number of VFOs)
+                                } while (strcmp(result, "-1") == 0 && attempts < 3); // Limit attempts to 3 just in case it fails. 
 
                                 if (strcmp(result, "-1") == 0) {
                                     printf("Failed to set any VFO after 3 attempts.\n");
@@ -133,7 +132,6 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             } else {
                                 printf("Error retrieving current VFO\n");
                             }
-                            // Free the memory allocated for current VFO
                             free(current_vfo);
                             break; 
                         case 2:
