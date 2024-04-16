@@ -363,14 +363,14 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                     switch (keyInput->shiftAmount) {
                         case 0:
                             void* inputArray[] = {radioDetails, RIG_VFO_CURR, RIG_LEVEL_IF};
-                            char* if_shift_result = get_level_or_func_wrapper(inputArray);
-                            if (strcmp(if_shift_result, "-1") != 0) {
-                                sprintf(stringForOutput, "IF Shift: %s Hz", if_shift_result);
-                                sendSpeakerOutput(stringForOutput);
-                            } else {
-                                fprintf(stderr, "Error retrieving IF shift value\n");
-                            }
-                            free(if_shift_result);
+                            // char* if_shift_result = get_level_or_func_wrapper(inputArray);
+                            // if (strcmp(if_shift_result, "-1") != 0) {
+                            //     sprintf(stringForOutput, "IF Shift: %s Hz", if_shift_result);
+                            //     sendSpeakerOutput(stringForOutput);
+                            // } else {
+                            //     fprintf(stderr, "Error retrieving IF shift value\n");
+                            // }
+                            // free(if_shift_result);
                             break; 
                         case 1:
                             break; 

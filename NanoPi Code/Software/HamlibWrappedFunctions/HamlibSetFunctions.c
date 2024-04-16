@@ -262,7 +262,7 @@ char* set_vfo(void* input) {
     int retcode = rig_set_vfo(rig, value); 
     if (retcode == RIG_OK) {
         char* output = malloc(100); 
-        snprintf(output, 100, "Current VFO now %s\n", rig_strvfo(value));
+        snprintf(output, 100, "VFO set to %s\n", rig_strvfo(value));
         return output; 
     } else {
         printf("rig_set_vfo: error = %s\n", rigerror(retcode));
@@ -278,7 +278,7 @@ char* set_ptt(void* input) {
     int retcode = rig_set_ptt(rig, vfo, value); 
     if (retcode == RIG_OK) {
         char* output = malloc(100); 
-        snprintf(output, 100, "Push to talk now %s\n", push_to_talk_converter(value));
+        snprintf(output, 100, "PTT set to %s\n", push_to_talk_converter(value));
         return output; 
     } else {
         printf("rig_set_ptt: error = %s\n", rigerror(retcode));
@@ -323,7 +323,7 @@ char* set_rit_offset(void* input) {
     int retcode = rig_set_rit(rig, vfo, value); 
     if (retcode == RIG_OK) {
         char* output = malloc(100); 
-        snprintf(output, 100, "RIT now %.3f\n", value);
+        snprintf(output, 100, "RIT set to %.3f\n", value);
         return output; 
     } else {
         printf("rig_set_rit: error = %s\n", rigerror(retcode));
@@ -339,7 +339,7 @@ char* set_xit_offset(void* input) {
     int retcode = rig_set_xit(rig, vfo, value); 
     if (retcode == RIG_OK) {
         char* output = malloc(100); 
-        snprintf(output, 100, "XIT now %.3f\n", value);
+        snprintf(output, 100, "XIT set to %.3f\n", value);
         return output; 
     } else {
         printf("rig_set_xit: error = %s\n", rigerror(retcode));
@@ -355,7 +355,7 @@ char* set_tuning_step(void* input) {
     int retcode = rig_set_ts(rig, vfo, value); 
     if (retcode == RIG_OK) {
         char* output = malloc(100); 
-        snprintf(output, 100, "%.3f\n", value);
+        snprintf(output, 100, "Tuning step set to %.3f\n", value);
         return output; 
     } else {
         printf("rig_set_ts: error = %s\n", rigerror(retcode));
@@ -371,7 +371,7 @@ char* set_CTCSS_sub_audible_tone(void* input) {
     int retcode = rig_set_ctcss_tone(rig, vfo, value); 
     if (retcode == RIG_OK) {
         char* output = malloc(100); 
-        snprintf(output, 100, "CTCSS sub-tone frequency now %i\n", value);
+        snprintf(output, 100, "CTCSS Tone set to %i\n", value);
         return output; 
     } else {
         printf("rig_set_ctcss_tone: error = %s\n", rigerror(retcode));
@@ -387,7 +387,7 @@ char* set_current_encoding_digitally_coded_squelch_code(void* input) {
     int retcode = rig_set_dcs_code(rig, vfo, value); 
     if (retcode == RIG_OK) {
         char* output = malloc(100); 
-        snprintf(output, 100, "Encoding DCS code now %i\n", value);
+        snprintf(output, 100, "DCS code set to %i\n", value);
         return output; 
     } else {
         printf("rig_set_dcs_code: error = %s\n", rigerror(retcode));
@@ -403,7 +403,7 @@ char* set_current_CTCSS_sub_audible_squelch_tone(void* input) {
     int retcode = rig_set_ctcss_sql(rig, vfo, value); 
     if (retcode == RIG_OK) {
         char* output = malloc(100); 
-        snprintf(output, 100, "CTCSS squelch now %i\n", value);
+        snprintf(output, 100, "CTCSS SQL set to %i\n", value);
         return output; 
     } else {
         printf("rig_set_ctcss_sql: error = %s\n", rigerror(retcode));
@@ -419,7 +419,7 @@ char* set_current_continuous_tone_controlled_squelch_code(void* input) {
     int retcode = rig_set_dcs_sql(rig, vfo, value); 
     if (retcode == RIG_OK) {
         char* output = malloc(100); 
-        snprintf(output, 100, "DCS code now %i\n", value);
+        snprintf(output, 100, "DCS code set to %i\n", value);
         return output; 
     } else {
         printf("rig_set_dcs_sql: error = %s\n", rigerror(retcode));
@@ -454,7 +454,7 @@ char* set_level(void* input) {
 
 	char* output = malloc(100); 
     rig_set_level (rig, vfo, setting_value, value); 
-    snprintf(output, 100, "%s now %d", rig_strlevel(setting_value), value); 
+    snprintf(output, 100, "%s set to %d", rig_strlevel(setting_value), value); 
     return output; 
 }
 
@@ -467,6 +467,6 @@ char* set_func(void* input) {
 	char* output = malloc(100); 
     int value = (int) input; 
     rig_set_func (rig, vfo, setting_value, value); 	
-    snprintf(output, 100, "%s now %d", rig_strfunc(setting_value), value); 
+    snprintf(output, 100, "%s set to %d", rig_strfunc(setting_value), value); 
     return output; 
 }
