@@ -22,7 +22,7 @@ char* get_current_frequency(void* input) {
     int retcode = rig_get_freq(rig, vfo, &value); 
     if (retcode == RIG_OK) {
         char* output = malloc(40); 
-        snprintf(output, 40, "%.3f\n", value);
+        snprintf(output, 40, "Frequency now %.3f\n", value);
         return output; 
     } else {
         printf("rig_get_freq: error = %s\n", rigerror(retcode));
@@ -39,7 +39,7 @@ char* get_current_mode(void* input) {
     int retcode = rig_get_mode(rig, vfo, &mode_value, &width_value); 	
     if (retcode == RIG_OK) {
         char* output = malloc(40); 
-        snprintf(output, 40, "%s, %.3f\n", rig_strrmode(mode_value), width_value);
+        snprintf(output, 40, "%s now %.3f\n", rig_strrmode(mode_value), width_value);
         return output; 
     } else {
         printf("get_current_mode: error = %s\n", rigerror(retcode));
@@ -54,7 +54,7 @@ char* get_current_vfo(void* input) {
     int retcode = rig_get_vfo(rig, &value); 
     if (retcode == RIG_OK) {
         char* output = malloc(40); 
-        snprintf(output, 40, "%s\n", rig_strvfo(value));
+        snprintf(output, 40, "VFO now %s\n", rig_strvfo(value));
         return output; 
     } else {
         printf("rig_get_vfo: error = %s\n", rigerror(retcode));
@@ -70,7 +70,7 @@ char* get_ptt(void* input) {
     int retcode = rig_get_ptt(rig, vfo, &value); 
     if (retcode == RIG_OK) {
         char* output = malloc(40); 
-        snprintf(output, 40, "%s\n", push_to_talk_converter(value));
+        snprintf(output, 40, "PTT now %s\n", push_to_talk_converter(value));
         return output; 
     } else {
         printf("rig_get_ptt: error = %s\n", rigerror(retcode));
@@ -157,7 +157,7 @@ char* get_current_rit_offset(void* input) {
     int retcode = rig_get_rit(rig, vfo, &value); 
     if (retcode == RIG_OK) {
         char* output = malloc(40); 
-        snprintf(output, 40, "%.3f\n", value);
+        snprintf(output, 40, "RIT now %.3f\n", value);
         return output; 
     } else {
         printf("rig_get_rit: error = %s\n", rigerror(retcode));
@@ -173,7 +173,7 @@ char* get_current_xit_offset(void* input) {
     int retcode = rig_get_xit(rig, vfo, &value); 
     if (retcode == RIG_OK) {
         char* output = malloc(40); 
-        snprintf(output, 40, "%.3f\n", value);
+        snprintf(output, 40, "XIT now %.3f\n", value);
         return output; 
     } else {
         printf("rig_get_xit: error = %s\n", rigerror(retcode));
@@ -189,7 +189,7 @@ char* get_current_tuning_step(void* input) {
     int retcode = rig_get_ts(rig, vfo, &value); 
     if (retcode == RIG_OK) {
         char* output = malloc(40); 
-        snprintf(output, 40, "%.3f\n", value);
+        snprintf(output, 40, "Tuning Step now %.3f\n", value);
         return output; 
     } else {
         printf("rig_get_ts: error = %s\n", rigerror(retcode));
@@ -205,7 +205,7 @@ char* get_current_CTCSS_sub_audible_tone(void* input) {
     int retcode = rig_get_ctcss_tone(rig, vfo, &value); 
     if (retcode == RIG_OK) {
         char* output = malloc(40); 
-        snprintf(output, 40, "%i\n", value);
+        snprintf(output, 40, "CTCSS tone now %i\n", value);
         return output; 
     } else {
         printf("rig_get_ctcss_tone: error = %s\n", rigerror(retcode));
@@ -221,7 +221,7 @@ char* get_current_encoding_digitally_coded_squelch_code(void* input) {
     int retcode = rig_get_dcs_code(rig, vfo, &value); 
     if (retcode == RIG_OK) {
         char* output = malloc(40); 
-        snprintf(output, 40, "%i\n", value);
+        snprintf(output, 40, "DCS code now %i\n", value);
         return output; 
     } else {
         printf("rig_get_dcs_code: error = %s\n", rigerror(retcode));
@@ -237,7 +237,7 @@ char* get_current_CTCSS_sub_audible_squelch_tone(void* input) {
     int retcode = rig_get_ctcss_sql(rig, vfo, &value); 
     if (retcode == RIG_OK) {
         char* output = malloc(40); 
-        snprintf(output, 40, "%i\n", value);
+        snprintf(output, 40, "CTCSS SQL now %i\n", value);
         return output; 
     } else {
         printf("rig_get_ctcss_sql: error = %s\n", rigerror(retcode));
@@ -253,7 +253,7 @@ char* get_current_continuous_tone_controlled_squelch_code(void* input) {
     int retcode = rig_get_dcs_sql(rig, vfo, &value); 
     if (retcode == RIG_OK) {
         char* output = malloc(40); 
-        snprintf(output, 40, "%i\n", value);
+        snprintf(output, 40, "DCS SQL now %i\n", value);
         return output; 
     } else {
         printf("rig_get_dcs_sql: error = %s\n", rigerror(retcode));
@@ -294,7 +294,7 @@ get_level(void* input) {
     char* output = malloc(40); 
     value_t* value; 
     rig_get_level (rig, vfo, setting_value, &value); 
-    snprintf(output, 40, "%d", value); 
+    snprintf(output, 40, "%s now %d", rig_strlevel(setting_value), value); 
     return output; 
 }
 
@@ -306,6 +306,6 @@ get_func(void* input) {
     char* output = malloc(40); 
     int status; 
     rig_get_func (rig, vfo, setting_value, &status); 	
-    snprintf(output, 40, "%d", status); 
+    snprintf(output, 40, "%s now %d", rig_strfunc(setting_value), status); 
     return output; 
 }
