@@ -7,6 +7,9 @@ int setFunctionType = 0;
 HamlibSetFunction currentInputFunctionOne;
 setting_t settingToChange; // This goes with Type Two
 
+rmode_t mode_list[] = {RIG_MODE_AM, RIG_MODE_CW, RIG_MODE_USB, RIG_MODE_LSB, RIG_MODE_RTTY, RIG_MODE_FM}; // This acts as a loop for the mode setting to go through. 
+
+
 int switchFuncMode(RIG* radioDetails, setting_t settingToGet) {
     int setting = rig_get_func(radioDetails, RIG_CURR_VFO, settingToGet); 
     if (setting) {
@@ -56,7 +59,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             void* inputArray[] = {radioDetails, RIG_VFO_A};
                             char* result = get_current_frequency(inputArray);
                             if (strcmp(result, "-1") != 0) {
-                                sprintf(stringForOutput, "VFO A Frequency %s", result);
+                                sprintf(stringForOutput, "%s", result);
                                 sendSpeakerOutput(stringForOutput);
                             } else {
                                 fprintf(stderr, "VFO A frequency error\n");
@@ -68,7 +71,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             void* inputArray[] = {radioDetails, RIG_VFO_B};
                             char* result = get_current_frequency(inputArray);
                             if (strcmp(result, "-1") != 0) {
-                                sprintf(stringForOutput, "VFO B Frequency %s", result);
+                                sprintf(stringForOutput, "%s", result);
                                 sendSpeakerOutput(stringForOutput);
                             } else {
                                 fprintf(stderr, "VFO B frequency error\n");
@@ -80,7 +83,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             void* inputArray[] = {radioDetails, RIG_VFO_C};
                             char* result = get_current_frequency(inputArray);
                             if (strcmp(result, "-1") != 0) {
-                                sprintf(stringForOutput, "VFO C Frequency %s", result);
+                                sprintf(stringForOutput, "%s", result);
                                 sendSpeakerOutput(stringForOutput);
                             } else {
                                 fprintf(stderr, "VFO C frequency error\n");
@@ -178,6 +181,8 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                     switch (keyInput->shiftAmount) {
                         case 0:
                             // Set Mode
+                            
+
                             break; 
                         case 1:
                             // Set Width
