@@ -60,7 +60,7 @@ char* set_vfo(void* input) {
 }
 
 char* push_to_talk_converter_for_set (ptt_t* input) {
-    if (input == RIG_PTT_ON) {
+    if (*input == RIG_PTT_ON) {
         return "on"; 
     } else if (input == RIG_PTT_OFF) {
         return "off"; 
