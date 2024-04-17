@@ -351,7 +351,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             } else {
                                 printf("Cannot get PTT Status\n"); 
                             }
-                            free(stringForOutput); 
+                            free(result); 
                             break;
                         case 1:
                             // Get Passband Tuning Input: RIG_LEVEL_PBT_IN
@@ -917,10 +917,9 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
                                 inputArray[2] = (void*) RIG_LEVEL_SWR; 
-                                char* stringForOutput = get_level(inputArray); 
-                                printf("%s", stringForOutput); 
-                                sendSpeakerOutput(stringForOutput); 
-                                free(stringForOutput); 
+                                result = get_level(inputArray); 
+                                sendSpeakerOutput(result); 
+                                free(result); 
                             } else {
                                 printf("Cannot get Standing Wave Ratio\n"); 
                             }
