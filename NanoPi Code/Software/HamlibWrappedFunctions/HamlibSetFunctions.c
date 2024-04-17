@@ -59,15 +59,13 @@ char* set_vfo(void* input) {
     }
 }
 
-char* push_to_talk_converter (ptt_t input) {
-    switch (input) {
-        case RIG_PTT_ON: 
-            return "on"; 
-        case RIG_PTT_OFF: 
-            return "off"; 
-        default: 
-            return "-1";
-
+char* push_to_talk_converter (ptt_t* input) {
+    if (input == RIG_PTT_ON) {
+        return "on"; 
+    } else if (input == RIG_PTT_OFF) {
+        return "off"; 
+    } else {
+        return "-1"; 
     }
 }
 
