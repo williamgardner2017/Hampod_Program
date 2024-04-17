@@ -451,20 +451,32 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                 if (!keyInput->isHold) {
                     switch (keyInput->shiftAmount) {
                         case 0:
-                            void* inputArray[] = {radioDetails, RIG_VFO_CURR, RIG_LEVEL_IF};
-                            // char* if_shift_result = get_level_or_func_wrapper(inputArray);
-                            // if (strcmp(if_shift_result, "-1") != 0) {
-                            //     sprintf(stringForOutput, "IF Shift: %s Hz", if_shift_result);
-                            //     sendSpeakerOutput(stringForOutput);
-                            // } else {
-                            //     fprintf(stderr, "Error retrieving IF shift value\n");
-                            // }
-                            // free(if_shift_result);
+                            // Get IF Shift: RIG_LEVEL_IF
+                            if (rig_has_get_func(radioDetails, RIG_LEVEL_IF)) {
+                                void* inputArray[] = {radioDetails, RIG_VFO_CURR, RIG_LEVEL_IF};
+                                char* stringForOutput = get_level(inputArray); 
+                                printf("%s", stringForOutput); 
+                                sendSpeakerOutput(stringForOutput); 
+                                free(stringForOutput); 
+                                
+                            } else {
+                                printf("Cannot get Squelch\n"); 
+                            }
                             break; 
                         case 1:
                             break; 
                         case 2:
                             // Get Squelch: RIG_LEVEL_SQL
+                            if (rig_has_get_func(radioDetails, RIG_LEVEL_SQL)) {
+                                void* inputArray[] = {radioDetails, RIG_VFO_CURR, RIG_LEVEL_SQL};
+                                char* stringForOutput = get_level(inputArray); 
+                                printf("%s", stringForOutput); 
+                                sendSpeakerOutput(stringForOutput); 
+                                free(stringForOutput); 
+                                
+                            } else {
+                                printf("Cannot get Squelch\n"); 
+                            }
                             break; 
                         default:
                             break;
