@@ -72,7 +72,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 sendSpeakerOutput(stringForOutput); 
                                 free(stringForOutput); 
                             } else {
-                                printf("Cannot get Compression status\n")
+                                printf("Cannot get Compression status\n"); 
                             }
                             break; 
                         case 2:
@@ -84,7 +84,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 sendSpeakerOutput(stringForOutput); 
                                 free(stringForOutput); 
                             } else {
-                                printf("Cannot get Tone Control status\n")
+                                printf("Cannot get Tone Control status\n"); 
                             }
                             break; 
                         default:
@@ -111,7 +111,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 sendSpeakerOutput(stringForOutput); 
                                 free(stringForOutput); 
                             } else {
-                                printf("Cannot set Compression status\n")
+                                printf("Cannot set Compression status\n"); 
                             }
                             break; 
                         case 2:
@@ -123,7 +123,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 sendSpeakerOutput(stringForOutput); 
                                 free(stringForOutput); 
                             } else {
-                                printf("Cannot set Tone Control status\n")
+                                printf("Cannot set Tone Control status\n"); 
                             }
                             break; 
                         default:
@@ -277,7 +277,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 sendSpeakerOutput(stringForOutput); 
                                 free(stringForOutput); 
                             } else {
-                                printf("Cannot get VFO lock status\n")
+                                printf("Cannot get VFO lock status\n"); 
                             }
                             break; 
                         default:
@@ -300,7 +300,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 sendSpeakerOutput(stringForOutput); 
                                 free(stringForOutput); 
                             } else {
-                                printf("Cannot set VFO lock status\n")
+                                printf("Cannot set VFO lock status\n"); 
                             }
                             break; 
                         default:
