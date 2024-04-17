@@ -277,10 +277,23 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 1:
                             // Set Passband Tuning Input: RIG_LEVEL_PBT_IN
-                            
+                            enteringValue = true;
+
+                            memset(inputValue, 0, sizeof(inputValue)); 
+                            sendSpeakerOutput("Enter value for Passband Tuning Input\n");
+                            settingToChange = RIG_LEVEL_PBT_IN; 
+                            HamlibSetFunction = set_level;
+                            int setFunctionType = 2; 
                             break; 
                         case 2:
                             // Set Passband Tuning Output: RIG_LEVEL_PBT_OUT
+                            enteringValue = true;
+
+                            memset(inputValue, 0, sizeof(inputValue)); 
+                            sendSpeakerOutput("Enter value for Passband Tuning Output\n");
+                            settingToChange = RIG_LEVEL_PBT_OUT; 
+                            HamlibSetFunction = set_level;
+                            int setFunctionType = 2; 
                             break; 
                         default:
                             break;
@@ -464,6 +477,17 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             }
                             break; 
                         case 1:
+                            // Get Automatic Gain Control: RIG_LEVEL_AGC
+                            if (rig_has_get_func(radioDetails, RIG_LEVEL_AGC)) {
+                                void* inputArray[] = {radioDetails, RIG_VFO_CURR, RIG_LEVEL_AGC};
+                                char* stringForOutput = get_level(inputArray); 
+                                printf("%s", stringForOutput); 
+                                sendSpeakerOutput(stringForOutput); 
+                                free(stringForOutput); 
+                                
+                            } else {
+                                printf("Cannot get Automatic Gain Control\n"); 
+                            }
                             break; 
                         case 2:
                             // Get Squelch: RIG_LEVEL_SQL
@@ -494,6 +518,14 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             int setFunctionType = 2; 
                             break;
                         case 1:
+                            // Set Automatic Gain Control: RIG_LEVEL_AGC
+                            enteringValue = true;
+
+                            memset(inputValue, 0, sizeof(inputValue)); 
+                            sendSpeakerOutput("Enter value for Automatic Gain Control\n");
+                            settingToChange = RIG_LEVEL_AGC; 
+                            HamlibSetFunction = set_level;
+                            int setFunctionType = 2; 
                             break; 
                         case 2:
                             // Set Squelch: RIG_LEVEL_SQL
