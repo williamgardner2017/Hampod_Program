@@ -1,3 +1,5 @@
+#include "MonitoringMode.h"
+
 int* stateOfMonitoring;
 
 void* monitoringModeRelay(KeyPress* keyInput, RIG* rig){
