@@ -245,7 +245,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             } else {
                                 printf("Error retrieving current VFO\n");
                             }
-                            free(current_vfo);
+                            free(result);
                             break; 
                         case 2:
                             break; 
