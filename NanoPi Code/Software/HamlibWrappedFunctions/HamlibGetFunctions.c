@@ -170,7 +170,7 @@ char* get_current_rit_offset(void* input) {
     int retcode = rig_get_rit(rig, vfo, &value); 
     if (retcode == RIG_OK) {
         char* output = malloc(40); 
-        snprintf(output, 40, "RIT now %.3f\n", value);
+        snprintf(output, 40, "RIT now %ld\n", value);
         return output; 
     } else {
         printf("rig_get_rit: error = %s\n", rigerror(retcode));
@@ -189,7 +189,7 @@ char* get_current_xit_offset(void* input) {
     int retcode = rig_get_xit(rig, vfo, &value); 
     if (retcode == RIG_OK) {
         char* output = malloc(40); 
-        snprintf(output, 40, "XIT now %.3f\n", value);
+        snprintf(output, 40, "XIT now %ld\n", value);
         return output; 
     } else {
         printf("rig_get_xit: error = %s\n", rigerror(retcode));
@@ -208,7 +208,7 @@ char* get_current_tuning_step(void* input) {
     int retcode = rig_get_ts(rig, vfo, &value); 
     if (retcode == RIG_OK) {
         char* output = malloc(40); 
-        snprintf(output, 40, "Tuning Step now %.3f\n", value);
+        snprintf(output, 40, "Tuning Step now %ld\n", value);
         return output; 
     } else {
         printf("rig_get_ts: error = %s\n", rigerror(retcode));
