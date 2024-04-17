@@ -536,7 +536,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             memset(inputValue, 0, sizeof(inputValue)); 
                             sendSpeakerOutput("Enter value for vox gain\n");
                             settingToChange = RIG_LEVEL_VOXGAIN; 
-                            HamlibSetFunction = set_if_shift;
+                            HamlibSetFunction = set_level;
                             int setFunctionType = 2; 
                             break; 
                         case 1:
@@ -584,7 +584,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             memset(inputValue, 0, sizeof(inputValue)); 
                             sendSpeakerOutput("Enter value for vox delay\n");
                             settingToChange = RIG_LEVEL_VOXDELAY; 
-                            HamlibSetFunction = set_if_shift;
+                            HamlibSetFunction = set_level;
                             int setFunctionType = 2; 
                             break; 
                         case 1:
