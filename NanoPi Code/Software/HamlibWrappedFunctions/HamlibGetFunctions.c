@@ -1,5 +1,7 @@
 char* get_current_transceive_mode(void* input) {
-    RIG* rig = (RIG*) input[0]; 
+    // RIG* rig = (RIG*) input[0]; 
+
+    RIG* rig = ((void**)input)[0];
 
     int value; 
     int retcode = rig_get_trn(rig, &value); 
@@ -71,15 +73,12 @@ char* get_current_vfo(void* input) {
 }
 
 char* push_to_talk_converter (ptt_t* input) {
-    
-    switch (input) {
-        case RIG_PTT_ON: 
-            return "PTT_ON"; 
-        case RIG_PTT_OFF: 
-            return "PTT_OFF"; 
-        default: 
-            return "-1";
-
+    if (input == RIG_PTT_ON) {
+        return "on"; 
+    } else if (input == RIG_PTT_OFF) {
+        return "off"; 
+    } else {
+        return "-1"; 
     }
 }
 
