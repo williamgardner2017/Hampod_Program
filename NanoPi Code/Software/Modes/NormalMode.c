@@ -292,6 +292,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             free(stringForOutput); 
                             break; 
                         case 2:
+                            // Get Noise Blanker: RIG_FUNC_NB
                             break; 
                         default:
                             break;
@@ -318,6 +319,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             currentInputFunction = set_rit_offset;
                             break; 
                         case 2:
+                            // Set Noise Blanker: RIG_FUNC_NB
                             break; 
                         default:
                             break;
@@ -352,6 +354,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             free(stringForOutput); 
                             break; 
                         case 2:
+                            // Get Squelch Control: RIG_FUNC_SQL 
                             break; 
                         default:
                             break;
@@ -378,6 +381,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             currentInputFunction = set_xit_offset;
                             break; 
                         case 2:
+                            // Set Squelch Control: RIG_FUNC_SQL 
                             break; 
                         default:
                             break;
@@ -401,6 +405,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 1:
                             break; 
                         case 2:
+                            // Get Squelch: RIG_LEVEL_SQL
                             break; 
                         default:
                             break;
@@ -416,6 +421,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 1:
                             break; 
                         case 2:
+                            // Set Squelch: RIG_LEVEL_SQL
                             break; 
                         default:
                             break;
