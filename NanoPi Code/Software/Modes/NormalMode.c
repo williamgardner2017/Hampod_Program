@@ -140,8 +140,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             inputArray = {radioDetails, RIG_VFO_A};
                             char* result = get_current_frequency(inputArray);
                             if (strcmp(result, "-1") != 0) {
-                                sprintf(stringForOutput, "%s", result);
-                                sendSpeakerOutput(stringForOutput);
+                                sendSpeakerOutput(result);
                             } else {
                                 fprintf(stderr, "VFO A frequency error\n");
                             }
@@ -152,8 +151,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             inputArray = {radioDetails, RIG_VFO_B};
                             char* result = get_current_frequency(inputArray);
                             if (strcmp(result, "-1") != 0) {
-                                sprintf(stringForOutput, "%s", result);
-                                sendSpeakerOutput(stringForOutput);
+                                sendSpeakerOutput(result);
                             } else {
                                 fprintf(stderr, "VFO B frequency error\n");
                             }
@@ -164,8 +162,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             inputArray = {radioDetails, RIG_VFO_C};
                             char* result = get_current_frequency(inputArray);
                             if (strcmp(result, "-1") != 0) {
-                                sprintf(stringForOutput, "%s", result);
-                                sendSpeakerOutput(stringForOutput);
+                                sendSpeakerOutput(result);
                             } else {
                                 fprintf(stderr, "VFO C frequency error\n");
                             }
