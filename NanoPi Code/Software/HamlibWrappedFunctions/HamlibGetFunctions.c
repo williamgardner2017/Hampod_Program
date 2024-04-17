@@ -73,9 +73,9 @@ char* get_current_vfo(void* input) {
 }
 
 char* push_to_talk_converter_for_get (ptt_t* input) {
-    if (input == RIG_PTT_ON) {
+    if (*input == RIG_PTT_ON) {
         return "on"; 
-    } else if (input == RIG_PTT_OFF) {
+    } else if (*input == RIG_PTT_OFF) {
         return "off"; 
     } else {
         return "-1"; 
