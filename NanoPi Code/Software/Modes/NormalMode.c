@@ -42,7 +42,7 @@ void enterValueModeTypeTwo(KeyPress* keyInput, RIG* radioDetails) {
         void** inputArray = malloc(sizeof(void*) * 4); 
         inputArray[0] = radioDetails; 
         inputArray[1] = &general_vfo; 
-        inputArray[2] = settingToChange; 
+        inputArray[2] = (void*)settingToChange; 
         inputArray[3] = (void*)(intptr_t)enteredValue; 
         // void** inputArray[] = {(void*) radioDetails, (void*) &general_vfo, (void*) settingToChange, (void*) enteredValue};
         char* result = currentInputFunction(inputArray);
