@@ -21,12 +21,16 @@ int switchFuncMode(RIG* radioDetails, setting_t settingToGet) {
 void enterValueModeTypeOne(KeyPress* keyInput, RIG* radioDetails) {
     double enteredValue = keypadInput(keyInput);
     if (enteredValue >= 0) {
-        void** inputArray[] = {(void*) radioDetails, (void*) &general_vfo, (void*) enteredValue};
+        void** inputArray = malloc(sizeof(void*) * 4); 
+        inputArray[0] = radioDetails; 
+        inputArray[1] = &general_vfo; 
+        inputArray[2] = (void*) enteredValue; 
+        // void** inputArray[] = {(void*) radioDetails, (void*) &general_vfo, (void*) enteredValue};
         char* result = currentInputFunction(inputArray);
         sendSpeakerOutput(result);
         free(result); 
-
         enteringValue = false; 
+        free(inputArray); 
     } else {
 
     }
@@ -35,11 +39,17 @@ void enterValueModeTypeOne(KeyPress* keyInput, RIG* radioDetails) {
 void enterValueModeTypeTwo(KeyPress* keyInput, RIG* radioDetails) {
     double enteredValue = keypadInput(keyInput);
     if (enteredValue >= 0) {
-        void** inputArray[] = {(void*) radioDetails, (void*) &general_vfo, (void*) settingToChange, (void*) enteredValue};
+        void** inputArray = malloc(sizeof(void*) * 4); 
+        inputArray[0] = radioDetails; 
+        inputArray[1] = &general_vfo; 
+        inputArray[2] = (void*) settingToChange; 
+        inputArray[3] = (void*) enteredValue; 
+        // void** inputArray[] = {(void*) radioDetails, (void*) &general_vfo, (void*) settingToChange, (void*) enteredValue};
         char* result = currentInputFunction(inputArray);
         sendSpeakerOutput(result);
         free(result); 
         enteringValue = false; 
+        free(inputArray); 
     } else {
 
     }
@@ -982,6 +992,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                 break; 
         }
     }
+    free(inputArray); 
     return NULL;
 }
 
