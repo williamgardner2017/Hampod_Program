@@ -78,7 +78,7 @@ char* set_ptt(void* input) {
     vfo_t vfo = *((vfo_t*)((void**)input)[1]);
     ptt_t value = *((ptt_t*)((void**)input)[2]);
 
-    int retcode = rig_set_ptt(rig, &vfo, &value); 
+    int retcode = rig_set_ptt(rig, &vfo, value); 
     if (retcode == RIG_OK) {
         char* output = malloc(100); 
         snprintf(output, 100, "PTT set to %s\n", push_to_talk_converter_for_set(&value));
@@ -274,7 +274,7 @@ char* set_level(void* input) {
     RIG* rig = ((void**)input)[0];
     vfo_t vfo = *((vfo_t*)((void**)input)[1]);
     setting_t setting_value = *((setting_t*)((void**)input)[2]); 
-    value_t value = *((value_t*)((void**)input)[3]); (void*)(intptr_t); 
+    value_t value = *((value_t*)((void**)input)[3]); 
 
 	char* output = malloc(100); 
     rig_set_level (rig, &vfo, setting_value, value); 
