@@ -225,7 +225,7 @@
 char* set_frequency(void* input) {
     RIG* rig = (RIG*) input[0]; 
     vfo_t vfo = *(vfo_t*) input[1]; 
-    freq_t value (freq_t) input[2]; 
+    freq_t value = (freq_t) input[2]; 
     
     int retcode = rig_set_freq(rig, vfo, value); 
     if (retcode == RIG_OK) {

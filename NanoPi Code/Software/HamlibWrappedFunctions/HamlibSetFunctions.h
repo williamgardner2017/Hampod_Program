@@ -1,7 +1,14 @@
 #ifndef HAMLIB_SET_FUNCTIONS_H
 #define HAMLIB_SET_FUNCTIONS_H
 
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include <math.h>
 #include <hamlib/rig.h>
+#include <hamlib/riglist.h>
 
 // typedef char* (*HamlibSetFunctionTypeOne)(RIG* rig, vfo_t vfo, shortfreq_t value);
 
