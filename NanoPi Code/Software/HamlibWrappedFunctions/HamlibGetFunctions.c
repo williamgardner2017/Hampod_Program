@@ -329,7 +329,7 @@ char* get_level(void* input) {
     char* output = malloc(40); 
     value_t value; 
     rig_get_level (rig, vfo, setting_value, &value); 
-    snprintf(output, 40, "%s now %d", rig_strlevel(setting_value), value); 
+    snprintf(output, 40, "%s now %d", rig_strlevel(setting_value), (int)value); 
     return output; 
 }
 
