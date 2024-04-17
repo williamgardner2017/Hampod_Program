@@ -602,7 +602,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             }
                             break; 
                         case 1:
-                            // Get Microphone Gain: RIG_LEVEL_MICGAIN
+                            // Get Audio Balance: RIG_LEVEL_BALANCE
                             break; 
                         case 2:
                             // Get Standing Wave Ratio: RIG_LEVEL_SWR
@@ -623,7 +623,14 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             int setFunctionType = 2; 
                             break; 
                         case 1:
-                            // Set Microphone Gain: RIG_LEVEL_MICGAIN
+                            // Set Audio Balance: RIG_LEVEL_BALANCE
+                            enteringValue = true;
+
+                            memset(inputValue, 0, sizeof(inputValue)); 
+                            sendSpeakerOutput("Enter value for Audio Balance\n");
+                            settingToChange = RIG_LEVEL_BALANCE; 
+                            HamlibSetFunction = set_level;
+                            int setFunctionType = 2; 
                             break; 
                         case 2:
                             // Set Standing Wave Ratio: RIG_LEVEL_SWR
