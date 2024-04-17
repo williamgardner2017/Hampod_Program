@@ -414,7 +414,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
 
                             memset(inputValue, 0, sizeof(inputValue)); 
                             sendSpeakerOutput("Enter value for Passband Tuning Input\n");
-                            settingToChange = (void*) RIG_LEVEL_PBT_IN; 
+                            settingToChange = RIG_LEVEL_PBT_IN; 
                             currentInputFunction = set_level;
                             setFunctionType = 2; 
                             break; 
@@ -424,7 +424,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
 
                             memset(inputValue, 0, sizeof(inputValue)); 
                             sendSpeakerOutput("Enter value for Passband Tuning Output\n");
-                            settingToChange = (void*) RIG_LEVEL_PBT_OUT; 
+                            settingToChange = RIG_LEVEL_PBT_OUT; 
                             currentInputFunction = set_level;
                             setFunctionType = 2; 
                             break; 
@@ -549,7 +549,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             // inputArray = {radioDetails, &general_vfo};
                             inputArray[0] = radioDetails; 
                             inputArray[1] = &general_vfo; 
-                            char* resultv = get_current_xit_offset(inputArray); 
+                            result = get_current_xit_offset(inputArray); 
                             if (strcmp(result, "-1") != 0) {
                                 sendSpeakerOutput(result); 
                             } else {
