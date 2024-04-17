@@ -327,7 +327,7 @@ char* get_level(void* input) {
     setting_t setting_value = *((setting_t*)((void**)input)[2]); 
     
     char* output = malloc(40); 
-    value_t* value; 
+    value_t value; 
     rig_get_level (rig, vfo, setting_value, &value); 
     snprintf(output, 40, "%s now %d", rig_strlevel(setting_value), value); 
     return output; 
