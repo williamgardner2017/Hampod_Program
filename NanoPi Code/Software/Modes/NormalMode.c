@@ -483,9 +483,23 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 1:
                             // Set Audio Frequency (AF): RIG_LEVEL_AF
+                            enteringValue = true;
+
+                            memset(inputValue, 0, sizeof(inputValue)); 
+                            sendSpeakerOutput("Enter value for vox gain\n");
+                            settingToChange = RIG_LEVEL_AF; 
+                            HamlibSetFunction = set_level;
+                            int setFunctionType = 2; 
                             break; 
                         case 2:
                             // Set Radio Frequency (RF): RIG_LEVEL_RF
+                            enteringValue = true;
+
+                            memset(inputValue, 0, sizeof(inputValue)); 
+                            sendSpeakerOutput("Enter value for radio frequency\n");
+                            settingToChange = RIG_LEVEL_RF; 
+                            HamlibSetFunction = set_level;
+                            int setFunctionType = 2; 
                             break; 
                         default:
                             break;
