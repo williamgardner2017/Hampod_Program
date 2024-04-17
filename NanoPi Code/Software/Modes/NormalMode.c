@@ -435,7 +435,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 free(stringForOutput); 
                                 
                             } else {
-                                printf("Cannot get vox\n"); 
+                                printf("Cannot get VOX Status\n"); 
                             }
                             break; 
                         case 1:
@@ -448,7 +448,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 free(stringForOutput); 
                                 
                             } else {
-                                printf("Cannot get audio frequency\n"); 
+                                printf("Cannot get Audio Frequency\n"); 
                             }
                             break; 
                         case 2:
@@ -461,7 +461,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 free(stringForOutput); 
                                 
                             } else {
-                                printf("Cannot get radio frequency\n"); 
+                                printf("Cannot get Radio Frequency\n"); 
                             }
                             break; 
                         default:
@@ -478,7 +478,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 sendSpeakerOutput(stringForOutput); 
                                 free(stringForOutput); 
                             } else {
-                                printf("Cannot set vox\n"); 
+                                printf("Cannot set VOX Status\n"); 
                             }
                             break; 
                         case 1:
