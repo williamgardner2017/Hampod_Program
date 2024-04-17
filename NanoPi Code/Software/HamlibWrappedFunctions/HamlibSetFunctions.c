@@ -520,7 +520,6 @@ char* set_func(void* input) {
     value_t value = *((value_t*)((void**)input)[3]); 
 
 	char* output = malloc(100); 
-    int value = (int) input; 
     rig_set_func (rig, vfo, setting_value, value); 	
     snprintf(output, 100, "%s set to %d", rig_strfunc(setting_value), value); 
     return output; 
