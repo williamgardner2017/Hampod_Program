@@ -18,7 +18,7 @@ int switchFuncMode(RIG* radioDetails, setting_t settingToGet) {
     return 1; 
 }
 
-void enterValueModeTypeOne(KeyPress* keyInput, RIG* radioDetails, SetValueFunctionTypeOne setValueFunction) {
+void enterValueModeTypeOne(KeyPress* keyInput, RIG* radioDetails) {
     double enteredValue = keypadInput(keyInput);
     if (enteredValue >= 0) {
         inputArray = {radioDetails, &general_vfo, enteredValue};
@@ -32,7 +32,7 @@ void enterValueModeTypeOne(KeyPress* keyInput, RIG* radioDetails, SetValueFuncti
     }
 }
 
-void enterValueModeTypeTwo(KeyPress* keyInput, RIG* radioDetail; SetValueFunctionTypeTwo setValueFunction) {
+void enterValueModeTypeTwo(KeyPress* keyInput, RIG* radioDetail) {
     double enteredValue = keypadInput(keyInput);
     if (enteredValue >= 0) {
         inputArray = {radioDetails, &general_vfo, settingToChange, enteredValue};
@@ -883,10 +883,10 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
     }else{
         switch(currentInputType) {
             case 1: 
-                enterValueModeTypeOne(keyInput, radioDetails, currentInputFunction);
+                enterValueModeTypeOne(keyInput, radioDetails);
                 break; 
             case 2: 
-                enterValueModeTypeTwo(keyInput, radioDetails, currentInputFunction);
+                enterValueModeTypeTwo(keyInput, radioDetails);
                 break; 
             case 3: 
                 // enterValueMode(keyInput, radioDetails, currentInputFunctionTypeThree);
