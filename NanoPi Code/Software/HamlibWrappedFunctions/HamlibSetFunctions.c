@@ -223,9 +223,13 @@
 // }
 
 char* set_frequency(void* input) {
-    RIG* rig = (RIG*) input[0]; 
-    vfo_t vfo = *(vfo_t*) input[1]; 
-    freq_t value = (freq_t) input[2]; 
+    // RIG* rig = (RIG*) input[0]; 
+    // vfo_t vfo = *(vfo_t*) input[1]; 
+    // freq_t value = (freq_t) input[2]; 
+
+    RIG* rig = ((void**)input)[0];
+    vfo_t vfo = *((vfo_t*)((void**)input)[1]);
+    freq_t value = *((freq_t*)((void**)input)[2]);
     
     int retcode = rig_set_freq(rig, vfo, value); 
     if (retcode == RIG_OK) {
@@ -239,10 +243,16 @@ char* set_frequency(void* input) {
 }
 
 char* set_mode(void* input) {
-    RIG* rig = (RIG*) input[0]; 
-    vfo_t vfo = *(vfo_t*) input[1]; 
-    rmode_t mode_value = *(rmode_t*) input[2]; 
-    pbwidth_t width_value = *(pbwidth_t*) input[3]; 
+    // RIG* rig = (RIG*) input[0]; 
+    // vfo_t vfo = *(vfo_t*) input[1]; 
+    // rmode_t mode_value = *(rmode_t*) input[2]; 
+    // pbwidth_t width_value = *(pbwidth_t*) input[3]; 
+
+    RIG* rig = ((void**)input)[0];
+    vfo_t vfo = *((vfo_t*)((void**)input)[1]);
+    rmode_t mode_value = *((rmode_t*)((void**)input)[2]);
+    pbwidth_t width_value = *((pbwidth_t*)((void**)input)[3]);
+
 
     int retcode = rig_set_mode(rig, vfo, mode_value, width_value); 	
     if (retcode == RIG_OK) {
@@ -256,8 +266,11 @@ char* set_mode(void* input) {
 }
 
 char* set_vfo(void* input) {
-    RIG* rig = (RIG*) input[0]; 
-    value_t value = *(value_t*) input[1]; 
+    // RIG* rig = (RIG*) input[0]; 
+    // vfo_t value = *(vfo_t*) input[1]; 
+
+    RIG* rig = ((void**)input)[0];
+    vfo_t value = *((vfo_t*)((void**)input)[1]);
 
     int retcode = rig_set_vfo(rig, value); 
     if (retcode == RIG_OK) {
@@ -271,9 +284,13 @@ char* set_vfo(void* input) {
 }
 
 char* set_ptt(void* input) {
-    RIG* rig = (RIG*) input[0]; 
-    vfo_t vfo = *(vfo_t*) input[1]; 
-    ptt_t value = *(ptt_t*) input[2]; 
+    // RIG* rig = (RIG*) input[0]; 
+    // vfo_t vfo = *(vfo_t*) input[1]; 
+    // ptt_t value = *(ptt_t*) input[2]; 
+
+    RIG* rig = ((void**)input)[0];
+    vfo_t vfo = *((vfo_t*)((void**)input)[1]);
+    ptt_t value = *((ptt_t*)((void**)input)[2]);
 
     int retcode = rig_set_ptt(rig, vfo, value); 
     if (retcode == RIG_OK) {
@@ -316,9 +333,13 @@ char* push_to_talk_converter (ptt_t input) {
 // }
 
 char* set_rit_offset(void* input) {
-`   RIG* rig = (RIG*) input[0]; 
-    vfo_t vfo = *(vfo_t*) input[1]; 
-    shortfreq_t value = *(shortfreq_t*) input[2]; 
+    // RIG* rig = (RIG*) input[0]; 
+    // vfo_t vfo = *(vfo_t*) input[1]; 
+    // shortfreq_t value = *(shortfreq_t*) input[2]; 
+
+    RIG* rig = ((void**)input)[0];
+    vfo_t vfo = *((vfo_t*)((void**)input)[1]);
+    shortfreq_t value = *((shortfreq_t*)((void**)input)[2]);
 
     int retcode = rig_set_rit(rig, vfo, value); 
     if (retcode == RIG_OK) {
@@ -332,9 +353,13 @@ char* set_rit_offset(void* input) {
 }
 
 char* set_xit_offset(void* input) {
-    RIG* rig = (RIG*) input[0]; 
-    vfo_t vfo = *(vfo_t*) input[1]; 
-    shortfreq_t value = *(shortfreq_t*) input[2]; 
+    // RIG* rig = (RIG*) input[0]; 
+    // vfo_t vfo = *(vfo_t*) input[1]; 
+    // shortfreq_t value = *(shortfreq_t*) input[2]; 
+
+    RIG* rig = ((void**)input)[0];
+    vfo_t vfo = *((vfo_t*)((void**)input)[1]);
+    shortfreq_t value = *((shortfreq_t*)((void**)input)[2]);
 
     int retcode = rig_set_xit(rig, vfo, value); 
     if (retcode == RIG_OK) {
@@ -348,9 +373,13 @@ char* set_xit_offset(void* input) {
 }
 
 char* set_tuning_step(void* input) {
-    RIG* rig = (RIG*) input[0]; 
-    vfo_t vfo = *(vfo_t*) input[1]; 
-    shortfreq_t value = *(shortfreq_t*) input[2]; 
+    // RIG* rig = (RIG*) input[0]; 
+    // vfo_t vfo = *(vfo_t*) input[1]; 
+    // shortfreq_t value = *(shortfreq_t*) input[2]; 
+
+    RIG* rig = ((void**)input)[0];
+    vfo_t vfo = *((vfo_t*)((void**)input)[1]);
+    shortfreq_t value = *((shortfreq_t*)((void**)input)[2]);
 
     int retcode = rig_set_ts(rig, vfo, value); 
     if (retcode == RIG_OK) {
@@ -463,10 +492,15 @@ char* set_current_continuous_tone_controlled_squelch_code(void* input) {
 // }
 
 char* set_level(void* input) {
-    RIG* rig = (RIG*) input[0]; 
-    vfo_t vfo = *(vfo_t*) input[1]; 
-    setting_t setting_value = *(setting_t*) input[2]; 
-    value_t value = *(value_t*) input[3]; 
+    // RIG* rig = (RIG*) input[0]; 
+    // vfo_t vfo = *(vfo_t*) input[1]; 
+    // setting_t setting_value = *(setting_t*) input[2]; 
+    // value_t value = *(value_t*) input[3]; 
+
+    RIG* rig = ((void**)input)[0];
+    vfo_t vfo = *((vfo_t*)((void**)input)[1]);
+    setting_t setting_value = *((setting_t*)((void**)input)[2]); 
+    value_t value = *((value_t*)((void**)input)[3]); 
 
 	char* output = malloc(100); 
     rig_set_level (rig, vfo, setting_value, value); 
@@ -475,10 +509,15 @@ char* set_level(void* input) {
 }
 
 char* set_func(void* input) {
-    RIG* rig = (RIG*) input[0]; 
-    vfo_t vfo = *(vfo_t*) input[1]; 
-    setting_t setting_value = *(setting_t*) input[2]; 
-    value_t value = *(value_t*) input[3]; 
+    // RIG* rig = (RIG*) input[0]; 
+    // vfo_t vfo = *(vfo_t*) input[1]; 
+    // setting_t setting_value = *(setting_t*) input[2]; 
+    // value_t value = *(value_t*) input[3]; 
+
+    RIG* rig = ((void**)input)[0];
+    vfo_t vfo = *((vfo_t*)((void**)input)[1]);
+    setting_t setting_value = *((setting_t*)((void**)input)[2]); 
+    value_t value = *((value_t*)((void**)input)[3]); 
 
 	char* output = malloc(100); 
     int value = (int) input; 
