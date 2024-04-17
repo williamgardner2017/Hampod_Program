@@ -62,6 +62,19 @@ char* get_current_vfo(void* input) {
     }
 }
 
+char* push_to_talk_converter (ptt_t* input) {
+    
+    switch (input) {
+        case RIG_PTT_ON: 
+            return "PTT_ON"; 
+        case RIG_PTT_OFF: 
+            return "PTT_OFF"; 
+        default: 
+            return "-1";
+
+    }
+}
+
 char* get_ptt(void* input) {
     RIG* rig = (RIG*) input[0]; 
     vfo_t vfo = *(vfo_t*) input[1]; 
@@ -75,19 +88,6 @@ char* get_ptt(void* input) {
     } else {
         printf("rig_get_ptt: error = %s\n", rigerror(retcode));
         return "-1"; 
-    }
-}
-
-char* push_to_talk_converter (ptt_t* input) {
-    
-    switch (input) {
-        case RIG_PTT_ON: 
-            return "PTT_ON"; 
-        case RIG_PTT_OFF: 
-            return "PTT_OFF"; 
-        default: 
-            return "-1";
-
     }
 }
 
