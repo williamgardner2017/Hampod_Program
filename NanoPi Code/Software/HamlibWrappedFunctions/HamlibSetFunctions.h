@@ -23,13 +23,15 @@
 
 typedef char* (*HamlibSetFunction)(void* input);
 
+char* set_vfo(void* input); 
+char* set_ptt(void* input); 
 char* set_xit_offset(void* input);
 char* set_rit_offset(void* input); 
 
 char* set_level(void* input); 
 char* set_func(void* input); 
 
-char* set_ptt(void* input); 
+
 
 #ifndef SHAREDLIB
 #include "HamlibSetFunctions.c"
