@@ -97,7 +97,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             sendSpeakerOutput("Enter value for Noise Reduction\n");
                             settingToChange = RIG_LEVEL_NR; 
                             HamlibSetFunction = set_level;
-                            int setFunctionType = 2; 
+                            setFunctionType = 2; 
                             break; 
                         case 1:
                             // Set Compression: RIG_FUNC_COMP
@@ -328,7 +328,6 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 printf("%s", stringForOutput); 
                                 sendSpeakerOutput(stringForOutput); 
                                 free(stringForOutput); 
-                                
                             } else {
                                 printf("Cannot get Passband Tuning Input\n"); 
                             }
@@ -371,7 +370,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             sendSpeakerOutput("Enter value for Passband Tuning Input\n");
                             settingToChange = RIG_LEVEL_PBT_IN; 
                             HamlibSetFunction = set_level;
-                            int setFunctionType = 2; 
+                            setFunctionType = 2; 
                             break; 
                         case 2:
                             // Set Passband Tuning Output: RIG_LEVEL_PBT_OUT
@@ -381,7 +380,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             sendSpeakerOutput("Enter value for Passband Tuning Output\n");
                             settingToChange = RIG_LEVEL_PBT_OUT; 
                             HamlibSetFunction = set_level;
-                            int setFunctionType = 2; 
+                            setFunctionType = 2; 
                             break; 
                         default:
                             break;
@@ -450,6 +449,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             memset(inputValue, 0, sizeof(inputValue)); 
                             sendSpeakerOutput("Enter value for RIT Offset\n");
                             currentInputFunction = set_rit_offset;
+                            setFunctionType = 1; 
                             break; 
                         case 2:
                             // Set Noise Blanker: RIG_FUNC_NB
@@ -530,6 +530,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             memset(inputValue, 0, sizeof(inputValue)); 
                             sendSpeakerOutput("Enter value for XIT Offset\n");
                             currentInputFunction = set_xit_offset;
+                            setFunctionType = 1; 
                             break; 
                         case 2:
                             // Set Squelch Control: RIG_FUNC_SQL 
@@ -603,7 +604,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             sendSpeakerOutput("Enter value for IF Shift\n");
                             settingToChange = RIG_LEVEL_IF; 
                             HamlibSetFunction = set_level;
-                            int setFunctionType = 2; 
+                            setFunctionType = 2; 
                             break;
                         case 1:
                             // Set Automatic Gain Control: RIG_LEVEL_AGC
@@ -613,7 +614,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             sendSpeakerOutput("Enter value for Automatic Gain Control\n");
                             settingToChange = RIG_LEVEL_AGC; 
                             HamlibSetFunction = set_level;
-                            int setFunctionType = 2; 
+                            setFunctionType = 2; 
                             break; 
                         case 2:
                             // Set Squelch: RIG_LEVEL_SQL
@@ -623,7 +624,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             sendSpeakerOutput("Enter value for Squelch\n");
                             settingToChange = RIG_LEVEL_SQL; 
                             HamlibSetFunction = set_level;
-                            int setFunctionType = 2; 
+                            setFunctionType = 2; 
                             break; 
                         default:
                             break;
@@ -697,7 +698,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             sendSpeakerOutput("Enter value for Audio Frequency\n");
                             settingToChange = RIG_LEVEL_AF; 
                             HamlibSetFunction = set_level;
-                            int setFunctionType = 2; 
+                            setFunctionType = 2; 
                             break; 
                         case 2:
                             // Set Radio Frequency (RF): RIG_LEVEL_RF
@@ -707,7 +708,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             sendSpeakerOutput("Enter value for Radio Frequency\n");
                             settingToChange = RIG_LEVEL_RF; 
                             HamlibSetFunction = set_level;
-                            int setFunctionType = 2; 
+                            setFunctionType = 2; 
                             break; 
                         default:
                             break;
@@ -766,7 +767,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             sendSpeakerOutput("Enter value for VOX Gain\n");
                             settingToChange = RIG_LEVEL_VOXGAIN; 
                             HamlibSetFunction = set_level;
-                            int setFunctionType = 2; 
+                            setFunctionType = 2; 
                             break; 
                         case 1:
                             // Set Microphone Gain: RIG_LEVEL_MICGAIN
@@ -776,7 +777,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             sendSpeakerOutput("Enter value for Microphone Gain\n");
                             settingToChange = RIG_LEVEL_MICGAIN; 
                             HamlibSetFunction = set_level;
-                            int setFunctionType = 2; 
+                            setFunctionType = 2; 
                             break; 
                         case 2:
                             // Set RF Power: RIG_LEVEL_RFPOWER
@@ -786,7 +787,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             sendSpeakerOutput("Enter value for RF Power\n");
                             settingToChange = RIG_LEVEL_RFPOWER; 
                             HamlibSetFunction = set_level;
-                            int setFunctionType = 2; 
+                            setFunctionType = 2; 
                             break; 
                         default:
                             break;
@@ -856,7 +857,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             sendSpeakerOutput("Enter value for Audio Balance\n");
                             settingToChange = RIG_LEVEL_BALANCE; 
                             HamlibSetFunction = set_level;
-                            int setFunctionType = 2; 
+                            setFunctionType = 2; 
                             break; 
                         case 2:
                             // Set Standing Wave Ratio: RIG_LEVEL_SWR
@@ -866,7 +867,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             sendSpeakerOutput("Enter value for Standing Wave Ratio\n");
                             settingToChange = RIG_LEVEL_SWR; 
                             HamlibSetFunction = set_level;
-                            int setFunctionType = 2; 
+                            setFunctionType = 2; 
                             break; 
                         default:
                             break;
