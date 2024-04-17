@@ -239,8 +239,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 if (strcmp(result, "-1") == 0) {
                                     printf("Failed to set any VFO after 3 attempts.\n");
                                 } else {
-                                    printf("%s", current_vfo); 
-                                    sendSpeakerOutput(current_vfo); 
+                                    sendSpeakerOutput(result); 
                                 }
                                 free(result);
                             } else {
@@ -970,7 +969,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                 break;
         }
     }else{
-        switch(currentInputType) {
+        switch(setFunctionType) {
             case 1: 
                 enterValueModeTypeOne(keyInput, radioDetails);
                 break; 
