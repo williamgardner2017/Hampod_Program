@@ -72,7 +72,7 @@ char* get_current_vfo(void* input) {
     }
 }
 
-char* push_to_talk_converter (ptt_t* input) {
+char* push_to_talk_converter_for_get (ptt_t* input) {
     if (input == RIG_PTT_ON) {
         return "on"; 
     } else if (input == RIG_PTT_OFF) {
@@ -93,7 +93,7 @@ char* get_ptt(void* input) {
     int retcode = rig_get_ptt(rig, vfo, &value); 
     if (retcode == RIG_OK) {
         char* output = malloc(40); 
-        snprintf(output, 40, "PTT now %s\n", push_to_talk_converter(value));
+        snprintf(output, 40, "PTT now %s\n", push_to_talk_converter_for_get(value));
         return output; 
     } else {
         printf("rig_get_ptt: error = %s\n", rigerror(retcode));
