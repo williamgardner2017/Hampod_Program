@@ -562,6 +562,13 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 1:
                             // Set Microphone Gain: RIG_LEVEL_MICGAIN
+                            enteringValue = true;
+
+                            memset(inputValue, 0, sizeof(inputValue)); 
+                            sendSpeakerOutput("Enter value for Microphone Gain\n");
+                            settingToChange = RIG_LEVEL_MICGAIN; 
+                            HamlibSetFunction = set_level;
+                            int setFunctionType = 2; 
                             break; 
                         case 2:
                             // Set RF Power: RIG_LEVEL_RFPOWER
