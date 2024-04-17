@@ -481,6 +481,13 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 2:
                             // Set Squelch: RIG_LEVEL_SQL
+                            enteringValue = true;
+
+                            memset(inputValue, 0, sizeof(inputValue)); 
+                            sendSpeakerOutput("Enter value for Squelch\n");
+                            settingToChange = RIG_LEVEL_SQL; 
+                            HamlibSetFunction = set_level;
+                            int setFunctionType = 2; 
                             break; 
                         default:
                             break;
