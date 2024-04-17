@@ -615,6 +615,15 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 2:
                             // Get Standing Wave Ratio: RIG_LEVEL_SWR
+                            if (rig_has_get_func(radioDetails, RIG_LEVEL_SWR)) {
+                                void* inputArray[] = {radioDetails, RIG_VFO_CURR, RIG_LEVEL_SWR};
+                                char* stringForOutput = get_level(inputArray); 
+                                printf("%s", stringForOutput); 
+                                sendSpeakerOutput(stringForOutput); 
+                                free(stringForOutput); 
+                            } else {
+                                printf("Cannot get Standing Wave Ratio\n"); 
+                            }
                             break; 
                         default:
                             break;
