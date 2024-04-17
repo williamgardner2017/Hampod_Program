@@ -276,7 +276,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 sendSpeakerOutput(stringForOutput); 
                                 free(stringForOutput); 
                             } else {
-                                printf("Cannot get RIT status\n"); 
+                                printf("Cannot get RIT Status\n"); 
                             }
                             break; 
                         case 1:
@@ -287,12 +287,21 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 printf("%s", stringForOutput); 
                                 sendSpeakerOutput(stringForOutput); 
                             } else {
-                                printf("Cannot get RIT offset\n"); 
+                                printf("Cannot get RIT Offset\n"); 
                             }
                             free(stringForOutput); 
                             break; 
                         case 2:
                             // Get Noise Blanker: RIG_FUNC_NB
+                            if (rig_has_get_func(radioDetails, RIG_FUNC_NB)) {
+                                void* inputArray[] = {radioDetails, RIG_VFO_CURR, RIG_FUNC_NB};
+                                char* stringForOutput = get_level(inputArray); 
+                                printf("%s", stringForOutput); 
+                                sendSpeakerOutput(stringForOutput); 
+                                free(stringForOutput); 
+                            } else {
+                                printf("Cannot get Noise Blanker\n"); 
+                            }
                             break; 
                         default:
                             break;
@@ -308,18 +317,27 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 sendSpeakerOutput(stringForOutput); 
                                 free(stringForOutput); 
                             } else {
-                                printf("Cannot set RIT status\n"); 
+                                printf("Cannot set RIT Status\n"); 
                             }
                             break; 
                         case 1:
                             // Set RIT Offset
                             enteringValue = true;
                             memset(inputValue, 0, sizeof(inputValue)); 
-                            sendSpeakerOutput("Enter value for RIT offset\n");
+                            sendSpeakerOutput("Enter value for RIT Offset\n");
                             currentInputFunction = set_rit_offset;
                             break; 
                         case 2:
                             // Set Noise Blanker: RIG_FUNC_NB
+                            if (rig_has_set_func(radioDetails, RIG_FUNC_NB)) {
+                                int setting = switchFuncMode(radioDetails, RIG_FUNC_NB); 
+                                void* inputArray[] = {radioDetails, RIG_VFO_CURR, RIG_FUNC_NB, setting}; 
+                                char* stringForOutput = set_func(inputArray); 
+                                sendSpeakerOutput(stringForOutput); 
+                                free(stringForOutput); 
+                            } else {
+                                printf("Cannot set Noise Blanker\n"); 
+                            }
                             break; 
                         default:
                             break;
@@ -338,7 +356,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 sendSpeakerOutput(stringForOutput); 
                                 free(stringForOutput); 
                             } else {
-                                printf("Cannot get XIT status\n"); 
+                                printf("Cannot get XIT Status\n"); 
                             }
                             break; 
                         case 1:
@@ -349,12 +367,21 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 printf("%s", stringForOutput); 
                                 sendSpeakerOutput(stringForOutput); 
                             } else {
-                                printf("Cannot get XIT offset\n"); 
+                                printf("Cannot get XIT Offset\n"); 
                             }
                             free(stringForOutput); 
                             break; 
                         case 2:
-                            // Get Squelch Control: RIG_FUNC_SQL 
+                            // Get Squelch Control: RIG_FUNC_SQL
+                            if (rig_has_get_func(radioDetails, RIG_FUNC_SQL)) {
+                                void* inputArray[] = {radioDetails, RIG_VFO_CURR, RIG_FUNC_SQL};
+                                char* stringForOutput = get_level(inputArray); 
+                                printf("%s", stringForOutput); 
+                                sendSpeakerOutput(stringForOutput); 
+                                free(stringForOutput); 
+                            } else {
+                                printf("Cannot get Squelch Control\n"); 
+                            }
                             break; 
                         default:
                             break;
@@ -370,18 +397,27 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 sendSpeakerOutput(stringForOutput); 
                                 free(stringForOutput); 
                             } else {
-                                printf("Cannot set XIT status\n"); 
+                                printf("Cannot set XIT Status\n"); 
                             }
                             break; 
                         case 1:
                             // Set XIT Offset
                             enteringValue = true;
                             memset(inputValue, 0, sizeof(inputValue)); 
-                            sendSpeakerOutput("Enter value for XIT offset\n");
+                            sendSpeakerOutput("Enter value for XIT Offset\n");
                             currentInputFunction = set_xit_offset;
                             break; 
                         case 2:
                             // Set Squelch Control: RIG_FUNC_SQL 
+                            if (rig_has_set_func(radioDetails, RIG_FUNC_SQL)) {
+                                int setting = switchFuncMode(radioDetails, RIG_FUNC_SQL); 
+                                void* inputArray[] = {radioDetails, RIG_VFO_CURR, RIG_FUNC_SQL, setting}; 
+                                char* stringForOutput = set_func(inputArray); 
+                                sendSpeakerOutput(stringForOutput); 
+                                free(stringForOutput); 
+                            } else {
+                                printf("Cannot set Squelch Control\n"); 
+                            }
                             break; 
                         default:
                             break;
