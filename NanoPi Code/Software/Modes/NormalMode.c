@@ -10,7 +10,8 @@ setting_t settingToChange; // This goes with Type Two
 vfo_t general_vfo = RIG_VFO_CURR;
 
 int switchFuncMode(RIG* radioDetails, setting_t settingToGet) {
-    int setting = rig_get_func(radioDetails, &general_vfo, settingToGet); 
+    int setting; 
+    rig_get_func(radioDetails, &general_vfo, settingToGet, &setting); 
     if (setting) {
         return 0; 
     }
@@ -62,7 +63,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
 
                                 result = get_level(inputArray); 
                                 sendSpeakerOutput(result); 
-                                free(stringForOutput); 
+                                free(result); 
                             } else {
                                 printf("Cannot get Noise Reduction\n"); 
                             }
