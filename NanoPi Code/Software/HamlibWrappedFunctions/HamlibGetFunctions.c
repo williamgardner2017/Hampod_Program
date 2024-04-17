@@ -286,7 +286,7 @@ char* get_current_continuous_tone_controlled_squelch_code(void* input) {
 //     }
 // }
 
-get_level(void* input) {
+char* get_level(void* input) {
     RIG* rig = (RIG*) input[0]; 
     vfo_t vfo = *(vfo_t*) input[1]; 
     setting_t setting_value = *(setting_t*) input[2]; 
@@ -298,7 +298,7 @@ get_level(void* input) {
     return output; 
 }
 
-get_func(void* input) {
+char* get_func(void* input) {
     RIG* rig = (RIG*) input[0]; 
     vfo_t vfo = *(vfo_t*) input[1]; 
     setting_t setting_value = *(setting_t*) input[2]; 
