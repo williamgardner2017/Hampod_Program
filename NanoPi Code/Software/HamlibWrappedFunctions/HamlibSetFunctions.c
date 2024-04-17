@@ -404,9 +404,13 @@ char* set_current_encoding_digitally_coded_squelch_code(void* input) {
 }
 
 char* set_current_CTCSS_sub_audible_squelch_tone(void* input) {
-    RIG* rig = (RIG*) input[0]; 
-    vfo_t vfo = *(vfo_t*) input[1]; 
-    tone_t value = *(tone_t*) input[2]; 
+    // RIG* rig = (RIG*) input[0]; 
+    // vfo_t vfo = *(vfo_t*) input[1]; 
+    // tone_t value = *(tone_t*) input[2]; 
+
+    RIG* rig = ((void**)input)[0];
+    vfo_t vfo = *((vfo_t*)((void**)input)[1]);
+    tone_t value = *((tone_t*)((void**)input)[2]);
 
     int retcode = rig_set_ctcss_sql(rig, vfo, value); 
     if (retcode == RIG_OK) {
@@ -420,9 +424,13 @@ char* set_current_CTCSS_sub_audible_squelch_tone(void* input) {
 }
 
 char* set_current_continuous_tone_controlled_squelch_code(void* input) {
-    RIG* rig = (RIG*) input[0]; 
-    vfo_t vfo = *(vfo_t*) input[1]; 
-    tone_t value = *(tone_t*) input[2]; 
+    // RIG* rig = (RIG*) input[0]; 
+    // vfo_t vfo = *(vfo_t*) input[1]; 
+    // tone_t value = *(tone_t*) input[2]; 
+
+    RIG* rig = ((void**)input)[0];
+    vfo_t vfo = *((vfo_t*)((void**)input)[1]);
+    tone_t value = *((tone_t*)((void**)input)[2]);
 
     int retcode = rig_set_dcs_sql(rig, vfo, value); 
     if (retcode == RIG_OK) {
