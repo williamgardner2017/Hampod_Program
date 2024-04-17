@@ -472,10 +472,14 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                 } else {
                     switch (keyInput->shiftAmount) {
                         case 0:
+                            // Set IF Shift: RIG_LEVEL_IF
                             enteringValue = true;
+
                             memset(inputValue, 0, sizeof(inputValue)); 
-                            sendSpeakerOutput("Enter value for IF shift (Hz)");
-                            currentInputFunction = set_if_shift;
+                            sendSpeakerOutput("Enter value for IF Shift\n");
+                            settingToChange = RIG_LEVEL_IF; 
+                            HamlibSetFunction = set_level;
+                            int setFunctionType = 2; 
                             break;
                         case 1:
                             break; 
