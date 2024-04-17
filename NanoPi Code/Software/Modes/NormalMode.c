@@ -440,9 +440,29 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 1:
                             // Get Audio Frequency (AF): RIG_LEVEL_AF
+                            if (rig_has_get_func(radioDetails, RIG_LEVEL_AF)) {
+                                void* inputArray[] = {radioDetails, RIG_VFO_CURR, RIG_LEVEL_AF};
+                                char* stringForOutput = get_level(inputArray); 
+                                printf("%s", stringForOutput); 
+                                sendSpeakerOutput(stringForOutput); 
+                                free(stringForOutput); 
+                                
+                            } else {
+                                printf("Cannot get vox\n"); 
+                            }
                             break; 
                         case 2:
                             // Get Radio Frequency (RF): RIG_LEVEL_RF
+                            if (rig_has_get_func(radioDetails, RIG_LEVEL_RF)) {
+                                void* inputArray[] = {radioDetails, RIG_VFO_CURR, RIG_LEVEL_RF};
+                                char* stringForOutput = get_level(inputArray); 
+                                printf("%s", stringForOutput); 
+                                sendSpeakerOutput(stringForOutput); 
+                                free(stringForOutput); 
+                                
+                            } else {
+                                printf("Cannot get vox\n"); 
+                            }
                             break; 
                         default:
                             break;
