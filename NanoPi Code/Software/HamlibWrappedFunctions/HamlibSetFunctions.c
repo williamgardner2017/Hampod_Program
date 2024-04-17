@@ -118,7 +118,7 @@ char* set_rit_offset(void* input) {
     int retcode = rig_set_rit(rig, vfo, value); 
     if (retcode == RIG_OK) {
         char* output = malloc(100); 
-        snprintf(output, 100, "RIT set to %.3f\n", value);
+        snprintf(output, 100, "RIT set to %ld\n", value);
         return output; 
     } else {
         printf("rig_set_rit: error = %s\n", rigerror(retcode));
@@ -138,7 +138,7 @@ char* set_xit_offset(void* input) {
     int retcode = rig_set_xit(rig, vfo, value); 
     if (retcode == RIG_OK) {
         char* output = malloc(100); 
-        snprintf(output, 100, "XIT set to %.3f\n", value);
+        snprintf(output, 100, "XIT set to %ld\n", value);
         return output; 
     } else {
         printf("rig_set_xit: error = %s\n", rigerror(retcode));
@@ -158,7 +158,7 @@ char* set_tuning_step(void* input) {
     int retcode = rig_set_ts(rig, vfo, value); 
     if (retcode == RIG_OK) {
         char* output = malloc(100); 
-        snprintf(output, 100, "Tuning step set to %.3f\n", value);
+        snprintf(output, 100, "Tuning step set to %ld\n", value);
         return output; 
     } else {
         printf("rig_set_ts: error = %s\n", rigerror(retcode));
