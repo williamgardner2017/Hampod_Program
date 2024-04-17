@@ -33,7 +33,7 @@ char* set_mode(void* input) {
     int retcode = rig_set_mode(rig, vfo, mode_value, width_value); 	
     if (retcode == RIG_OK) {
         char* output = malloc(100); 
-        snprintf(output, 100, "Mode now %s, Passband now %.3f\n", rig_strrmode(mode_value), width_value);
+        snprintf(output, 100, "Mode now %s, Passband now %ld\n", rig_strrmode(mode_value), width_value);
         return output; 
     } else {
         printf("set_current_mode: error = %s\n", rigerror(retcode));

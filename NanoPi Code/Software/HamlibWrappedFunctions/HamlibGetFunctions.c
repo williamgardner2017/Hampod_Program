@@ -47,7 +47,7 @@ char* get_current_mode(void* input) {
     int retcode = rig_get_mode(rig, vfo, &mode_value, &width_value); 	
     if (retcode == RIG_OK) {
         char* output = malloc(40); 
-        snprintf(output, 40, "%s now %.3f\n", rig_strrmode(mode_value), width_value);
+        snprintf(output, 40, "%s now %ld\n", rig_strrmode(mode_value), width_value);
         return output; 
     } else {
         printf("get_current_mode: error = %s\n", rigerror(retcode));
