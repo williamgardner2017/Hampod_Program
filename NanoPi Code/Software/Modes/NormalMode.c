@@ -45,7 +45,7 @@ void enterValueModeTypeTwo(KeyPress* keyInput, RIG* radioDetail) {
 }
 
 void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
-    void* inputArray = malloc(sizeof(int * 4))
+    void* inputArray = malloc(sizeof(int * 4)); 
     if (enteringValue == false) {
         switch (keyInput->keyPressed) {
             case '0':
