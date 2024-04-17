@@ -511,6 +511,16 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 1:
                             // Get Microphone Gain: RIG_LEVEL_MICGAIN
+                            if (rig_has_get_func(radioDetails, RIG_LEVEL_MICGAIN)) {
+                                void* inputArray[] = {radioDetails, RIG_VFO_CURR, RIG_LEVEL_MICGAIN};
+                                char* stringForOutput = get_level(inputArray); 
+                                printf("%s", stringForOutput); 
+                                sendSpeakerOutput(stringForOutput); 
+                                free(stringForOutput); 
+                                
+                            } else {
+                                printf("Cannot get vox\n"); 
+                            }
                             break; 
                         case 2:
                             // Get RF Power: RIG_LEVEL_RFPOWER
