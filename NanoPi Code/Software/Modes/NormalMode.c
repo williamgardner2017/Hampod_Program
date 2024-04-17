@@ -166,7 +166,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             // Get frequency from VFO A
                             // inputArray = {radioDetails, RIG_VFO_A};
                             inputArray[0] = radioDetails; 
-                            inputArray[1] = RIG_VFO_A; 
+                            inputArray[1] = (void*) RIG_VFO_A; 
                             result = get_current_frequency(inputArray);
                             if (strcmp(result, "-1") != 0) {
                                 sendSpeakerOutput(result);
@@ -179,7 +179,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             // Get frequency from VFO B
                             // inputArray = {radioDetails, RIG_VFO_B};
                             inputArray[0] = radioDetails; 
-                            inputArray[1] = RIG_VFO_B; 
+                            inputArray[1] = (void*) RIG_VFO_B; 
                             result = get_current_frequency(inputArray);
                             if (strcmp(result, "-1") != 0) {
                                 sendSpeakerOutput(result);
@@ -192,7 +192,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             // Get frequency from VFO C
                             // inputArray = {radioDetails, RIG_VFO_C};
                             inputArray[0] = radioDetails; 
-                            inputArray[1] = RIG_VFO_C; 
+                            inputArray[1] = (void*) RIG_VFO_C; 
                             result = get_current_frequency(inputArray);
                             if (strcmp(result, "-1") != 0) {
                                 sendSpeakerOutput(result);
