@@ -603,6 +603,15 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 1:
                             // Get Audio Balance: RIG_LEVEL_BALANCE
+                            if (rig_has_get_func(radioDetails, RIG_LEVEL_BALANCE)) {
+                                void* inputArray[] = {radioDetails, RIG_VFO_CURR, RIG_LEVEL_BALANCE};
+                                char* stringForOutput = get_level(inputArray); 
+                                printf("%s", stringForOutput); 
+                                sendSpeakerOutput(stringForOutput); 
+                                free(stringForOutput); 
+                            } else {
+                                printf("Cannot get Audio Balance\n"); 
+                            }
                             break; 
                         case 2:
                             // Get Standing Wave Ratio: RIG_LEVEL_SWR
