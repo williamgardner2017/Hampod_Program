@@ -42,5 +42,7 @@ char* get_current_continuous_tone_controlled_squelch_code(void* input);
 char* get_level(void* input);
 char* get_func(void* input); 
 
+#ifndef SHAREDLIB
 #include "HamlibGetFunctions.c"
+#endif
 #endif
