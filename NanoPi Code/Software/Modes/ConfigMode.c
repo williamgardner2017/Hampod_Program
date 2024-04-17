@@ -170,7 +170,7 @@ void exitConfigMode(){
 }
 
 Mode* ConfigLoad(){
-     Mode* newMode = (Mode*) malloc(sizeof(Mode));
+    Mode* newMode = (Mode*) malloc(sizeof(Mode));
 
     if(newMode == NULL){
         return NULL;

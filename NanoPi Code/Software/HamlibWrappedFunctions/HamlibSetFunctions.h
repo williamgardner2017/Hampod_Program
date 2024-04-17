@@ -32,6 +32,7 @@ char* set_func(void* input);
 char* set_ptt(void* input); 
 
 
-
+#ifndef SHAREDLIB
 #include "HamlibSetFunctions.c"
+#endif
 #endif
