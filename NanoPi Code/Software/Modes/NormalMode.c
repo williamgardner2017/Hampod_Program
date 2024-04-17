@@ -119,8 +119,8 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 // inputArray = {radioDetails, &general_vfo, RIG_FUNC_COMP, setting}; 
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
-                                inputArray[2] = RIG_FUNC_COMP; 
-                                inputArray[3] = setting; 
+                                inputArray[2] = (void*) RIG_FUNC_COMP; 
+                                inputArray[3] = (void*) setting; 
                                 char* stringForOutput = set_func(inputArray); 
                                 sendSpeakerOutput(stringForOutput); 
                                 free(stringForOutput); 
