@@ -77,7 +77,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 inputArray[2] = (void*) RIG_FUNC_COMP; 
                                 result = get_level(inputArray); 
                                 sendSpeakerOutput(result); 
-                                free(stringForOutput); 
+                                free(result); 
                             } else {
                                 printf("Cannot get Compression status\n"); 
                             }
