@@ -486,7 +486,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             enteringValue = true;
 
                             memset(inputValue, 0, sizeof(inputValue)); 
-                            sendSpeakerOutput("Enter value for vox gain\n");
+                            sendSpeakerOutput("Enter value for Audio Frequency\n");
                             settingToChange = RIG_LEVEL_AF; 
                             HamlibSetFunction = set_level;
                             int setFunctionType = 2; 
@@ -496,7 +496,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             enteringValue = true;
 
                             memset(inputValue, 0, sizeof(inputValue)); 
-                            sendSpeakerOutput("Enter value for radio frequency\n");
+                            sendSpeakerOutput("Enter value for Radio Frequency\n");
                             settingToChange = RIG_LEVEL_RF; 
                             HamlibSetFunction = set_level;
                             int setFunctionType = 2; 
@@ -518,7 +518,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 sendSpeakerOutput(stringForOutput); 
                                 free(stringForOutput); 
                             } else {
-                                printf("Cannot get vox gain\n"); 
+                                printf("Cannot get VOX Gain\n"); 
                             }
                             break; 
                         case 1:
@@ -530,7 +530,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 sendSpeakerOutput(stringForOutput); 
                                 free(stringForOutput); 
                             } else {
-                                printf("Cannot get microphone gain\n"); 
+                                printf("Cannot get Microphone Gain\n"); 
                             }
                             break; 
                         case 2:
@@ -542,7 +542,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 sendSpeakerOutput(stringForOutput); 
                                 free(stringForOutput); 
                             } else {
-                                printf("Cannot get radio frequency power\n"); 
+                                printf("Cannot get RF Power\n"); 
                             }
                             break; 
                         default:
@@ -555,7 +555,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             enteringValue = true;
 
                             memset(inputValue, 0, sizeof(inputValue)); 
-                            sendSpeakerOutput("Enter value for vox gain\n");
+                            sendSpeakerOutput("Enter value for VOX Gain\n");
                             settingToChange = RIG_LEVEL_VOXGAIN; 
                             HamlibSetFunction = set_level;
                             int setFunctionType = 2; 
@@ -584,7 +584,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 free(stringForOutput); 
                                 
                             } else {
-                                printf("Cannot get vox delay\n"); 
+                                printf("Cannot get VOX Delay\n"); 
                             }
                             break; 
                         case 1:
@@ -603,7 +603,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             enteringValue = true;
 
                             memset(inputValue, 0, sizeof(inputValue)); 
-                            sendSpeakerOutput("Enter value for vox delay\n");
+                            sendSpeakerOutput("Enter value for VOX Delay\n");
                             settingToChange = RIG_LEVEL_VOXDELAY; 
                             HamlibSetFunction = set_level;
                             int setFunctionType = 2; 
