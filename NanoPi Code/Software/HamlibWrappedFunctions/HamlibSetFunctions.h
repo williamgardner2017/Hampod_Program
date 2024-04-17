@@ -22,6 +22,8 @@ char* set_rit_offset(void* input);
 char* set_level(void* input); 
 char* set_func(void* input); 
 
+char* set_ptt(void* input); 
+
 
 
 #include "HamlibSetFunctions.c"

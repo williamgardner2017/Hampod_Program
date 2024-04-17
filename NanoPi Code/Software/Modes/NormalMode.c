@@ -46,6 +46,52 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
     if (enteringValue == false) {
         switch (keyInput->keyPressed) {
             case '0':
+                if (!keyInput->isHold) {
+                    switch (keyInput->shiftAmount) {
+                        case 0:
+                            // Get Noise Reduction: RIG_LEVEL_NR
+                            if (rig_has_get_level(radioDetails, RIG_LEVEL_NR)) {
+                                void* inputArray[] = {radioDetails, RIG_VFO_CURR, RIG_LEVEL_NR};
+                                char* stringForOutput = get_level(inputArray); 
+                                printf("%s", stringForOutput); 
+                                sendSpeakerOutput(stringForOutput); 
+                                free(stringForOutput); 
+                                
+                            } else {
+                                printf("Cannot get Noise Reduction\n"); 
+                            }
+                            break; 
+                        case 1:
+                            // Get Audio Balance: RIG_LEVEL_BALANCE
+                            break; 
+                        case 2:
+                            // Get Standing Wave Ratio: RIG_LEVEL_SWR
+                            break; 
+                        default:
+                            break;
+                    }
+                } else {
+                    switch (keyInput->shiftAmount) {
+                        case 0:
+                            // Set Noise Reduction: RIG_LEVEL_NR
+                            enteringValue = true;
+
+                            memset(inputValue, 0, sizeof(inputValue)); 
+                            sendSpeakerOutput("Enter value for Noise Reduction\n");
+                            settingToChange = RIG_LEVEL_NR; 
+                            HamlibSetFunction = set_level;
+                            int setFunctionType = 2; 
+                            break; 
+                        case 1:
+                            // Set Audio Balance: RIG_LEVEL_BALANCE
+                            break; 
+                        case 2:
+                            // Set Standing Wave Ratio: RIG_LEVEL_SWR
+                            break; 
+                        default:
+                            break;
+                    }
+                }
                 break;
             
             case '1':
@@ -203,8 +249,6 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                     switch (keyInput->shiftAmount) {
                         case 0:
                             // Set Mode
-                            
-
                             break; 
                         case 1:
                             // Set Width
@@ -237,7 +281,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 printf("%s", stringForOutput); 
                                 sendSpeakerOutput(stringForOutput);
                             } else {
-                                printf("Cannot get PTT Status offset\n"); 
+                                printf("Cannot get PTT Status\n"); 
                             }
                             free(stringForOutput); 
                             break;
@@ -274,6 +318,15 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                     switch (keyInput->shiftAmount) {
                         case 0:
                             // Set PTT Status
+                            // void* inputArray[] = {radioDetails, RIG_VFO_CURR};
+                            // char* stringForOutput = get_ptt(inputArray);
+                            // if (strcmp(stringForOutput, "-1") != 0) {
+                            //     printf("%s", stringForOutput); 
+                            //     sendSpeakerOutput(stringForOutput);
+                            // } else {
+                            //     printf("Cannot set PTT Status\n"); 
+                            // }
+                            // free(stringForOutput); 
                             break; 
                         case 1:
                             // Set Passband Tuning Input: RIG_LEVEL_PBT_IN
