@@ -634,6 +634,13 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 2:
                             // Set Standing Wave Ratio: RIG_LEVEL_SWR
+                            enteringValue = true;
+
+                            memset(inputValue, 0, sizeof(inputValue)); 
+                            sendSpeakerOutput("Enter value for Standing Wave Ratio\n");
+                            settingToChange = RIG_LEVEL_SWR; 
+                            HamlibSetFunction = set_level;
+                            int setFunctionType = 2; 
                             break; 
                         default:
                             break;
