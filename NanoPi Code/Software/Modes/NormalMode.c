@@ -572,6 +572,13 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 2:
                             // Set RF Power: RIG_LEVEL_RFPOWER
+                            enteringValue = true;
+
+                            memset(inputValue, 0, sizeof(inputValue)); 
+                            sendSpeakerOutput("Enter value for RF Power\n");
+                            settingToChange = RIG_LEVEL_RFPOWER; 
+                            HamlibSetFunction = set_level;
+                            int setFunctionType = 2; 
                             break; 
                         default:
                             break;
