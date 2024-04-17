@@ -21,7 +21,7 @@ int switchFuncMode(RIG* radioDetails, setting_t settingToGet) {
 void enterValueModeTypeOne(KeyPress* keyInput, RIG* radioDetails) {
     double enteredValue = keypadInput(keyInput);
     if (enteredValue >= 0) {
-        void* inputArray[] = {radioDetails, &general_vfo, (void*) enteredValue};
+        void** inputArray[] = {radioDetails, &general_vfo, (void*) enteredValue};
         char* result = currentInputFunction(inputArray);
         sendSpeakerOutput(result);
         free(result); 
@@ -35,7 +35,7 @@ void enterValueModeTypeOne(KeyPress* keyInput, RIG* radioDetails) {
 void enterValueModeTypeTwo(KeyPress* keyInput, RIG* radioDetails) {
     double enteredValue = keypadInput(keyInput);
     if (enteredValue >= 0) {
-        void* inputArray[] = {radioDetails, &general_vfo, settingToChange, (void*) enteredValue};
+        void** inputArray[] = {radioDetails, &general_vfo, settingToChange, (void*) enteredValue};
         char* result = currentInputFunction(inputArray);
         sendSpeakerOutput(result);
         free(result); 
