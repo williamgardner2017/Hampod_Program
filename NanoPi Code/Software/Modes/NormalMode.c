@@ -56,16 +56,33 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 printf("%s", stringForOutput); 
                                 sendSpeakerOutput(stringForOutput); 
                                 free(stringForOutput); 
-                                
                             } else {
                                 printf("Cannot get Noise Reduction\n"); 
                             }
                             break; 
                         case 1:
-                            // Get Audio Balance: RIG_LEVEL_BALANCE
+                            // Get Compression: RIG_FUNC_COMP
+                            if (rig_has_get_func(radioDetails, RIG_FUNC_COMP)) {
+                                void* inputArray[] = {radioDetails, RIG_VFO_CURR, RIG_FUNC_COMP};
+                                char* stringForOutput = get_level(inputArray); 
+                                printf("%s", stringForOutput); 
+                                sendSpeakerOutput(stringForOutput); 
+                                free(stringForOutput); 
+                            } else {
+                                printf("Cannot get Compression status\n")
+                            }
                             break; 
                         case 2:
-                            // Get Standing Wave Ratio: RIG_LEVEL_SWR
+                            // Get Tone Control: RIG_FUNC_TONE
+                            if (rig_has_get_func(radioDetails, RIG_FUNC_TONE)) {
+                                void* inputArray[] = {radioDetails, RIG_VFO_CURR, RIG_FUNC_TONE};
+                                char* stringForOutput = get_level(inputArray); 
+                                printf("%s", stringForOutput); 
+                                sendSpeakerOutput(stringForOutput); 
+                                free(stringForOutput); 
+                            } else {
+                                printf("Cannot get Tone Control status\n")
+                            }
                             break; 
                         default:
                             break;
@@ -83,10 +100,28 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             int setFunctionType = 2; 
                             break; 
                         case 1:
-                            // Set Audio Balance: RIG_LEVEL_BALANCE
+                            // Set Compression: RIG_FUNC_COMP
+                            if (rig_has_set_func(radioDetails, RIG_FUNC_COMP)) {
+                                int setting = switchFuncMode(radioDetails, RIG_FUNC_COMP); 
+                                void* inputArray[] = {radioDetails, RIG_VFO_CURR, RIG_FUNC_COMP, setting}; 
+                                char* stringForOutput = set_func(inputArray); 
+                                sendSpeakerOutput(stringForOutput); 
+                                free(stringForOutput); 
+                            } else {
+                                printf("Cannot set Compression status\n")
+                            }
                             break; 
                         case 2:
-                            // Set Standing Wave Ratio: RIG_LEVEL_SWR
+                            // Set Tone Control: RIG_FUNC_TONE
+                            if (rig_has_set_func(radioDetails, RIG_FUNC_TONE)) {
+                                int setting = switchFuncMode(radioDetails, RIG_FUNC_TONE); 
+                                void* inputArray[] = {radioDetails, RIG_VFO_CURR, RIG_FUNC_TONE, setting}; 
+                                char* stringForOutput = set_func(inputArray); 
+                                sendSpeakerOutput(stringForOutput); 
+                                free(stringForOutput); 
+                            } else {
+                                printf("Cannot set Tone Control status\n")
+                            }
                             break; 
                         default:
                             break;
