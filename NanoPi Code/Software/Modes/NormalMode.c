@@ -217,7 +217,6 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 char* stringForOutput = set_func(inputArray); 
                                 sendSpeakerOutput(stringForOutput); 
                                 free(stringForOutput); 
-                                
                             } else {
                                 printf("Cannot set VFO lock status\n")
                             }
@@ -231,10 +230,6 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                 if (!keyInput->isHold) {
                     switch (keyInput->shiftAmount) {
                         case 0:
-                            break;
-                        case 1:
-                            break; 
-                        case 2:
                             // Get PTT Status
                             void* inputArray[] = {radioDetails, RIG_VFO_CURR};
                             char* stringForOutput = get_ptt(inputArray);
@@ -245,6 +240,32 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 printf("Cannot get PTT Status offset\n"); 
                             }
                             free(stringForOutput); 
+                            break;
+                        case 1:
+                            // Get Passband Tuning Input: RIG_LEVEL_PBT_IN
+                            if (rig_has_get_func(radioDetails, RIG_LEVEL_PBT_IN)) {
+                                void* inputArray[] = {radioDetails, RIG_VFO_CURR, RIG_LEVEL_PBT_IN};
+                                char* stringForOutput = get_level(inputArray); 
+                                printf("%s", stringForOutput); 
+                                sendSpeakerOutput(stringForOutput); 
+                                free(stringForOutput); 
+                                
+                            } else {
+                                printf("Cannot get Passband Tuning Input\n"); 
+                            }
+                            break; 
+                        case 2:
+                            // Get Passband Tuning Output: RIG_LEVEL_PBT_OUT
+                            if (rig_has_get_func(radioDetails, RIG_LEVEL_PBT_OUT)) {
+                                void* inputArray[] = {radioDetails, RIG_VFO_CURR, RIG_LEVEL_PBT_OUT};
+                                char* stringForOutput = get_level(inputArray); 
+                                printf("%s", stringForOutput); 
+                                sendSpeakerOutput(stringForOutput); 
+                                free(stringForOutput); 
+                                
+                            } else {
+                                printf("Cannot get Passband Tuning Output\n"); 
+                            }
                             break; 
                         default:
                             break;
@@ -252,12 +273,14 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                 } else {
                     switch (keyInput->shiftAmount) {
                         case 0:
-                            
+                            // Set PTT Status
                             break; 
                         case 1:
+                            // Set Passband Tuning Input: RIG_LEVEL_PBT_IN
+                            
                             break; 
                         case 2:
-                            // Set PTT Status
+                            // Set Passband Tuning Output: RIG_LEVEL_PBT_OUT
                             break; 
                         default:
                             break;
