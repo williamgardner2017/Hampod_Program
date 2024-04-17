@@ -477,7 +477,6 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 char* stringForOutput = set_func(inputArray); 
                                 sendSpeakerOutput(stringForOutput); 
                                 free(stringForOutput); 
-                                
                             } else {
                                 printf("Cannot set vox\n"); 
                             }
@@ -504,7 +503,6 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 printf("%s", stringForOutput); 
                                 sendSpeakerOutput(stringForOutput); 
                                 free(stringForOutput); 
-                                
                             } else {
                                 printf("Cannot get vox gain\n"); 
                             }
@@ -523,6 +521,15 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 2:
                             // Get RF Power: RIG_LEVEL_RFPOWER
+                            if (rig_has_get_func(radioDetails, RIG_LEVEL_RFPOWER)) {
+                                void* inputArray[] = {radioDetails, RIG_VFO_CURR, RIG_LEVEL_RFPOWER};
+                                char* stringForOutput = get_level(inputArray); 
+                                printf("%s", stringForOutput); 
+                                sendSpeakerOutput(stringForOutput); 
+                                free(stringForOutput); 
+                            } else {
+                                printf("Cannot get radio frequency power\n"); 
+                            }
                             break; 
                         default:
                             break;
