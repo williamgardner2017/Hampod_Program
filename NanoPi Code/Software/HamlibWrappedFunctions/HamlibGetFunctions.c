@@ -15,8 +15,11 @@ char* get_current_transceive_mode(void* input) {
 }
 
 char* get_current_frequency(void* input) {
-    RIG* rig = (RIG*) input[0]; 
-    vfo_t vfo = *(vfo_t*) input[1]; 
+    // RIG* rig = (RIG*) input[0]; 
+    // vfo_t vfo = *(vfo_t*) input[1]; 
+
+    RIG* rig = ((void**)input)[0];
+    vfo_t vfo = *((vfo_t*)((void**)input)[1]);
     
     freq_t value; 
     int retcode = rig_get_freq(rig, vfo, &value); 
@@ -31,8 +34,11 @@ char* get_current_frequency(void* input) {
 }
 
 char* get_current_mode(void* input) {
-    RIG* rig = (RIG*) input[0]; 
-    vfo_t vfo = *(vfo_t*) input[1]; 
+    // RIG* rig = (RIG*) input[0]; 
+    // vfo_t vfo = *(vfo_t*) input[1]; 
+
+    RIG* rig = ((void**)input)[0];
+    vfo_t vfo = *((vfo_t*)((void**)input)[1]);
 
     rmode_t mode_value; 
     pbwidth_t width_value; 
@@ -48,7 +54,9 @@ char* get_current_mode(void* input) {
 }
 
 char* get_current_vfo(void* input) {
-    RIG* rig = (RIG*) input[0]; 
+    // RIG* rig = (RIG*) input[0]; 
+
+    RIG* rig = ((void**)input)[0];
 
     vfo_t value; 
     int retcode = rig_get_vfo(rig, &value); 
@@ -76,8 +84,11 @@ char* push_to_talk_converter (ptt_t* input) {
 }
 
 char* get_ptt(void* input) {
-    RIG* rig = (RIG*) input[0]; 
-    vfo_t vfo = *(vfo_t*) input[1]; 
+    // RIG* rig = (RIG*) input[0]; 
+    // vfo_t vfo = *(vfo_t*) input[1]; 
+
+    RIG* rig = ((void**)input)[0];
+    vfo_t vfo = *((vfo_t*)((void**)input)[1]);
 
     ptt_t value; 
     int retcode = rig_get_ptt(rig, vfo, &value); 
@@ -150,8 +161,11 @@ char* get_ptt(void* input) {
 
 
 char* get_current_rit_offset(void* input) {
-    RIG* rig = (RIG*) input[0]; 
-    vfo_t vfo = *(vfo_t*) input[1]; 
+    // RIG* rig = (RIG*) input[0]; 
+    // vfo_t vfo = *(vfo_t*) input[1]; 
+
+    RIG* rig = ((void**)input)[0];
+    vfo_t vfo = *((vfo_t*)((void**)input)[1]);
 
     shortfreq_t value; 
     int retcode = rig_get_rit(rig, vfo, &value); 
@@ -166,8 +180,11 @@ char* get_current_rit_offset(void* input) {
 }
 
 char* get_current_xit_offset(void* input) {
-    RIG* rig = (RIG*) input[0]; 
-    vfo_t vfo = *(vfo_t*) input[1]; 
+    // RIG* rig = (RIG*) input[0]; 
+    // vfo_t vfo = *(vfo_t*) input[1]; 
+
+    RIG* rig = ((void**)input)[0];
+    vfo_t vfo = *((vfo_t*)((void**)input)[1]);
 
     shortfreq_t value; 
     int retcode = rig_get_xit(rig, vfo, &value); 
@@ -182,8 +199,11 @@ char* get_current_xit_offset(void* input) {
 }
 
 char* get_current_tuning_step(void* input) {
-    RIG* rig = (RIG*) input[0]; 
-    vfo_t vfo = *(vfo_t*) input[1]; 
+    // RIG* rig = (RIG*) input[0]; 
+    // vfo_t vfo = *(vfo_t*) input[1]; 
+
+    RIG* rig = ((void**)input)[0];
+    vfo_t vfo = *((vfo_t*)((void**)input)[1]);
 
     shortfreq_t value; 
     int retcode = rig_get_ts(rig, vfo, &value); 
@@ -198,8 +218,11 @@ char* get_current_tuning_step(void* input) {
 }
 
 char* get_current_CTCSS_sub_audible_tone(void* input) {
-    RIG* rig = (RIG*) input[0]; 
-    vfo_t vfo = *(vfo_t*) input[1]; 
+    // RIG* rig = (RIG*) input[0]; 
+    // vfo_t vfo = *(vfo_t*) input[1]; 
+
+    RIG* rig = ((void**)input)[0];
+    vfo_t vfo = *((vfo_t*)((void**)input)[1]);
 
     tone_t value; 
     int retcode = rig_get_ctcss_tone(rig, vfo, &value); 
@@ -214,8 +237,11 @@ char* get_current_CTCSS_sub_audible_tone(void* input) {
 }
 
 char* get_current_encoding_digitally_coded_squelch_code(void* input) {
-    RIG* rig = (RIG*) input[0]; 
-    vfo_t vfo = *(vfo_t*) input[1]; 
+    // RIG* rig = (RIG*) input[0]; 
+    // vfo_t vfo = *(vfo_t*) input[1]; 
+
+    RIG* rig = ((void**)input)[0];
+    vfo_t vfo = *((vfo_t*)((void**)input)[1]);
 
     tone_t value; 
     int retcode = rig_get_dcs_code(rig, vfo, &value); 
@@ -230,8 +256,11 @@ char* get_current_encoding_digitally_coded_squelch_code(void* input) {
 }
 
 char* get_current_CTCSS_sub_audible_squelch_tone(void* input) {
-    RIG* rig = (RIG*) input[0]; 
-    vfo_t vfo = *(vfo_t*) input[1]; 
+    // RIG* rig = (RIG*) input[0]; 
+    // vfo_t vfo = *(vfo_t*) input[1]; 
+
+    RIG* rig = ((void**)input)[0];
+    vfo_t vfo = *((vfo_t*)((void**)input)[1]);
 
     tone_t value; 
     int retcode = rig_get_ctcss_sql(rig, vfo, &value); 
@@ -246,8 +275,11 @@ char* get_current_CTCSS_sub_audible_squelch_tone(void* input) {
 }
 
 char* get_current_continuous_tone_controlled_squelch_code(void* input) {
-    RIG* rig = (RIG*) input[0]; 
-    vfo_t vfo = *(vfo_t*) input[1]; 
+    // RIG* rig = (RIG*) input[0]; 
+    // vfo_t vfo = *(vfo_t*) input[1]; 
+
+    RIG* rig = ((void**)input)[0];
+    vfo_t vfo = *((vfo_t*)((void**)input)[1]);
 
     tone_t value; 
     int retcode = rig_get_dcs_sql(rig, vfo, &value); 
@@ -287,9 +319,13 @@ char* get_current_continuous_tone_controlled_squelch_code(void* input) {
 // }
 
 char* get_level(void* input) {
-    RIG* rig = (RIG*) input[0]; 
-    vfo_t vfo = *(vfo_t*) input[1]; 
-    setting_t setting_value = *(setting_t*) input[2]; 
+    // RIG* rig = (RIG*) input[0]; 
+    // vfo_t vfo = *(vfo_t*) input[1]; 
+    // setting_t setting_value = *(setting_t*) input[2]; 
+
+    RIG* rig = ((void**)input)[0];
+    vfo_t vfo = *((vfo_t*)((void**)input)[1]);
+    setting_t setting_value = *((setting_t*)((void**)input)[2]); 
     
     char* output = malloc(40); 
     value_t* value; 
@@ -299,9 +335,13 @@ char* get_level(void* input) {
 }
 
 char* get_func(void* input) {
-    RIG* rig = (RIG*) input[0]; 
-    vfo_t vfo = *(vfo_t*) input[1]; 
-    setting_t setting_value = *(setting_t*) input[2]; 
+    // RIG* rig = (RIG*) input[0]; 
+    // vfo_t vfo = *(vfo_t*) input[1]; 
+    // setting_t setting_value = *(setting_t*) input[2]; 
+
+    RIG* rig = ((void**)input)[0];
+    vfo_t vfo = *((vfo_t*)((void**)input)[1]);
+    setting_t setting_value = *((setting_t*)((void**)input)[2]); 
 
     char* output = malloc(40); 
     int status; 
