@@ -334,13 +334,15 @@ char* get_level(void* input) {
 }
 
 char* get_func(void* input) {
+    void** inputArray = (void**)input;
+
     // RIG* rig = (RIG*) input[0]; 
     // vfo_t vfo = *(vfo_t*) input[1]; 
     // setting_t setting_value = *(setting_t*) input[2]; 
     
-    RIG* rig = ((void**)input)[0];
-    vfo_t vfo = *((vfo_t*)((void**)input)[1]);
-    setting_t setting_value = *((setting_t*)((void**)input)[2]); 
+    RIG* rig = (RIG*)inputArray[0];
+    vfo_t vfo = *((vfo_t*)inputArray[1]);
+    setting_t setting_value = *((setting_t*)inputArray[2]); 
 
     printf("I get here"); 
 
