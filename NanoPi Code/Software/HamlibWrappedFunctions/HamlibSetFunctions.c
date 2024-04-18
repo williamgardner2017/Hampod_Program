@@ -288,17 +288,10 @@ char* set_func(void* input) {
     // setting_t setting_value = *(setting_t*) input[2]; 
     // value_t value = *(value_t*) input[3]; 
 
-    printf("I get here 1"); 
     RIG* rig = ((void**)input)[0];
-
-    printf("I get here 2"); 
     vfo_t vfo = *((vfo_t*)((void**)input)[1]);
-
-    printf("I get here 3"); 
     setting_t setting_value = (setting_t)(uintptr_t)((void**)input)[2];
-
-    printf("I get here 4"); 
-    int value = *((int*)((void**)input)[3]);
+    int value = (int)(uintptr_t)((void**)input)[3];
 
     printf("I get here 5"); 
 	char* output = malloc(100); 
