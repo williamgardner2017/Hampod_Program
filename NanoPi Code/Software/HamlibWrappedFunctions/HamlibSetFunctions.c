@@ -300,6 +300,7 @@ char* set_func(void* input) {
     printf("I get here 4"); 
     int value = *((int*)((void**)input)[3]);
 
+    printf("I get here 5"); 
 	char* output = malloc(100); 
     rig_set_func (rig, vfo, setting_value, value); 	
     snprintf(output, 100, "%s set to %d", rig_strfunc(setting_value), value); 
