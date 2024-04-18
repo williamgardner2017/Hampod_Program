@@ -443,7 +443,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
                                 inputArray[2] = (void*) RIG_FUNC_RIT; 
-                                result = get_level(inputArray); 
+                                result = get_func(inputArray); 
                                 sendSpeakerOutput(result); 
                                 free(result); 
                             } else {
@@ -470,7 +470,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
                                 inputArray[2] = (void*) RIG_FUNC_NB; 
-                                result = get_level(inputArray); 
+                                result = get_func(inputArray); 
                                 sendSpeakerOutput(result); 
                                 free(result); 
                             } else {
@@ -537,7 +537,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
                                 inputArray[2] = (void*) RIG_FUNC_XIT; 
-                                result = get_level(inputArray); 
+                                result = get_func(inputArray); 
                                 sendSpeakerOutput(result); 
                                 free(result); 
                             } else {
@@ -564,7 +564,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
                                 inputArray[2] = (void*) RIG_FUNC_SQL; 
-                                result = get_level(inputArray); 
+                                result = get_func(inputArray); 
                                 sendSpeakerOutput(result); 
                                 free(result); 
                             } else {
