@@ -351,7 +351,17 @@ char* get_func(void* input) {
     // snprintf(output, 40, "%s now %d", rig_strfunc(setting_value), status); 
     // return output; 
 
+    if (input == NULL) {
+        printf("Error: Input array is NULL.\n");
+        return NULL;
+    }
+
     RIG* rig = ((void**)input)[0];
+    if (rig == NULL) {
+        printf("Error: RIG pointer is NULL.\n");
+        return NULL;
+    }
+    
     vfo_t vfo = *((vfo_t*)((void**)input)[1]);
     setting_t setting_value = *((setting_t*)((void**)input)[2]);
 
