@@ -361,9 +361,9 @@ char* get_func(void* input) {
         printf("Error: RIG pointer is NULL.\n");
         return NULL;
     }
-    
+
     vfo_t vfo = *((vfo_t*)((void**)input)[1]);
-    setting_t setting_value = *((setting_t*)((void**)input)[2]);
+    setting_t setting_value = (setting_t)(uintptr_t)((void**)input)[2];
 
     printf("Retrieving data from input array:\n");
     printf("RIG pointer: %p\n", rig);

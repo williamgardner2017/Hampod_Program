@@ -442,13 +442,15 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 // inputArray = {radioDetails, &general_vfo, RIG_FUNC_RIT};
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
-                                inputArray[2] = (void*) RIG_FUNC_RIT; 
+                                // inputArray[2] = (void*) RIG_FUNC_RIT; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_RIT;
                                 result = get_func(inputArray); 
                                 sendSpeakerOutput(result); 
                                 free(result); 
                             } else {
                                 printf("Cannot get RIT Status\n"); 
                             }
+                            
                             break; 
                         case 1:
                             // Get RIT Offset
