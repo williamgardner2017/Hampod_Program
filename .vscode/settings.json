@@ -3,6 +3,7 @@
         "stdlib.h": "c",
         "generalfunctions.h": "c",
         "firmwarecommunication.h": "c",
-        "mode.h": "c"
+        "mode.h": "c",
+        "cstdlib": "c"
     }
 }

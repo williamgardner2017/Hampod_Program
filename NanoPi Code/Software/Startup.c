@@ -18,6 +18,8 @@
 #include "ConfigSettings/ConfigParams.h"
 #include "ConfigSettings/ConfigFunctions.h"
 #include "Monitoring.h"
+#include "HamlibWrappedFunctions/HamlibGetFunctions.h"
+#include "HamlibWrappedFunctions/HamlibSetFunctions.h"
 
 #ifndef HAMPOD_ERROROUTPUT
 #define HAMPOD_ERROROUTPUT

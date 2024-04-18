@@ -3,12 +3,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <hamlib/rig.h>
 #include <hamlib/riglist.h>
 #include "Mode.h"
 #include "../GeneralFunctions.h"
 #include "../FirmwareCommunication.h"
 
+#include "../HamlibWrappedFunctions/HamlibGetFunctions.h"
+#include "../HamlibWrappedFunctions/HamlibSetFunctions.h"
 
 #ifdef OUTPUTLEVEL1
 #define PRINTFLEVEL1(...) \
