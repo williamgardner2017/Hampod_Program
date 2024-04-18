@@ -337,7 +337,7 @@ char* get_func(void* input) {
     // RIG* rig = (RIG*) input[0]; 
     // vfo_t vfo = *(vfo_t*) input[1]; 
     // setting_t setting_value = *(setting_t*) input[2]; 
-
+    printf("I get here"); 
     RIG* rig = ((void**)input)[0];
     vfo_t vfo = *((vfo_t*)((void**)input)[1]);
     setting_t setting_value = *((setting_t*)((void**)input)[2]); 
