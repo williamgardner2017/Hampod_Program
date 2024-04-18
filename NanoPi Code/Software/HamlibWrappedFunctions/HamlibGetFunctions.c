@@ -342,9 +342,7 @@ char* get_func(void* input) {
     RIG* rig = ((void**)input)[0];
     vfo_t vfo = *((vfo_t*)((void**)input)[1]);
     setting_t setting_value = (setting_t)(uintptr_t)((void**)input)[2];
-
-    printf("I get here"); 
-
+    
     char* output = malloc(40); 
     int status; 
     rig_get_func (rig, vfo, setting_value, &status); 	

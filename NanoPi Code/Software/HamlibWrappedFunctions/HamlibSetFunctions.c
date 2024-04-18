@@ -291,7 +291,7 @@ char* set_func(void* input) {
     RIG* rig = ((void**)input)[0];
     vfo_t vfo = *((vfo_t*)((void**)input)[1]);
     setting_t setting_value = (setting_t)(uintptr_t)((void**)input)[2];
-    int value = *((int*)((void**)input)[3]); 
+    int value = *((int*)((void**)input)[3]);
 
 	char* output = malloc(100); 
     rig_set_func (rig, vfo, setting_value, value); 	
