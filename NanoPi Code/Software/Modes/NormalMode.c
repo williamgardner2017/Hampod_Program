@@ -42,7 +42,7 @@ void enterValueModeTypeTwo(KeyPress* keyInput, RIG* radioDetails) {
         void** inputArray = malloc(sizeof(void*) * 4); 
         inputArray[0] = radioDetails; 
         inputArray[1] = &general_vfo; 
-        inputArray[2] = (void*)settingToChange; 
+        inputArray[2] = (void*)(uintptr_t)settingToChange; 
         inputArray[3] = (void*)(intptr_t)enteredValue; 
         // void** inputArray[] = {(void*) radioDetails, (void*) &general_vfo, (void*) settingToChange, (void*) enteredValue};
         char* result = currentInputFunction(inputArray);
@@ -69,7 +69,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 // inputArray = {radioDetails, &general_vfo, RIG_LEVEL_NR};
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
-                                inputArray[2] = (void*) RIG_LEVEL_NR; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_LEVEL_NR; 
 
                                 result = get_level(inputArray); 
                                 sendSpeakerOutput(result); 
@@ -84,7 +84,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 // inputArray = {radioDetails, &general_vfo, RIG_FUNC_COMP};
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
-                                inputArray[2] = (void*) RIG_FUNC_COMP; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_COMP; 
                                 result = get_level(inputArray); 
                                 sendSpeakerOutput(result); 
                                 free(result); 
@@ -98,7 +98,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 // inputArray = {radioDetails, &general_vfo, RIG_FUNC_TONE};
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
-                                inputArray[2] = (void*) RIG_FUNC_TONE; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_TONE; 
                                 result = get_level(inputArray); 
                                 sendSpeakerOutput(result); 
                                 free(result); 
@@ -128,7 +128,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 // inputArray = {radioDetails, &general_vfo, RIG_FUNC_COMP, setting}; 
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
-                                inputArray[2] = (void*) RIG_FUNC_COMP; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_COMP; 
                                 inputArray[3] = (void*) setting; 
                                 result = set_func(inputArray); 
                                 sendSpeakerOutput(result); 
@@ -144,7 +144,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 // inputArray = {radioDetails, &general_vfo, RIG_FUNC_TONE, setting}; 
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
-                                inputArray[2] = (void*) RIG_FUNC_TONE; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_TONE; 
                                 inputArray[3] = (void*) setting; 
                                 result = set_func(inputArray); 
                                 sendSpeakerOutput(result); 
@@ -306,7 +306,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 // inputArray = {radioDetails, &general_vfo, RIG_FUNC_LOCK};
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
-                                inputArray[2] = (void*) RIG_FUNC_LOCK; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_LOCK; 
                                 result = get_level(inputArray); 
                                 printf("%s", result); 
                                 sendSpeakerOutput(result); 
@@ -333,7 +333,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 // inputArray = {radioDetails, &general_vfo, RIG_FUNC_LOCK, setting}; 
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
-                                inputArray[2] = (void*) RIG_FUNC_LOCK; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_LOCK; 
                                 inputArray[3] = (void*) setting; 
                                 result = set_func(inputArray); 
                                 sendSpeakerOutput(result); 
@@ -369,7 +369,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 // inputArray = {radioDetails, &general_vfo, RIG_LEVEL_PBT_IN};
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
-                                inputArray[2] = (void*) RIG_LEVEL_PBT_IN; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_LEVEL_PBT_IN; 
                                 result = get_level(inputArray); 
                                 sendSpeakerOutput(result); 
                                 free(result); 
@@ -383,7 +383,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 // inputArray = {radioDetails, &general_vfo, RIG_LEVEL_PBT_OUT};
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
-                                inputArray[2] = (void*) RIG_LEVEL_PBT_OUT; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_LEVEL_PBT_OUT; 
                                 result = get_level(inputArray); 
                                 sendSpeakerOutput(result); 
                                 free(result); 
@@ -471,7 +471,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 // inputArray = {radioDetails, &general_vfo, RIG_FUNC_NB};
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
-                                inputArray[2] = (void*) RIG_FUNC_NB; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_NB; 
                                 result = get_func(inputArray); 
                                 sendSpeakerOutput(result); 
                                 free(result); 
@@ -491,7 +491,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 // inputArray = {radioDetails, &general_vfo, RIG_FUNC_RIT, setting}; 
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
-                                inputArray[2] = (void*) RIG_FUNC_RIT; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_RIT; 
                                 inputArray[3] = (void*) setting; 
                                 result = set_func(inputArray); 
                                 sendSpeakerOutput(result); 
@@ -515,7 +515,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 // inputArray = {radioDetails, &general_vfo, RIG_FUNC_NB, setting}; 
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
-                                inputArray[2] = (void*) RIG_FUNC_NB; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_NB; 
                                 inputArray[3] = (void*) setting; 
                                 result = set_func(inputArray); 
                                 sendSpeakerOutput(result); 
@@ -538,7 +538,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 // inputArray = {radioDetails, &general_vfo, RIG_FUNC_XIT};
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
-                                inputArray[2] = (void*) RIG_FUNC_XIT; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_XIT; 
                                 result = get_func(inputArray); 
                                 sendSpeakerOutput(result); 
                                 free(result); 
@@ -565,7 +565,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 // inputArray = {radioDetails, &general_vfo, RIG_FUNC_SQL};
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
-                                inputArray[2] = (void*) RIG_FUNC_SQL; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_SQL; 
                                 result = get_func(inputArray); 
                                 sendSpeakerOutput(result); 
                                 free(result); 
@@ -585,7 +585,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 // inputArray = {radioDetails, &general_vfo, RIG_FUNC_XIT, setting}; 
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
-                                inputArray[2] = (void*) RIG_FUNC_XIT; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_XIT; 
                                 inputArray[3] = (void*) setting; 
                                 result = set_func(inputArray); 
                                 sendSpeakerOutput(result); 
@@ -609,7 +609,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 // inputArray = {radioDetails, &general_vfo, RIG_FUNC_SQL, setting}; 
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
-                                inputArray[2] = (void*) RIG_FUNC_SQL; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_SQL; 
                                 inputArray[3] = (void*) setting; 
                                 result = set_func(inputArray); 
                                 sendSpeakerOutput(result); 
@@ -632,7 +632,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 // inputArray = {radioDetails, &general_vfo, RIG_LEVEL_IF};
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = (void*) &general_vfo; 
-                                inputArray[2] = (void*) RIG_LEVEL_IF; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_LEVEL_IF; 
                                 result = get_level(inputArray); 
                                 sendSpeakerOutput(result); 
                                 free(result); 
@@ -647,7 +647,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 // inputArray = {radioDetails, &general_vfo, RIG_LEVEL_AGC};
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
-                                inputArray[2] = (void*) RIG_LEVEL_AGC; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_LEVEL_AGC; 
                                 result = get_level(inputArray); 
                                 sendSpeakerOutput(result); 
                                 free(result); 
@@ -662,7 +662,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 // inputArray = {radioDetails, &general_vfo, RIG_LEVEL_SQL};
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
-                                inputArray[2] = (void*) RIG_LEVEL_SQL; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_LEVEL_SQL; 
                                 result = get_level(inputArray); 
                                 sendSpeakerOutput(result); 
                                 free(result); 
@@ -720,7 +720,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 // inputArray = {radioDetails, &general_vfo, RIG_FUNC_VOX};
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
-                                inputArray[2] = (void*) RIG_FUNC_VOX; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_VOX; 
                                 result = get_func(inputArray); 
                                 sendSpeakerOutput(result); 
                                 free(result); 
@@ -735,7 +735,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 // inputArray = {radioDetails, &general_vfo, RIG_LEVEL_AF};
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
-                                inputArray[2] = (void*) RIG_LEVEL_AF; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_LEVEL_AF; 
                                 result = get_level(inputArray); 
                                 sendSpeakerOutput(result); 
                                 free(result); 
@@ -750,7 +750,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 // inputArray = {radioDetails, &general_vfo, RIG_LEVEL_RF};
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
-                                inputArray[2] = (void*) RIG_LEVEL_RF; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_LEVEL_RF; 
                                 result = get_level(inputArray); 
                                 sendSpeakerOutput(result); 
                                 free(result); 
@@ -771,7 +771,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 // inputArray = {radioDetails, &general_vfo, RIG_FUNC_VOX, setting}; 
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
-                                inputArray[2] = (void*) RIG_FUNC_VOX; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_VOX; 
                                 inputArray[3] = (void*) setting; 
                                 result = set_func(inputArray); 
                                 sendSpeakerOutput(result); 
@@ -814,7 +814,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 // inputArray = {radioDetails, &general_vfo, RIG_LEVEL_VOXGAIN};
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
-                                inputArray[2] = (void*) RIG_LEVEL_VOXGAIN; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_LEVEL_VOXGAIN; 
                                 result = get_level(inputArray); 
                                 sendSpeakerOutput(result); 
                                 free(result); 
@@ -828,7 +828,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 // inputArray = {radioDetails, &general_vfo, RIG_LEVEL_MICGAIN};
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
-                                inputArray[2] = (void*) RIG_LEVEL_MICGAIN; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_LEVEL_MICGAIN; 
                                 result = get_level(inputArray); 
                                 sendSpeakerOutput(result); 
                                 free(result); 
@@ -842,7 +842,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 // inputArray = {radioDetails, &general_vfo, RIG_LEVEL_RFPOWER};
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
-                                inputArray[2] = (void*) RIG_LEVEL_RFPOWER; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_LEVEL_RFPOWER; 
                                 result = get_level(inputArray); 
                                 sendSpeakerOutput(result); 
                                 free(result); 
@@ -899,7 +899,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 // inputArray = {radioDetails, &general_vfo, RIG_LEVEL_VOXDELAY};
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
-                                inputArray[2] = (void*) RIG_LEVEL_VOXDELAY; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_LEVEL_VOXDELAY; 
                                 result = get_level(inputArray); 
                                 sendSpeakerOutput(result); 
                                 free(result); 
@@ -914,7 +914,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 // inputArray = {radioDetails, &general_vfo, RIG_LEVEL_BALANCE};
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
-                                inputArray[2] = (void*) RIG_LEVEL_BALANCE; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_LEVEL_BALANCE; 
                                 result = get_level(inputArray); 
                                 sendSpeakerOutput(result); 
                                 free(result); 
@@ -928,7 +928,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 // inputArray = {radioDetails, &general_vfo, RIG_LEVEL_SWR};
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
-                                inputArray[2] = (void*) RIG_LEVEL_SWR; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_LEVEL_SWR; 
                                 result = get_level(inputArray); 
                                 sendSpeakerOutput(result); 
                                 free(result); 

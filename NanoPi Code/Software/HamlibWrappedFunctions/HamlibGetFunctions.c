@@ -324,7 +324,7 @@ char* get_level(void* input) {
 
     RIG* rig = ((void**)input)[0];
     vfo_t vfo = *((vfo_t*)((void**)input)[1]);
-    setting_t setting_value = *((setting_t*)((void**)input)[2]); 
+    setting_t setting_value = (setting_t)(uintptr_t)((void**)input)[2];
     
     char* output = malloc(40); 
     value_t value; 
@@ -339,51 +339,51 @@ char* get_func(void* input) {
     // vfo_t vfo = *(vfo_t*) input[1]; 
     // setting_t setting_value = *(setting_t*) input[2]; 
     
-    // RIG* rig = ((void**)input)[0];
-    // vfo_t vfo = *((vfo_t*)((void**)input)[1]);
-    // setting_t setting_value = *((setting_t*)((void**)input)[2]); 
-
-    // printf("I get here"); 
-
-    // char* output = malloc(40); 
-    // int status; 
-    // rig_get_func (rig, vfo, setting_value, &status); 	
-    // snprintf(output, 40, "%s now %d", rig_strfunc(setting_value), status); 
-    // return output; 
-
-    if (input == NULL) {
-        printf("Error: Input array is NULL.\n");
-        return NULL;
-    }
-
     RIG* rig = ((void**)input)[0];
-    if (rig == NULL) {
-        printf("Error: RIG pointer is NULL.\n");
-        return NULL;
-    }
-
     vfo_t vfo = *((vfo_t*)((void**)input)[1]);
     setting_t setting_value = (setting_t)(uintptr_t)((void**)input)[2];
 
-    printf("Retrieving data from input array:\n");
-    printf("RIG pointer: %p\n", rig);
-    printf("VFO value: %d\n", vfo);
-    printf("Setting value: %d\n", setting_value);
+    printf("I get here"); 
 
-    char* output = malloc(sizeof(char) * 40);
-    if (output == NULL) {
-        printf("Error: Failed to allocate memory for output buffer.\n");
-        return NULL;
-    }
+    char* output = malloc(40); 
+    int status; 
+    rig_get_func (rig, vfo, setting_value, &status); 	
+    snprintf(output, 40, "%s now %d", rig_strfunc(setting_value), status); 
+    return output; 
 
-    printf("Allocated memory for output buffer.\n");
+    // if (input == NULL) {
+    //     printf("Error: Input array is NULL.\n");
+    //     return NULL;
+    // }
 
-    int status;
-    rig_get_func(rig, vfo, setting_value, &status);
-    printf("Got here after rig_get_func\n");
+    // RIG* rig = ((void**)input)[0];
+    // if (rig == NULL) {
+    //     printf("Error: RIG pointer is NULL.\n");
+    //     return NULL;
+    // }
 
-    snprintf(output, 40, "%s now %d", rig_strfunc(setting_value), status);
-    printf("Got here after snprintf\n");
+    // vfo_t vfo = *((vfo_t*)((void**)input)[1]);
+    // setting_t setting_value = (setting_t)(uintptr_t)((void**)input)[2];
+
+    // printf("Retrieving data from input array:\n");
+    // printf("RIG pointer: %p\n", rig);
+    // printf("VFO value: %d\n", vfo);
+    // printf("Setting value: %d\n", setting_value);
+
+    // char* output = malloc(sizeof(char) * 40);
+    // if (output == NULL) {
+    //     printf("Error: Failed to allocate memory for output buffer.\n");
+    //     return NULL;
+    // }
+
+    // printf("Allocated memory for output buffer.\n");
+
+    // int status;
+    // rig_get_func(rig, vfo, setting_value, &status);
+    // printf("Got here after rig_get_func\n");
+
+    // snprintf(output, 40, "%s now %d", rig_strfunc(setting_value), status);
+    // printf("Got here after snprintf\n");
 
     return output;
 }
