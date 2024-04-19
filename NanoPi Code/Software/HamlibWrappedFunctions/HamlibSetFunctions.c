@@ -273,8 +273,10 @@ char* set_level(void* input) {
     printf("I get here into the level function\n"); 
     RIG* rig = ((void**)input)[0];
     vfo_t vfo = *((vfo_t*)((void**)input)[1]);
-    setting_t setting_value = (setting_t)(uintptr_t)((void**)input)[2];
-    value_t value = *((value_t*)((void**)input)[3]); 
+    setting_t setting_value = *(setting_t*)((void**)input)[2];
+    double value_double = *((double*)((void**)input)[3]); 
+
+    float value = (float)value_double; 
 
     printf("I finish casting\n"); 
 	char* output = malloc(100); 
