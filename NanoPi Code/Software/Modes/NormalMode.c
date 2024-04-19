@@ -10,13 +10,14 @@ setting_t settingToChange; // This goes with Type Two
 vfo_t general_vfo = RIG_VFO_CURR;
 
 int switchFuncMode(RIG* radioDetails, setting_t settingToGet) {
+    printf("I run");
     int status = 0; 
     if (rig_get_func(radioDetails, &general_vfo, settingToGet, &status) == RIG_OK) {
         if (status == 0) {
             printf("Turn func on\n"); 
             return 1; 
         } else {
-            printf("Turn func on\n"); 
+            printf("Turn func off\n"); 
             return 0; 
         }
     }
