@@ -279,7 +279,7 @@ char* set_level(void* input) {
     printf("I finish casting\n"); 
 	char* output = malloc(100); 
     rig_set_level (rig, vfo, setting_value, value); 
-    snprintf(output, 100, "%s set to %d", rig_strlevel(setting_value), value); 
+    snprintf(output, 100, "%s set to %f", rig_strlevel(setting_value), value); 
     printf("I finish entirely\n"); 
     return output; 
 }
