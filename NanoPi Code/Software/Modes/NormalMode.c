@@ -13,10 +13,10 @@ int switchFuncMode(RIG* radioDetails, setting_t settingToGet) {
     int status = 0; 
     if (rig_get_func(radioDetails, &general_vfo, settingToGet, &status) == RIG_OK) {
         if (status == 0) {
-            printf("Turn func on\n")
+            printf("Turn func on\n"); 
             return 1; 
         } else {
-            printf("Turn func on\n")
+            printf("Turn func on\n"); 
             return 0; 
         }
     }
