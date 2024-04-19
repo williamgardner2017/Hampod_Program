@@ -9,10 +9,10 @@ setting_t settingToChange; // This goes with Type Two
  
 vfo_t general_vfo = RIG_VFO_CURR;
 
-int switchFuncMode(RIG* radioDetails, setting_t settingToGet) {
+int switchFuncMode(RIG* radioDetails) {
     printf("I run\n");
     int status; 
-    if (rig_get_func(radioDetails, &general_vfo, settingToGet, &status) == RIG_OK) {
+    if (rig_get_func(radioDetails, &general_vfo, &status) == RIG_OK) {
         if (status == 0) {
             printf("Turn func on\n"); 
             return 1; 
@@ -130,7 +130,8 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 1:
                             // Set Compression: RIG_FUNC_COMP
                             if (rig_has_set_func(radioDetails, RIG_FUNC_COMP)) {
-                                int setting = switchFuncMode(radioDetails, RIG_FUNC_COMP); 
+                                settingToChange = RIG_FUNC_COMP; 
+                                int setting = switchFuncMode(radioDetails); 
                                 // inputArray = {radioDetails, &general_vfo, RIG_FUNC_COMP, setting}; 
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
@@ -146,7 +147,8 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 2:
                             // Set Tone Control: RIG_FUNC_TONE
                             if (rig_has_set_func(radioDetails, RIG_FUNC_TONE)) {
-                                int setting = switchFuncMode(radioDetails, RIG_FUNC_TONE); 
+                                settingToChange = RIG_FUNC_TONE; 
+                                int setting = switchFuncMode(radioDetails); 
                                 // inputArray = {radioDetails, &general_vfo, RIG_FUNC_TONE, setting}; 
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
@@ -335,7 +337,8 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 2:
                             // Setting VFO Lock
                             if (rig_has_set_func(radioDetails, RIG_FUNC_LOCK)) {
-                                int setting = switchFuncMode(radioDetails, RIG_FUNC_LOCK); 
+                                settingToChange = RIG_FUNC_LOCK; 
+                                int setting = switchFuncMode(radioDetails); 
                                 // inputArray = {radioDetails, &general_vfo, RIG_FUNC_LOCK, setting}; 
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
@@ -492,7 +495,8 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 0:
                             // Set RIT Status
                             if (rig_has_set_func(radioDetails, RIG_FUNC_RIT)) {
-                                int setting = switchFuncMode(radioDetails, RIG_FUNC_RIT); 
+                                settingToChange = RIG_FUNC_RIT; 
+                                int setting = switchFuncMode(radioDetails); 
                                 printf("%i", setting); 
                                 // inputArray = {radioDetails, &general_vfo, RIG_FUNC_RIT, setting}; 
                                 inputArray[0] = radioDetails; 
@@ -517,7 +521,8 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 2:
                             // Set Noise Blanker: RIG_FUNC_NB
                             if (rig_has_set_func(radioDetails, RIG_FUNC_NB)) {
-                                int setting = switchFuncMode(radioDetails, RIG_FUNC_NB); 
+                                settingToChange = RIG_FUNC_NB; 
+                                int setting = switchFuncMode(radioDetails); 
                                 // inputArray = {radioDetails, &general_vfo, RIG_FUNC_NB, setting}; 
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
@@ -587,7 +592,8 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 0:
                             // Set XIT Status
                             if (rig_has_set_func(radioDetails, RIG_FUNC_XIT)) {
-                                int setting = switchFuncMode(radioDetails, RIG_FUNC_XIT); 
+                                settingToChange = RIG_FUNC_XIT; 
+                                int setting = switchFuncMode(radioDetails); 
                                 // inputArray = {radioDetails, &general_vfo, RIG_FUNC_XIT, setting}; 
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
@@ -611,7 +617,8 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 2:
                             // Set Squelch Control: RIG_FUNC_SQL 
                             if (rig_has_set_func(radioDetails, RIG_FUNC_SQL)) {
-                                int setting = switchFuncMode(radioDetails, RIG_FUNC_SQL); 
+                                settingToChange = RIG_FUNC_SQL; 
+                                int setting = switchFuncMode(radioDetails); 
                                 // inputArray = {radioDetails, &general_vfo, RIG_FUNC_SQL, setting}; 
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
@@ -773,7 +780,8 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 0:
                             // Set VOX Status (Voice Operated Relay): RIG_FUNC_VOX
                             if (rig_has_set_func(radioDetails, RIG_FUNC_VOX)) {
-                                int setting = switchFuncMode(radioDetails, RIG_FUNC_VOX); 
+                                settingToChange = RIG_FUNC_VOX; 
+                                int setting = switchFuncMode(radioDetails); 
                                 // inputArray = {radioDetails, &general_vfo, RIG_FUNC_VOX, setting}; 
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
