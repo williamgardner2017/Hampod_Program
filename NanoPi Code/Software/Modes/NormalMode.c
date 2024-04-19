@@ -11,7 +11,7 @@ KeyPress* normalModeClearing;
 vfo_t general_vfo = RIG_VFO_CURR;
 vfo_t a_vfo = RIG_VFO_A; 
 vfo_t b_vfo = RIG_VFO_B; 
-vfo_t c_vfo = RIG_VFO_Cs; 
+vfo_t c_vfo = RIG_VFO_C; 
 
 int switchFuncMode(RIG* radioDetails) {
     int status; 
