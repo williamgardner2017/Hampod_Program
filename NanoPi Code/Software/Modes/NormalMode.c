@@ -12,7 +12,13 @@ vfo_t general_vfo = RIG_VFO_CURR;
 int switchFuncMode(RIG* radioDetails, setting_t settingToGet) {
     int status = 0; 
     if (rig_get_func(radioDetails, &general_vfo, settingToGet, &status) == RIG_OK) {
-        return (status != 0);  // Convert status to 1 for "on", 0 otherwise
+        if (status == 0) {
+            printf("Turn func on\n")
+            return 1; 
+        } else {
+            printf("Turn func on\n")
+            return 0; 
+        }
     }
     return -1;
 }
