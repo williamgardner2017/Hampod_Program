@@ -19,16 +19,20 @@ char* get_current_transceive_mode(void* input) {
 char* get_current_frequency(void* input) {
     // RIG* rig = (RIG*) input[0]; 
     // vfo_t vfo = *(vfo_t*) input[1]; 
-    printf("I run here"); 
+    printf("I run here\n"); 
 
     RIG* rig = ((void**)input)[0];
     vfo_t vfo = *((vfo_t*)((void**)input)[1]);
+
+    printf("I finish casting\n"); 
     
     freq_t value; 
     int retcode = rig_get_freq(rig, vfo, &value); 
     if (retcode == RIG_OK) {
         char* output = malloc(40); 
+        
         snprintf(output, 40, "Frequency now %.3f\n", value);
+        printf("I finish getting frequency\n"); 
         return output; 
     } else {
         printf("rig_get_freq: error = %s\n", rigerror(retcode));
