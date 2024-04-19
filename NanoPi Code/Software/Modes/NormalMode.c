@@ -12,7 +12,10 @@ vfo_t general_vfo = RIG_VFO_CURR;
 int switchFuncMode(RIG* radioDetails) {
     printf("I run\n");
     int status; 
-    if (rig_get_func(radioDetails, &general_vfo, settingToChange, &status) == RIG_OK) {
+    retcode = rig_get_func(radioDetails, &general_vfo, settingToChange, &status);
+    if (retcode != RIG_OK) {
+        printf("rig_get_func RIT error: %s\n", rigerror(retcode));
+    } else {
         if (status == 0) {
             printf("Turn func on\n"); 
             return 1; 
