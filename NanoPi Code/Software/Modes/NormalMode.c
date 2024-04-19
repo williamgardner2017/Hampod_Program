@@ -44,6 +44,7 @@ void enterValueModeTypeOne(KeyPress* keyInput, RIG* radioDetails) {
 
 void enterValueModeTypeTwo(KeyPress* keyInput, RIG* radioDetails) {
     double enteredValue = keypadInput(keyInput);
+    printf("%d", enteredValue); 
     if (enteredValue >= 0) {
         void** inputArray = malloc(sizeof(void*) * 4); 
         inputArray[0] = radioDetails; 
