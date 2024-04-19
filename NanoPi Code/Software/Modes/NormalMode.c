@@ -44,7 +44,7 @@ void enterValueModeTypeOne(KeyPress* keyInput, RIG* radioDetails) {
 
 void enterValueModeTypeTwo(KeyPress* keyInput, RIG* radioDetails) {
     double enteredValue = keypadInput(keyInput);
-    printf("%d", enteredValue); 
+    printf("%d\n", enteredValue); 
     if (enteredValue >= 0) {
         void** inputArray = malloc(sizeof(void*) * 4); 
         inputArray[0] = radioDetails; 
@@ -52,7 +52,9 @@ void enterValueModeTypeTwo(KeyPress* keyInput, RIG* radioDetails) {
         inputArray[2] = (void*)(uintptr_t)settingToChange; 
         inputArray[3] = (void*)(intptr_t)enteredValue; 
         // void** inputArray[] = {(void*) radioDetails, (void*) &general_vfo, (void*) settingToChange, (void*) enteredValue};
+        printf("I got here before result\n"); 
         char* result = currentInputFunction(inputArray);
+        printf("%s\n", result); 
         sendSpeakerOutput(result);
         free(result); 
         enteringValue = false; 
