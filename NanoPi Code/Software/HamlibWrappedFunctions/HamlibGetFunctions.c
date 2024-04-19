@@ -11,7 +11,9 @@ char* get_current_transceive_mode(void* input) {
         return output; 
     } else {
         printf("rig_get_trn: error = %s\n", rigerror(retcode));
-        return "-1"; 
+        char* output = malloc(40); 
+        sprintf(output, "Error Getting");
+        return output; 
     }
     
 }
@@ -33,7 +35,9 @@ char* get_current_frequency(void* input) {
         return output; 
     } else {
         printf("rig_get_freq: error = %s\n", rigerror(retcode));
-        return "-1"; 
+        char* output = malloc(40); 
+        sprintf(output, "Error Getting Frequency");
+        return output; 
     }
 }
 
@@ -53,7 +57,9 @@ char* get_current_mode(void* input) {
         return output; 
     } else {
         printf("get_current_mode: error = %s\n", rigerror(retcode));
-        return "-1"; 
+        char* output = malloc(40); 
+        sprintf(output, "Error Getting");
+        return output; 
     }
 }
 
@@ -70,7 +76,9 @@ char* get_current_vfo(void* input) {
         return output; 
     } else {
         printf("rig_get_vfo: error = %s\n", rigerror(retcode));
-        return "-1"; 
+        char* output = malloc(40); 
+        sprintf(output, "Error Getting");
+        return output; 
     }
 }
 
@@ -99,7 +107,9 @@ char* get_ptt(void* input) {
         return output; 
     } else {
         printf("rig_get_ptt: error = %s\n", rigerror(retcode));
-        return "-1"; 
+        char* output = malloc(40); 
+        sprintf(output, "Error Getting");
+        return output; 
     }
 }
 
@@ -176,7 +186,9 @@ char* get_current_rit_offset(void* input) {
         return output; 
     } else {
         printf("rig_get_rit: error = %s\n", rigerror(retcode));
-        return "-1"; 
+        char* output = malloc(40); 
+        sprintf(output, "Error Getting");
+        return output; 
     }
 }
 
@@ -195,7 +207,9 @@ char* get_current_xit_offset(void* input) {
         return output; 
     } else {
         printf("rig_get_xit: error = %s\n", rigerror(retcode));
-        return "-1"; 
+        char* output = malloc(40); 
+        sprintf(output, "Error Getting");
+        return output; 
     }
 }
 
@@ -214,7 +228,9 @@ char* get_current_tuning_step(void* input) {
         return output; 
     } else {
         printf("rig_get_ts: error = %s\n", rigerror(retcode));
-        return "-1"; 
+        char* output = malloc(40); 
+        sprintf(output, "Error Getting");
+        return output; 
     }
 }
 
@@ -233,7 +249,9 @@ char* get_current_CTCSS_sub_audible_tone(void* input) {
         return output; 
     } else {
         printf("rig_get_ctcss_tone: error = %s\n", rigerror(retcode));
-        return "-1"; 
+        char* output = malloc(40); 
+        sprintf(output, "Error Getting");
+        return output; 
     }
 }
 
@@ -252,7 +270,9 @@ char* get_current_encoding_digitally_coded_squelch_code(void* input) {
         return output; 
     } else {
         printf("rig_get_dcs_code: error = %s\n", rigerror(retcode));
-        return "-1"; 
+        char* output = malloc(40); 
+        sprintf(output, "Error Getting");
+        return output; 
     }
 }
 
@@ -271,7 +291,9 @@ char* get_current_CTCSS_sub_audible_squelch_tone(void* input) {
         return output; 
     } else {
         printf("rig_get_ctcss_sql: error = %s\n", rigerror(retcode));
-        return "-1"; 
+        char* output = malloc(40); 
+        sprintf(output, "Error Getting");
+        return output; 
     }
 }
 
@@ -290,7 +312,9 @@ char* get_current_continuous_tone_controlled_squelch_code(void* input) {
         return output; 
     } else {
         printf("rig_get_dcs_sql: error = %s\n", rigerror(retcode));
-        return "-1"; 
+        char* output = malloc(40); 
+        sprintf(output, "Error Getting");
+        return output; 
     }
 }
 
