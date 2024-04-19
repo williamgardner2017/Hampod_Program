@@ -293,7 +293,7 @@ char* set_func(void* input) {
     setting_t setting_value = (setting_t)(uintptr_t)((void**)input)[2];
     int value = (int)(uintptr_t)((void**)input)[3];
 
-    printf("I get here 5"); 
+    printf("%i", value); 
 	char* output = malloc(100); 
     rig_set_func (rig, vfo, setting_value, value); 	
     snprintf(output, 100, "%s set to %d", rig_strfunc(setting_value), value); 

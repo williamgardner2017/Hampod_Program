@@ -493,6 +493,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             // Set RIT Status
                             if (rig_has_set_func(radioDetails, RIG_FUNC_RIT)) {
                                 int setting = switchFuncMode(radioDetails, RIG_FUNC_RIT); 
+                                printf("%i", setting); 
                                 // inputArray = {radioDetails, &general_vfo, RIG_FUNC_RIT, setting}; 
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
