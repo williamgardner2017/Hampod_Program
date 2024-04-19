@@ -276,7 +276,7 @@ char* set_level(void* input) {
     setting_t setting_value = *(setting_t*)((void**)input)[2];
     double value_double = *((double*)((void**)input)[3]); 
 
-    float value = (float)value_double; 
+    value_t value = (value_t)value_double; 
 
     printf("I finish casting\n"); 
 	char* output = malloc(100); 
