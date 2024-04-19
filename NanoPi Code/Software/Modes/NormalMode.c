@@ -6,6 +6,7 @@ char inputValue[100] = "";
 int setFunctionType = 0; 
 HamlibSetFunction currentInputFunction;
 setting_t settingToChange; // This goes with Type Two
+KeyPress* normalModeClearing; 
  
 vfo_t general_vfo = RIG_VFO_CURR;
 
@@ -701,6 +702,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             settingToChange = RIG_LEVEL_IF; 
                             currentInputFunction = set_level;
                             setFunctionType = 2; 
+                            keypadInput(normalModeClearing); // Clear previous input
                             break;
                         case 1:
                             // Set Automatic Gain Control: RIG_LEVEL_AGC
@@ -1024,6 +1026,8 @@ void freeNormalMode(Mode* modeToFree){
 
 Mode* NormalLoad(){
     Mode* newMode = malloc(sizeof(Mode));
+    normalModeClearing = malloc(sizeof(KeyPress)); 
+    normalModeClearing->keyPressed = '#'; 
 
     if(newMode == NULL){
         return NULL;
