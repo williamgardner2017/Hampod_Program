@@ -276,12 +276,12 @@ char* set_level(void* input) {
     setting_t setting_value = *(setting_t*)((void**)input)[2];
     double value_double = *((double*)((void**)input)[3]); 
 
-    value_t value = (value_t)value_double; 
+    float value_float = (float)value_double; 
 
     printf("I finish casting\n"); 
 	char* output = malloc(100); 
-    rig_set_level (rig, vfo, setting_value, value); 
-    snprintf(output, 100, "%s set to %d", rig_strlevel(setting_value), value); 
+    rig_set_level (rig, vfo, setting_value, value_float); 
+    snprintf(output, 100, "%s set to %.2f", rig_strlevel(setting_value), value_float); 
     printf("I finish entirely\n"); 
     return output; 
 }
