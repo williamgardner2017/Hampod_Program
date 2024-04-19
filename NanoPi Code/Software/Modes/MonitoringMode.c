@@ -1,6 +1,7 @@
 #include "MonitoringMode.h"
 
 int* stateOfMonitoring;
+vfo_t general_vfo = RIG_VFO_CURR;
 
 void* monitoringModeRelay(KeyPress* keyInput, RIG* rig){
     void** inputData;
@@ -11,7 +12,7 @@ void* monitoringModeRelay(KeyPress* keyInput, RIG* rig){
                 stateOfMonitoring[0] = 1;
                 inputData = malloc(sizeof(void*)*2);
                 inputData[0] = rig;
-                inputData[1] = RIG_VFO_CURR;
+                inputData[1] = &general_vfo;
                 addMonitoringLink(get_current_frequency,(void*) inputData);
             }else{//turn it off
                 sendSpeakerOutput("Stopping monitoring of Frequensy");
@@ -51,7 +52,7 @@ void* monitoringModeRelay(KeyPress* keyInput, RIG* rig){
                 stateOfMonitoring[3] = 1;
                 inputData = malloc(sizeof(void*)*2);
                 inputData[0] = rig;
-                inputData[1] = RIG_VFO_CURR;
+                inputData[1] =  &general_vfo;
                 addMonitoringLink(get_current_mode,(void*) inputData);
             }else{//turn it off
                 sendSpeakerOutput("Stopping monitoring of Radio mode");
@@ -65,7 +66,7 @@ void* monitoringModeRelay(KeyPress* keyInput, RIG* rig){
                 stateOfMonitoring[4] = 1;
                 inputData = malloc(sizeof(void*)*2);
                 inputData[0] = rig;
-                inputData[1] = RIG_VFO_CURR;
+                inputData[1] =  &general_vfo;
                 addMonitoringLink(get_current_rit_offset,(void*) inputData);
             }else{//turn it off
                 sendSpeakerOutput("Stopping monitoring of rit offset");
@@ -79,7 +80,7 @@ void* monitoringModeRelay(KeyPress* keyInput, RIG* rig){
                 stateOfMonitoring[5] = 1;
                 inputData = malloc(sizeof(void*)*2);
                 inputData[0] = rig;
-                inputData[1] = RIG_VFO_CURR;
+                inputData[1] =  &general_vfo;
                 addMonitoringLink(get_current_xit_offset,(void*) inputData);
             }else{//turn it off
                 sendSpeakerOutput("Stopping monitoring of xit offset");
@@ -93,7 +94,7 @@ void* monitoringModeRelay(KeyPress* keyInput, RIG* rig){
                 stateOfMonitoring[6] = 1;
                 inputData = malloc(sizeof(void*)*2);
                 inputData[0] = rig;
-                inputData[1] = RIG_VFO_CURR;
+                inputData[1] =  &general_vfo;
                 addMonitoringLink(get_current_tuning_step,(void*) inputData);
             }else{//turn it off
                 sendSpeakerOutput("Stopping monitoring of tuning step");
@@ -107,7 +108,7 @@ void* monitoringModeRelay(KeyPress* keyInput, RIG* rig){
                 stateOfMonitoring[7] = 1;
                 inputData = malloc(sizeof(void*)*3);
                 inputData[0] = rig;
-                inputData[1] = RIG_VFO_CURR;
+                inputData[1] =  &general_vfo;
                 inputData[2] = (void*)(uintptr_t)RIG_LEVEL_RF;
                 addMonitoringLink(get_level,(void*) inputData);
             }else{//turn it off
@@ -122,7 +123,7 @@ void* monitoringModeRelay(KeyPress* keyInput, RIG* rig){
                 stateOfMonitoring[8] = 1;
                 inputData = malloc(sizeof(void*)*3);
                 inputData[0] = rig;
-                inputData[1] = RIG_VFO_CURR;
+                inputData[1] =  &general_vfo;
                 inputData[2] = (void*)(uintptr_t)RIG_FUNC_SQL;
                 addMonitoringLink(get_func,(void*) inputData);
             }else{//turn it off
