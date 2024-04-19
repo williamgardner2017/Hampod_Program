@@ -108,7 +108,7 @@ void* monitoringModeRelay(KeyPress* keyInput, RIG* rig){
                 inputData = malloc(sizeof(void*)*3);
                 inputData[0] = rig;
                 inputData[1] = RIG_VFO_CURR;
-                inputData[2] = RIG_LEVEL_RF;
+                inputData[2] = (void*)(uintptr_t)RIG_LEVEL_RF;
                 addMonitoringLink(get_level,(void*) inputData);
             }else{//turn it off
                 sendSpeakerOutput("Stopping monitoring of level R F");
@@ -123,7 +123,7 @@ void* monitoringModeRelay(KeyPress* keyInput, RIG* rig){
                 inputData = malloc(sizeof(void*)*3);
                 inputData[0] = rig;
                 inputData[1] = RIG_VFO_CURR;
-                inputData[2] = RIG_FUNC_SQL;
+                inputData[2] = (void*)(uintptr_t)RIG_FUNC_SQL;
                 addMonitoringLink(get_func,(void*) inputData);
             }else{//turn it off
                 sendSpeakerOutput("Stopping monitoring of Func Squelch");

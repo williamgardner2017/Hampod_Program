@@ -4,47 +4,66 @@ int retcode;
 bool enteringValue = false;
 char inputValue[100] = ""; 
 int setFunctionType = 0; 
-HamlibSetFunction currentInputFunctionOne;
+HamlibSetFunction currentInputFunction;
 setting_t settingToChange; // This goes with Type Two
-
+ 
 vfo_t general_vfo = RIG_VFO_CURR;
 
-int switchFuncMode(RIG* radioDetails, setting_t settingToGet) {
-    int setting = rig_get_func(radioDetails, &general_vfo, settingToGet); 
-    if (setting) {
-        return 0; 
+int switchFuncMode(RIG* radioDetails) {
+    int status; 
+    retcode = rig_get_func(radioDetails, general_vfo, settingToChange, &status);
+    if (retcode == RIG_OK) {
+        if (status == 0) {
+            printf("Turn func on\n"); 
+            return 1; 
+        } else {
+            printf("Turn func off\n"); 
+            return 0; 
+        }
     }
-    return 1; 
+    return -1;
 }
 
-void enterValueModeTypeOne(KeyPress* keyInput, RIG* radioDetails, SetValueFunctionTypeOne setValueFunction) {
+void enterValueModeTypeOne(KeyPress* keyInput, RIG* radioDetails) {
     double enteredValue = keypadInput(keyInput);
     if (enteredValue >= 0) {
-        void* inputArray[] = {radioDetails, &general_vfo, enteredValue};
-        char* result = HamlibSetFunction(inputArray);
+        void** inputArray = malloc(sizeof(void*) * 4); 
+        inputArray[0] = radioDetails; 
+        inputArray[1] = &general_vfo; 
+        inputArray[2] = (void*)(intptr_t)enteredValue; 
+        // void** inputArray[] = {(void*) radioDetails, (void*) &general_vfo, (void*) enteredValue};
+        char* result = currentInputFunction(inputArray);
         sendSpeakerOutput(result);
         free(result); 
-
         enteringValue = false; 
+        free(inputArray); 
     } else {
 
     }
 }
 
-void enterValueModeTypeTwo(KeyPress* keyInput, RIG* radioDetail; SetValueFunctionTypeTwo setValueFunction) {
+void enterValueModeTypeTwo(KeyPress* keyInput, RIG* radioDetails) {
     double enteredValue = keypadInput(keyInput);
     if (enteredValue >= 0) {
-        void* inputArray[] = {radioDetails, &general_vfo, settingToChange, enteredValue};
-        char* result = HamlibSetFunction(inputArray);
+        void** inputArray = malloc(sizeof(void*) * 4); 
+        inputArray[0] = radioDetails; 
+        inputArray[1] = &general_vfo; 
+        inputArray[2] = (void*)(uintptr_t)settingToChange; 
+        inputArray[3] = (void*)(intptr_t)enteredValue; 
+        // void** inputArray[] = {(void*) radioDetails, (void*) &general_vfo, (void*) settingToChange, (void*) enteredValue};
+        char* result = currentInputFunction(inputArray);
         sendSpeakerOutput(result);
         free(result); 
         enteringValue = false; 
+        free(inputArray); 
     } else {
 
     }
 }
 
 void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
+    void** inputArray = malloc(sizeof(void*) * 4); 
+    char* result; 
     if (enteringValue == false) {
         switch (keyInput->keyPressed) {
             case '0':
@@ -53,11 +72,14 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 0:
                             // Get Noise Reduction: RIG_LEVEL_NR
                             if (rig_has_get_level(radioDetails, RIG_LEVEL_NR)) {
-                                void* inputArray[] = {radioDetails, &general_vfo, RIG_LEVEL_NR};
-                                char* stringForOutput = get_level(inputArray); 
-                                printf("%s", stringForOutput); 
-                                sendSpeakerOutput(stringForOutput); 
-                                free(stringForOutput); 
+                                // inputArray = {radioDetails, &general_vfo, RIG_LEVEL_NR};
+                                inputArray[0] = radioDetails; 
+                                inputArray[1] = &general_vfo; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_LEVEL_NR; 
+
+                                result = get_level(inputArray); 
+                                sendSpeakerOutput(result); 
+                                free(result); 
                             } else {
                                 printf("Cannot get Noise Reduction\n"); 
                             }
@@ -65,25 +87,29 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 1:
                             // Get Compression: RIG_FUNC_COMP
                             if (rig_has_get_func(radioDetails, RIG_FUNC_COMP)) {
-                                void* inputArray[] = {radioDetails, &general_vfo, RIG_FUNC_COMP};
-                                char* stringForOutput = get_level(inputArray); 
-                                printf("%s", stringForOutput); 
-                                sendSpeakerOutput(stringForOutput); 
-                                free(stringForOutput); 
+                                // inputArray = {radioDetails, &general_vfo, RIG_FUNC_COMP};
+                                inputArray[0] = radioDetails; 
+                                inputArray[1] = &general_vfo; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_COMP; 
+                                result = get_level(inputArray); 
+                                sendSpeakerOutput(result); 
+                                free(result); 
                             } else {
-                                printf("Cannot get Compression status\n")
+                                printf("Cannot get Compression status\n"); 
                             }
                             break; 
                         case 2:
                             // Get Tone Control: RIG_FUNC_TONE
                             if (rig_has_get_func(radioDetails, RIG_FUNC_TONE)) {
-                                void* inputArray[] = {radioDetails, &general_vfo, RIG_FUNC_TONE};
-                                char* stringForOutput = get_level(inputArray); 
-                                printf("%s", stringForOutput); 
-                                sendSpeakerOutput(stringForOutput); 
-                                free(stringForOutput); 
+                                // inputArray = {radioDetails, &general_vfo, RIG_FUNC_TONE};
+                                inputArray[0] = radioDetails; 
+                                inputArray[1] = &general_vfo; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_TONE; 
+                                result = get_level(inputArray); 
+                                sendSpeakerOutput(result); 
+                                free(result); 
                             } else {
-                                printf("Cannot get Tone Control status\n")
+                                printf("Cannot get Tone Control status\n"); 
                             }
                             break; 
                         default:
@@ -98,31 +124,41 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             memset(inputValue, 0, sizeof(inputValue)); 
                             sendSpeakerOutput("Enter value for Noise Reduction\n");
                             settingToChange = RIG_LEVEL_NR; 
-                            HamlibSetFunction = set_level;
+                            currentInputFunction = set_level;
                             setFunctionType = 2; 
                             break; 
                         case 1:
                             // Set Compression: RIG_FUNC_COMP
                             if (rig_has_set_func(radioDetails, RIG_FUNC_COMP)) {
-                                int setting = switchFuncMode(radioDetails, RIG_FUNC_COMP); 
-                                void* inputArray[] = {radioDetails, &general_vfo, RIG_FUNC_COMP, setting}; 
-                                char* stringForOutput = set_func(inputArray); 
-                                sendSpeakerOutput(stringForOutput); 
-                                free(stringForOutput); 
+                                settingToChange = RIG_FUNC_COMP; 
+                                int setting = switchFuncMode(radioDetails); 
+                                // inputArray = {radioDetails, &general_vfo, RIG_FUNC_COMP, setting}; 
+                                inputArray[0] = radioDetails; 
+                                inputArray[1] = &general_vfo; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_COMP; 
+                                inputArray[3] = (void*)(uintptr_t)setting; 
+                                result = set_func(inputArray); 
+                                sendSpeakerOutput(result); 
+                                free(result); 
                             } else {
-                                printf("Cannot set Compression status\n")
+                                printf("Cannot set Compression status\n"); 
                             }
                             break; 
                         case 2:
                             // Set Tone Control: RIG_FUNC_TONE
                             if (rig_has_set_func(radioDetails, RIG_FUNC_TONE)) {
-                                int setting = switchFuncMode(radioDetails, RIG_FUNC_TONE); 
-                                void* inputArray[] = {radioDetails, &general_vfo, RIG_FUNC_TONE, setting}; 
-                                char* stringForOutput = set_func(inputArray); 
-                                sendSpeakerOutput(stringForOutput); 
-                                free(stringForOutput); 
+                                settingToChange = RIG_FUNC_TONE; 
+                                int setting = switchFuncMode(radioDetails); 
+                                // inputArray = {radioDetails, &general_vfo, RIG_FUNC_TONE, setting}; 
+                                inputArray[0] = radioDetails; 
+                                inputArray[1] = &general_vfo; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_TONE; 
+                                inputArray[3] = (void*)(uintptr_t)setting; 
+                                result = set_func(inputArray); 
+                                sendSpeakerOutput(result); 
+                                free(result); 
                             } else {
-                                printf("Cannot set Tone Control status\n")
+                                printf("Cannot set Tone Control status\n"); 
                             }
                             break; 
                         default:
@@ -136,11 +172,12 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                     switch (keyInput->shiftAmount) {
                         case 0:
                             // Get frequency from VFO A
-                            void* inputArray[] = {radioDetails, RIG_VFO_A};
-                            char* result = get_current_frequency(inputArray);
+                            // inputArray = {radioDetails, RIG_VFO_A};
+                            inputArray[0] = radioDetails; 
+                            inputArray[1] = (void*) RIG_VFO_A; 
+                            result = get_current_frequency(inputArray);
                             if (strcmp(result, "-1") != 0) {
-                                sprintf(stringForOutput, "%s", result);
-                                sendSpeakerOutput(stringForOutput);
+                                sendSpeakerOutput(result);
                             } else {
                                 fprintf(stderr, "VFO A frequency error\n");
                             }
@@ -148,11 +185,12 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break;
                         case 1:
                             // Get frequency from VFO B
-                            void* inputArray[] = {radioDetails, RIG_VFO_B};
-                            char* result = get_current_frequency(inputArray);
+                            // inputArray = {radioDetails, RIG_VFO_B};
+                            inputArray[0] = radioDetails; 
+                            inputArray[1] = (void*) RIG_VFO_B; 
+                            result = get_current_frequency(inputArray);
                             if (strcmp(result, "-1") != 0) {
-                                sprintf(stringForOutput, "%s", result);
-                                sendSpeakerOutput(stringForOutput);
+                                sendSpeakerOutput(result);
                             } else {
                                 fprintf(stderr, "VFO B frequency error\n");
                             }
@@ -160,11 +198,12 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break;
                         case 2:
                             // Get frequency from VFO C
-                            void* inputArray[] = {radioDetails, RIG_VFO_C};
-                            char* result = get_current_frequency(inputArray);
+                            // inputArray = {radioDetails, RIG_VFO_C};
+                            inputArray[0] = radioDetails; 
+                            inputArray[1] = (void*) RIG_VFO_C; 
+                            result = get_current_frequency(inputArray);
                             if (strcmp(result, "-1") != 0) {
-                                sprintf(stringForOutput, "%s", result);
-                                sendSpeakerOutput(stringForOutput);
+                                sendSpeakerOutput(result);
                             } else {
                                 fprintf(stderr, "VFO C frequency error\n");
                             }
@@ -178,24 +217,25 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                     switch (keyInput->shiftAmount) {
                         case 0:
                             // Get current VFO
-                            void* inputArray[] = {radioDetails};
-                            char* current_vfo = get_current_vfo(inputArray); 
-                            printf("%s", current_vfo); 
-                            sendSpeakerOutput(current_vfo); 
-                            free(current_vfo);
+                            // inputArray = {radioDetails};
+                            inputArray[0] = radioDetails; 
+                            result = get_current_vfo(inputArray); 
+                            sendSpeakerOutput(result); 
+                            free(result);
                             break; 
                         case 1:
                             // Set current VFO
-                            void* inputArray[] = {radioDetails};
-                            char* current_vfo = get_current_vfo(inputArray);
-                            if (strcmp(current_vfo, "-1") != 0) {
-                                current_vfo[strcspn(current_vfo, "\n")] = 0; // Remove newline for proper comparison
+                            // inputArray = {radioDetails};
+                            inputArray[0] = radioDetails; 
+                            char* result = get_current_vfo(inputArray);
+                            if (strcmp(result, "-1") != 0) {
+                                result[strcspn(result, "\n")] = 0; // Remove newline for proper comparison
 
-                                vfo_t current_vfo_enum = rig_parse_vfo(current_vfo);
+                                vfo_t current_vfo_enum = rig_parse_vfo(result);
                                 vfo_t next_vfo = current_vfo_enum;
                                 
                                 int attempts = 0; // Counter to avoid infinite loops
-                                char* result = NULL;
+                                result = NULL;
                                 do {
                                     // Get next VFO in sequence
                                     if (next_vfo == RIG_VFO_A) next_vfo = RIG_VFO_B;
@@ -207,7 +247,9 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                         free(result); // free the previous result
                                         result = NULL;
                                     }
-                                    inputArray = {radioDetails, &next_vfo};
+                                    // inputArray = {radioDetails, &next_vfo};
+                                    inputArray[0] = radioDetails; 
+                                    inputArray[1] = &next_vfo; 
                                     result = set_vfo(inputArray);
                                     attempts++;
                                 } while (strcmp(result, "-1") == 0 && attempts < 3); // Limit attempts to 3 just in case it fails. 
@@ -215,14 +257,13 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                                 if (strcmp(result, "-1") == 0) {
                                     printf("Failed to set any VFO after 3 attempts.\n");
                                 } else {
-                                    printf("%s", current_vfo); 
-                                    sendSpeakerOutput(current_vfo); 
+                                    sendSpeakerOutput(result); 
                                 }
                                 free(result);
                             } else {
                                 printf("Error retrieving current VFO\n");
                             }
-                            free(current_vfo);
+                            free(result);
                             break; 
                         case 2:
                             break; 
@@ -236,7 +277,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                     switch (keyInput->shiftAmount) {
                         case 0:
                             // Get Mode
-                            // void* inputArray[] = {radioDetails};
+                            // inputArray = {radioDetails};
                             // rmode_t mode_list[] = {RIG_MODE_AM, RIG_MODE_CW, RIG_MODE_USB, RIG_MODE_LSB, RIG_MODE_RTTY, RIG_MODE_FM};
 
                             // // Iterate through mode list
@@ -270,13 +311,16 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 2:
                             // Getting VFO Lock Status
                             if (rig_has_get_func(radioDetails, RIG_FUNC_LOCK)) {
-                                void* inputArray[] = {radioDetails, &general_vfo, RIG_FUNC_LOCK};
-                                char* stringForOutput = get_level(inputArray); 
-                                printf("%s", stringForOutput); 
-                                sendSpeakerOutput(stringForOutput); 
-                                free(stringForOutput); 
+                                // inputArray = {radioDetails, &general_vfo, RIG_FUNC_LOCK};
+                                inputArray[0] = radioDetails; 
+                                inputArray[1] = &general_vfo; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_LOCK; 
+                                result = get_level(inputArray); 
+                                printf("%s", result); 
+                                sendSpeakerOutput(result); 
+                                free(result); 
                             } else {
-                                printf("Cannot get VFO lock status\n")
+                                printf("Cannot get VFO lock status\n"); 
                             }
                             break; 
                         default:
@@ -293,13 +337,18 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 2:
                             // Setting VFO Lock
                             if (rig_has_set_func(radioDetails, RIG_FUNC_LOCK)) {
-                                int setting = switchFuncMode(radioDetails, RIG_FUNC_LOCK); 
-                                void* inputArray[] = {radioDetails, &general_vfo, RIG_FUNC_LOCK, setting}; 
-                                char* stringForOutput = set_func(inputArray); 
-                                sendSpeakerOutput(stringForOutput); 
-                                free(stringForOutput); 
+                                settingToChange = RIG_FUNC_LOCK; 
+                                int setting = switchFuncMode(radioDetails); 
+                                // inputArray = {radioDetails, &general_vfo, RIG_FUNC_LOCK, setting}; 
+                                inputArray[0] = radioDetails; 
+                                inputArray[1] = &general_vfo; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_LOCK; 
+                                inputArray[3] = (void*)(uintptr_t)setting; 
+                                result = set_func(inputArray); 
+                                sendSpeakerOutput(result); 
+                                free(result); 
                             } else {
-                                printf("Cannot set VFO lock status\n")
+                                printf("Cannot set VFO lock status\n"); 
                             }
                             break; 
                         default:
@@ -312,24 +361,27 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                     switch (keyInput->shiftAmount) {
                         case 0:
                             // Get PTT Status
-                            void* inputArray[] = {radioDetails, &general_vfo};
-                            char* stringForOutput = get_ptt(inputArray);
-                            if (strcmp(stringForOutput, "-1") != 0) {
-                                printf("%s", stringForOutput); 
-                                sendSpeakerOutput(stringForOutput);
+                            // inputArray = {radioDetails, &general_vfo};
+                            inputArray[0] = radioDetails; 
+                            inputArray[1] = &general_vfo; 
+                            result = get_ptt(inputArray);
+                            if (strcmp(result, "-1") != 0) {
+                                sendSpeakerOutput(result);
                             } else {
                                 printf("Cannot get PTT Status\n"); 
                             }
-                            free(stringForOutput); 
+                            free(result); 
                             break;
                         case 1:
                             // Get Passband Tuning Input: RIG_LEVEL_PBT_IN
                             if (rig_has_get_func(radioDetails, RIG_LEVEL_PBT_IN)) {
-                                void* inputArray[] = {radioDetails, &general_vfo, RIG_LEVEL_PBT_IN};
-                                char* stringForOutput = get_level(inputArray); 
-                                printf("%s", stringForOutput); 
-                                sendSpeakerOutput(stringForOutput); 
-                                free(stringForOutput); 
+                                // inputArray = {radioDetails, &general_vfo, RIG_LEVEL_PBT_IN};
+                                inputArray[0] = radioDetails; 
+                                inputArray[1] = &general_vfo; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_LEVEL_PBT_IN; 
+                                result = get_level(inputArray); 
+                                sendSpeakerOutput(result); 
+                                free(result); 
                             } else {
                                 printf("Cannot get Passband Tuning Input\n"); 
                             }
@@ -337,11 +389,13 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 2:
                             // Get Passband Tuning Output: RIG_LEVEL_PBT_OUT
                             if (rig_has_get_func(radioDetails, RIG_LEVEL_PBT_OUT)) {
-                                void* inputArray[] = {radioDetails, &general_vfo, RIG_LEVEL_PBT_OUT};
-                                char* stringForOutput = get_level(inputArray); 
-                                printf("%s", stringForOutput); 
-                                sendSpeakerOutput(stringForOutput); 
-                                free(stringForOutput); 
+                                // inputArray = {radioDetails, &general_vfo, RIG_LEVEL_PBT_OUT};
+                                inputArray[0] = radioDetails; 
+                                inputArray[1] = &general_vfo; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_LEVEL_PBT_OUT; 
+                                result = get_level(inputArray); 
+                                sendSpeakerOutput(result); 
+                                free(result); 
                                 
                             } else {
                                 printf("Cannot get Passband Tuning Output\n"); 
@@ -354,15 +408,14 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                     switch (keyInput->shiftAmount) {
                         case 0:
                             // Set PTT Status
-                            // void* inputArray[] = {radioDetails, &general_vfo};
-                            // char* stringForOutput = get_ptt(inputArray);
-                            // if (strcmp(stringForOutput, "-1") != 0) {
-                            //     printf("%s", stringForOutput); 
-                            //     sendSpeakerOutput(stringForOutput);
+                            // inputArray = {radioDetails, &general_vfo};
+                            // result = get_ptt(inputArray);
+                            // if (strcmp(result, "-1") != 0) {
+                            //     sendSpeakerOutput(result);
                             // } else {
                             //     printf("Cannot set PTT Status\n"); 
                             // }
-                            // free(stringForOutput); 
+                            // free(result); 
                             break; 
                         case 1:
                             // Set Passband Tuning Input: RIG_LEVEL_PBT_IN
@@ -371,7 +424,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             memset(inputValue, 0, sizeof(inputValue)); 
                             sendSpeakerOutput("Enter value for Passband Tuning Input\n");
                             settingToChange = RIG_LEVEL_PBT_IN; 
-                            HamlibSetFunction = set_level;
+                            currentInputFunction = set_level;
                             setFunctionType = 2; 
                             break; 
                         case 2:
@@ -381,7 +434,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             memset(inputValue, 0, sizeof(inputValue)); 
                             sendSpeakerOutput("Enter value for Passband Tuning Output\n");
                             settingToChange = RIG_LEVEL_PBT_OUT; 
-                            HamlibSetFunction = set_level;
+                            currentInputFunction = set_level;
                             setFunctionType = 2; 
                             break; 
                         default:
@@ -395,35 +448,41 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 0:
                             // Get RIT Status (Voice Operated Relay)
                             if (rig_has_get_func(radioDetails, RIG_FUNC_RIT)) {
-                                void* inputArray[] = {radioDetails, &general_vfo, RIG_FUNC_RIT};
-                                char* stringForOutput = get_level(inputArray); 
-                                printf("%s", stringForOutput); 
-                                sendSpeakerOutput(stringForOutput); 
-                                free(stringForOutput); 
+                                // inputArray = {radioDetails, &general_vfo, RIG_FUNC_RIT};
+                                inputArray[0] = radioDetails; 
+                                inputArray[1] = &general_vfo; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_RIT;
+                                result = get_func(inputArray); 
+                                sendSpeakerOutput(result); 
+                                free(result); 
                             } else {
                                 printf("Cannot get RIT Status\n"); 
                             }
+                            
                             break; 
                         case 1:
                             // Get RIT Offset
-                            void* inputArray[] = {radioDetails, &general_vfo};
-                            char* stringForOutput = get_current_rit_offset(inputArray); 
-                            if (strcmp(stringForOutput, "-1") != 0) {
-                                printf("%s", stringForOutput); 
-                                sendSpeakerOutput(stringForOutput); 
+                            // inputArray = {radioDetails, &general_vfo};
+                            inputArray[0] = radioDetails; 
+                            inputArray[1] = &general_vfo; 
+                            result = get_current_rit_offset(inputArray); 
+                            if (strcmp(result, "-1") != 0) {
+                                sendSpeakerOutput(result); 
                             } else {
                                 printf("Cannot get RIT Offset\n"); 
                             }
-                            free(stringForOutput); 
+                            free(result); 
                             break; 
                         case 2:
                             // Get Noise Blanker: RIG_FUNC_NB
                             if (rig_has_get_func(radioDetails, RIG_FUNC_NB)) {
-                                void* inputArray[] = {radioDetails, &general_vfo, RIG_FUNC_NB};
-                                char* stringForOutput = get_level(inputArray); 
-                                printf("%s", stringForOutput); 
-                                sendSpeakerOutput(stringForOutput); 
-                                free(stringForOutput); 
+                                // inputArray = {radioDetails, &general_vfo, RIG_FUNC_NB};
+                                inputArray[0] = radioDetails; 
+                                inputArray[1] = &general_vfo; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_NB; 
+                                result = get_func(inputArray); 
+                                sendSpeakerOutput(result); 
+                                free(result); 
                             } else {
                                 printf("Cannot get Noise Blanker\n"); 
                             }
@@ -436,11 +495,17 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 0:
                             // Set RIT Status
                             if (rig_has_set_func(radioDetails, RIG_FUNC_RIT)) {
-                                int setting = switchFuncMode(radioDetails, RIG_FUNC_RIT); 
-                                void* inputArray[] = {radioDetails, &general_vfo, RIG_FUNC_RIT, setting}; 
-                                char* stringForOutput = set_func(inputArray); 
-                                sendSpeakerOutput(stringForOutput); 
-                                free(stringForOutput); 
+                                settingToChange = RIG_FUNC_RIT; 
+                                int setting = switchFuncMode(radioDetails); 
+                                printf("%i", setting); 
+                                // inputArray = {radioDetails, &general_vfo, RIG_FUNC_RIT, setting}; 
+                                inputArray[0] = radioDetails; 
+                                inputArray[1] = &general_vfo; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_RIT; 
+                                inputArray[3] = (void*)(uintptr_t)setting; 
+                                result = set_func(inputArray); 
+                                sendSpeakerOutput(result); 
+                                free(result); 
                             } else {
                                 printf("Cannot set RIT Status\n"); 
                             }
@@ -456,11 +521,16 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 2:
                             // Set Noise Blanker: RIG_FUNC_NB
                             if (rig_has_set_func(radioDetails, RIG_FUNC_NB)) {
-                                int setting = switchFuncMode(radioDetails, RIG_FUNC_NB); 
-                                void* inputArray[] = {radioDetails, &general_vfo, RIG_FUNC_NB, setting}; 
-                                char* stringForOutput = set_func(inputArray); 
-                                sendSpeakerOutput(stringForOutput); 
-                                free(stringForOutput); 
+                                settingToChange = RIG_FUNC_NB; 
+                                int setting = switchFuncMode(radioDetails); 
+                                // inputArray = {radioDetails, &general_vfo, RIG_FUNC_NB, setting}; 
+                                inputArray[0] = radioDetails; 
+                                inputArray[1] = &general_vfo; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_NB; 
+                                inputArray[3] = (void*)(uintptr_t)setting; 
+                                result = set_func(inputArray); 
+                                sendSpeakerOutput(result); 
+                                free(result); 
                             } else {
                                 printf("Cannot set Noise Blanker\n"); 
                             }
@@ -476,35 +546,40 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 0:
                             // Get XIT Status
                             if (rig_has_get_func(radioDetails, RIG_FUNC_XIT)) {
-                                void* inputArray[] = {radioDetails, &general_vfo, RIG_FUNC_XIT};
-                                char* stringForOutput = get_level(inputArray); 
-                                printf("%s", stringForOutput); 
-                                sendSpeakerOutput(stringForOutput); 
-                                free(stringForOutput); 
+                                // inputArray = {radioDetails, &general_vfo, RIG_FUNC_XIT};
+                                inputArray[0] = radioDetails; 
+                                inputArray[1] = &general_vfo; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_XIT; 
+                                result = get_func(inputArray); 
+                                sendSpeakerOutput(result); 
+                                free(result); 
                             } else {
                                 printf("Cannot get XIT Status\n"); 
                             }
                             break; 
                         case 1:
                             // Get XIT Offset
-                            void* inputArray[] = {radioDetails, &general_vfo};
-                            char* stringForOutput = get_current_xit_offset(inputArray); 
-                            if (strcmp(stringForOutput, "-1") != 0) {
-                                printf("%s", stringForOutput); 
-                                sendSpeakerOutput(stringForOutput); 
+                            // inputArray = {radioDetails, &general_vfo};
+                            inputArray[0] = radioDetails; 
+                            inputArray[1] = &general_vfo; 
+                            result = get_current_xit_offset(inputArray); 
+                            if (strcmp(result, "-1") != 0) {
+                                sendSpeakerOutput(result); 
                             } else {
                                 printf("Cannot get XIT Offset\n"); 
                             }
-                            free(stringForOutput); 
+                            free(result); 
                             break; 
                         case 2:
                             // Get Squelch Control: RIG_FUNC_SQL
                             if (rig_has_get_func(radioDetails, RIG_FUNC_SQL)) {
-                                void* inputArray[] = {radioDetails, &general_vfo, RIG_FUNC_SQL};
-                                char* stringForOutput = get_level(inputArray); 
-                                printf("%s", stringForOutput); 
-                                sendSpeakerOutput(stringForOutput); 
-                                free(stringForOutput); 
+                                // inputArray = {radioDetails, &general_vfo, RIG_FUNC_SQL};
+                                inputArray[0] = radioDetails; 
+                                inputArray[1] = &general_vfo; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_SQL; 
+                                result = get_func(inputArray); 
+                                sendSpeakerOutput(result); 
+                                free(result); 
                             } else {
                                 printf("Cannot get Squelch Control\n"); 
                             }
@@ -517,11 +592,16 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 0:
                             // Set XIT Status
                             if (rig_has_set_func(radioDetails, RIG_FUNC_XIT)) {
-                                int setting = switchFuncMode(radioDetails, RIG_FUNC_XIT); 
-                                void* inputArray[] = {radioDetails, &general_vfo, RIG_FUNC_XIT, setting}; 
-                                char* stringForOutput = set_func(inputArray); 
-                                sendSpeakerOutput(stringForOutput); 
-                                free(stringForOutput); 
+                                settingToChange = RIG_FUNC_XIT; 
+                                int setting = switchFuncMode(radioDetails); 
+                                // inputArray = {radioDetails, &general_vfo, RIG_FUNC_XIT, setting}; 
+                                inputArray[0] = radioDetails; 
+                                inputArray[1] = &general_vfo; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_XIT; 
+                                inputArray[3] = (void*)(uintptr_t)setting; 
+                                result = set_func(inputArray); 
+                                sendSpeakerOutput(result); 
+                                free(result); 
                             } else {
                                 printf("Cannot set XIT Status\n"); 
                             }
@@ -537,11 +617,16 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 2:
                             // Set Squelch Control: RIG_FUNC_SQL 
                             if (rig_has_set_func(radioDetails, RIG_FUNC_SQL)) {
-                                int setting = switchFuncMode(radioDetails, RIG_FUNC_SQL); 
-                                void* inputArray[] = {radioDetails, &general_vfo, RIG_FUNC_SQL, setting}; 
-                                char* stringForOutput = set_func(inputArray); 
-                                sendSpeakerOutput(stringForOutput); 
-                                free(stringForOutput); 
+                                settingToChange = RIG_FUNC_SQL; 
+                                int setting = switchFuncMode(radioDetails); 
+                                // inputArray = {radioDetails, &general_vfo, RIG_FUNC_SQL, setting}; 
+                                inputArray[0] = radioDetails; 
+                                inputArray[1] = &general_vfo; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_SQL; 
+                                inputArray[3] = (void*)(uintptr_t)setting; 
+                                result = set_func(inputArray); 
+                                sendSpeakerOutput(result); 
+                                free(result); 
                             } else {
                                 printf("Cannot set Squelch Control\n"); 
                             }
@@ -557,11 +642,13 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 0:
                             // Get IF Shift: RIG_LEVEL_IF
                             if (rig_has_get_func(radioDetails, RIG_LEVEL_IF)) {
-                                void* inputArray[] = {radioDetails, &general_vfo, RIG_LEVEL_IF};
-                                char* stringForOutput = get_level(inputArray); 
-                                printf("%s", stringForOutput); 
-                                sendSpeakerOutput(stringForOutput); 
-                                free(stringForOutput); 
+                                // inputArray = {radioDetails, &general_vfo, RIG_LEVEL_IF};
+                                inputArray[0] = radioDetails; 
+                                inputArray[1] = (void*) &general_vfo; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_LEVEL_IF; 
+                                result = get_level(inputArray); 
+                                sendSpeakerOutput(result); 
+                                free(result); 
                                 
                             } else {
                                 printf("Cannot get Squelch\n"); 
@@ -570,11 +657,13 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 1:
                             // Get Automatic Gain Control: RIG_LEVEL_AGC
                             if (rig_has_get_func(radioDetails, RIG_LEVEL_AGC)) {
-                                void* inputArray[] = {radioDetails, &general_vfo, RIG_LEVEL_AGC};
-                                char* stringForOutput = get_level(inputArray); 
-                                printf("%s", stringForOutput); 
-                                sendSpeakerOutput(stringForOutput); 
-                                free(stringForOutput); 
+                                // inputArray = {radioDetails, &general_vfo, RIG_LEVEL_AGC};
+                                inputArray[0] = radioDetails; 
+                                inputArray[1] = &general_vfo; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_LEVEL_AGC; 
+                                result = get_level(inputArray); 
+                                sendSpeakerOutput(result); 
+                                free(result); 
                                 
                             } else {
                                 printf("Cannot get Automatic Gain Control\n"); 
@@ -583,11 +672,13 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 2:
                             // Get Squelch: RIG_LEVEL_SQL
                             if (rig_has_get_func(radioDetails, RIG_LEVEL_SQL)) {
-                                void* inputArray[] = {radioDetails, &general_vfo, RIG_LEVEL_SQL};
-                                char* stringForOutput = get_level(inputArray); 
-                                printf("%s", stringForOutput); 
-                                sendSpeakerOutput(stringForOutput); 
-                                free(stringForOutput); 
+                                // inputArray = {radioDetails, &general_vfo, RIG_LEVEL_SQL};
+                                inputArray[0] = radioDetails; 
+                                inputArray[1] = &general_vfo; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_LEVEL_SQL; 
+                                result = get_level(inputArray); 
+                                sendSpeakerOutput(result); 
+                                free(result); 
                                 
                             } else {
                                 printf("Cannot get Squelch\n"); 
@@ -605,7 +696,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             memset(inputValue, 0, sizeof(inputValue)); 
                             sendSpeakerOutput("Enter value for IF Shift\n");
                             settingToChange = RIG_LEVEL_IF; 
-                            HamlibSetFunction = set_level;
+                            currentInputFunction = set_level;
                             setFunctionType = 2; 
                             break;
                         case 1:
@@ -615,7 +706,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             memset(inputValue, 0, sizeof(inputValue)); 
                             sendSpeakerOutput("Enter value for Automatic Gain Control\n");
                             settingToChange = RIG_LEVEL_AGC; 
-                            HamlibSetFunction = set_level;
+                            currentInputFunction = set_level;
                             setFunctionType = 2; 
                             break; 
                         case 2:
@@ -625,7 +716,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             memset(inputValue, 0, sizeof(inputValue)); 
                             sendSpeakerOutput("Enter value for Squelch\n");
                             settingToChange = RIG_LEVEL_SQL; 
-                            HamlibSetFunction = set_level;
+                            currentInputFunction = set_level;
                             setFunctionType = 2; 
                             break; 
                         default:
@@ -639,11 +730,13 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 0:
                             // Get VOX Status (Voice Operated Relay): RIG_FUNC_VOX
                             if (rig_has_get_func(radioDetails, RIG_FUNC_VOX)) {
-                                void* inputArray[] = {radioDetails, &general_vfo, RIG_FUNC_VOX};
-                                char* stringForOutput = get_func(inputArray); 
-                                printf("%s", stringForOutput); 
-                                sendSpeakerOutput(stringForOutput); 
-                                free(stringForOutput); 
+                                // inputArray = {radioDetails, &general_vfo, RIG_FUNC_VOX};
+                                inputArray[0] = radioDetails; 
+                                inputArray[1] = &general_vfo; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_VOX; 
+                                result = get_func(inputArray); 
+                                sendSpeakerOutput(result); 
+                                free(result); 
                                 
                             } else {
                                 printf("Cannot get VOX Status\n"); 
@@ -652,11 +745,13 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 1:
                             // Get Audio Frequency (AF): RIG_LEVEL_AF
                             if (rig_has_get_func(radioDetails, RIG_LEVEL_AF)) {
-                                void* inputArray[] = {radioDetails, &general_vfo, RIG_LEVEL_AF};
-                                char* stringForOutput = get_level(inputArray); 
-                                printf("%s", stringForOutput); 
-                                sendSpeakerOutput(stringForOutput); 
-                                free(stringForOutput); 
+                                // inputArray = {radioDetails, &general_vfo, RIG_LEVEL_AF};
+                                inputArray[0] = radioDetails; 
+                                inputArray[1] = &general_vfo; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_LEVEL_AF; 
+                                result = get_level(inputArray); 
+                                sendSpeakerOutput(result); 
+                                free(result); 
                                 
                             } else {
                                 printf("Cannot get Audio Frequency\n"); 
@@ -665,11 +760,13 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 2:
                             // Get Radio Frequency (RF): RIG_LEVEL_RF
                             if (rig_has_get_func(radioDetails, RIG_LEVEL_RF)) {
-                                void* inputArray[] = {radioDetails, &general_vfo, RIG_LEVEL_RF};
-                                char* stringForOutput = get_level(inputArray); 
-                                printf("%s", stringForOutput); 
-                                sendSpeakerOutput(stringForOutput); 
-                                free(stringForOutput); 
+                                // inputArray = {radioDetails, &general_vfo, RIG_LEVEL_RF};
+                                inputArray[0] = radioDetails; 
+                                inputArray[1] = &general_vfo; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_LEVEL_RF; 
+                                result = get_level(inputArray); 
+                                sendSpeakerOutput(result); 
+                                free(result); 
                                 
                             } else {
                                 printf("Cannot get Radio Frequency\n"); 
@@ -683,11 +780,16 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 0:
                             // Set VOX Status (Voice Operated Relay): RIG_FUNC_VOX
                             if (rig_has_set_func(radioDetails, RIG_FUNC_VOX)) {
-                                int setting = switchFuncMode(radioDetails, RIG_FUNC_VOX); 
-                                void* inputArray[] = {radioDetails, &general_vfo, RIG_FUNC_VOX, setting}; 
-                                char* stringForOutput = set_func(inputArray); 
-                                sendSpeakerOutput(stringForOutput); 
-                                free(stringForOutput); 
+                                settingToChange = RIG_FUNC_VOX; 
+                                int setting = switchFuncMode(radioDetails); 
+                                // inputArray = {radioDetails, &general_vfo, RIG_FUNC_VOX, setting}; 
+                                inputArray[0] = radioDetails; 
+                                inputArray[1] = &general_vfo; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_VOX; 
+                                inputArray[3] = (void*)(uintptr_t)setting; 
+                                result = set_func(inputArray); 
+                                sendSpeakerOutput(result); 
+                                free(result); 
                             } else {
                                 printf("Cannot set VOX Status\n"); 
                             }
@@ -699,7 +801,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             memset(inputValue, 0, sizeof(inputValue)); 
                             sendSpeakerOutput("Enter value for Audio Frequency\n");
                             settingToChange = RIG_LEVEL_AF; 
-                            HamlibSetFunction = set_level;
+                            currentInputFunction = set_level;
                             setFunctionType = 2; 
                             break; 
                         case 2:
@@ -709,7 +811,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             memset(inputValue, 0, sizeof(inputValue)); 
                             sendSpeakerOutput("Enter value for Radio Frequency\n");
                             settingToChange = RIG_LEVEL_RF; 
-                            HamlibSetFunction = set_level;
+                            currentInputFunction = set_level;
                             setFunctionType = 2; 
                             break; 
                         default:
@@ -723,11 +825,13 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 0:
                             // Get VOX Gain: RIG_LEVEL_VOXGAIN
                             if (rig_has_get_level(radioDetails, RIG_LEVEL_VOXGAIN)) {
-                                void* inputArray[] = {radioDetails, &general_vfo, RIG_LEVEL_VOXGAIN};
-                                char* stringForOutput = get_level(inputArray); 
-                                printf("%s", stringForOutput); 
-                                sendSpeakerOutput(stringForOutput); 
-                                free(stringForOutput); 
+                                // inputArray = {radioDetails, &general_vfo, RIG_LEVEL_VOXGAIN};
+                                inputArray[0] = radioDetails; 
+                                inputArray[1] = &general_vfo; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_LEVEL_VOXGAIN; 
+                                result = get_level(inputArray); 
+                                sendSpeakerOutput(result); 
+                                free(result); 
                             } else {
                                 printf("Cannot get VOX Gain\n"); 
                             }
@@ -735,11 +839,13 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 1:
                             // Get Microphone Gain: RIG_LEVEL_MICGAIN
                             if (rig_has_get_func(radioDetails, RIG_LEVEL_MICGAIN)) {
-                                void* inputArray[] = {radioDetails, &general_vfo, RIG_LEVEL_MICGAIN};
-                                char* stringForOutput = get_level(inputArray); 
-                                printf("%s", stringForOutput); 
-                                sendSpeakerOutput(stringForOutput); 
-                                free(stringForOutput); 
+                                // inputArray = {radioDetails, &general_vfo, RIG_LEVEL_MICGAIN};
+                                inputArray[0] = radioDetails; 
+                                inputArray[1] = &general_vfo; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_LEVEL_MICGAIN; 
+                                result = get_level(inputArray); 
+                                sendSpeakerOutput(result); 
+                                free(result); 
                             } else {
                                 printf("Cannot get Microphone Gain\n"); 
                             }
@@ -747,11 +853,13 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 2:
                             // Get RF Power: RIG_LEVEL_RFPOWER
                             if (rig_has_get_func(radioDetails, RIG_LEVEL_RFPOWER)) {
-                                void* inputArray[] = {radioDetails, &general_vfo, RIG_LEVEL_RFPOWER};
-                                char* stringForOutput = get_level(inputArray); 
-                                printf("%s", stringForOutput); 
-                                sendSpeakerOutput(stringForOutput); 
-                                free(stringForOutput); 
+                                // inputArray = {radioDetails, &general_vfo, RIG_LEVEL_RFPOWER};
+                                inputArray[0] = radioDetails; 
+                                inputArray[1] = &general_vfo; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_LEVEL_RFPOWER; 
+                                result = get_level(inputArray); 
+                                sendSpeakerOutput(result); 
+                                free(result); 
                             } else {
                                 printf("Cannot get RF Power\n"); 
                             }
@@ -768,7 +876,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             memset(inputValue, 0, sizeof(inputValue)); 
                             sendSpeakerOutput("Enter value for VOX Gain\n");
                             settingToChange = RIG_LEVEL_VOXGAIN; 
-                            HamlibSetFunction = set_level;
+                            currentInputFunction = set_level;
                             setFunctionType = 2; 
                             break; 
                         case 1:
@@ -778,7 +886,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             memset(inputValue, 0, sizeof(inputValue)); 
                             sendSpeakerOutput("Enter value for Microphone Gain\n");
                             settingToChange = RIG_LEVEL_MICGAIN; 
-                            HamlibSetFunction = set_level;
+                            currentInputFunction = set_level;
                             setFunctionType = 2; 
                             break; 
                         case 2:
@@ -788,7 +896,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             memset(inputValue, 0, sizeof(inputValue)); 
                             sendSpeakerOutput("Enter value for RF Power\n");
                             settingToChange = RIG_LEVEL_RFPOWER; 
-                            HamlibSetFunction = set_level;
+                            currentInputFunction = set_level;
                             setFunctionType = 2; 
                             break; 
                         default:
@@ -802,11 +910,13 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 0:
                             // Get VOX Delay: RIG_LEVEL_VOXDELAY
                             if (rig_has_get_level(radioDetails, RIG_LEVEL_VOXDELAY)) {
-                                void* inputArray[] = {radioDetails, &general_vfo, RIG_LEVEL_VOXDELAY};
-                                char* stringForOutput = get_level(inputArray); 
-                                printf("%s", stringForOutput); 
-                                sendSpeakerOutput(stringForOutput); 
-                                free(stringForOutput); 
+                                // inputArray = {radioDetails, &general_vfo, RIG_LEVEL_VOXDELAY};
+                                inputArray[0] = radioDetails; 
+                                inputArray[1] = &general_vfo; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_LEVEL_VOXDELAY; 
+                                result = get_level(inputArray); 
+                                sendSpeakerOutput(result); 
+                                free(result); 
                                 
                             } else {
                                 printf("Cannot get VOX Delay\n"); 
@@ -815,11 +925,13 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 1:
                             // Get Audio Balance: RIG_LEVEL_BALANCE
                             if (rig_has_get_func(radioDetails, RIG_LEVEL_BALANCE)) {
-                                void* inputArray[] = {radioDetails, &general_vfo, RIG_LEVEL_BALANCE};
-                                char* stringForOutput = get_level(inputArray); 
-                                printf("%s", stringForOutput); 
-                                sendSpeakerOutput(stringForOutput); 
-                                free(stringForOutput); 
+                                // inputArray = {radioDetails, &general_vfo, RIG_LEVEL_BALANCE};
+                                inputArray[0] = radioDetails; 
+                                inputArray[1] = &general_vfo; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_LEVEL_BALANCE; 
+                                result = get_level(inputArray); 
+                                sendSpeakerOutput(result); 
+                                free(result); 
                             } else {
                                 printf("Cannot get Audio Balance\n"); 
                             }
@@ -827,11 +939,13 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                         case 2:
                             // Get Standing Wave Ratio: RIG_LEVEL_SWR
                             if (rig_has_get_func(radioDetails, RIG_LEVEL_SWR)) {
-                                void* inputArray[] = {radioDetails, &general_vfo, RIG_LEVEL_SWR};
-                                char* stringForOutput = get_level(inputArray); 
-                                printf("%s", stringForOutput); 
-                                sendSpeakerOutput(stringForOutput); 
-                                free(stringForOutput); 
+                                // inputArray = {radioDetails, &general_vfo, RIG_LEVEL_SWR};
+                                inputArray[0] = radioDetails; 
+                                inputArray[1] = &general_vfo; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_LEVEL_SWR; 
+                                result = get_level(inputArray); 
+                                sendSpeakerOutput(result); 
+                                free(result); 
                             } else {
                                 printf("Cannot get Standing Wave Ratio\n"); 
                             }
@@ -848,7 +962,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             memset(inputValue, 0, sizeof(inputValue)); 
                             sendSpeakerOutput("Enter value for VOX Delay\n");
                             settingToChange = RIG_LEVEL_VOXDELAY; 
-                            HamlibSetFunction = set_level;
+                            currentInputFunction = set_level;
                             int setFunctionType = 2; 
                             break; 
                         case 1:
@@ -858,7 +972,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             memset(inputValue, 0, sizeof(inputValue)); 
                             sendSpeakerOutput("Enter value for Audio Balance\n");
                             settingToChange = RIG_LEVEL_BALANCE; 
-                            HamlibSetFunction = set_level;
+                            currentInputFunction = set_level;
                             setFunctionType = 2; 
                             break; 
                         case 2:
@@ -868,7 +982,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             memset(inputValue, 0, sizeof(inputValue)); 
                             sendSpeakerOutput("Enter value for Standing Wave Ratio\n");
                             settingToChange = RIG_LEVEL_SWR; 
-                            HamlibSetFunction = set_level;
+                            currentInputFunction = set_level;
                             setFunctionType = 2; 
                             break; 
                         default:
@@ -880,12 +994,12 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                 break;
         }
     }else{
-        switch(currentInputType) {
+        switch(setFunctionType) {
             case 1: 
-                enterValueModeTypeOne(keyInput, radioDetails, currentInputFunction);
+                enterValueModeTypeOne(keyInput, radioDetails);
                 break; 
             case 2: 
-                enterValueModeTypeTwo(keyInput, radioDetails, currentInputFunction);
+                enterValueModeTypeTwo(keyInput, radioDetails);
                 break; 
             case 3: 
                 // enterValueMode(keyInput, radioDetails, currentInputFunctionTypeThree);
@@ -894,6 +1008,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                 break; 
         }
     }
+    free(inputArray); 
     return NULL;
 }
 

@@ -10,6 +10,7 @@
 #include "../GeneralFunctions.h"
 #include "../FirmwareCommunication.h"
 
+#include "../HamlibWrappedFunctions/HamlibGetFunctions.h"
 #include "../HamlibWrappedFunctions/HamlibSetFunctions.h"
 
 #ifdef OUTPUTLEVEL1
