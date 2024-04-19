@@ -14,10 +14,8 @@ int switchFuncMode(RIG* radioDetails) {
     retcode = rig_get_func(radioDetails, general_vfo, settingToChange, &status);
     if (retcode == RIG_OK) {
         if (status == 0) {
-            printf("Turn func on\n"); 
             return 1; 
         } else {
-            printf("Turn func off\n"); 
             return 0; 
         }
     }

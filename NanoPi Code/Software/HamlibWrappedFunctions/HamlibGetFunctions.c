@@ -19,6 +19,7 @@ char* get_current_transceive_mode(void* input) {
 char* get_current_frequency(void* input) {
     // RIG* rig = (RIG*) input[0]; 
     // vfo_t vfo = *(vfo_t*) input[1]; 
+    printf("I run here"); 
 
     RIG* rig = ((void**)input)[0];
     vfo_t vfo = *((vfo_t*)((void**)input)[1]);
