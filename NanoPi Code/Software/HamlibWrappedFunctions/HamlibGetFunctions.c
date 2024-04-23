@@ -49,7 +49,27 @@ char* get_current_mode(void* input) {
     int retcode = rig_get_mode(rig, vfo, &mode_value, &width_value); 	
     if (retcode == RIG_OK) {
         char* output = malloc(40); 
-        snprintf(output, 40, "%s now %ld\n", rig_strrmode(mode_value), width_value);
+        snprintf(output, 40, "Mode now %s\n", rig_strrmode(mode_value));
+        return output; 
+    } else {
+        printf("get_current_mode: error = %s\n", rigerror(retcode));
+        return "-1"; 
+    }
+}
+
+char* get_current_mode_width(void* input) {
+    // RIG* rig = (RIG*) input[0]; 
+    // vfo_t vfo = *(vfo_t*) input[1]; 
+
+    RIG* rig = ((void**)input)[0];
+    vfo_t vfo = *((vfo_t*)((void**)input)[1]);
+
+    rmode_t mode_value; 
+    pbwidth_t width_value; 
+    int retcode = rig_get_mode(rig, vfo, &mode_value, &width_value); 	
+    if (retcode == RIG_OK) {
+        char* output = malloc(40); 
+        snprintf(output, 40, "Mode width now %ld\n", width_value);
         return output; 
     } else {
         printf("get_current_mode: error = %s\n", rigerror(retcode));

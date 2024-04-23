@@ -29,6 +29,7 @@
 char* get_current_transceive_mode(void* input);
 char* get_current_frequency(void* input);
 char* get_current_mode(void* input);
+char* get_current_mode_width(void* input); 
 char* get_current_vfo(void* input);
 char* get_ptt(void* input);
 char* get_current_rit_offset(void* input);
