@@ -1,4 +1,6 @@
-char* set_frequency(void* input) {
+vfo_t vfo_array[3] = {RIG_VFO_A, RIG_VFO_B, RIG_VFO_C};
+
+har* set_frequency(void* input) {
     RIG* rig = ((void**)input)[0];
     vfo_t vfo = *((vfo_t*)((void**)input)[1]);
     freq_t value = *((freq_t*)((void**)input)[2]);
@@ -29,6 +31,25 @@ char* set_mode(void* input) {
         snprintf(output, 100, "-1\n");
     }
     return output; 
+}
+
+char* set_vfo_custom(void* input) {
+    RIG* rig = ((void**)input)[0];
+    vfo_t value = *((vfo_t*)((void**)input)[1]);
+
+    char* output = malloc(100);
+    int retcode;
+    for (int i = 0; i < 3; i++) {
+        retcode = rig_set_vfo(rig, vfo_array[i]);
+        if (retcode == RIG_OK) {
+            snprintf(output, 100, "VFO set to %s\n", rig_strvfo(vfo_array[i]));
+            return output; 
+        } else {
+            printf("rig_set_vfo: error = %s\n", rigerror(retcode));
+        }
+    }
+    snprintf(output, 100, "-1\n");
+    return output;
 }
 
 char* set_vfo(void* input) {
