@@ -1,4 +1,5 @@
 vfo_t vfo_array[3] = {RIG_VFO_A, RIG_VFO_B, RIG_VFO_C};
+rmode_t mode_array[6] = {RIG_MODE_AM, RIG_MODE_CW, RIG_MODE_USB, RIG_MODE_LSB, RIG_MODE_RTTY, RIG_MODE_FM};
 
 har* set_frequency(void* input) {
     RIG* rig = ((void**)input)[0];
@@ -14,6 +15,41 @@ har* set_frequency(void* input) {
         snprintf(output, 100, "-1\n");
     }
     return output; 
+}
+
+char* set_mode_custom(void* input) {
+    RIG* rig = ((void**)input)[0];
+    vfo_t vfo = *((vfo_t*)((void**)input)[1]);
+    rmode_t mode_value = *((rmode_t*)((void**)input)[2]);
+    pbwidth_t width_value = *((pbwidth_t*)((void**)input)[3]);
+
+    char* output = malloc(100); 
+
+    int retcode;
+    for (int i = 0; i < 3; i++) {
+        int retcode = rig_set_mode(rig, vfo, mode_value, width_value); 	
+        if (retcode == RIG_OK) {
+            snprintf(output, 100, "Mode now %s, Passband now %ld\n", rig_strrmode(mode_value), width_value);
+        } else {
+            printf("set_current_mode: error = %s\n", rigerror(retcode));
+            snprintf(output, 100, "-1\n");
+        }
+    }
+    snprintf(output, 100, "-1\n");
+    return output; 
+
+    int retcode;
+    for (int i = 0; i < 3; i++) {
+        retcode = rig_set_vfo(rig, vfo_array[i]);
+        if (retcode == RIG_OK) {
+            snprintf(output, 100, "VFO set to %s\n", rig_strvfo(vfo_array[i]));
+            return output; 
+        } else {
+            printf("rig_set_vfo: error = %s\n", rigerror(retcode));
+        }
+    }
+    snprintf(output, 100, "-1\n");
+    return output;
 }
 
 char* set_mode(void* input) {
@@ -37,8 +73,17 @@ char* set_vfo_custom(void* input) {
     RIG* rig = ((void**)input)[0];
     vfo_t value = *((vfo_t*)((void**)input)[1]);
 
-    char* output = malloc(100);
     int retcode;
+    char* output = malloc(100);
+
+    vfo_t current_vfo;
+    retcode = rig_get_vfo(rig, &current_vfo);
+    if (retcode != RIG_OK) {
+        snprintf(output, 100, "Error getting current VFO: %s\n", rigerror(retcode));
+        return output;
+    }
+
+    
     for (int i = 0; i < 3; i++) {
         retcode = rig_set_vfo(rig, vfo_array[i]);
         if (retcode == RIG_OK) {
@@ -49,6 +94,44 @@ char* set_vfo_custom(void* input) {
         }
     }
     snprintf(output, 100, "-1\n");
+    return output;
+}
+
+char* set_vfo_custom(void* input) {
+    RIG* rig = ((void**)input)[0];
+    vfo_t value = *((vfo_t*)((void**)input)[1]);
+
+    char* output = malloc(100);
+    int retcode;
+
+    // Get the current VFO
+    vfo_t current_vfo;
+    retcode = rig_get_vfo(rig, &current_vfo);
+    if (retcode != RIG_OK) {
+        snprintf(output, 100, "Error getting current VFO: %s\n", rigerror(retcode));
+        return output;
+    }
+
+    // Find the index of the current VFO
+    int current_index;
+    for (current_index = 0; current_index < 3; current_index++) {
+        if (vfo_array[current_index] == current_vfo) {
+            break; 
+        }
+    }
+
+    // Try next VFO
+    for (int i = 0; i < 3; i++) {
+        int next_index = (current_index + i + 1) % 3;
+        retcode = rig_set_vfo(rig, vfo_array[next_index]);
+        if (retcode == RIG_OK) {
+            snprintf(output, 100, "VFO set to %s\n", rig_strvfo(vfo_array[next_index]));
+            return output; 
+        } else {
+            printf("Error setting VFO: %s\n", rigerror(retcode));
+        }
+    }
+    snprintf(output, 100, "Unable to set VFO\n");
     return output;
 }
 
