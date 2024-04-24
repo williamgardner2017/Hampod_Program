@@ -284,6 +284,39 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                     switch (keyInput->shiftAmount) {
                         case 0:
                             // Get Mode
+                            rmode_t mode; 
+                            pbwidth_t width;  	
+                            inputArray[0] = radioDetails; 
+                            inputArray[1] = &general_vfo; 
+                            rig_get_mode()
+
+                            
+                            break; 
+                        case 1:
+                            // Get Width
+                            break; 
+                        case 2:
+                            // Getting VFO Lock Status
+                            if (rig_has_get_func(radioDetails, RIG_FUNC_LOCK)) {
+                                // inputArray = {radioDetails, &general_vfo, RIG_FUNC_LOCK};
+                                inputArray[0] = radioDetails; 
+                                inputArray[1] = &general_vfo; 
+                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_LOCK; 
+                                result = get_level(inputArray); 
+                                printf("%s", result); 
+                                sendSpeakerOutput(result); 
+                                free(result); 
+                            } else {
+                                printf("Cannot get VFO lock status\n"); 
+                            }
+                            break; 
+                        default:
+                            break;
+                    }
+                } else {
+                    switch (keyInput->shiftAmount) {
+                        case 0:
+                            // Set Mode
                             // inputArray = {radioDetails};
                             // rmode_t mode_list[] = {RIG_MODE_AM, RIG_MODE_CW, RIG_MODE_USB, RIG_MODE_LSB, RIG_MODE_RTTY, RIG_MODE_FM};
 
@@ -311,32 +344,6 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             //     // Additional actions after successful mode change
                             // }
                             // free(result);
-                            break; 
-                        case 1:
-                            // Get Width
-                            break; 
-                        case 2:
-                            // Getting VFO Lock Status
-                            if (rig_has_get_func(radioDetails, RIG_FUNC_LOCK)) {
-                                // inputArray = {radioDetails, &general_vfo, RIG_FUNC_LOCK};
-                                inputArray[0] = radioDetails; 
-                                inputArray[1] = &general_vfo; 
-                                inputArray[2] = (void*)(uintptr_t)RIG_FUNC_LOCK; 
-                                result = get_level(inputArray); 
-                                printf("%s", result); 
-                                sendSpeakerOutput(result); 
-                                free(result); 
-                            } else {
-                                printf("Cannot get VFO lock status\n"); 
-                            }
-                            break; 
-                        default:
-                            break;
-                    }
-                } else {
-                    switch (keyInput->shiftAmount) {
-                        case 0:
-                            // Set Mode
                             break; 
                         case 1:
                             // Set Width
@@ -846,7 +853,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 1:
                             // Get Microphone Gain: RIG_LEVEL_MICGAIN
-                            if (rig_has_get_func(radioDetails, RIG_LEVEL_MICGAIN)) {
+                            if (rig_has_get_level(radioDetails, RIG_LEVEL_MICGAIN)) {
                                 // inputArray = {radioDetails, &general_vfo, RIG_LEVEL_MICGAIN};
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
@@ -860,7 +867,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 2:
                             // Get RF Power: RIG_LEVEL_RFPOWER
-                            if (rig_has_get_func(radioDetails, RIG_LEVEL_RFPOWER)) {
+                            if (rig_has_get_level(radioDetails, RIG_LEVEL_RFPOWER)) {
                                 // inputArray = {radioDetails, &general_vfo, RIG_LEVEL_RFPOWER};
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
