@@ -1,5 +1,5 @@
 vfo_t vfo_array[3] = {RIG_VFO_A, RIG_VFO_B, RIG_VFO_C};
-rmode_t mode_array[6] = {RIG_MODE_AM, RIG_MODE_CW, RIG_MODE_USB, RIG_MODE_LSB, RIG_MODE_RTTY, RIG_MODE_FM};
+char* mode_array[6] = {"AM", "CW", "USB", "LSB", "RTTY", "FM"};
 
 char* set_frequency(void* input) {
     RIG* rig = ((void**)input)[0];
@@ -31,8 +31,8 @@ char* set_mode_custom(void* input) {
     // Find the index of the current mode
     int current_index;
     for (current_index = 0; current_index < 6; current_index++) {
-        if (mode_array[current_index] == current_mode) {
-            printf("Found index, %s", rig_strrmode(mode_array[current_index])); 
+        if (strcmp(mode_array[current_index], rig_strrmode(current_mode)) == 0) {
+            printf("Found index, %s\n", rig_strrmode(current_mode));
             break; // Found the index
         }
     }
@@ -40,10 +40,10 @@ char* set_mode_custom(void* input) {
     // Try the next mode
     for (int i = 0; i < 6; i++) {
         int next_index = (current_index + i + 1) % 6;
-        printf("Next index, %s", rig_strrmode(mode_array[next_index])); 
-        retcode = rig_set_mode(rig, RIG_VFO_CURR, mode_array[next_index], rig_passband_normal(rig, mode_array[next_index]));
+        printf("Next index, %s\n", mode_array[next_index]);
+        retcode = rig_set_mode(rig, RIG_VFO_CURR, rig_str2mode(mode_array[next_index]), rig_passband_normal(rig, rig_str2mode(mode_array[next_index])));
         if (retcode == RIG_OK) {
-            snprintf(output, 100, "Mode set to %s\n", rig_strrmode(mode_array[next_index]));
+            snprintf(output, 100, "Mode set to %s\n", mode_array[next_index]);
             return output; 
         } else {
             printf("Error setting mode: %s\n", rigerror(retcode));
