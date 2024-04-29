@@ -32,6 +32,7 @@ char* set_mode_custom(void* input) {
     int current_index;
     for (current_index = 0; current_index < 6; current_index++) {
         if (mode_array[current_index] == current_mode) {
+            printf("Found index, %s", rig_strrmode(mode_array[current_index])); 
             break; // Found the index
         }
     }
@@ -39,6 +40,7 @@ char* set_mode_custom(void* input) {
     // Try the next mode
     for (int i = 0; i < 6; i++) {
         int next_index = (current_index + i + 1) % 6;
+        printf("Next index, %s", rig_strrmode(mode_array[next_index])); 
         retcode = rig_set_mode(rig, RIG_VFO_CURR, mode_array[next_index], rig_passband_normal(rig, mode_array[next_index]));
         if (retcode == RIG_OK) {
             snprintf(output, 100, "Mode set to %s\n", rig_strrmode(mode_array[next_index]));
