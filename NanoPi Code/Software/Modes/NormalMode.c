@@ -284,11 +284,11 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                     switch (keyInput->shiftAmount) {
                         case 0:
                             // Get Mode
-                            rmode_t mode; 
-                            pbwidth_t width;  	
-                            inputArray[0] = radioDetails; 
-                            inputArray[1] = &general_vfo; 
-                            rig_get_mode()
+                            // rmode_t mode; 
+                            // pbwidth_t width;  	
+                            // inputArray[0] = radioDetails; 
+                            // inputArray[1] = &general_vfo; 
+                            // rig_get_mode(); 
 
                             
                             break; 
@@ -317,33 +317,15 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                     switch (keyInput->shiftAmount) {
                         case 0:
                             // Set Mode
-                            // inputArray = {radioDetails};
-                            // rmode_t mode_list[] = {RIG_MODE_AM, RIG_MODE_CW, RIG_MODE_USB, RIG_MODE_LSB, RIG_MODE_RTTY, RIG_MODE_FM};
-
-                            // // Iterate through mode list
-                            // int mode_count = sizeof(mode_list) / sizeof(mode_list[0]);
-                            // int attempts = 0; // Counter to avoid infinite loops
-                            // char* result = NULL;
-                            // do {
-                            //     rmode_t next_mode = mode_list[attempts % mode_count]; // Cycle through modes
-                            //     // Setting the mode
-                            //     if (result) {
-                            //         free(result); // Free the previous result
-                            //         result = NULL;
-                            //     }
-                            //     pbwidth_t passband_normal = rig_passband_normal(my_rig, RIG_MODE_USB); 
-                            //     inputArray = {radioDetails, RIG_VFO_CURR, &next_mode, &passband_normal};
-                            //     result = set_mode(inputArray);
-                            //     attempts++;
-                            // } while (strcmp(result, "-1") == 0 && attempts < mode_count); // Limit attempts to mode_count
-
-                            // if (strcmp(result, "-1") == 0) {
-                            //     printf("Failed to set any mode after trying all modes.\n");
-                            // } else {
-                            //     printf("Mode set successfully.\n");
-                            //     // Additional actions after successful mode change
-                            // }
-                            // free(result);
+                            inputArray[0] = radioDetails; 
+                            inputArray[1] = &general_vfo; 
+                            result = set_mode_custom(inputArray); 
+                            if (strcmp(result, "-1") != 0) {
+                                sendSpeakerOutput(result);
+                            } else {
+                                printf("Cannot set mode\n"); 
+                            }
+                            free(result); 
                             break; 
                         case 1:
                             // Set Width
