@@ -41,7 +41,7 @@ char* set_mode_custom(void* input) {
         int next_index = (current_index + i + 1) % 6;
         retcode = rig_set_mode(rig, RIG_VFO_CURR, mode_array[next_index], rig_passband_normal(rig, mode_array[next_index]));
         if (retcode == RIG_OK) {
-            snprintf(output, 100, "Mode set to %s\n", rig_strmode(mode_array[next_index]));
+            snprintf(output, 100, "Mode set to %s\n", rig_strrmode(mode_array[next_index]));
             return output; 
         } else {
             printf("Error setting mode: %s\n", rigerror(retcode));
