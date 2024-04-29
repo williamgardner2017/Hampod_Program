@@ -26,7 +26,7 @@ char* set_mode_custom(void* input) {
 
     // Get the current mode
     rmode_t current_mode;
-    int retcode = rig_get_mode(rig, RIG_VFO_CURR, &current_mode, NULL);
+    retcode = rig_get_mode(rig, RIG_VFO_CURR, &current_mode, NULL);
     if (retcode != RIG_OK) {
         printf("Rig cannot get mode\n"); 
     }
