@@ -31,6 +31,7 @@ char* set_mode_custom(void* input) {
     // Find the index of the current mode
     int current_index;
     for (current_index = 0; current_index < 6; current_index++) {
+        printf("Test %s\n", rig_strrmode(current_mode));
         if (strcmp(mode_array[current_index], rig_strrmode(current_mode)) == 0) {
             printf("Found index, %s\n", rig_strrmode(current_mode));
             break; // Found the index
