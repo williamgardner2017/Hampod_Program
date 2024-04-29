@@ -23,6 +23,8 @@
 
 typedef char* (*HamlibSetFunction)(void* input);
 
+char* set_mode_custom(void* input); 
+
 char* set_vfo(void* input); 
 char* set_ptt(void* input); 
 char* set_xit_offset(void* input);

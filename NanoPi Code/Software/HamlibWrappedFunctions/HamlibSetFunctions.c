@@ -1,7 +1,7 @@
 vfo_t vfo_array[3] = {RIG_VFO_A, RIG_VFO_B, RIG_VFO_C};
 rmode_t mode_array[6] = {RIG_MODE_AM, RIG_MODE_CW, RIG_MODE_USB, RIG_MODE_LSB, RIG_MODE_RTTY, RIG_MODE_FM};
 
-har* set_frequency(void* input) {
+char* set_frequency(void* input) {
     RIG* rig = ((void**)input)[0];
     vfo_t vfo = *((vfo_t*)((void**)input)[1]);
     freq_t value = *((freq_t*)((void**)input)[2]);
