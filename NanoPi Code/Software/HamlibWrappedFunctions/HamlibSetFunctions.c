@@ -84,61 +84,64 @@ char* set_vfo_custom(void* input) {
     char* output = malloc(100);
     int retcode;
 
-    // Get the current VFO
-    vfo_t current_vfo;
-    retcode = rig_get_vfo(rig, &current_vfo);
-    if (retcode != RIG_OK) {
-        printf("Rig cannot get VFO\n"); 
-        non_existing_vfo_feature = 1; 
-    }
-    if (non_existing_vfo_feature) {
-        // Feature does not exist on rig, which sucks... 
-        // This is the only way I could implement a close working idea. Basically we will have an independent current VFO on the Hampod. 
-        // If the user does not change the VFO on the rig, this should work. 
-        // If they do though, it won't break, it will just take at most two presses until the Hampod catches up to the current on the rig. 
-        // Also note, this was found through the ICOM7300 were it kept returning "Feature not available."
-        // Feel free to change!!! 
-        // Try next VFO
-        for (int i = 0; i < 3; i++) {
-            int temp_index = (temp_index + i + 1) % 3;
-            PRINTFLEVEL1("Next index, %s\n", vfo_array[temp_index]);
-            retcode = rig_set_vfo(rig, rig_parse_vfo(vfo_array[temp_index]));
-            if (retcode == RIG_OK) {
-                snprintf(output, 100, "VFO set to %s\n", vfo_array[temp_index]);
-                return output; 
-            } else {
-                printf("Error setting VFO: %s\n", rigerror(retcode));
-            }
-        }
-    } else {
-        // Feature exists on rig. 
-        PRINTFLEVEL1("Current VFO is %s.\n", rig_strvfo(current_vfo));
+    rig_set_vfo(rig, rig_parse_vfo(vfo_array[1]));
+    snprintf(output, 100, "VFO set to %s\n", vfo_array[1]);
 
-        // Find the index of the current VFO
-        int current_index;
-        for (current_index = 0; current_index < 3; current_index++) {
-            if (strcmp(vfo_array[current_index], rig_strvfo(current_vfo)) == 0) {
-                printf("Found index, %s\n", rig_strvfo(current_vfo));
-                break; // Found the index
-            }
-        }
+    // // Get the current VFO
+    // vfo_t current_vfo;
+    // retcode = rig_get_vfo(rig, &current_vfo);
+    // if (retcode != RIG_OK) {
+    //     printf("Rig cannot get VFO\n"); 
+    //     non_existing_vfo_feature = 1; 
+    // }
+    // if (non_existing_vfo_feature) {
+    //     // Feature does not exist on rig, which sucks... 
+    //     // This is the only way I could implement a close working idea. Basically we will have an independent current VFO on the Hampod. 
+    //     // If the user does not change the VFO on the rig, this should work. 
+    //     // If they do though, it won't break, it will just take at most two presses until the Hampod catches up to the current on the rig. 
+    //     // Also note, this was found through the ICOM7300 were it kept returning "Feature not available."
+    //     // Feel free to change!!! 
+    //     // Try next VFO
+    //     for (int i = 0; i < 3; i++) {
+    //         int temp_index = (temp_index + i + 1) % 3;
+    //         PRINTFLEVEL1("Next index, %s\n", vfo_array[temp_index]);
+    //         retcode = rig_set_vfo(rig, rig_parse_vfo(vfo_array[temp_index]));
+    //         if (retcode == RIG_OK) {
+    //             snprintf(output, 100, "VFO set to %s\n", vfo_array[temp_index]);
+    //             return output; 
+    //         } else {
+    //             printf("Error setting VFO: %s\n", rigerror(retcode));
+    //         }
+    //     }
+    // } else {
+    //     // Feature exists on rig. 
+    //     PRINTFLEVEL1("Current VFO is %s.\n", rig_strvfo(current_vfo));
 
-        // Try next VFO
-        for (int i = 0; i < 3; i++) {
-            int next_index = (current_index + i + 1) % 3;
-            PRINTFLEVEL1("Next index, %s\n", vfo_array[next_index]);
-            retcode = rig_set_vfo(rig, rig_parse_vfo(vfo_array[next_index]));
-            if (retcode == RIG_OK) {
-                snprintf(output, 100, "VFO set to %s\n", vfo_array[next_index]);
-                return output; 
-            } else {
-                printf("Error setting VFO: %s\n", rigerror(retcode));
-            }
-        }
-    }
+    //     // Find the index of the current VFO
+    //     int current_index;
+    //     for (current_index = 0; current_index < 3; current_index++) {
+    //         if (strcmp(vfo_array[current_index], rig_strvfo(current_vfo)) == 0) {
+    //             printf("Found index, %s\n", rig_strvfo(current_vfo));
+    //             break; // Found the index
+    //         }
+    //     }
+
+    //     // Try next VFO
+    //     for (int i = 0; i < 3; i++) {
+    //         int next_index = (current_index + i + 1) % 3;
+    //         PRINTFLEVEL1("Next index, %s\n", vfo_array[next_index]);
+    //         retcode = rig_set_vfo(rig, rig_parse_vfo(vfo_array[next_index]));
+    //         if (retcode == RIG_OK) {
+    //             snprintf(output, 100, "VFO set to %s\n", vfo_array[next_index]);
+    //             return output; 
+    //         } else {
+    //             printf("Error setting VFO: %s\n", rigerror(retcode));
+    //         }
+    //     }
+    // }
     
     
-    snprintf(output, 100, "Unable to set VFO\n");
+    // snprintf(output, 100, "Unable to set VFO\n");
     return output;
 }
 

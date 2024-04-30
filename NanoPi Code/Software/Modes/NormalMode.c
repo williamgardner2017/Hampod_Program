@@ -227,7 +227,6 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             // inputArray = {radioDetails};
                             inputArray[0] = radioDetails; 
                             result = get_current_vfo(inputArray); 
-                            printf("%s, %s, %s\n", rig_strvfo(RIG_VFO_A), rig_strvfo(RIG_VFO_B), rig_strvfo(RIG_VFO_C)); 
                             sendSpeakerOutput(result); 
                             free(result);
                             break; 
