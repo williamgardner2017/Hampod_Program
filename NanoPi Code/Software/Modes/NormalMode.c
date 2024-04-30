@@ -232,43 +232,13 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 1:
                             // Set current VFO
-                            // inputArray = {radioDetails};
                             inputArray[0] = radioDetails; 
-                            char* result = get_current_vfo(inputArray);
+                            inputArray[1] = &general_vfo; 
+                            result = set_vfo_custom(inputArray); 
                             if (strcmp(result, "-1") != 0) {
-                                result[strcspn(result, "\n")] = 0; // Remove newline for proper comparison
-
-                                vfo_t current_vfo_enum = rig_parse_vfo(result);
-                                vfo_t next_vfo = current_vfo_enum;
-                                
-                                int attempts = 0; // Counter to avoid infinite loops
-                                result = NULL;
-                                do {
-                                    // Get next VFO in sequence
-                                    if (next_vfo == RIG_VFO_A) next_vfo = RIG_VFO_B;
-                                    else if (next_vfo == RIG_VFO_B) next_vfo = RIG_VFO_C;
-                                    else if (next_vfo == RIG_VFO_C) next_vfo = RIG_VFO_A;
-                                    
-                                    // Setting the VFO
-                                    if (result) {
-                                        free(result); // free the previous result
-                                        result = NULL;
-                                    }
-                                    // inputArray = {radioDetails, &next_vfo};
-                                    inputArray[0] = radioDetails; 
-                                    inputArray[1] = &next_vfo; 
-                                    result = set_vfo(inputArray);
-                                    attempts++;
-                                } while (strcmp(result, "-1") == 0 && attempts < 3); // Limit attempts to 3 just in case it fails. 
-
-                                if (strcmp(result, "-1") == 0) {
-                                    printf("Failed to set any VFO after 3 attempts.\n");
-                                } else {
-                                    sendSpeakerOutput(result); 
-                                }
-                                free(result);
+                                sendSpeakerOutput(result);
                             } else {
-                                printf("Error retrieving current VFO\n");
+                                printf("Cannot set mode\n"); 
                             }
                             free(result);
                             break; 
