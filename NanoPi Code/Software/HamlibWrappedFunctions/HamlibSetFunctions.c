@@ -1,4 +1,4 @@
-vfo_t vfo_array[3] = {"VFOA", "VFOB", "VFOC"};
+char* vfo_array[3] = {"VFOA", "VFOB", "VFOC"};
 char* mode_array[6] = {"AM", "CW", "USB", "LSB", "RTTY", "FM"};
 
 char* set_frequency(void* input) {
