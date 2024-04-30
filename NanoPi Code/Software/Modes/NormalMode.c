@@ -238,7 +238,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             if (strcmp(result, "-1") != 0) {
                                 sendSpeakerOutput(result);
                             } else {
-                                printf("Cannot set mode\n"); 
+                                printf("Cannot set VFO\n"); 
                             }
                             free(result);
                             break; 
