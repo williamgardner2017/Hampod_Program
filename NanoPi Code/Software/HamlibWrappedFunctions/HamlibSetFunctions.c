@@ -93,7 +93,7 @@ char* set_vfo_custom(void* input) {
     // Find the index of the current VFO
     int current_index;
     for (current_index = 0; current_index < 3; current_index++) {
-        if (strcmp(vfo_array[current_index], rig_strvfo(current_vfo) == 0) {
+        if (strcmp(vfo_array[current_index], rig_strvfo(current_vfo)) == 0) {
             printf("Found index, %s\n", rig_strvfo(current_vfo));
             break; // Found the index
         }
