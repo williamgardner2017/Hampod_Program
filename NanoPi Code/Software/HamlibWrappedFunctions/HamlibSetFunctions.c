@@ -112,7 +112,7 @@ char* set_vfo_custom(void* input) {
         }
     } else {
         // Feature exists on rig. 
-        PRINTFLEVEL1("Current VFO is %s.\n", rig_strrmode(current_vfo));
+        PRINTFLEVEL1("Current VFO is %s.\n", rig_strvfo(current_vfo));
 
         // Find the index of the current VFO
         int current_index;
