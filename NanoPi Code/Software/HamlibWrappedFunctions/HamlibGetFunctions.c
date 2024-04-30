@@ -80,6 +80,8 @@ char* get_current_vfo(void* input) {
         snprintf(output, 40, "VFO now %s\n", rig_strvfo(value));
     } else {
         printf("rig_get_vfo: error = %s\n", rigerror(retcode));
+        // Trying new way
+        printf("%s\n", rig_strvfo(RIG_VFO_CURR)); 
         snprintf(output, 40, "-1\n");
     }
     return output; 
