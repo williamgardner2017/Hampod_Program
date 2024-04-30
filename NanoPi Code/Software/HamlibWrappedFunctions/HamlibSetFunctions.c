@@ -105,7 +105,7 @@ char* set_vfo_custom(void* input) {
         PRINTFLEVEL1("Next index, %s\n", vfo_array[next_index]);
         retcode = rig_set_vfo(rig, rig_parse_vfo(vfo_array[next_index]));
         if (retcode == RIG_OK) {
-            snprintf(output, 100, "VFO set to %s\n", rig_strvfo(vfo_array[next_index]));
+            snprintf(output, 100, "VFO set to %s\n", vfo_array[next_index]);
             return output; 
         } else {
             printf("Error setting VFO: %s\n", rigerror(retcode));
