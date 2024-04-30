@@ -256,7 +256,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             // Get Mode
                             inputArray[0] = radioDetails; 
                             inputArray[1] = &general_vfo; 
-                            result = get_current_mode(inputArray)
+                            result = get_current_mode(inputArray); 
                             if (strcmp(result, "-1") != 0) {
                                 sendSpeakerOutput(result);
                             } else {
