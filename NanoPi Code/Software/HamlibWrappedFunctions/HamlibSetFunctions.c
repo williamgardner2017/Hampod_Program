@@ -1,4 +1,4 @@
-vfo_t vfo_array[3] = {RIG_VFO_A, RIG_VFO_B, RIG_VFO_C};
+vfo_t vfo_array[3] = {"VFOA", "VFOB", "VFOC"};
 char* mode_array[6] = {"AM", "CW", "USB", "LSB", "RTTY", "FM"};
 
 char* set_frequency(void* input) {
@@ -31,7 +31,7 @@ char* set_mode_custom(void* input) {
     if (retcode != RIG_OK) {
         printf("Rig cannot get mode\n"); 
     }
-    printf("Current mode is %s.\n", rig_strrmode(current_mode));
+    PRINTFLEVEL1("Current mode is %s.\n", rig_strrmode(current_mode));
 
     // Find the index of the current mode
     int current_index;
@@ -45,7 +45,7 @@ char* set_mode_custom(void* input) {
     // Try the next mode
     for (int i = 0; i < 6; i++) {
         int next_index = (current_index + i + 1) % 6;
-        printf("Next index, %s\n", mode_array[next_index]);
+        PRINTFLEVEL1("Next index, %s\n", mode_array[next_index]);
         retcode = rig_set_mode(rig, RIG_VFO_CURR, rig_parse_mode(mode_array[next_index]), rig_passband_normal(rig, rig_parse_mode(mode_array[next_index])));
         if (retcode == RIG_OK) {
             snprintf(output, 100, "Mode set to %s\n", mode_array[next_index]);
@@ -86,22 +86,24 @@ char* set_vfo_custom(void* input) {
     vfo_t current_vfo;
     retcode = rig_get_vfo(rig, &current_vfo);
     if (retcode != RIG_OK) {
-        snprintf(output, 100, "Error getting current VFO: %s\n", rigerror(retcode));
-        return output;
+        printf("Rig cannot get VFO\n"); 
     }
+    PRINTFLEVEL1("Current VFO is %s.\n", rig_strrmode(current_vfo));
 
     // Find the index of the current VFO
     int current_index;
     for (current_index = 0; current_index < 3; current_index++) {
-        if (vfo_array[current_index] == current_vfo) {
-            break; 
+        if (strcmp(vfo_array[current_index], rig_strvfo(current_vfo) == 0) {
+            printf("Found index, %s\n", rig_strvfo(current_vfo));
+            break; // Found the index
         }
     }
 
     // Try next VFO
     for (int i = 0; i < 3; i++) {
         int next_index = (current_index + i + 1) % 3;
-        retcode = rig_set_vfo(rig, vfo_array[next_index]);
+        PRINTFLEVEL1("Next index, %s\n", vfo_array[next_index]);
+        retcode = rig_set_vfo(rig, rig_parse_vfo(vfo_array[next_index]));
         if (retcode == RIG_OK) {
             snprintf(output, 100, "VFO set to %s\n", rig_strvfo(vfo_array[next_index]));
             return output; 
