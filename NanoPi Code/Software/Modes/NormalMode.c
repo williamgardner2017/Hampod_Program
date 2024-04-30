@@ -254,13 +254,15 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                     switch (keyInput->shiftAmount) {
                         case 0:
                             // Get Mode
-                            // rmode_t mode; 
-                            // pbwidth_t width;  	
-                            // inputArray[0] = radioDetails; 
-                            // inputArray[1] = &general_vfo; 
-                            // rig_get_mode(); 
-
-                            
+                            inputArray[0] = radioDetails; 
+                            inputArray[1] = &general_vfo; 
+                            result = get_current_mode(inputArray)
+                            if (strcmp(result, "-1") != 0) {
+                                sendSpeakerOutput(result);
+                            } else {
+                                printf("Cannot set VFO\n"); 
+                            }
+                            free(result);
                             break; 
                         case 1:
                             // Get Width
