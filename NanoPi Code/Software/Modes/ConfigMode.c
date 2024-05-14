@@ -14,7 +14,7 @@ void configNavigation(KeyPress* keyInput){
     case '4':
         currentConfig --;
         if(currentConfig < 0){
-            currentConfig = getLengthOfConfigs();
+            currentConfig = getLengthOfConfigs()-1;
         }
         PRINTFLEVEL1("SOFTWARE: switched configs to %s\n", configNames[currentConfig]);
         sprintf(output, "%s",configNames[currentConfig]);
@@ -170,7 +170,7 @@ void exitConfigMode(){
 }
 
 Mode* ConfigLoad(){
-     Mode* newMode = (Mode*) malloc(sizeof(Mode));
+    Mode* newMode = (Mode*) malloc(sizeof(Mode));
 
     if(newMode == NULL){
         return NULL;

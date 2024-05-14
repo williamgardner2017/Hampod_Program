@@ -23,6 +23,9 @@
 
 typedef char* (*HamlibSetFunction)(void* input);
 
+char* set_mode_custom(void* input); 
+char* set_vfo_custom(void* input); 
+
 char* set_vfo(void* input); 
 char* set_ptt(void* input); 
 char* set_xit_offset(void* input);
@@ -31,7 +34,19 @@ char* set_rit_offset(void* input);
 char* set_level(void* input); 
 char* set_func(void* input); 
 
+#ifdef OUTPUTLEVEL1
+#define PRINTFLEVEL1(...) \
+    do { \
+        if(OUTPUTLEVEL1) { \
+            printf(__VA_ARGS__); \
+        } \
+    } while(0)
+#else
 
+#define PRINTFLEVEL1(...) \
+do{}while(0)
+
+#endif
 
 #ifndef SHAREDLIB
 #include "HamlibSetFunctions.c"

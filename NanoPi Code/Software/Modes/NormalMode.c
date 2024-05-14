@@ -6,8 +6,12 @@ char inputValue[100] = "";
 int setFunctionType = 0; 
 HamlibSetFunction currentInputFunction;
 setting_t settingToChange; // This goes with Type Two
+KeyPress* normalModeClearing; 
  
 vfo_t general_vfo = RIG_VFO_CURR;
+vfo_t a_vfo = RIG_VFO_A; 
+vfo_t b_vfo = RIG_VFO_B; 
+vfo_t c_vfo = RIG_VFO_C; 
 
 int switchFuncMode(RIG* radioDetails) {
     int status; 
@@ -44,6 +48,7 @@ void enterValueModeTypeOne(KeyPress* keyInput, RIG* radioDetails) {
 
 void enterValueModeTypeTwo(KeyPress* keyInput, RIG* radioDetails) {
     double enteredValue = keypadInput(keyInput);
+    printf("%lf\n", enteredValue); 
     if (enteredValue >= 0) {
         void** inputArray = malloc(sizeof(void*) * 4); 
         inputArray[0] = radioDetails; 
@@ -51,7 +56,9 @@ void enterValueModeTypeTwo(KeyPress* keyInput, RIG* radioDetails) {
         inputArray[2] = (void*)(uintptr_t)settingToChange; 
         inputArray[3] = (void*)(intptr_t)enteredValue; 
         // void** inputArray[] = {(void*) radioDetails, (void*) &general_vfo, (void*) settingToChange, (void*) enteredValue};
+        printf("I got here before result\n"); 
         char* result = currentInputFunction(inputArray);
+        printf("%s\n", result); 
         sendSpeakerOutput(result);
         free(result); 
         enteringValue = false; 
@@ -174,7 +181,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             // Get frequency from VFO A
                             // inputArray = {radioDetails, RIG_VFO_A};
                             inputArray[0] = radioDetails; 
-                            inputArray[1] = (void*) RIG_VFO_A; 
+                            inputArray[1] = &a_vfo; 
                             result = get_current_frequency(inputArray);
                             if (strcmp(result, "-1") != 0) {
                                 sendSpeakerOutput(result);
@@ -187,7 +194,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             // Get frequency from VFO B
                             // inputArray = {radioDetails, RIG_VFO_B};
                             inputArray[0] = radioDetails; 
-                            inputArray[1] = (void*) RIG_VFO_B; 
+                            inputArray[1] = &b_vfo; 
                             result = get_current_frequency(inputArray);
                             if (strcmp(result, "-1") != 0) {
                                 sendSpeakerOutput(result);
@@ -200,7 +207,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             // Get frequency from VFO C
                             // inputArray = {radioDetails, RIG_VFO_C};
                             inputArray[0] = radioDetails; 
-                            inputArray[1] = (void*) RIG_VFO_C; 
+                            inputArray[1] = &c_vfo; 
                             result = get_current_frequency(inputArray);
                             if (strcmp(result, "-1") != 0) {
                                 sendSpeakerOutput(result);
@@ -225,43 +232,13 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 1:
                             // Set current VFO
-                            // inputArray = {radioDetails};
                             inputArray[0] = radioDetails; 
-                            char* result = get_current_vfo(inputArray);
+                            inputArray[1] = &general_vfo; 
+                            result = set_vfo_custom(inputArray); 
                             if (strcmp(result, "-1") != 0) {
-                                result[strcspn(result, "\n")] = 0; // Remove newline for proper comparison
-
-                                vfo_t current_vfo_enum = rig_parse_vfo(result);
-                                vfo_t next_vfo = current_vfo_enum;
-                                
-                                int attempts = 0; // Counter to avoid infinite loops
-                                result = NULL;
-                                do {
-                                    // Get next VFO in sequence
-                                    if (next_vfo == RIG_VFO_A) next_vfo = RIG_VFO_B;
-                                    else if (next_vfo == RIG_VFO_B) next_vfo = RIG_VFO_C;
-                                    else if (next_vfo == RIG_VFO_C) next_vfo = RIG_VFO_A;
-                                    
-                                    // Setting the VFO
-                                    if (result) {
-                                        free(result); // free the previous result
-                                        result = NULL;
-                                    }
-                                    // inputArray = {radioDetails, &next_vfo};
-                                    inputArray[0] = radioDetails; 
-                                    inputArray[1] = &next_vfo; 
-                                    result = set_vfo(inputArray);
-                                    attempts++;
-                                } while (strcmp(result, "-1") == 0 && attempts < 3); // Limit attempts to 3 just in case it fails. 
-
-                                if (strcmp(result, "-1") == 0) {
-                                    printf("Failed to set any VFO after 3 attempts.\n");
-                                } else {
-                                    sendSpeakerOutput(result); 
-                                }
-                                free(result);
+                                sendSpeakerOutput(result);
                             } else {
-                                printf("Error retrieving current VFO\n");
+                                printf("Cannot set VFO\n"); 
                             }
                             free(result);
                             break; 
@@ -277,33 +254,15 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                     switch (keyInput->shiftAmount) {
                         case 0:
                             // Get Mode
-                            // inputArray = {radioDetails};
-                            // rmode_t mode_list[] = {RIG_MODE_AM, RIG_MODE_CW, RIG_MODE_USB, RIG_MODE_LSB, RIG_MODE_RTTY, RIG_MODE_FM};
-
-                            // // Iterate through mode list
-                            // int mode_count = sizeof(mode_list) / sizeof(mode_list[0]);
-                            // int attempts = 0; // Counter to avoid infinite loops
-                            // char* result = NULL;
-                            // do {
-                            //     rmode_t next_mode = mode_list[attempts % mode_count]; // Cycle through modes
-                            //     // Setting the mode
-                            //     if (result) {
-                            //         free(result); // Free the previous result
-                            //         result = NULL;
-                            //     }
-                            //     pbwidth_t passband_normal = rig_passband_normal(my_rig, RIG_MODE_USB); 
-                            //     inputArray = {radioDetails, RIG_VFO_CURR, &next_mode, &passband_normal};
-                            //     result = set_mode(inputArray);
-                            //     attempts++;
-                            // } while (strcmp(result, "-1") == 0 && attempts < mode_count); // Limit attempts to mode_count
-
-                            // if (strcmp(result, "-1") == 0) {
-                            //     printf("Failed to set any mode after trying all modes.\n");
-                            // } else {
-                            //     printf("Mode set successfully.\n");
-                            //     // Additional actions after successful mode change
-                            // }
-                            // free(result);
+                            inputArray[0] = radioDetails; 
+                            inputArray[1] = &general_vfo; 
+                            result = get_current_mode(inputArray); 
+                            if (strcmp(result, "-1") != 0) {
+                                sendSpeakerOutput(result);
+                            } else {
+                                printf("Cannot set VFO\n"); 
+                            }
+                            free(result);
                             break; 
                         case 1:
                             // Get Width
@@ -330,6 +289,15 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                     switch (keyInput->shiftAmount) {
                         case 0:
                             // Set Mode
+                            inputArray[0] = radioDetails; 
+                            inputArray[1] = &general_vfo; 
+                            result = set_mode_custom(inputArray); 
+                            if (strcmp(result, "-1") != 0) {
+                                sendSpeakerOutput(result);
+                            } else {
+                                printf("Cannot set mode\n"); 
+                            }
+                            free(result); 
                             break; 
                         case 1:
                             // Set Width
@@ -698,6 +666,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             settingToChange = RIG_LEVEL_IF; 
                             currentInputFunction = set_level;
                             setFunctionType = 2; 
+                            keypadInput(normalModeClearing); // Clear previous input
                             break;
                         case 1:
                             // Set Automatic Gain Control: RIG_LEVEL_AGC
@@ -838,7 +807,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 1:
                             // Get Microphone Gain: RIG_LEVEL_MICGAIN
-                            if (rig_has_get_func(radioDetails, RIG_LEVEL_MICGAIN)) {
+                            if (rig_has_get_level(radioDetails, RIG_LEVEL_MICGAIN)) {
                                 // inputArray = {radioDetails, &general_vfo, RIG_LEVEL_MICGAIN};
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
@@ -852,7 +821,7 @@ void* normalCommandRelay(KeyPress* keyInput, RIG* radioDetails){
                             break; 
                         case 2:
                             // Get RF Power: RIG_LEVEL_RFPOWER
-                            if (rig_has_get_func(radioDetails, RIG_LEVEL_RFPOWER)) {
+                            if (rig_has_get_level(radioDetails, RIG_LEVEL_RFPOWER)) {
                                 // inputArray = {radioDetails, &general_vfo, RIG_LEVEL_RFPOWER};
                                 inputArray[0] = radioDetails; 
                                 inputArray[1] = &general_vfo; 
@@ -1021,6 +990,8 @@ void freeNormalMode(Mode* modeToFree){
 
 Mode* NormalLoad(){
     Mode* newMode = malloc(sizeof(Mode));
+    normalModeClearing = malloc(sizeof(KeyPress)); 
+    normalModeClearing->keyPressed = '#'; 
 
     if(newMode == NULL){
         return NULL;

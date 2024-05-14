@@ -363,6 +363,7 @@ char* applyDictionary(char* s){
     //apply the numeric updates to this
     insertSpaces(stringBuild);
     PRINTFLEVEL1("finished creation and got %s\n",stringBuild);
+    stringBuild[strlen(stringBuild)-1] = '\0';
     return stringBuild;
 }
 
